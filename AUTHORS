@@ -1,0 +1,41 @@
+AUTHORS
+-------------------------------------------------------------------------------
+
+JIA Pei
+contact: jp4work at gmail dot com
+Website: http://www.visionopen.com
+http://www.visionopen.com/members/jiapei/jiapei.html
+
+
+
+ACKNOWLEDGEMENT
+-------------------------------------------------------------------------------
+
+
+YAO Wei
+Great much thanks are given to Mr. YAO Wei for his help on the following several points:
+1) I implemented 1D ASM Profile after I read Mr's YAO Wei's ASMLibrary in 2008.
+   So, that's why his name appears as the first author in some functions in the file
+   VO_FittingASMNDProfiles.cpp .
+2) He helped to dramatically speed up my image warping function, namely,
+   function VO_TextureModel::VO_LoadOneTextureFromShape in file VO_TextureModel.cpp .
+   That's also why his name is listed as the 2nd author in file VO_TextureModel.cpp .
+3) His two fabulous libraries, say ASMLibrary and AAMLibrary partly depend on 
+   my old version of statistical models, say, "aambuilding" .
+4) He did some further research in statistical models that I'm not familiar with,
+   which, I believe, enables him to be one of the best researchers in statistical face models .
+
+His contact:  njustyw at gmail dot com
+Website: http://www.visionopen.com/members/yaowei/yaowei.html
+
+
+HU XuBing
+Great much thanks are given to Mr. HU XuBing, the CTO of ShenYang YiMeng Ltd, China,
+for his help on annotating two Chinese face databases:
+a) EMOUNT b) JIAPEI
+Some fitting results of the database EMOUNT can be viewed at
+http://www.emount.com.cn/ShowNewsDetail.aspx?NewsId=9
+
+His contact:
+Website: http://www.emount.com.cn
+
