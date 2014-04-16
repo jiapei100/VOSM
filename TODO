@@ -1,0 +1,5 @@
+1) use namespace "vo->sm->", rather than current "VO_" for every class
+2) use "XML/YML" files to store trained data, rather than current '.txt" files.
+3) 3D statistical models are not covered yet (tough to build up a 3D face database but this is to be done!)
+4) documentations are still to be improved
+

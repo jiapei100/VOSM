@@ -1,0 +1,61 @@
+
+How to use vosm to 
+a) train a face model 
+b) fit an untrained face using the trained face model
+
+First of all, in order to use vosm, you need to find and download 
+respective ShapeInfo.txt files summarized in the table at 
+http://www.visionopen.com/cv/2dsm.php
+
+Secondly, you have to find and download or buy the standard
+annotated face databases by yourself.
+
+Help on two commands "vo_smbuilding" and "vo_smfitting".
+./vo_smbuilding --help
+Usage: vo_smbuilding [options] save_directory annotation_directory image_directory shapeinfo_path database channels type levels percentage 
+options: 
+   -o   output directory (default './') 
+   -a   annotation directory (required) 
+   -i   image directory (required) 
+   -s   path of the file shapeinfo (required, please find and download the corresponding ShapeInfo.txt files from 
+		my website http://www.visionopen.com/cv/2dsm.php)
+   -d   training database (required) 
+   -c   channels (1 or 3, default 3) 
+   -t   statistical model type (SM, TM, AM, IA, FM, SMLTC, SMNDPROFILE. default SMNDPROFILE ) 
+   -l   level of parymid (default 4) 
+   -p   percentage of shape, texture and appearance PCA (default 0.95) 
+Note: If you are building SMLTC or SMNDPROFILE, you must specify 
+ -c 1, namely, SMLTC and SMNDPROFILE can only deal with gray-level images. 
+
+
+./vo_smfitting --help
+Usage: vo_smfitting [options] trained_data type testing_images testing_annotations  
+options: 
+   -o   trained data directory (required)
+   -t   fitting method to be used (ASM_PROFILEND, ASM_LTC, AAM_BASIC, AAM_CMUICIA, AAM_IAIA. default ASM_PROFILEND ) 
+   -i   testing image directory containing at least one image (required)
+   -a   testing annotation directory (can be ignored) 
+   -d   testing database -- if annotation directory is specified, database should also be specified for further evaluation on fitting performance (can be ignored) 
+   -s   static image sequence or dynamic image sequence (default value true) 
+   -r   recording the fitting results or not (default value false) 
+
+
+
+
+Tow examples are given as:
+
+vo_smbuilding -a "/media/usb0/Research/Databases/face/2D/emount/annotations/training" 
+-i "/media/usb0/Research/Databases/face/2D/emount/images/training" 
+-s "/media/usb0/Research/Databases/face/2D/emount/annotations/training/ShapeInfo.txt" 
+-d "EMOUNT"
+-t "SM"
+
+
+vo_smfitting -o "/media/usb0/Research/Databases/face/2D/BIOID/traineddata/397Frontal/Gray" 
+-t "ASM_PROFILEND" 
+-i "/media/usb0/Research/Databases/face/2D/BIOID/images/testing" 
+-s "true" 
+-r "true"
+
+
+
