@@ -1,62 +1,63 @@
-/****************************************************************************
-*                                                                           *
-*   IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.       *
-*                                                                           *
-*   By downloading, copying, installing or using the software you agree to  *
-*   this license. If you do not agree to this license, do not download,     *
-*   install, copy or use the software.                                      *
-*                                                                           *
-*                           License Agreement                               *
-*                   For Vision Open Statistical Models                      *
-*                                                                           *
-*   Copyright (C):      2006~2012 by JIA Pei, all rights reserved.          *
-*                                                                           *
-*   VOSM is free software under the terms of the GNU Lesser General Public  *
-*   License (GNU LGPL) as published by the Free Software Foundation; either *
-*   version 3.0 of the License, or (at your option) any later version.      *
-*   You can use it, modify it, redistribute it, etc; and redistribution and *
-*   use in source and binary forms, with or without modification, are       *
-*   permitted provided that the following conditions are met:               *
-*                                                                           *
-*   a) Redistribution's of source code must retain this whole paragraph of  *
-*   copyright notice, including this list of conditions and all the         *
-*   following contents in this  copyright paragraph.                        *
-*                                                                           *
-*   b) Redistribution's in binary form must reproduce this whole paragraph  *
-*   of copyright notice, including this list of conditions and all the      *
-*   following contents in this copyright paragraph, and/or other materials  *
-*   provided with the distribution.                                         *
-*                                                                           *
-*   c) The name of the copyright holders may not be used to endorse or      *
-*   promote products derived from this software without specific prior      *
-*   written permission.                                                     *
-*                                                                           *
-*   Any publications based on this code must cite the following five papers,*
-*   technical reports and on-line materials.                                *
-*   1) P. JIA, 2D Statistical Models, Technical Report of Vision Open       *
-*   Working Group, 2st Edition, October 21, 2010.                           *
-*   http://www.visionopen.com/members/jiapei/publications/pei_sm2dreport2010.pdf*
-*   2) P. JIA. Audio-visual based HMI for an Intelligent Wheelchair.        *
-*   PhD thesis, University of Essex, February, 2011.                        *
-*   http://www.visionopen.com/members/jiapei/publications/pei_phdthesis2010.pdf*
-*   3) T. Cootes and C. Taylor. Statistical models of appearance for        *
-*   computer vision. Technical report, Imaging Science and Biomedical       *
-*   Engineering, University of Manchester, March 8, 2004.                   *
-*   http://www.isbe.man.ac.uk/~bim/Models/app_models.pdf                    *
-*   4) I. Matthews and S. Baker. Active appearance models revisited.        *
-*   International Journal of Computer Vision, 60(2):135--164, November 2004.*
-*   http://www.ri.cmu.edu/pub_files/pub4/matthews_iain_2004_2/matthews_iain_2004_2.pdf*
-*   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and     *
-*   Cases, 2000.                                                            *
-*   http://www2.imm.dtu.dk/~aam/main/                                       *
-*                                                                           *
-* Version:          0.4                                                     *
-* Author:           JIA Pei                                                 *
-* Contact:          jp4work@gmail.com                                       *
-* URL:              http://www.visionopen.com                               *
-* Create Date:      2010-02-06                                              *
-* Revise Date:      2012-03-22                                              *
-*****************************************************************************/
+/****************************************************************************************************
+*                                                                                                   *
+*                   IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.               *
+*                                                                                                   *
+*   By downloading, copying, installing or using the software you agree to this license.            *
+*   If you do not agree to this license, do not download, install, copy or use the software.        *
+*                                                                                                   *
+*                                   License Agreement                                               *
+*                           For Vision Open Statistical Models                                      *
+*                                                                                                   *
+* Copyright (C):    2006~2014 by JIA Pei, all rights reserved.                                      *
+*                                                                                                   *
+*                   VOSM is free software under the terms of the GNU Lesser General Public License  *
+*                   (GNU LGPL) as published by the Free Software Foundation; either version 3.0 of  *
+*                   the License, or (at your option) any later version.                             *
+*                   You can use it, modify it, redistribute it, etc; and redistribution and use in  *
+*                   source and binary forms, with or without modification, are permitted provided   *
+*                   that the following conditions are met:                                          *
+*                                                                                                   *
+*                   a) Redistribution's of source code must retain this whole paragraph of          *
+*                   copyright notice, including this list of conditions and all the following       *
+*                   contents in this copyright paragraph.                                           *
+*                                                                                                   *
+*                   b) Redistribution's in binary form must reproduce this whole paragraph of       *
+*                   copyright notice, including this list of conditions and all the following       *
+*                   contents in this copyright paragraph, and/or other materials provided with      *
+*                   the distribution.                                                               *
+*                                                                                                   *
+*                   c) The name of the copyright holders may not be used to endorse or promote      *
+*                   products derived from this software without specific prior written permission.  *
+*                                                                                                   *
+*                   Any publications based on this code must cite the following five papers,        *
+*                   technic reports and on-line materials.                                          *
+*                                                                                                   *
+*                   1) P. JIA, 2D Statistical Models, Technical Report of Vision Open Working       *
+*                   Group, 2st Edition, Oct 21, 2010.                                               *
+*                   http://www.visionopen.com/members/jiapei/publications/pei_sm2dreport2010.pdf    *
+*                                                                                                   *
+*                   2) P. JIA. Audio-visual based HMI for an Intelligent Wheelchair.                *
+*                   PhD thesis, University of Essex, 2010.                                          *
+*                   http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf   *
+*                                                                                                   *
+*                   3) T. Cootes and C. Taylor. Statistical models of appearance for computer       *
+*                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
+*                   University of Manchester, March 8 2004.                                         *
+*                                                                                                   *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
+*                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
+*                                                                                                   *
+*                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
+*                   http://www2.imm.dtu.dk/~aam/main/, 2000.                                        *
+*                                                                                                   *
+*                                                                                                   *
+* Version:          0.3.4                                                                           *
+* Author:           JIA Pei                                                                         *
+* Contact:          jp4work@gmail.com                                                               *
+* URL:              http://www.visionopen.com                                                       *
+* Create Date:      2010-02-06                                                                      *
+* Modify Date:      2014-04-16                                                                      *
+****************************************************************************************************/
 
 
 #include <fstream>
@@ -74,11 +75,11 @@
  * @return      void
 */
 void CDetectionDBIO::ReadAllFilesFromPUT4MVFD(
-    const string& dir_path,
-    vector<VO_FaceCompPos>& faceComps)
+    const std::string& dir_path,
+    std::vector<VO_FaceCompPos>& faceComps)
 {
-    vector<string> labelFileNames   = VO_ScanFilesInDir::ScanNSortXMLYMLsInDirectory ( dir_path );
-    int NbOfFiles                   = labelFileNames.size();
+    std::vector<std::string> labelFileNames = VO_ScanFilesInDir::ScanNSortXMLYMLsInDirectory ( dir_path );
+    int NbOfFiles                           = labelFileNames.size();
     faceComps.resize(NbOfFiles);
     
     for ( unsigned int i = 0; i < NbOfFiles; i++ )
@@ -88,8 +89,8 @@ void CDetectionDBIO::ReadAllFilesFromPUT4MVFD(
 }
 
 
-//void operator >> (const YAML::Node& node, Rect& rect) {
-void operator >> (const FileNode& node, Rect& rect)
+//void operator >> (const YAML::Node& node, cv::Rect& rect) {
+void operator >> (const cv::FileNode& node, cv::Rect& rect)
 {
     node["x"] >> rect.x;
     node["y"] >> rect.y;
@@ -107,10 +108,10 @@ void operator >> (const FileNode& node, Rect& rect)
  * @return      void
 */
 void CDetectionDBIO::ReadOneFileFromPUT4MVFD(
-    const string& filename,
+    const std::string& filename,
     VO_FaceCompPos& oFaceComps)
 {
-    vector<Rect> allRects;
+    std::vector<cv::Rect> allRects;
     allRects.resize(5);
 
     //std::ifstream fin(filename.c_str());
@@ -127,8 +128,8 @@ void CDetectionDBIO::ReadOneFileFromPUT4MVFD(
     //doc["Mouth"] >> oFaceComps.m_rectMouth;
     //doc["Nose"] >> oFaceComps.m_rectNose;
     
-    FileStorage fs(filename, FileStorage::READ);
-    FileNode node = fs["Face"];
+    cv::FileStorage fs(filename, cv::FileStorage::READ);
+    cv::FileNode node = fs["Face"];
 
     node >> oFaceComps.m_rectObject;
     // Explained by JIA Pei. for PUT database, lefteye and righteye should be reversed.
@@ -154,10 +155,10 @@ void CDetectionDBIO::ReadOneFileFromPUT4MVFD(
  * @return      void
 */
 void CDetectionDBIO::ReadAllFilesFromCASPEALR14MVFD(
-    const string& dir_path,
-    vector< vector<VO_FaceCompPos> >& faceComps)
+    const std::string& dir_path,
+    std::vector< std::vector<VO_FaceCompPos> >& faceComps)
 {
-    vector<string> labelFileNames   = VO_ScanFilesInDir::ScanNSortTextFilesInDirectory ( dir_path );
+    std::vector<std::string> labelFileNames   = VO_ScanFilesInDir::ScanNSortTextFilesInDirectory ( dir_path );
     int NbOfFiles                   = labelFileNames.size();
     faceComps.resize(NbOfFiles);
 
@@ -177,21 +178,21 @@ void CDetectionDBIO::ReadAllFilesFromCASPEALR14MVFD(
  * @brief       Read a single file from CAS-PEAL-R1 face database for MVFD training
  * @note        a single faceFP file from CAS-PEAL-R1 contains all information of all 21 images for one individual
  * @param       filename    Input    --    The input file name
- * @param       faceComps   Output    --    face components corresponding to 1 person. should be a vector of 21
+ * @param       faceComps   Output    --    face components corresponding to 1 person. should be a std::vector of 21
  * @return      void
 */
 void CDetectionDBIO::ReadOneFileFromCASPEALR14MVFD(
-    const string& filename,
-    vector<VO_FaceCompPos>& oFaceComps)
+    const std::string& filename,
+    std::vector<VO_FaceCompPos>& oFaceComps)
 {
     int dmu, degrees, idx;
-    Point leftEyeCenter, rightEyeCenter;
+    cv::Point leftEyeCenter, rightEyeCenter;
     int rightbottomx, rightbottomy;
-    Rect leftEyeRect, rightEyeRect, faceRect, noseRect, mouthRect;
+    cv::Rect leftEyeRect, rightEyeRect, faceRect, noseRect, mouthRect;
 
-    string fn;
-    ifstream ifs;
-    ifs.open(filename.c_str(), ifstream::in);
+    std::string fn;
+    std::ifstream ifs;
+    ifs.open(filename.c_str(), std::ifstream::in);
 
     oFaceComps.resize(21);
     for(int i = 0; i < 21; i++)
@@ -231,17 +232,17 @@ void CDetectionDBIO::ReadOneFileFromCASPEALR14MVFD(
  * @return      void
 */
 void CDetectionDBIO::AnalyzeFileNameFromCASPEALR14MVFD(
-    const string& filename,
+    const std::string& filename,
     int& dmu,
     int& degrees)
 {
-    string s_dmu = filename.substr(17, 2);
+    std::string s_dmu = filename.substr(17, 2);
     if(s_dmu == "PD") dmu = DOWN;
     else if(s_dmu == "PM") dmu = MIDDLE;
     else if(s_dmu == "PU") dmu = UP;
 
-    string s_degrees = filename.substr(20, 2);
-    stringstream ss;
+    std::string s_degrees = filename.substr(20, 2);
+    std::stringstream ss;
     ss << s_degrees;
     ss >> degrees;
 }
@@ -263,15 +264,15 @@ void CDetectionDBIO::AnalyzeFileNameFromCASPEALR14MVFD(
  * @return      void
 */
 void CDetectionDBIO::EstimateRects4MVFD(
-    const Point& leftEyeCenter,
-    const Point& rightEyeCenter,
+    const cv::Point& leftEyeCenter,
+    const cv::Point& rightEyeCenter,
     int dmu,
     int degrees,
-    Rect& faceRect,
-    Rect& leftEyeRect,
-    Rect& rightEyeRect,
-    Rect& mouthRect,
-    Rect& noseRect)
+    cv::Rect& faceRect,
+    cv::Rect& leftEyeRect,
+    cv::Rect& rightEyeRect,
+    cv::Rect& mouthRect,
+    cv::Rect& noseRect)
 {
     switch( dmu*7+(degrees/15+3) )
     {
@@ -396,14 +397,14 @@ void CDetectionDBIO::EstimateRects4MVFD(
  * @version     2010-04-07
  * @brief       Load face components from training files
  * @param       allFaceCompFiles4Training   Input  --  file names of all training face files
- * @param       database    Input   --  database, including PUT and CASPEALR1
- * @param       faceComps  Output  --  a vector of all face components from all files
+ * @param       database   Input   --  database, including PUT and CASPEALR1
+ * @param       faceComps  Output  --  a std::vector of all face components from all files
  * @return      void
 */
 void CDetectionDBIO::VO_LoadFaceCompTrainingData(
-    const vector<string>& allFaceCompFiles4Training,
+    const std::vector<std::string>& allFaceCompFiles4Training,
     unsigned int database,
-    vector<VO_FaceCompPos>& faceComps)
+    std::vector<VO_FaceCompPos>& faceComps)
 {
     faceComps.clear();
     
@@ -413,7 +414,7 @@ void CDetectionDBIO::VO_LoadFaceCompTrainingData(
         case CASPEALR1:
         {
             int NbOfFiles   = allFaceCompFiles4Training.size();
-            vector< vector<VO_FaceCompPos> > tempFaceComps;
+            std::vector< std::vector<VO_FaceCompPos> > tempFaceComps;
             tempFaceComps.resize(NbOfFiles);
             
             for ( unsigned int i = 0; i < NbOfFiles; i++ )
@@ -448,15 +449,15 @@ void CDetectionDBIO::VO_LoadFaceCompTrainingData(
  * @brief       Load object rectangles from training files
  * @param       allFaceCompFiles4Training   Input   --  file names of all training face files
  * @param       database    Input   --  database, including PUT and CASPEALR1
- * @param       objRects    Output  --  a vector of all face components from all files
+ * @param       objRects    Output  --  a std::vector of all face components from all files
  * @return      void
 */
 void CDetectionDBIO::VO_LoadFaceCompTrainingData(
-    const vector<string>& allFaceCompFiles4Training,
+    const std::vector<std::string>& allFaceCompFiles4Training,
     unsigned int database,
-    vector<Rect>& objRects)
+    std::vector<cv::Rect>& objRects)
 {
-    vector<VO_FaceCompPos> faceComps;
+    std::vector<VO_FaceCompPos> faceComps;
     CDetectionDBIO::VO_LoadFaceCompTrainingData(allFaceCompFiles4Training,
                                                 database,
                                                 faceComps);
