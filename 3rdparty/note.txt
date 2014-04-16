@@ -1,0 +1,7 @@
+The only 3rd party libraries that VOSM is based upon are
+
+	a) 	Boost for platform-independent file and directory operations
+		(The version that current VOSM 0.3.4 is built upon is Rlease 1.55.0)
+	b)	OpenCV
+		(The version that current VOSM 0.3.4 is built upon is Release 2.4.8)
+
