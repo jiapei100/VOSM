@@ -78,7 +78,7 @@ void CAnnotationDBIO::ReadASF(  const std::string &filename,
     oAAMShape.SetAnnotationFileName(filename);
 
     std::fstream fp;
-    fp.open(filename.c_str (), ios::in);
+    fp.open(filename.c_str (), std::ios::in);
 
     std::stringstream ss;
     std::string temp;
@@ -138,7 +138,7 @@ void CAnnotationDBIO::ReadPTS(  const std::string &filename,
     oAAMShape.SetAnnotationFileName(filename);
 
     std::fstream fp;
-    fp.open(filename.c_str (), ios::in);
+    fp.open(filename.c_str (), std::ios::in);
 
     std::string temp, oneLine;
     std::stringstream ss;
@@ -193,7 +193,7 @@ void CAnnotationDBIO::ReadOBJ(  const std::string &filename,
     oAAMShape.SetAnnotationFileName(filename);
 
     std::fstream fp;
-    fp.open(filename.c_str (), ios::in);
+    fp.open(filename.c_str (), std::ios::in);
 
     std::stringstream ss;
     std::string temp;
@@ -239,7 +239,7 @@ void CAnnotationDBIO::ReadWRL(  const std::string &filename,
     oAAMShape.SetAnnotationFileName(filename);
 
     std::fstream fp;
-    fp.open(filename.c_str (), ios::in);
+    fp.open(filename.c_str (), std::ios::in);
 
     std::string temp;
     std::stringstream ss;
@@ -304,23 +304,23 @@ void CAnnotationDBIO::WritePTS( const std::string &filename,
                                 const VO_Shape& iAAMShape)
 {
     std::fstream fp;
-    fp.open(filename.c_str (), ios::out);
+    fp.open(filename.c_str (), std::ios::out);
 
     std::string temp, oneLine;
     std::stringstream ss;
     float tempFloat = 0.0f;
     unsigned int NbOfPoints = iAAMShape.GetNbOfPoints();
 
-    fp << "version: 1" << endl
-    << "n_points: " << NbOfPoints << endl
-    << "{" << endl;
+    fp << "version: 1" << std::endl
+    << "n_points: " << NbOfPoints << std::endl
+    << "{" << std::endl;
 
     for (unsigned int i = 0; i < NbOfPoints; i++)
     {
-        fp << iAAMShape.GetA2DPoint(i).x << " " << iAAMShape.GetA2DPoint(i).y << endl;
+        fp << iAAMShape.GetA2DPoint(i).x << " " << iAAMShape.GetA2DPoint(i).y << std::endl;
     }
 
-    fp << "}" << endl << endl;
+    fp << "}" << std::endl << std::endl;
 
     fp.close ();
 }
