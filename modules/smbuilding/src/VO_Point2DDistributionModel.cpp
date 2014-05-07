@@ -105,7 +105,7 @@ void VO_Point2DDistributionModel::VO_BuildPointDistributionModel( const std::vec
     unsigned int NbOfPoints                 = allAlignedShapes[0].GetNbOfPoints();
     this->m_VONormalizedEllipses.resize(NbOfPoints);
     cv::Mat_<float> matAlignedPoints        = cv::Mat_<float>::zeros(NbOfSamples, 2);
-    cv::Mat_<float> matAlignedMeanPoint     = cv::Mat_<float>::zeros(1, 2);
+    //cv::Mat_<float> matAlignedMeanPoint     = cv::Mat_<float>::zeros(1, 2);
 	
     for(unsigned int i = 0; i < NbOfPoints; ++i)
 	{
@@ -114,7 +114,9 @@ void VO_Point2DDistributionModel::VO_BuildPointDistributionModel( const std::vec
             matAlignedPoints(j, 0)			= allAlignedShapes[j].GetA2DPoint(i).x;
             matAlignedPoints(j, 1)			= allAlignedShapes[j].GetA2DPoint(i).y;
 		}
-        cv::PCA pca = cv::PCA(matAlignedPoints, matAlignedMeanPoint, CV_PCA_DATA_AS_ROW, 2);
+        // 2014-05-08, asked by Pei JIA: why the following line is not correct??
+        //cv::PCA pca = cv::PCA(matAlignedPoints, matAlignedMeanPoint, CV_PCA_DATA_AS_ROW, 2);
+        cv::PCA pca = cv::PCA(matAlignedPoints, cv::Mat(), CV_PCA_DATA_AS_ROW, 2);
         float xx = pca.eigenvectors.at<float>(0,0);
         float yy = pca.eigenvectors.at<float>(0,1);
 		float theta = 0.0;
