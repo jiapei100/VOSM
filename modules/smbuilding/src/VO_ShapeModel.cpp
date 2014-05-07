@@ -881,7 +881,7 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
 	this->m_iNbOfEigenShapesAtMost 				= MIN(this->m_iNbOfSamples, this->m_iNbOfShapes);
     this->m_fTruncatedPercent_Shape 			= TPShape;
     cv::Mat_<float> matAlignedShapes			= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfShapes);
-    cv::Mat_<float> matAlignedMeanShape			= cv::Mat_<float>::zeros(1, this->m_iNbOfShapes);
+    //cv::Mat_<float> matAlignedMeanShape			= cv::Mat_<float>::zeros(1, this->m_iNbOfShapes);
 
     // Align all shapes
     this->m_fAverageShapeSize = VO_ShapeModel::VO_AlignAllShapes(this->m_vShapes, this->m_vAlignedShapes);
@@ -897,11 +897,15 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
     this->m_VOPDM.VO_BuildPointDistributionModel(this->m_vAlignedShapes);
 	//////////////////////////////////////////////////////////////////////////
 
-	matAlignedMeanShape = this->m_VOAlignedMeanShape.GetTheShapeInARow();
-	for(unsigned int i = 0; i < this->m_iNbOfSamples; ++i)
+    //matAlignedMeanShape = this->m_VOAlignedMeanShape.GetTheShapeInARow();
+    for(unsigned int i = 0; i < this->m_iNbOfSamples; i++)
 	{
-		cv::Mat tmpRow = matAlignedShapes.row(i);
-		this->m_vAlignedShapes[i].GetTheShapeInARow().copyTo(tmpRow);
+        cv::Mat_<float> shapeInARow = this->m_vAlignedShapes[i].GetTheShapeInARow();
+
+        for(unsigned int j = 0; j < this->m_iNbOfShapes; j++)
+        {
+            matAlignedShapes.at<float>(i,j) = shapeInARow.at<float>(0,j);
+        }
 	}
     // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
     this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenShapesAtMost) );
