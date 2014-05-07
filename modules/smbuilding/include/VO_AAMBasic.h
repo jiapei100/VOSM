@@ -121,10 +121,10 @@ protected:
     cv::Mat_<float>                 m_MatRt;
 
     /** Totally, n=m(4(k+4))=60*(4*(12+4))=3840 displacements. 4*12 */
-    std::vector< Mat_<float> > 	    m_vvCDisps;
+    std::vector< cv::Mat_<float> > 	m_vvCDisps;
 
     /** Totally, n=m(4(k+4))=60*(4*(12+4))=3840 displacements. 4*4, refer to AAM-API page 3 of 10 */
-    std::vector< Mat_<float> > 	    m_vvPoseDisps;
+    std::vector< cv::Mat_<float> > 	m_vvPoseDisps;
 
     /** Stegmann: Gradient Matrix 80259*12 */
     cv::Mat_<float>                 m_MatCParamGradientMatrix;
@@ -152,7 +152,7 @@ public:
     VO_AAMBasic();
 
     /** Destructor */
-    ~VO_AAMBasic();
+    virtual ~VO_AAMBasic();
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////Regression//////////////////////////////////////////////
@@ -177,44 +177,44 @@ public:
     void                            VO_CalcGradientMatrices();
 
     /** Build gradient matrices in terms of C parameters */
-    void                            VO_EstCParamGradientMatrix(Mat_<float>& oCParamGM);
+    void                            VO_EstCParamGradientMatrix(cv::Mat_<float>& oCParamGM);
 
     /** Build gradient matrices in terms of pose */
-    void                            VO_EstPoseGradientMatrix(Mat_<float>& oPoseGM);
+    void                            VO_EstPoseGradientMatrix(cv::Mat_<float>& oPoseGM);
 	////////////////////////////////////////////////////////////////////////////////////////////
 	
 	/** Appearance parameters constraints */
-	void							VO_AppearanceParameterConstraint(Mat_<float>& ioC, float nSigma = 4.0f);
+    void							VO_AppearanceParameterConstraint(cv::Mat_<float>& ioC, float nSigma = 4.0f);
 
 	/** Shape and texture project to shape parameters and texture parameters, and then concatenated */
-	void							VO_ShapeTexture2Appearance( VO_Shape iShape, VO_Texture iTexture, Mat_<float>& app ) const;
+    void							VO_ShapeTexture2Appearance( VO_Shape iShape, VO_Texture iTexture, cv::Mat_<float>& app ) const;
 	
 	/** Appearance projected to appearance parameters */
-    void   	                		VO_AppearanceProjectToCParam(const Mat_<float>& app, Mat_<float>& outC) const;
+    void   	                		VO_AppearanceProjectToCParam(const cv::Mat_<float>& app, cv::Mat_<float>& outC) const;
 
     /** Shape parameters and texture parameters projected to concatenated parameters */
-    void                            VO_SParamTParamProjectToCParam(const Mat_<float>& inS, const Mat_<float>& inT, Mat_<float>& outC) const;
+    void                            VO_SParamTParamProjectToCParam(const cv::Mat_<float>& inS, const cv::Mat_<float>& inT, cv::Mat_<float>& outC) const;
 
 	/** Appearance parameters back projected to appearance */
-    void   	                		VO_CParamBackProjectToAppearance(const Mat_<float>& inC, Mat_<float>& app) const;
+    void   	                		VO_CParamBackProjectToAppearance(const cv::Mat_<float>& inC, cv::Mat_<float>& app) const;
 	
     /** Concatenated parameters back projected to shape parameters and texture parameters */
-    void                            VO_CParamBackProjectToSParamTParam(const Mat_<float>& inC, Mat_<float>& outS, Mat_<float>& outT) const;
+    void                            VO_CParamBackProjectToSParamTParam(const cv::Mat_<float>& inC, cv::Mat_<float>& outS, cv::Mat_<float>& outT) const;
 
     /** Concatenated parameters back projected to aligned shape */
-    void                            VO_CParamBackProjectToAlignedShape(const Mat_<float>& inC, VO_Shape& oShape, int dim = 2) const;
+    void                            VO_CParamBackProjectToAlignedShape(const cv::Mat_<float>& inC, VO_Shape& oShape, int dim = 2) const;
 
     /** Concatenated parameters back projected to normalized texture */
-    void                            VO_CParamBackProjectToNormalizedTexture(const Mat_<float>& inC, VO_Texture& oTexture, int tr = 3) const;
+    void                            VO_CParamBackProjectToNormalizedTexture(const cv::Mat_<float>& inC, VO_Texture& oTexture, int tr = 3) const;
 
 	/** Build displacement sets */
     void                            VO_CreateDisplacementSets();
 
     /** Build displacement sets for C parameters */
-    static std::vector< Mat_<float> >   VO_CalcCParamDisplacementVectors(const std::vector<float>& vStdDisp, const Mat_<float>& cVectors);
+    static std::vector< cv::Mat_<float> >   VO_CalcCParamDisplacementVectors(const std::vector<float>& vStdDisp, const cv::Mat_<float>& cVectors);
 
     /** Build displacement sets for Pose parameters */
-    static std::vector< Mat_<float> >   VO_CalcPoseDisplacementVectors( const std::vector<float> &vScaleDisp, const std::vector<float>& vRotDisp, const std::vector<float>& vXDisp, const std::vector<float>& vYDisp);
+    static std::vector< cv::Mat_<float> >   VO_CalcPoseDisplacementVectors( const std::vector<float> &vScaleDisp, const std::vector<float>& vRotDisp, const std::vector<float>& vXDisp, const std::vector<float>& vYDisp);
 
 	/** Build Appearance model */
     void                            VO_BuildAppearanceModel(const std::vector<std::string>& allLandmarkFiles4Training,
@@ -239,19 +239,19 @@ public:
     void                            VO_LoadParameters4Fitting(const std::string& fd);
 
     /** Gets and Sets */
-	Mat_<float>                 	GetAppearanceMean() const {return this->m_PCAAppearance.mean;}
+    cv::Mat_<float>                 GetAppearanceMean() const {return this->m_PCAAppearance.mean;}
     cv::Mat_<float>                 GetAppearanceEigenValues() const {return this->m_PCAAppearance.eigenvalues;}
-    Mat_<float>                 	GetAppearanceEigenVectors() const {return this->m_PCAAppearance.eigenvectors;}
+    cv::Mat_<float>                 GetAppearanceEigenVectors() const {return this->m_PCAAppearance.eigenvectors;}
     cv::Mat_<float>                 GetWeightsScaleShape2Texture() const {return this->m_MatWeightsScaleShape2Texture;}
-	Mat_<float>						GetAppearanceProject2Truncated() const {return this->m_MatAppearanceProject2Truncated;}
+    cv::Mat_<float>					GetAppearanceProject2Truncated() const {return this->m_MatAppearanceProject2Truncated;}
     cv::Mat_<float>                 GetPcs() const {return this->m_MatPcs;}
     cv::Mat_<float>                 GetPcg() const {return this->m_MatPcg;}
     cv::Mat_<float>                 GetQs() const {return this->m_MatQs;}
     cv::Mat_<float>                 GetQg() const {return this->m_MatQg;}
     cv::Mat_<float>                 GetRc() const {return this->m_MatRc;}
     cv::Mat_<float>                 GetRt() const {return this->m_MatRt;}
-    std::vector< Mat_<float> >      GetCDisps() const {return this->m_vvCDisps;}
-    std::vector< Mat_<float> >      GetPoseDisps() const {return this->m_vvPoseDisps;}
+    std::vector< cv::Mat_<float> >  GetCDisps() const {return this->m_vvCDisps;}
+    std::vector< cv::Mat_<float> >  GetPoseDisps() const {return this->m_vvPoseDisps;}
     cv::Mat_<float>                 GetCParamGradientMatrix() const {return this->m_MatCParamGradientMatrix;}
     cv::Mat_<float>                 GetPoseGradientMatrix() const {return this->m_MatPoseGradientMatrix;}
     unsigned int                    GetNbOfAppearance() const {return this->m_iNbOfAppearance;}
@@ -259,19 +259,19 @@ public:
     unsigned int                    GetNbOfAppearanceEigens() const {return this->m_iNbOfAppearanceEigens;}
     float                           GetTruncatedPercent_Concatenated() const {return this->m_fTruncatedPercent_Appearance;}
 
-//    void                            SetWeightsScaleShape2Texture(const Mat_<float>& inWeightsScaleShape2Texture) 
+//    void                            SetWeightsScaleShape2Texture(const cv::Mat_<float>& inWeightsScaleShape2Texture)
 //                                    {inWeightsScaleShape2Texture.copyTo(this->m_MatWeightsScaleShape2Texture);}
-//    void                            SetPcs(const Mat_<float>& inPcs) {inPcs.copyTo(this->m_MatPcs);}
-//    void                            SetPcg(const Mat_<float>& inPcg) {inPcg.copyTo(this->m_MatPcg);}
-//    void                            SetQs(const Mat_<float>& inQs) {inQs.copyTo(this->m_MatQs);}
-//    void                            SetQg(const Mat_<float>& inQg) {inQg.copyTo(this->m_MatQg);}
-//    void                            SetRc(const Mat_<float>& inRc) {inRc.copyTo(this->m_MatRc);}
-//    void                            SetRt(const Mat_<float>& inRt) {inRt.copyTo(this->m_MatRt);}
+//    void                            SetPcs(const cv::Mat_<float>& inPcs) {inPcs.copyTo(this->m_MatPcs);}
+//    void                            SetPcg(const cv::Mat_<float>& inPcg) {inPcg.copyTo(this->m_MatPcg);}
+//    void                            SetQs(const cv::Mat_<float>& inQs) {inQs.copyTo(this->m_MatQs);}
+//    void                            SetQg(const cv::Mat_<float>& inQg) {inQg.copyTo(this->m_MatQg);}
+//    void                            SetRc(const cv::Mat_<float>& inRc) {inRc.copyTo(this->m_MatRc);}
+//    void                            SetRt(const cv::Mat_<float>& inRt) {inRt.copyTo(this->m_MatRt);}
 //    void                            SetCDisps(const std::vector<std::vector<float> >& inCDisps) {this->m_vvCDisps = inCDisps;}
 //    void                            SetPoseDisps(const std::vector<std::vector<float> >& inPoseDisps) {this->m_vvPoseDisps = inPoseDisps;}
-//    void                            SetCParamGradientMatrix(const Mat_<float>& inCParamGradientMatrix) 
+//    void                            SetCParamGradientMatrix(const cv::Mat_<float>& inCParamGradientMatrix)
 //                                    {inCParamGradientMatrix.copyTo(this->m_MatCParamGradientMatrix);}
-//    void                            SetPoseParamGradientMatrix(const Mat_<float>& inPoseGradientMatrix) 
+//    void                            SetPoseParamGradientMatrix(const cv::Mat_<float>& inPoseGradientMatrix)
 //                                    {inPoseGradientMatrix.copyTo(this->m_MatPoseGradientMatrix);}
 //    void                            SetNbOfConcatenated(unsigned int inNbOfConcatenated) {this->m_iNbOfAppearance = inNbOfConcatenated;}
 //    void                            SetTruncatedPercent_Concatenated(float inTruncatedPercent_Concatenated) 

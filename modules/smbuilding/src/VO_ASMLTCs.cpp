@@ -114,10 +114,10 @@ VO_ASMLTCs::~VO_ASMLTCs()
  * @param      	useKnownTriangles  				Input - use known triangle structures??
  * @param		ltcMtd							Input - local texture constrain methods
  * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "cv::vector<float>"
+ * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
-void VO_ASMLTCs::VO_BuildASMLTCs (	const cv::vector<std::string>& allLandmarkFiles4Training,
-									const cv::vector<std::string>& allImgFiles4Training,
+void VO_ASMLTCs::VO_BuildASMLTCs (	const std::vector<std::string>& allLandmarkFiles4Training,
+                                    const std::vector<std::string>& allImgFiles4Training,
 									const std::string& shapeinfoFileName,
 									unsigned int database,
 									unsigned int channels,
@@ -260,7 +260,7 @@ void VO_ASMLTCs::VO_LoadLTCTrainingData()
 // ss << i;
 // ss >> ssi;
 // static std::string fn = ssi+".jpg";
-// imwrite(fn.c_str(), resizedImg);
+// cv::imwrite(fn.c_str(), resizedImg);
 
 		// Explained by JIA Pei -- wavelet feature extraction
         for( unsigned int k = 0; k < this->m_iNbOfPoints; ++k )
@@ -293,7 +293,7 @@ void VO_ASMLTCs::VO_LoadLTCTrainingData()
  * @param		mtd						Input	-- LTC method
  * @param		shiftX					Input	-- shift in X direction
  * @param		shiftY					Input	-- shift in Y direction
- * @return		cv::Mat_<float>				Output	-- the extracted LTC
+ * @return		cv::Mat_<float>			Output	-- the extracted LTC
  */
 void VO_ASMLTCs::VO_LoadLTC4OneAnnotatedPoint(	const cv::Mat& iImg,
 												const VO_Shape& theShape,
@@ -392,7 +392,7 @@ void VO_ASMLTCs::VO_HardSaveWaveletSingleChannelImage(const std::string& fn,
 			break;
 		}
 	}
-	imwrite(fn, img);
+    cv::imwrite(fn, img);
 }
 
 

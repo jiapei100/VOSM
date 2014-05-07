@@ -317,7 +317,7 @@ VO_Profile VO_Profile::operator/(float value)
 {
     if( fabs(value) <= FLT_MIN )
     {
-        cerr << "Divided by zero!" << endl;
+        std::cerr << "Divided by zero!" << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -339,7 +339,7 @@ VO_Profile& VO_Profile::operator/=(float value)
 {
     if( fabs(value) <= FLT_MIN )
     {
-        cerr << "Divided by zero!" << endl;
+        std::cerr << "Divided by zero!" << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -364,7 +364,7 @@ VO_Profile VO_Profile::operator/(const VO_Profile& iProfile)
 		{
             if( fabs(iProfile.m_MatProf(i,j)) <= FLT_MIN )
 			{
-				cerr << "Divided by zero!" << endl;
+                std::cerr << "Divided by zero!" << std::endl;
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -392,7 +392,7 @@ VO_Profile& VO_Profile::operator/=(const VO_Profile& iProfile)
 		{
             if( fabs(iProfile.m_MatProf(i,j)) <= FLT_MIN )
 			{
-				cerr << "Divided by zero!" << endl;
+                std::cerr << "Divided by zero!" << std::endl;
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -416,7 +416,7 @@ VO_Profile& VO_Profile::operator/=(const VO_Profile& iProfile)
 float&  VO_Profile::operator() (unsigned row, unsigned col)
 {
     if ( row >= m_MatProf.rows || col >= m_MatProf.cols )
-		cerr << "cv::Matrix subscript out of bounds" << endl;
+        std::cerr << "cv::Matrix subscript out of bounds" << std::endl;
     return m_MatProf.at<float>(row, col);
 }
 
@@ -432,7 +432,7 @@ float&  VO_Profile::operator() (unsigned row, unsigned col)
 float  VO_Profile::operator() (unsigned row, unsigned col) const
 {
     if ( row >= m_MatProf.rows || col >= m_MatProf.cols )
-		cerr << "cv::Matrix subscript out of bounds" << endl;
+        std::cerr << "cv::Matrix subscript out of bounds" << std::endl;
     return m_MatProf.at<float>(row, col);
 }
 	
@@ -476,7 +476,7 @@ void VO_Profile::Resize(unsigned int length, unsigned int dim)
 cv::Mat_<float> VO_Profile::GetSubProfile(int start, unsigned int length, unsigned int dimIdx) const
 {
     if(start+length > this->m_MatProf.rows)
-        cerr << "VO_Profile  start+length is bigger than m_MatProf.rows" << endl;
+        std::cerr << "VO_Profile  start+length is bigger than m_MatProf.rows" << std::endl;
 
 	cv::Mat_<float> oProfile = cv::Mat_<float>::zeros(length, 1);
 	for(unsigned int i = 0; i < length; i++)
@@ -492,7 +492,7 @@ cv::Mat_<float> VO_Profile::GetSubProfile(int start, unsigned int length, unsign
  * @author     	JIA Pei
  * @version    	2010-02-07
  * @brief		Set 1 dimension Profile
- * @param		iOneDimProf 	Input		1D column cv::vector, length*1
+ * @param		iOneDimProf 	Input		1D column std::vector, length*1
  * @return		void
  */ 
 void VO_Profile::Set1DimProfile(const cv::Mat_<float>& iOneDimProf, unsigned int idx)
@@ -501,12 +501,12 @@ void VO_Profile::Set1DimProfile(const cv::Mat_<float>& iOneDimProf, unsigned int
     unsigned int NbOfLength = this->m_MatProf.rows;
 	if(idx >= NbOfDim)
 	{
-        cerr << "idx shouldn't be bigger than the dim of m_MatProf!" << endl;
+        std::cerr << "idx shouldn't be bigger than the dim of m_MatProf!" << std::endl;
 		exit(1);
 	}
 	if(iOneDimProf.rows != NbOfLength)
 	{
-        cerr << "input profile length should be equal to the length of m_MatProf!" << endl;
+        std::cerr << "input profile length should be equal to the length of m_MatProf!" << std::endl;
 		exit(1);
 	}
 	for(unsigned int i = 0; i < NbOfLength; i++)
@@ -532,7 +532,7 @@ void VO_Profile::Set1DimProfile(const VO_Profile& iOneDimProf, unsigned int idx)
  * @param		deltaY					Input	-- deltaY in some direction
  * @param		ProfileLength	Input	-- how many elements for a single profile
  * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "cv::vector<float>"
+ * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
 void VO_Profile::VO_Get1DProfileInMat4OneLandmark (	const cv::Mat& iImg,
                                                     const cv::Point2f& ThisPoint,
@@ -699,11 +699,11 @@ void VO_Profile::VO_Get1DProfileInMat4OneLandmark (	const cv::Mat& iImg,
 	}
 	else
 	{
-		cerr << "VO_Profile: image channels error!" << endl;
+        std::cerr << "VO_Profile: image channels error!" << std::endl;
 		exit(1);
 	}
 
-//imwrite("test.jpg", oImg);
+//cv::imwrite("test.jpg", oImg);
 }
 
 
@@ -721,11 +721,11 @@ void VO_Profile::VO_Get1DProfileInMat4OneLandmark (	const cv::Mat& iImg,
  * @param		pDeltaX					Output	-- deltaX in normal direction
  * @param		pDeltaY					Output	-- deltaY in normal direction
  * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "cv::vector<float>"
+ * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
 void VO_Profile::VO_GetNDProfiles4OneLandmark (	const cv::Mat& iImg,
 												const VO_Shape& iShape,
-												const cv::vector<VO_Shape2DInfo>& iShapeInfo,
+                                                const std::vector<VO_Shape2DInfo>& iShapeInfo,
 												unsigned int ptIdx,
 												VO_Profile& oProf,
 												unsigned int dim,

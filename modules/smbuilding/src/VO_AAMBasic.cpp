@@ -170,9 +170,9 @@ void VO_AAMBasic::VO_DoCParamExperiments()
     for(unsigned int i = 0; i < this->m_iNbOfSamples; i++)
     {
 		if(this->m_iNbOfChannels == 1)
-			img = imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
+            img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
 		else if (this->m_iNbOfChannels == 3)
-			img = imread ( this->m_vStringTrainingImageNames[i].c_str (), 1 );
+            img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 1 );
 		else
 			cerr << "We can't deal with image channels not equal to 1 or 3!" << endl;
 
@@ -240,10 +240,10 @@ void VO_AAMBasic::VO_DoCParamExperiments()
 					std::string res1Str 	= "CDisplaceLoadedWarpedImage" + stri + "_" + strj + "_" + strk + ".jpg";
 					std::string res2Str 	= "CDisplaceTextureWarpedImage" + stri + "_" + strj + "_" + strk + ".jpg";
 
-					imwrite(temp1Str.c_str(), tempImage1 );
-					imwrite(temp2Str.c_str(), tempImage2 );
-					imwrite(res1Str.c_str(), resImage1 );
-					imwrite(res2Str.c_str(), resImage2 );
+                    cv::imwrite(temp1Str.c_str(), tempImage1 );
+                    cv::imwrite(temp2Str.c_str(), tempImage2 );
+                    cv::imwrite(res1Str.c_str(), resImage1 );
+                    cv::imwrite(res2Str.c_str(), resImage2 );
 
 					ssi.clear();
 					ssj.clear();
@@ -420,8 +420,8 @@ void VO_AAMBasic::VO_DoPoseExperiments()
 					std::string temp1Str = "poseDisplaceLoadedImage" + stri + "_" + strj + "_" + strk + ".jpg";
 					std::string res1Str 	= "poseDisplaceLoadedWarpedImage" + stri + "_" + strj + "_" + strk + ".jpg";
 
-					imwrite(temp1Str.c_str(), tempImage );
-					imwrite(res1Str.c_str(), resImage );
+                    cv::imwrite(temp1Str.c_str(), tempImage );
+                    cv::imwrite(res1Str.c_str(), resImage );
 
 					ssi.clear();
 					ssj.clear();
@@ -627,10 +627,10 @@ void VO_AAMBasic::VO_EstCParamGradientMatrix(cv::Mat_<float>& oCParamGM)
 //	VO_Texture tempTexture;
 //	cv::Mat oImg(tempImage1);
 //	cout << this->m_VOReferenceShape << endl;
-//	imwrite("template.jpg", this->m_ImageTemplateFace);
+//	cv::imwrite("template.jpg", this->m_ImageTemplateFace);
 //	VO_TextureModel::VO_LoadOneTextureFromShape(this->m_VOReferenceShape, this->m_ImageTemplateFace, this->m_vTemplateTriangle2D, this->m_vTemplatePointWarpInfo, tempTexture);
 //	VO_TextureModel::VO_PutOneTextureToTemplateShape(tempTexture, this->m_vTemplateTriangle2D, oImg);
-//	imwrite("temp.jpg", oImg);
+//	cv::imwrite("temp.jpg", oImg);
 
 
 					VO_TextureModel::VO_WarpFromOneShapeToAnother(this->m_VOReferenceShape, currentShapeInstanceNegative, this->m_vTemplateTriangle2D, tempImage1, resImage1);
@@ -737,9 +737,9 @@ void VO_AAMBasic::VO_EstPoseGradientMatrix(cv::Mat_<float>& oPoseGM)
     for(unsigned int i = 0; i < this->m_iNbOfSamples; i++)
     {
 		if(this->m_iNbOfChannels == 1)
-			img = imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
+            img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
 		else if (this->m_iNbOfChannels == 3)
-			img = imread ( this->m_vStringTrainingImageNames[i].c_str (), 1 );
+            img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 1 );
 		else
 			cerr << "We can't deal with image channels not equal to 1 or 3!" << endl;
 
@@ -822,10 +822,10 @@ void VO_AAMBasic::VO_EstPoseGradientMatrix(cv::Mat_<float>& oPoseGM)
 					std::string res1Str 	= "poseDisplaceLoadedWarpedImage" + stri + "_" + strj + "_" + strk + ".jpg";
 					std::string res2Str 	= "poseDisplaceLoadedWarpedImage" + stri + "_" + strj1 + "_" + strk + ".jpg";
 
-					imwrite(temp1Str.c_str(), tempImage1 );
-					imwrite(temp2Str.c_str(), tempImage2 );
-					imwrite(res1Str.c_str(), resImage1 );
-					imwrite(res2Str.c_str(), resImage2 );
+                    cv::imwrite(temp1Str.c_str(), tempImage1 );
+                    cv::imwrite(temp2Str.c_str(), tempImage2 );
+                    cv::imwrite(res1Str.c_str(), resImage1 );
+                    cv::imwrite(res2Str.c_str(), resImage2 );
 
 					ssi.clear();
 					ssj.clear();

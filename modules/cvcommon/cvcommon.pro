@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG(debug, debug | release): TARGET = vo_commonD
+CONFIG(debug, debug | release): TARGET = cvcommonD
 
 INCLUDEPATH += \
                 include \

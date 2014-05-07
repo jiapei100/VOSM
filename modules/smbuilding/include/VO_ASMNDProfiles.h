@@ -106,7 +106,7 @@ protected:
     std::vector< std::vector< std::vector< cv::Mat_<float> > > >    m_vvvCVMInverseOfSg;
 
 	/** Initialization */
-	void 													init();
+    void                                                init();
 
 public:
 	enum { SAME = 0, PYRAMID = 1, DESCENDING = 2};
@@ -115,7 +115,7 @@ public:
     VO_ASMNDProfiles();
 
     /** Destructor */
-    ~VO_ASMNDProfiles();
+    virtual ~VO_ASMNDProfiles();
 
     /** Build ASM ND Profile model */
     void                                				VO_BuildASMNDProfiles(	const std::vector<std::string>& allLandmarkFiles4Training,

@@ -86,30 +86,30 @@ friend class VO_FittingASMLTCs;
 friend class VO_FittingASMNDProfiles;
 friend class VO_FittingAFM;
 private:
-    Mat                   		m_IplImageTempFaceX;
-    Mat                   		m_IplImageTempFaceY;
-    Mat                   		m_IplImageTempFace;
+    cv::Mat                   	m_IplImageTempFaceX;
+    cv::Mat                   	m_IplImageTempFaceY;
+    cv::Mat                   	m_IplImageTempFace;
 protected:
     /** "Revisited" P26-27, 4*116 */
-    Mat_<float>					m_MatSimilarityTransform;
+    cv::Mat_<float>             m_MatSimilarityTransform;
 
     /** Steepest Descent Images for each point, 90396*20 */
-    Mat_<float>					m_MatSteepestDescentImages4ShapeModel;
+    cv::Mat_<float>				m_MatSteepestDescentImages4ShapeModel;
 
     /** Steepest Descent Images for global shape normalization, 90396*4 */
-    Mat_<float>					m_MatSteepestDescentImages4GlobalShapeNormalization;
+    cv::Mat_<float>				m_MatSteepestDescentImages4GlobalShapeNormalization;
 
     /** Combined Steepest Descent Images, 90396*24 */
-    Mat_<float>					m_MatSteepestDescentImages;
+    cv::Mat_<float>				m_MatSteepestDescentImages;
 
     /** Combined Modified Steepest Descent Images, 90396*24 */
-    Mat_<float>					m_MatModifiedSteepestDescentImages;
+    cv::Mat_<float>				m_MatModifiedSteepestDescentImages;
 
     /** Hessian Matrix, actually, Hessian matrix is summed up from all the pixels in the image, 20*20, or 24*24 */
-    Mat_<float>					m_MatHessianMatrixInverse;
+    cv::Mat_<float>				m_MatHessianMatrixInverse;
 
     /** Pre computed matrix 24*90396 */
-    Mat_<float>                 m_MatICIAPreMatrix;
+    cv::Mat_<float>             m_MatICIAPreMatrix;
 
     /** Initialization */
     void                        init();
@@ -119,7 +119,7 @@ public:
     VO_AAMInverseIA();
 
     /** Destructor */
-    ~VO_AAMInverseIA();
+    virtual ~VO_AAMInverseIA();
 
     /** Pre-computation for Inverse Compositional Image Alignment AAM Fitting */
 

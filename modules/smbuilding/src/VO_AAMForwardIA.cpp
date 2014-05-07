@@ -104,10 +104,10 @@ VO_AAMForwardIA::~VO_AAMForwardIA()
  * @param      	TPTexture     					Input - truncated percentage for texture model
  * @param      	useKnownTriangles  				Input - use known triangle structures??
  * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "cv::vector<float>"
+ * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
-void VO_AAMForwardIA::VO_BuildAAMFCIA(const cv::vector<std::string>& allLandmarkFiles4Training,
-									const cv::vector<std::string>& allImgFiles4Training,
+void VO_AAMForwardIA::VO_BuildAAMFCIA(const std::vector<std::string>& allLandmarkFiles4Training,
+                                    const std::vector<std::string>& allImgFiles4Training,
 									const std::string& shapeinfoFileName, 
 									unsigned int database,
 									unsigned int levels,
@@ -163,7 +163,7 @@ void VO_AAMForwardIA::VO_Load(const std::string& fd)
     std::string fn = fd+"/AAMFCIA";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "AAMFCIA subfolder is not existing. " << endl;
+        std::cout << "AAMFCIA subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 }
@@ -182,11 +182,11 @@ void VO_AAMForwardIA::VO_LoadParameters4Fitting(const std::string& fd)
     std::string fn = fd+"/AAMFCIA";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "AAMFCIA subfolder is not existing. " << endl;
+        std::cout << "AAMFCIA subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    fstream fp;
+    std::fstream fp;
     std::string tempfn;
     std::string temp;
 

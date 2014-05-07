@@ -185,8 +185,8 @@ public:
     static bool                         VO_TriangleHasBeenCounted(const std::vector<VO_Triangle2DStructure>& triangles, const std::vector<unsigned int>& t);
 
     /** Build Edges */
-    static unsigned int                 VO_BuildEdges(const VO_Shape& iShape, const CvSubdiv2D* Subdiv, std::vector<VO_Edge>& outEdges);
-    static unsigned int                 VO_BuildEdges(const VO_Shape& iShape, const cv::Subdiv2D& Subdiv, std::vector<VO_Edge>& outEdges);
+    //static unsigned int                 VO_BuildEdges(const VO_Shape& iShape, const CvSubdiv2D* subdiv, std::vector<VO_Edge>& outEdges);
+    static unsigned int                 VO_BuildEdges(const VO_Shape& iShape, const cv::Subdiv2D& subdiv, std::vector<VO_Edge>& outEdges);
 
     /** Build triangles */
     static unsigned int                 VO_BuildTriangles(const VO_Shape& iShape, const std::vector<VO_Edge>& edges, std::vector<VO_Triangle2DStructure>& outTriangles);

@@ -126,13 +126,13 @@ public:
     VO_AFM();
 	
     /** Destructor */
-    ~VO_AFM();
+    virtual ~VO_AFM();
 	
 	/** Feature parameters constraints */
     void							VO_FeatureParameterConstraint(cv::Mat_<float>& ioF, float nSigma = 3.0f);
 
     /** Build ASMLTCs model */
-    void                         	VO_BuildFeatureModel ( const std::vector<std::string>& allLandmarkFiles4Training,
+    void                         	VO_BuildFeatureModel (  const std::vector<std::string>& allLandmarkFiles4Training,
 															const std::vector<std::string>& allImgFiles4Training,
 															const std::string& shapeinfoFileName, 
 															unsigned int database,

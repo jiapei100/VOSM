@@ -106,7 +106,7 @@ VO_ASMNDProfiles::~VO_ASMNDProfiles()
  * @param      	ProduceMethod   				Input - method
  * @return		void
 */
-void VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(	cv::vector<unsigned int>& nbOfProfilesPerPixelAtLevels,
+void VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(	std::vector<unsigned int>& nbOfProfilesPerPixelAtLevels,
 														unsigned int NbOfLevels, 
 														unsigned int NbOfProfileInLevel0, 
 														unsigned int ProduceMethod)
@@ -201,7 +201,7 @@ void VO_ASMNDProfiles::VO_LoadProfileTrainingData ()
 // ss << i;
 // ss >> ssi;
 // static std::string fn = ssi+".jpg";
-// imwrite(fn.c_str(), resizedImg);
+// cv::imwrite(fn.c_str(), resizedImg);
 
 			// Explained by JIA Pei -- wavelet feature extraction
             for( unsigned int k = 0; k < this->m_iNbOfPoints; ++k )
@@ -280,8 +280,8 @@ void VO_ASMNDProfiles::VO_CalcStatistics4AllProfiles()
  * @param      	useKnownTriangles  				Input - use known triangle structures??
  * @return		void
   */
-void VO_ASMNDProfiles::VO_BuildASMNDProfiles ( const cv::vector<std::string>& allLandmarkFiles4Training,
-												const cv::vector<std::string>& allImgFiles4Training,
+void VO_ASMNDProfiles::VO_BuildASMNDProfiles ( const std::vector<std::string>& allLandmarkFiles4Training,
+                                                const std::vector<std::string>& allImgFiles4Training,
 												const std::string& shapeinfoFileName,
 												unsigned int database,
 												unsigned int channels,

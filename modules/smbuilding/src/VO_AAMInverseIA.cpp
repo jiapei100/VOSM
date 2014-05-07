@@ -97,7 +97,7 @@ VO_AAMInverseIA::~VO_AAMInverseIA()
 */
 void VO_AAMInverseIA::VO_CalcTemplateFaceGradients ()
 {
-    cv::vector< cv::vector<int> >     tblr;
+    std::vector< std::vector<int> >     tblr;
     tblr.resize(this->m_iNbOfPixels);
 
     for (unsigned int i = 0; i < this->m_iNbOfPixels; i++)
@@ -151,7 +151,7 @@ void VO_AAMInverseIA::VO_CalcTemplateFaceGradients ()
         }
     }
 
-	cv::vector< cv::vector <float> > tempGradients, tempNormalizedGradients;
+    std::vector< std::vector <float> > tempGradients, tempNormalizedGradients;
     tempGradients.resize(this->m_iNbOfChannels);
     tempNormalizedGradients.resize(this->m_iNbOfChannels);
     for (unsigned int m = 0; m < this->m_iNbOfChannels; m++)
@@ -491,10 +491,10 @@ void VO_AAMInverseIA::VO_CalcICIAPreMatrix()
  * @param      	TPTexture     					Input - truncated percentage for texture model
  * @param      	useKnownTriangles  				Input - use known triangle structures??
  * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "cv::vector<float>"
+ * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
- void VO_AAMInverseIA::VO_BuildAAMICIA(const cv::vector<std::string>& allLandmarkFiles4Training,
-									const cv::vector<std::string>& allImgFiles4Training,
+ void VO_AAMInverseIA::VO_BuildAAMICIA(const std::vector<std::string>& allLandmarkFiles4Training,
+                                    const std::vector<std::string>& allImgFiles4Training,
 									const std::string& shapeinfoFileName,
 									unsigned int database,
 									unsigned int channels,
@@ -536,20 +536,20 @@ void VO_AAMInverseIA::VO_Save(const std::string& fd)
     if (!boost::filesystem::is_directory(fn) )
         boost::filesystem::create_directory( fn );
 
-    fstream fp;
+    std::fstream fp;
     std::string tempfn;
 
     // m_IplImageTempFaceX
     tempfn = fn + "/m_IplImageTempFaceX.jpg";
-    imwrite(tempfn.c_str(), this->m_IplImageTempFaceX);
+    cv::imwrite(tempfn.c_str(), this->m_IplImageTempFaceX);
 
     // m_IplImageTempFaceY
     tempfn = fn + "/m_IplImageTempFaceY.jpg";
-    imwrite(tempfn.c_str(), this->m_IplImageTempFaceY);
+    cv::imwrite(tempfn.c_str(), this->m_IplImageTempFaceY);
 
     // m_IplImageTempFace
     tempfn = fn + "/m_IplImageTempFace.jpg";
-    imwrite(tempfn.c_str(), this->m_IplImageTempFace);
+    cv::imwrite(tempfn.c_str(), this->m_IplImageTempFace);
 
     // m_MatSimilarityTransform
     tempfn = fn + "/m_MatSimilarityTransform" + ".txt";
@@ -620,7 +620,7 @@ void VO_AAMInverseIA ::VO_Load(const std::string& fd)
         exit(EXIT_FAILURE);
     }
 
-    fstream fp;
+    std::fstream fp;
     std::string tempfn;
     std::string temp;
 
@@ -698,7 +698,7 @@ void VO_AAMInverseIA ::VO_LoadParameters4Fitting(const std::string& fd)
         exit(EXIT_FAILURE);
     }
 
-    fstream fp;
+    std::fstream fp;
     std::string tempfn;
     std::string temp;
 

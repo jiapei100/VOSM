@@ -98,7 +98,7 @@ public:
     VO_AAMForwardIA();
 
     /** Destructor */
-    ~VO_AAMForwardIA();
+    virtual ~VO_AAMForwardIA();
 
     /** Build ICIA AAM model */
     void						VO_BuildAAMFCIA(const std::vector<std::string>& allLandmarkFiles4Training,

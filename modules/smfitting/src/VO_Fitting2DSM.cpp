@@ -221,7 +221,7 @@ float VO_Fitting2DSM::VO_CalcErrorImage(const cv::Mat& iImg,
  * @param       pyramidlevel        Input -- pyramid levels, normally 3
 */
 float VO_Fitting2DSM::VO_StartFitting(  const cv::Mat& iImage,
-                                        cv::vector<cv::Mat>& oImages,
+                                        std::vector<cv::Mat>& oImages,
                                         int fittingMethod,
                                         const cv::Point2f& ptLeftEyeCenter,
                                         const cv::Point2f& ptRightEyeCenter,
@@ -316,7 +316,7 @@ float VO_Fitting2DSM::VO_StartFitting(  const cv::Mat& iImage,
     if (oImages.size() > 0 ) oImages.back().copyTo(this->m_ImageOutput);
     else this->m_ImageOutput = this->m_ImageInput;
 
-// cv::vector<float> angles;
+// std::vector<float> angles;
 // VO_AAMFaceRecognition::CalcFittedFaceAngle2D(angles, this->m_VOShape, this->m_FaceParts);
 // imwrite("test.jpg", this->m_ImageOutput);
 
@@ -337,7 +337,7 @@ float VO_Fitting2DSM::VO_StartFitting(  const cv::Mat& iImage,
 void VO_Fitting2DSM::VO_DrawMesh(const VO_Shape& iShape, const VO_AXM* iModel, cv::Mat& ioImg)
 {
     cv::Point iorg,idst;
-    cv::vector<VO_Edge> edges = iModel->GetEdge();
+    std::vector<VO_Edge> edges = iModel->GetEdge();
     unsigned int NbOfEdges = iModel->GetNbOfEdges();
 
     for (unsigned int i = 0; i < NbOfEdges; i++)
@@ -369,7 +369,7 @@ void VO_Fitting2DSM::VO_DrawMesh(const VO_Shape& iShape, const VO_AXM* iModel, c
  */
 void VO_Fitting2DSM::VO_DrawAline(  const VO_Shape& iShape,
                                     const VO_Shape& theSubshape,
-                                    const cv::vector<float>& iLine,
+                                    const std::vector<float>& iLine,
                                     cv::Mat& oImg,
                                     unsigned int dir,
                                     bool ws,

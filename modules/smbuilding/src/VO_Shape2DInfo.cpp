@@ -107,10 +107,10 @@ std::istream& operator>>(std::istream &is, VO_Shape2DInfo& shapeinfo)
  * @version    	2010-02-05
  * @brief      	read a file to get the shape information
  * @param      	filename                        input parameter, file to read from
- * @param      	cv::vector<VO_Shape2DInfo>       	output parameter, a cv::vector of all shape points' information
- * @param      	VO_FaceParts       				output parameter, a cv::vector of all parts information
+ * @param      	std::vector<VO_Shape2DInfo>       	output parameter, a std::vector of all shape points' information
+ * @param      	VO_FaceParts       				output parameter, a std::vector of all parts information
 */
-void VO_Shape2DInfo::ReadShape2DInfo(const std::string& filename, cv::vector<VO_Shape2DInfo>& oShapeInfo, VO_FaceParts& faceparts)
+void VO_Shape2DInfo::ReadShape2DInfo(const std::string& filename, std::vector<VO_Shape2DInfo>& oShapeInfo, VO_FaceParts& faceparts)
 {
     VO_Shape2DInfo tempShapeInfo;
     VO_FacePart onePart;

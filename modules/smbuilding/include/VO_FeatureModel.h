@@ -117,7 +117,7 @@ public:
     VO_FeatureModel();
 
     /** Destructor */
-    ~VO_FeatureModel();
+    virtual ~VO_FeatureModel();
 
 	/** Load features for one face */
 	static bool						VO_LoadFeatures4OneFace(const VO_Shape& iShape, 

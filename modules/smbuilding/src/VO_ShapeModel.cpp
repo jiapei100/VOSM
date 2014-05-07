@@ -346,57 +346,57 @@ bool VO_ShapeModel::VO_TriangleHasBeenCounted(const std::vector<VO_Triangle2DStr
  * @param      	outEdges	        Output - edges
  * @return     	unsigned int        Number of edges
 */
-unsigned int VO_ShapeModel::VO_BuildEdges(const VO_Shape& iShape, const CvSubdiv2D* Subdiv, std::vector<VO_Edge>& outEdges)
-{
-    unsigned int NbOfPoints = iShape.GetNbOfPoints();
-    CvSeqReader  reader;
+//unsigned int VO_ShapeModel::VO_BuildEdges(const VO_Shape& iShape, const CvSubdiv2D* subdiv, std::vector<VO_Edge>& outEdges)
+//{
+//    unsigned int NbOfPoints = iShape.GetNbOfPoints();
+//    CvSeqReader  reader;
 
-    cvStartReadSeq( (CvSeq*)(Subdiv->edges), &reader, 0 );
+//    cvStartReadSeq( (CvSeq*)(Subdiv->edges), &reader, 0 );
 
-    for( unsigned int i = 0; i < Subdiv->edges->total; i++ )
-    {
-        CvQuadEdge2D* edge = (CvQuadEdge2D*)(reader.ptr);
+//    for( unsigned int i = 0; i < Subdiv->edges->total; i++ )
+//    {
+//        CvQuadEdge2D* edge = (CvQuadEdge2D*)(reader.ptr);
 
-        if( CV_IS_SET_ELEM( edge ))
-        {
-            cv::Point2f org;
-            cv::Point2f dst;
+//        if( CV_IS_SET_ELEM( edge ))
+//        {
+//            cv::Point2f org;
+//            cv::Point2f dst;
 
-            CvSubdiv2DPoint* org_pt = cvSubdiv2DEdgeOrg((CvSubdiv2DEdge)edge);
-            CvSubdiv2DPoint* dst_pt = cvSubdiv2DEdgeDst((CvSubdiv2DEdge)edge);
+//            CvSubdiv2DPoint* org_pt = cvSubdiv2DEdgeOrg((CvSubdiv2DEdge)edge);
+//            CvSubdiv2DPoint* dst_pt = cvSubdiv2DEdgeDst((CvSubdiv2DEdge)edge);
 
-            if( org_pt && dst_pt )
-            {
-                org = org_pt->pt;
-                dst = dst_pt->pt;
+//            if( org_pt && dst_pt )
+//            {
+//                org = org_pt->pt;
+//                dst = dst_pt->pt;
 
-                for (unsigned int j = 0; j < NbOfPoints; j++)
-                {
-                    // if the current edge convex (org points, not the dst point) is in our point list
-                    if ( (fabs ( org.x - iShape.GetACol(j)(0, 0) ) < FLT_EPSILON )
-                        && ( fabs ( org.y - iShape.GetACol(j)(1, 0) ) < FLT_EPSILON ) )
-                    {
-                        for (unsigned int k = 0; k < NbOfPoints; k++)
-                        {
-                            // With the above org point, we search around for the dst point(s),
-                            // which make org-dst an edge during cvSubdivDelaunay2DInsert()
-                            if ( ( fabs (dst.x - iShape.GetACol(k)(0, 0) ) < FLT_EPSILON )
-                                && ( fabs (dst.y - iShape.GetACol(k)(1, 0) ) < FLT_EPSILON ) )
-                            {
-                                // Already tested, this->m_vEdge is definitely correct!
-                                outEdges.push_back ( VO_Edge(j,k) );
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//                for (unsigned int j = 0; j < NbOfPoints; j++)
+//                {
+//                    // if the current edge convex (org points, not the dst point) is in our point list
+//                    if ( (fabs ( org.x - iShape.GetACol(j)(0, 0) ) < FLT_EPSILON )
+//                        && ( fabs ( org.y - iShape.GetACol(j)(1, 0) ) < FLT_EPSILON ) )
+//                    {
+//                        for (unsigned int k = 0; k < NbOfPoints; k++)
+//                        {
+//                            // With the above org point, we search around for the dst point(s),
+//                            // which make org-dst an edge during cvSubdivDelaunay2DInsert()
+//                            if ( ( fabs (dst.x - iShape.GetACol(k)(0, 0) ) < FLT_EPSILON )
+//                                && ( fabs (dst.y - iShape.GetACol(k)(1, 0) ) < FLT_EPSILON ) )
+//                            {
+//                                // Already tested, this->m_vEdge is definitely correct!
+//                                outEdges.push_back ( VO_Edge(j,k) );
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
-        CV_NEXT_SEQ_ELEM( Subdiv->edges->elem_size, reader );
-    }
+//        CV_NEXT_SEQ_ELEM( Subdiv->edges->elem_size, reader );
+//    }
 
-    return outEdges.size();
-}
+//    return outEdges.size();
+//}
 
 
 /**
@@ -408,8 +408,38 @@ unsigned int VO_ShapeModel::VO_BuildEdges(const VO_Shape& iShape, const CvSubdiv
  * @param   outEdges            Output - edges
  * @return  unsigned int        Number of edges
  */
-unsigned int VO_ShapeModel::VO_BuildEdges(const VO_Shape& iShape, const cv::Subdiv2D& Subdiv, std::vector<VO_Edge>& outEdges)
+unsigned int VO_ShapeModel::VO_BuildEdges(const VO_Shape& iShape, const cv::Subdiv2D& subdiv, std::vector<VO_Edge>& outEdges)
 {
+    unsigned int NbOfPoints = iShape.GetNbOfPoints();
+    std::vector<cv::Vec4f> edgeList;
+    subdiv.getEdgeList(edgeList);
+    for( unsigned int i = 0; i < edgeList.size(); i++ )
+    {
+        cv::Vec4f e = edgeList[i];
+        cv::Point2f org = cv::Point2f(e[0], e[1]);
+        cv::Point2f dst = cv::Point2f(e[2], e[3]);
+
+        for (unsigned int j = 0; j < NbOfPoints; j++)
+        {
+            // if the current edge convex (org points, not the dst point) is in our point list
+            if ( (fabs ( org.x - iShape.GetACol(j)(0, 0) ) < FLT_EPSILON )
+                && ( fabs ( org.y - iShape.GetACol(j)(1, 0) ) < FLT_EPSILON ) )
+            {
+                for (unsigned int k = 0; k < NbOfPoints; k++)
+                {
+                    // With the above org point, we search around for the dst point(s),
+                    // which make org-dst an edge during cvSubdivDelaunay2DInsert()
+                    if ( ( fabs (dst.x - iShape.GetACol(k)(0, 0) ) < FLT_EPSILON )
+                        && ( fabs (dst.y - iShape.GetACol(k)(1, 0) ) < FLT_EPSILON ) )
+                    {
+                        // Already tested, this->m_vEdge is definitely correct!
+                        outEdges.push_back ( VO_Edge(j,k) );
+                    }
+                }
+            }
+        }
+    }
+
     return 0;
 }
 
@@ -422,7 +452,7 @@ unsigned int VO_ShapeModel::VO_BuildEdges(const VO_Shape& iShape, const cv::Subd
  * @param		outTriangles			Output	- the output triangles
  * @return     	unsigned int          	Number of triangles
 */
-unsigned int VO_ShapeModel::VO_BuildTriangles(const VO_Shape& iShape, 
+unsigned int VO_ShapeModel::VO_BuildTriangles(  const VO_Shape& iShape,
                                                 const std::vector<VO_Edge>& edges,
                                                 std::vector<VO_Triangle2DStructure>& outTriangles)
 {
@@ -474,7 +504,40 @@ unsigned int VO_ShapeModel::VO_BuildTriangles(const VO_Shape& iShape,
  * @param		triangles		Input	- the constructed triangles
  * @return		void
 */
-void VO_ShapeModel::VO_BuildTemplateMesh(const VO_Shape& iShape, 
+//void VO_ShapeModel::VO_BuildTemplateMesh(const VO_Shape& iShape,
+//                                        std::vector<VO_Edge>& edges,
+//                                        std::vector<VO_Triangle2DStructure>& triangles )
+//{
+//    unsigned int NbOfPoints = iShape.GetNbOfPoints();
+
+//    //////////////////////////////////////////////////////////////////////////
+//    // Build Delaunay Triangulation Sub Divisions
+//    // Later VO_BuildEdges need DTSubdiv information
+//    CvSubdiv2D* tempCVSubdiv = NULL;
+
+//    cv::Rect rect = iShape.GetShapeBoundRect();
+
+//    CvMemStorage* DelaunayStorage = cvCreateMemStorage(0);
+
+//    // By JIA Pei, 2006-09-20. How to release this storage?
+//    tempCVSubdiv = cvCreateSubdivDelaunay2D( rect, DelaunayStorage );
+
+//    for( unsigned int i = 0; i < NbOfPoints; i++ )
+//    {
+//        cv::Point2f onePoint = iShape.GetA2DPoint(i);
+//        cvSubdivDelaunay2DInsert( tempCVSubdiv, onePoint);
+//    }
+//    //////////////////////////////////////////////////////////////////////////
+
+//    unsigned int NbOfEdges = VO_ShapeModel::VO_BuildEdges(iShape, tempCVSubdiv, edges);
+//    unsigned int NbOfTriangles = VO_ShapeModel::VO_BuildTriangles (iShape, edges, triangles);
+
+//    // How to release CvSubdiv2D* m_CVSubdiv is still a problem.
+//    if (tempCVSubdiv)   cvClearSubdivVoronoi2D( tempCVSubdiv );
+//    cvReleaseMemStorage( &DelaunayStorage );
+//}
+
+void VO_ShapeModel::VO_BuildTemplateMesh(const VO_Shape& iShape,
                                         std::vector<VO_Edge>& edges,
                                         std::vector<VO_Triangle2DStructure>& triangles )
 {
@@ -483,28 +546,19 @@ void VO_ShapeModel::VO_BuildTemplateMesh(const VO_Shape& iShape,
     //////////////////////////////////////////////////////////////////////////
     // Build Delaunay Triangulation Sub Divisions
     // Later VO_BuildEdges need DTSubdiv information
-    CvSubdiv2D* tempCVSubdiv = NULL;
-
     cv::Rect rect = iShape.GetShapeBoundRect();
-
-    CvMemStorage* DelaunayStorage = cvCreateMemStorage(0);
-
-    // By JIA Pei, 2006-09-20. How to release this storage?
-    tempCVSubdiv = cvCreateSubdivDelaunay2D( rect, DelaunayStorage );
+    cv::Subdiv2D tempCVSubdiv(rect);
 
     for( unsigned int i = 0; i < NbOfPoints; i++ )
     {
         cv::Point2f onePoint = iShape.GetA2DPoint(i);
-        cvSubdivDelaunay2DInsert( tempCVSubdiv, onePoint);
+        tempCVSubdiv.insert(onePoint);
     }
     //////////////////////////////////////////////////////////////////////////
 
     unsigned int NbOfEdges = VO_ShapeModel::VO_BuildEdges(iShape, tempCVSubdiv, edges);
     unsigned int NbOfTriangles = VO_ShapeModel::VO_BuildTriangles (iShape, edges, triangles);
 
-    // How to release CvSubdiv2D* m_CVSubdiv is still a problem.
-    if (tempCVSubdiv)   cvClearSubdivVoronoi2D( tempCVSubdiv );
-    cvReleaseMemStorage( &DelaunayStorage );
 }
 
 
@@ -839,7 +893,7 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
     this->m_VOReferenceShape.Translate( -refMin );
 
 	//////////////////////////////////////////////////////////////////////////
-	// Build VO_cv::Point2DDistributionModel /////////////////////////////////////
+    // Build VO_Point2DDistributionModel /////////////////////////////////////
     this->m_VOPDM.VO_BuildPointDistributionModel(this->m_vAlignedShapes);
 	//////////////////////////////////////////////////////////////////////////
 
@@ -849,7 +903,9 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
 		cv::Mat tmpRow = matAlignedShapes.row(i);
 		this->m_vAlignedShapes[i].GetTheShapeInARow().copyTo(tmpRow);
 	}
-	this->m_PCAAlignedShape(matAlignedShapes, matAlignedMeanShape, CV_PCA_DATA_AS_ROW, this->m_iNbOfEigenShapesAtMost );
+    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
+    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenShapesAtMost) );
+    //cv::PCACompute(matAlignedShapes, matAlignedMeanShape, OutputArray eigenvectors, this->m_iNbOfEigenShapesAtMost);
 	// to decide how many components to be selected
     this->m_iNbOfShapeEigens = 0;
 
@@ -863,7 +919,9 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
         if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Shape) break;
     }
 	// m_iNbOfShapeEigens decided. For simplicity, we carry out PCA once again.
-	this->m_PCAAlignedShape(matAlignedShapes, matAlignedMeanShape, CV_PCA_DATA_AS_ROW, this->m_iNbOfShapeEigens );
+    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
+    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfShapeEigens) );
+    //this->m_PCAAlignedShape(matAlignedShapes, matAlignedMeanShape, CV_PCA_DATA_AS_ROW, this->m_iNbOfShapeEigens );
 
     //////////////////////////////////////////////////////////////////////////
     // Calculate template shape mesh

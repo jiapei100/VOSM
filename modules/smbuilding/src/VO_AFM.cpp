@@ -128,10 +128,10 @@ void VO_AFM::VO_FeatureParameterConstraint(cv::Mat_<float>& ioF, float nSigma)
  * @param      	useKnownTriangles  				Input - use known triangle structures??
  * @param		ltcMtd							Input - local texture constrain methods
  * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "cv::vector<float>"
+ * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
-void VO_AFM::VO_BuildFeatureModel ( const cv::vector<std::string>& allLandmarkFiles4Training,
-							const cv::vector<std::string>& allImgFiles4Training,
+void VO_AFM::VO_BuildFeatureModel ( const std::vector<std::string>& allLandmarkFiles4Training,
+                            const std::vector<std::string>& allImgFiles4Training,
 							const std::string& shapeinfoFileName,
 							unsigned int database,
 							unsigned int channels,

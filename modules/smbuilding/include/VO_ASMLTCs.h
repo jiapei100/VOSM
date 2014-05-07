@@ -121,7 +121,7 @@ public:
     VO_ASMLTCs();
 
     /** Destructor */
-    ~VO_ASMLTCs();
+    virtual ~VO_ASMLTCs();
 
     /** Build ASMLTCs model */
     void                         	VO_BuildASMLTCs (	const std::vector<std::string>& allLandmarkFiles4Training,

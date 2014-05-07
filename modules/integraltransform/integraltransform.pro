@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG(debug, debug | release): TARGET = vo_featureextractionD
+CONFIG(debug, debug | release): TARGET = integraltransformD
 
 INCLUDEPATH += \
                 include \

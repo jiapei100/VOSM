@@ -118,13 +118,13 @@ VO_TextureModel::~VO_TextureModel()
  * @author     	JIA Pei
  * @version    	2010-02-10
  * @brief      	Calculate point warping information
- * @param      	triangles           Input - a cv::vector of all triangles
+ * @param      	triangles           Input - a std::vector of all triangles
  * @param      	ch                  Input - convex hull
- * @param      	warpInfo            Input - information of a cv::vector of warping points
+ * @param      	warpInfo            Input - information of a std::vector of warping points
  * @return     	unsigned int        points (actually pixels) inside the template face
  * @note       	Obviously, triangles and ch contain duplicated information
 */
-unsigned int VO_TextureModel::VO_CalcPointWarpingInfo(const cv::vector <VO_Triangle2DStructure>& templateTriangles, cv::vector<VO_WarpingPoint>& warpInfo)
+unsigned int VO_TextureModel::VO_CalcPointWarpingInfo(const std::vector <VO_Triangle2DStructure>& templateTriangles, std::vector<VO_WarpingPoint>& warpInfo)
 {
     unsigned int NbOfPixels     = 0;
 
@@ -149,7 +149,7 @@ unsigned int VO_TextureModel::VO_CalcPointWarpingInfo(const cv::vector <VO_Trian
                 tempPixelTriangle.SetPointIndex(NbOfPixels);
 				tempPixelTriangle.SetTriangle2DStructure(templateTriangles[k] );
 
-				// Very important!! Note by JIA Pei, push_back cannot perform on 2-D cv::vectors
+                // Very important!! Note by JIA Pei, push_back cannot perform on 2-D std::vectors
 				warpInfo.push_back (tempPixelTriangle);
 
 				NbOfPixels ++;
@@ -175,8 +175,8 @@ unsigned int VO_TextureModel::VO_CalcPointWarpingInfo(const cv::vector <VO_Trian
 */
 bool VO_TextureModel::VO_LoadOneTextureFromShape(const VO_Shape& iShape, 
 												const cv::Mat& img,
-												const cv::vector<VO_Triangle2DStructure>& templateTriangles,
-                                                const cv::vector<VO_WarpingPoint>& warpInfo,
+                                                const std::vector<VO_Triangle2DStructure>& templateTriangles,
+                                                const std::vector<VO_WarpingPoint>& warpInfo,
 												VO_Texture& oTexture, 
 												int trm)
 {
@@ -204,7 +204,7 @@ double time0 = (double)cvGetTickCount();
     oTexture.m_MatTexture               = cv::Mat_<float>::zeros(NbOfChannels, NbOfPixels);
 
 	cv::Point2f src[3], dst[3];
-	cv::vector< cv::Mat_<float> > matWarping;
+    std::vector< cv::Mat_<float> > matWarping;
 	matWarping.resize(NbOfTriangles);
 
 
@@ -274,7 +274,7 @@ fs << "Before Mapping -- Step 1 of warping time: " << elapsed << "millisec."  <<
             case COLORCHANNELS:
             default:
                 {
-					cv::vector<cv::Mat> bgr, bgrHC;
+                    std::vector<cv::Mat> bgr, bgrHC;
 					bgrHC.resize(3);
                     cv::split(img, bgr);
 
@@ -319,7 +319,7 @@ fs << "Before Mapping -- Step 1 of warping time: " << elapsed << "millisec."  <<
             case COLORCHANNELS:
             default:
                 {
-                    cv::vector<cv::Mat> bgr;
+                    std::vector<cv::Mat> bgr;
                     cv::split(Img2BExtracted, bgr);
 
 					for(unsigned int i = 0; i < 3; i++)
@@ -345,7 +345,7 @@ fs << "Mapping -- Step 2 of warping time: " << elapsed << "millisec."  << std::e
 
 	//cv::Mat Img4Display = cv::Mat::zeros(Img2BExtracted.size(), CV_8U);
 	//Img2BExtracted.convertTo(Img4Display, Img4Display.type());
-	//imwrite("testtest.jpg", Img4Display);
+    //cv::imwrite("testtest.jpg", Img4Display);
 
 	float x;
 	float y;
@@ -529,7 +529,7 @@ fs << "Mapping -- Step 3 of warping time: " << elapsed << "millisec."  << std::e
 //else if(NbOfChannels == 3)
 //	otmpImg = cv::Mat::zeros(Size(rect1.width, rect1.height), CV_8UC3);
 //VO_TextureModel::VO_PutOneTextureToTemplateShape(oTexture, templateTriangles, otmpImg);
-//imwrite("ttttt.jpg", otmpImg);
+//cv::imwrite("ttttt.jpg", otmpImg);
 ///** How many triangles totally */
 //std::string trianglestr;
 //std::stringstream ssi;
@@ -544,7 +544,7 @@ fs << "Mapping -- Step 3 of warping time: " << elapsed << "millisec."  << std::e
 //else
 //	trianglestr = stri + ".jpg";
 //
-//imwrite(trianglestr.c_str(), otmpImg);
+//cv::imwrite(trianglestr.c_str(), otmpImg);
 //
 //ssi.clear();
 //NbOfImages++;
@@ -563,7 +563,7 @@ fs << "Mapping -- Step 3 of warping time: " << elapsed << "millisec."  << std::e
  * @param      	normalizedTextures  	Output 	- all textures after normalization
  * @return     	return               	float 	average texture size of all textures
 */
-float VO_TextureModel::VO_NormalizeAllTextures(const cv::vector<VO_Texture>& vTextures, cv::vector<VO_Texture>& normalizedTextures)
+float VO_TextureModel::VO_NormalizeAllTextures(const std::vector<VO_Texture>& vTextures, std::vector<VO_Texture>& normalizedTextures)
 {
     unsigned int NbOfSamples                    = vTextures.size();
     unsigned int NbOfPixels                   	= vTextures[0].GetNbOfPixels();
@@ -591,7 +591,7 @@ float VO_TextureModel::VO_NormalizeAllTextures(const cv::vector<VO_Texture>& vTe
  * @return		void
 */
 void VO_TextureModel::VO_RescaleAllNormalizedTextures(const VO_Texture& meanNormalizeTexture,
-														cv::vector<VO_Texture>& normalizedTextures)
+                                                        std::vector<VO_Texture>& normalizedTextures)
 {
     unsigned int NbOfSamples = normalizedTextures.size();
 
@@ -625,7 +625,7 @@ void VO_TextureModel:: VO_RescaleOneNormalizedTexture(const VO_Texture& meanNorm
  * @param      	vTextures     	Input 	- all textures
  * @param      	meanTexture   	Output 	- mean texture
 */
-void VO_TextureModel::VO_CalcMeanTexture(const cv::vector<VO_Texture>& vTextures, VO_Texture& meanTexture)
+void VO_TextureModel::VO_CalcMeanTexture(const std::vector<VO_Texture>& vTextures, VO_Texture& meanTexture)
 {
     unsigned int NbOfSamples    = vTextures.size();
     meanTexture = vTextures[0];
@@ -646,11 +646,11 @@ void VO_TextureModel::VO_CalcMeanTexture(const cv::vector<VO_Texture>& vTextures
  * @param      	texture             	Input
  * @param      	triangles           	Input 	- template triangle, contains warping information
  * @param      	oImg                	Output
- * @note       	All texture cv::vectors are of the same size. So, you can't put it into the respective triangulation
+ * @note       	All texture std::vectors are of the same size. So, you can't put it into the respective triangulation
 				for respective image. You've got to put a texture into a template shape first, then VO_WarpFromOneShapeToAnother
  * @return		void
 */
-void VO_TextureModel::VO_PutOneTextureToTemplateShape(const VO_Texture& texture, const cv::vector <VO_Triangle2DStructure>& triangles, cv::Mat& oImg)
+void VO_TextureModel::VO_PutOneTextureToTemplateShape(const VO_Texture& texture, const std::vector <VO_Triangle2DStructure>& triangles, cv::Mat& oImg)
 {
 	unsigned int NbOfChannels = texture.GetNbOfTextureRepresentation() >= 3 ? 3:1;
 	VO_Shape shape = VO_Triangle2DStructure::Triangle2D2Shape(triangles);
@@ -715,12 +715,12 @@ void VO_TextureModel::VO_PutOneTextureToTemplateShape(const VO_Texture& texture,
  * @param      	triangles           Input - contains warp information
  * @param      	iImg                Input - input image, extracted texture from
  * @param      	oImg                Output - output image, put the texture on to this image
- * @note       	All texture cv::vectors are of the same size. So, you can't put it into the respective triangulation
+ * @note       	All texture std::vectors are of the same size. So, you can't put it into the respective triangulation
 				for respective image. You've got to put a texture into a template shape first, then VO_WarpFromOneShapeToAnother
 */
 unsigned int VO_TextureModel::VO_WarpFromOneShapeToAnother(const VO_Shape& iShape, 
 													const VO_Shape& oShape, 
-													const cv::vector <VO_Triangle2DStructure>& triangles, 
+                                                    const std::vector <VO_Triangle2DStructure>& triangles,
 													const cv::Mat& iImg, 
 													cv::Mat& oImg)
 {
@@ -730,9 +730,9 @@ unsigned int VO_TextureModel::VO_WarpFromOneShapeToAnother(const VO_Shape& iShap
     unsigned int NbOfPixels     = 0;
     
 	cv::Point2f src[3], dst[3];
-	cv::vector< cv::Mat_<float> > matWarping;
+    std::vector< cv::Mat_<float> > matWarping;
 	matWarping.resize(NbOfTriangles);
-	cv::vector<VO_Triangle2DStructure> warpedTriangles = oShape.GetTriangle2DStructure(triangles);
+    std::vector<VO_Triangle2DStructure> warpedTriangles = oShape.GetTriangle2DStructure(triangles);
     cv::Rect rect_in = iShape.GetShapeBoundRect();
     cv::Rect rect_out = oShape.GetShapeBoundRect();
     oImg = cv::Mat::zeros( cv::Size(rect_out.width, rect_out.height), iImg.type() );
@@ -872,7 +872,7 @@ unsigned int VO_TextureModel::VO_WarpFromOneShapeToAnother(const VO_Shape& iShap
  * @param		step			Input		between 0 to 1, Normally, 0.1 or 0.2 are good selections
  * @note		Current version requires iShape1 and iShape2 have the same size
  **/
-void VO_TextureModel::VO_Morphing(const VO_Shape& iShape1, const VO_Shape& iShape2, cv::vector<VO_Shape>& oShapes, const cv::vector<VO_Triangle2DStructure>& triangles, const cv::Mat& iImg1, const cv::Mat& iImg2, cv::vector<cv::Mat>& oImgs, float step)
+void VO_TextureModel::VO_Morphing(const VO_Shape& iShape1, const VO_Shape& iShape2, std::vector<VO_Shape>& oShapes, const std::vector<VO_Triangle2DStructure>& triangles, const cv::Mat& iImg1, const cv::Mat& iImg2, std::vector<cv::Mat>& oImgs, float step)
 {
     assert (iImg1.cols == iImg2.cols && iImg1.rows == iImg2.rows);
     unsigned int NbOfFrames     = cvRound(1.0/step);
@@ -905,10 +905,10 @@ void VO_TextureModel::VO_Morphing(const VO_Shape& iShape1, const VO_Shape& iShap
  * @param      	triangles           Input - contains warp information
  * @param      	iImg                Input - input image, extracted texture from
  * @param      	oImg                Output - output image, put the texture on to this image
- * @note       	All texture cv::vectors are of the same size. So, you can't put it into the respective triangulation
+ * @note       	All texture std::vectors are of the same size. So, you can't put it into the respective triangulation
 				for respective image. You've got to put a texture into a template shape first, then VO_WarpFromOneShapeToAnother
 */
-void VO_TextureModel::VO_PutOneTextureToOneShape(const VO_Texture& texture, const VO_Shape& oShape, const cv::vector <VO_Triangle2DStructure>& triangles, cv::Mat& oImg)
+void VO_TextureModel::VO_PutOneTextureToOneShape(const VO_Texture& texture, const VO_Shape& oShape, const std::vector <VO_Triangle2DStructure>& triangles, cv::Mat& oImg)
 {
     cv::Mat intermediateImg (oImg);
     VO_TextureModel::VO_PutOneTextureToTemplateShape(texture, triangles, intermediateImg);
@@ -1003,16 +1003,16 @@ void VO_TextureModel::VO_CalcSubPixelTexture(float x, float y, const cv::Mat& im
  * @author     	JIA Pei
  * @version    	2010-02-10
  * @brief      	Calculate sub pixel texture of a point in image
- * @return     	cv::vector<float>   - a cv::vector of size 1 or 3
+ * @return     	std::vector<float>   - a std::vector of size 1 or 3
  * @note       	In the pictures, x represents cols, y represents rows!
 				In cv::Mat& image, x represents cols, y represents rows as well!!!
  * @return		void
 */
-cv::vector<float> VO_TextureModel::VO_CalcSubPixelTexture(float x, float y, const cv::Mat& image)
+std::vector<float> VO_TextureModel::VO_CalcSubPixelTexture(float x, float y, const cv::Mat& image)
 {
 // double sec = (double)cvGetTickCount();
 
-    cv::vector<float> result;
+    std::vector<float> result;
     unsigned int channels = image.channels();
 	if (!(channels == 1 || channels == 3))
 	{
@@ -1217,7 +1217,7 @@ void VO_TextureModel::VO_ReferenceTextureBack2Normalize(const VO_Texture& inText
  * @param     	oImg            	Output 	- output image with edges on oImg
  * @return		void
 */
-void VO_TextureModel::VO_PutEdgesOnTemplateFace(const cv::vector<VO_Edge>& edges, 
+void VO_TextureModel::VO_PutEdgesOnTemplateFace(const std::vector<VO_Edge>& edges,
 												const VO_Shape& templateShape,
 												const cv::Mat& iImg, 
 												cv::Mat& oImg)
@@ -1281,7 +1281,7 @@ void VO_TextureModel::VO_PutEdgesOnTemplateFace(const cv::vector<VO_Edge>& edges
 // * @param      iImg            Input - template image
 // * @param      oImg            Output - output images with concave pixels on oImg
 //*/
-//void VO_TextureModel::VO_PutConcavePixelsOnTemplateFace(const cv::Mat& ch, const cv::vector <VO_Triangle2DStructure>& triangles,
+//void VO_TextureModel::VO_PutConcavePixelsOnTemplateFace(const cv::Mat& ch, const std::vector <VO_Triangle2DStructure>& triangles,
 //                                               const cv::Mat& iImg, cv::Mat& oImg)
 //{
 //    iImg.copyTo(oImg);
@@ -1313,14 +1313,14 @@ void VO_TextureModel::VO_PutEdgesOnTemplateFace(const cv::vector<VO_Edge>& edges
  * @param      	oImgs           Output - output images with single triangle on every single oImg
  * @return		void
 */
-void VO_TextureModel::VO_PutTrianglesOnTemplateFace(const cv::vector <VO_Triangle2DStructure>& triangles,
+void VO_TextureModel::VO_PutTrianglesOnTemplateFace(const std::vector <VO_Triangle2DStructure>& triangles,
 													const cv::Mat& iImg, 
-													cv::vector<cv::Mat>& oImgs)
+                                                    std::vector<cv::Mat>& oImgs)
 {
     unsigned int NbOfTriangles = triangles.size();
 	oImgs.resize(NbOfTriangles);
 
-	cv::vector<cv::Point2f> iorgFloat, idstFloat;
+    std::vector<cv::Point2f> iorgFloat, idstFloat;
 	iorgFloat.resize(3);
 	idstFloat.resize(3);
 		
@@ -1344,28 +1344,31 @@ void VO_TextureModel::VO_PutTrianglesOnTemplateFace(const cv::vector <VO_Triangl
 
 /**
  * @author     	JIA Pei
- * @version    	2010-02-10
+ * @version    	2014-05-07
  * @brief		draw all PDM ellipses onto the textured template face
  * @param		iShape		Input	-	the input shape
  * @param		iImg		Input	- 	the input image
  * @param		oImg		Output	-	the output image
  * @return		void
  */
-void VO_TextureModel::VO_PutPDMEllipsesOnTemplateFace(const cv::vector<VO_Ellipse>& ellipses, const cv::Mat& iImg, cv::Mat& oImg)
+void VO_TextureModel::VO_PutPDMEllipsesOnTemplateFace(const std::vector<VO_Ellipse>& ellipses, const cv::Mat& iImg, cv::Mat& oImg)
 {
     unsigned int NbOfEllipses =  ellipses.size();
     iImg.copyTo(oImg);
+    VO_Ellipse ellipse;
     cv::Point2f iPoint;
 
     for(unsigned int i = 0; i < NbOfEllipses; i++)
     {
-        cv::Point2f pt = ellipses.at(i).GetCOG();
+        ellipse = ellipses.at(i);
+        iPoint = ellipse.GetCOG();
 
-        cv::ellipse(oImg, cv::Point( (int)pt.x, (int)pt.y ),
-                    cv::Size(ellipses.at(i).GetAxisXHalfLen(), ellipses.at(i).GetAxisYHalfLen()),
-					ellipses.at(i).GetAngle(),
-					ellipses.at(i).GetStartAngle(),
-					ellipses.at(i).GetEndAngle(),
+        cv::ellipse(oImg,
+                    cv::Point( (int)iPoint.x, (int)iPoint.y ),
+                    cv::Size(ellipse.GetAxisXHalfLen(), ellipse.GetAxisYHalfLen()),
+                    ellipse.GetAngle(),
+                    ellipse.GetStartAngle(),
+                    ellipse.GetEndAngle(),
 					colors[7],
 					1,
 					0,
@@ -1501,7 +1504,7 @@ void VO_TextureModel::VO_CalcAllParams4AnyTexture(VO_Texture& ioTexture, cv::Mat
  * @brief      	Load Training data for texture model
  * @return		void
 */
-bool VO_TextureModel::VO_LoadTextureTrainingData( const cv::vector<std::string>& allImgFiles4Training,
+bool VO_TextureModel::VO_LoadTextureTrainingData( const std::vector<std::string>& allImgFiles4Training,
 													unsigned int channels,
 													int trm )
 {
@@ -1559,8 +1562,8 @@ bool VO_TextureModel::VO_LoadTextureTrainingData( const cv::vector<std::string>&
  * @note       	Refer to "Statistical Models of Appearance for Computer Vision" page 31, Cootes
  * @return		void
 */
-void VO_TextureModel::VO_BuildTextureModel(	const cv::vector<std::string>& allLandmarkFiles4Training,
-											const cv::vector<std::string>& allImgFiles4Training,
+void VO_TextureModel::VO_BuildTextureModel(	const std::vector<std::string>& allLandmarkFiles4Training,
+                                            const std::vector<std::string>& allImgFiles4Training,
 											const std::string& shapeinfoFileName, 
 											unsigned int database,
 											unsigned int channels,
@@ -1589,7 +1592,7 @@ void VO_TextureModel::VO_BuildTextureModel(	const cv::vector<std::string>& allLa
 	// Calculate reference texture
     VO_TextureModel::VO_NormalizedTexture2ReferenceScale(this->m_VONormalizedMeanTexture, this->m_fAverageTextureStandardDeviation, this->m_VOReferenceTexture);
 //VO_TextureModel::VO_PutOneTextureToTemplateShape(this->m_VOReferenceTexture, this->m_vTemplateTriangle2D, this->m_ImageTemplateFace);
-//imwrite("template.jpg",this->m_ImageTemplateFace);
+//cv::imwrite("template.jpg",this->m_ImageTemplateFace);
 
 	matNormalizedMeanTextures = this->m_VONormalizedMeanTexture.GetTheTextureInARow();
 	for(unsigned int i = 0; i < this->m_iNbOfSamples; ++i)
@@ -1597,7 +1600,9 @@ void VO_TextureModel::VO_BuildTextureModel(	const cv::vector<std::string>& allLa
 		cv::Mat_<float> tmpRow = matNormalizedTextures.row(i);
 		this->m_vNormalizedTextures[i].GetTheTextureInARow().copyTo(tmpRow);
 	}
-	this->m_PCANormalizedTexture(matNormalizedTextures, matNormalizedMeanTextures, CV_PCA_DATA_AS_ROW, this->m_iNbOfEigenTexturesAtMost );
+    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
+    this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenTexturesAtMost) );
+    //this->m_PCANormalizedTexture(matNormalizedTextures, matNormalizedMeanTextures, CV_PCA_DATA_AS_ROW, this->m_iNbOfEigenTexturesAtMost );
 	// to decide how many components to be selected
     this->m_iNbOfTextureEigens = 0;
 
@@ -1611,7 +1616,9 @@ void VO_TextureModel::VO_BuildTextureModel(	const cv::vector<std::string>& allLa
         if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Texture) break;
     }
 	// m_iNbOfTextureEigens decided. For simplicity, we carry out PCA once again.
-	this->m_PCANormalizedTexture(matNormalizedTextures, matNormalizedMeanTextures, CV_PCA_DATA_AS_ROW, this->m_iNbOfTextureEigens );
+    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
+    this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfTextureEigens) );
+    //this->m_PCANormalizedTexture(matNormalizedTextures, matNormalizedMeanTextures, CV_PCA_DATA_AS_ROW, this->m_iNbOfTextureEigens );
 
     //////////////////////////////////////////////////////////////////////////
     // Calculate m_vNormalizedPointWarpInfo
@@ -1620,7 +1627,7 @@ void VO_TextureModel::VO_BuildTextureModel(	const cv::vector<std::string>& allLa
     cv::Point2f dst[3];
 
     // warp from reference triangles to normalized triangles, it's basically just a translation and scaling
-    cv::vector< cv::Mat_<float> > matWarping;
+    std::vector< cv::Mat_<float> > matWarping;
     matWarping.resize(this->m_iNbOfTriangles);
 
     // calculate all the possible mapping (for speeding up) 95 mapping totally
@@ -1665,7 +1672,7 @@ void VO_TextureModel::VO_BuildTextureModel(	const cv::vector<std::string>& allLa
         tempNormalizedPixelTriangle.SetPointIndex(i);
         tempNormalizedPixelTriangle.SetTriangle2DStructure(this->m_vNormalizedTriangle2D[triangleIndex] );
 
-        // Very important!! Note by JIA Pei, push_back cannot perform on cv::vector< cv::vector < > >
+        // Very important!! Note by JIA Pei, push_back cannot perform on std::vector< std::vector < > >
         this->m_vNormalizedPointWarpInfo.push_back (tempNormalizedPixelTriangle);
     }
     //////////////////////////////////////////////////////////////////////////
@@ -1676,32 +1683,8 @@ void VO_TextureModel::VO_BuildTextureModel(	const cv::vector<std::string>& allLa
 
 	//////////////////////////////////////////////////////////////////////////
 	VO_Shape tmpRefShape = this->m_VOAlignedMeanShape*this->m_fAverageShapeSize;
-	cv::vector<VO_Ellipse> refEllipses = this->m_VOPDM.GetPDMEllipses();
-    refEllipses.resize(this->m_iNbOfPoints);
-    for(unsigned int i = 0; i < this->m_iNbOfPoints; i++)
-	{
-		refEllipses[i].ScaleCenter(this->m_fAverageShapeSize);
-		refEllipses[i] *= this->m_fAverageShapeSize;
-		//refEllipses[i] *= this->m_fAverageShapeSize*3.0;
-//		cv::Rect rect = refEllipses[i].CalcBoundingcv::Rect();
-//		cv::Mat tmpImg= cv::Mat::zeros( rect.height, rect.width, this->m_ImageTemplateFace.type());
-//		cv::Mat_<float> ellipseMin = cv::Mat_<float>::zeros(2, 1);
-//		ellipseMin(0,0) = rect.x;
-//		ellipseMin(1,0) = rect.y;
-//		refEllipses[i].Translate(-ellipseMin);
-//
-//		cv::Point2f pt = refEllipses[i].GetCOG();
-//        cv::ellipse(tmpImg, cv::Point( (int)pt.x, (int)pt.y ),
-//					Size(refEllipses[i].GetAxisXHalfLen(), refEllipses[i].GetAxisYHalfLen()),
-//					refEllipses[i].GetAngle(),
-//					refEllipses[i].GetStartAngle(),
-//					refEllipses[i].GetEndAngle(),
-//					colors[3],
-//					1,
-//					0,
-//					0);
-//		imwrite("tmp.jpg", tmpImg);
-	}
+    std::vector<VO_Ellipse> refEllipses = this->m_VOPDM.GetPDMEllipses();
+    VO_Point2DDistributionModel::VO_ScalePDMEllipses(refEllipses, this->m_fAverageShapeSize, refEllipses);
     cv::Rect brect = VO_Ellipse::VO_CalcBoundingRect4MultipleEllipses (refEllipses);
 	cv::Mat_<float> ellipseMin = cv::Mat_<float>::zeros(2, 1);
 	ellipseMin(0,0) = brect.x;
@@ -1711,7 +1694,7 @@ void VO_TextureModel::VO_BuildTextureModel(	const cv::vector<std::string>& allLa
     for(unsigned int i = 0; i < this->m_iNbOfPoints; i++)
 		refEllipses[i].Translate(-ellipseMin);
 	VO_TextureModel::VO_PutShapeOnTemplateFace(tmpRefShape, this->m_ImageEllipses, this->m_ImageEllipses);
-//	imwrite("edges.jpg", this->m_ImageEllipses);
+    //cv::imwrite("ttttt.jpg", this->m_ImageEllipses);
 	VO_TextureModel::VO_PutPDMEllipsesOnTemplateFace(refEllipses, this->m_ImageEllipses, this->m_ImageEllipses);
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -1816,18 +1799,18 @@ void VO_TextureModel ::VO_Save(const std::string& fd)
 
     /** Template face image */
     tempfn = fn + "/Reference.jpg";
-    imwrite(tempfn.c_str(), this->m_ImageTemplateFace);
+    cv::imwrite(tempfn.c_str(), this->m_ImageTemplateFace);
 
     /** Image of edges */
     tempfn = fn + "/edges.jpg";
-    imwrite(tempfn.c_str(), this->m_ImageEdges);
+    cv::imwrite(tempfn.c_str(), this->m_ImageEdges);
 
 	/** Image of ellipse */
 	tempfn = fn + "/ellipses.jpg";
-	imwrite(tempfn.c_str(), this->m_ImageEllipses);
+    cv::imwrite(tempfn.c_str(), this->m_ImageEllipses);
 
     /** How many triangles totally */
-	cv::vector<cv::Mat> imageTriangles;
+    std::vector<cv::Mat> imageTriangles;
 	VO_TextureModel::VO_PutTrianglesOnTemplateFace(this->m_vTemplateTriangle2D, this->m_ImageTemplateFace, imageTriangles);
     std::string trianglestr;
     std::stringstream ssi;
@@ -1843,7 +1826,7 @@ void VO_TextureModel ::VO_Save(const std::string& fd)
         else
             trianglestr = fn + "/triangle" + stri + ".jpg";
 
-        imwrite(trianglestr.c_str(), imageTriangles[i] );
+        cv::imwrite(trianglestr.c_str(), imageTriangles[i] );
 
         ssi.clear();
     }

@@ -82,7 +82,7 @@ std::ostream& operator<<(std::ostream& os, const VO_Triangle2DStructure& aamtria
 
 std::istream& operator>>(std::istream &is, VO_Triangle2DStructure& aamtriangle2d)
 {
-    cv::vector<unsigned int> vIndexes;
+    std::vector<unsigned int> vIndexes;
     cv::Mat_<float> vVertexes = cv::Mat_<float>::zeros(2,3);
     cv::Point2f tmpPoint;
     int tempint;
@@ -111,11 +111,11 @@ std::istream& operator>>(std::istream &is, VO_Triangle2DStructure& aamtriangle2d
  * @param		VO_Shape		- 	Output	shape in cv::Mat_<float>
  * @return		void
  */
-VO_Shape VO_Triangle2DStructure::Triangle2D2Shape(const cv::vector <VO_Triangle2DStructure>& triangles)
+VO_Shape VO_Triangle2DStructure::Triangle2D2Shape(const std::vector <VO_Triangle2DStructure>& triangles)
 {
-	cv::vector<unsigned int> vi4oneTriangle;
-	cv::vector<unsigned int> countedIdx;
-	cv::vector<cv::Point2f> ptList;
+    std::vector<unsigned int> vi4oneTriangle;
+    std::vector<unsigned int> countedIdx;
+    std::vector<cv::Point2f> ptList;
 
 	for(unsigned int i = 0; i < triangles.size(); ++i)
 	{
@@ -255,7 +255,7 @@ void VO_Triangle2DStructure::AdjustVertexSequence()
  * @param		triangles			input		all triangles composing the shape
  * @param		int					return the index of triangle containing pt
 */
-int VO_Triangle2DStructure::IsPointInTriangles(const cv::Point2f& pt, const cv::vector<VO_Triangle2DStructure>& triangles)
+int VO_Triangle2DStructure::IsPointInTriangles(const cv::Point2f& pt, const std::vector<VO_Triangle2DStructure>& triangles)
 {
     unsigned int NbOfTriangles  = triangles.size();
 	cv::Mat contour;

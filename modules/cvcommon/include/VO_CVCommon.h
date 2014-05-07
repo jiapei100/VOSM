@@ -894,7 +894,7 @@ static void strech ( const cv::Mat& iImg, cv::Mat& oImg, T low, T up )
                 minVal_r = 0.0, maxVal_r = 0.0, 
                 minVal = 0.0, maxVal = 0.0,
                 diff = 0.0, temp = 0.0;
-        cv::vector<cv::Mat> bgr;
+        std::vector<cv::Mat> bgr;
         cv::split(iImg, bgr);
 
         cv::minMaxLoc(bgr[0], &minVal_b, &maxVal_b);
@@ -1071,7 +1071,7 @@ static cv::Rect operator* ( const cv::Rect& rect1, T value )
  *        abs(Ar + Bs + C)/sqrt(A^2 + B^2)
 */
 static float cvDistFromAPoint2ALine2D(  const cv::Point2f& pt,
-                                        const cv::vector<float>& lp)
+                                        const std::vector<float>& lp)
 {
     return ( fabs(lp[0]*pt.x+lp[1]*pt.y+lp[2]) / 
         sqrt(lp[0]*lp[0]+lp[1]*lp[1]) );
@@ -1084,7 +1084,7 @@ static float cvDistFromAPoint2ALine2D(  const cv::Point2f& pt,
 * @param    fdname        -- Input        the specific folder
 * @ref        OpenCV 2.x documentation
  */
-static void SaveSequentialImagesInFolder(   const cv::vector<cv::Mat>& imgs,
+static void SaveSequentialImagesInFolder(   const std::vector<cv::Mat>& imgs,
                                             const std::string& fdname)
 {
     if (!boost::filesystem::is_directory(fdname) )

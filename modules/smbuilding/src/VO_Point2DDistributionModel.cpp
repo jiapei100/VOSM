@@ -111,8 +111,8 @@ void VO_Point2DDistributionModel::VO_BuildPointDistributionModel( const std::vec
 	{
 		for(unsigned int j = 0; j < NbOfSamples; ++j)
 		{
-            matAlignedPoints(j, 0)				= allAlignedShapes[j].GetA2DPoint(i).x;
-            matAlignedPoints(j, 1)				= allAlignedShapes[j].GetA2DPoint(i).y;
+            matAlignedPoints(j, 0)			= allAlignedShapes[j].GetA2DPoint(i).x;
+            matAlignedPoints(j, 1)			= allAlignedShapes[j].GetA2DPoint(i).y;
 		}
         cv::PCA pca = cv::PCA(matAlignedPoints, matAlignedMeanPoint, CV_PCA_DATA_AS_ROW, 2);
         float xx = pca.eigenvectors.at<float>(0,0);
@@ -121,7 +121,7 @@ void VO_Point2DDistributionModel::VO_BuildPointDistributionModel( const std::vec
 		if( fabs(xx) < FLT_MIN )	theta = (float)(CV_PI/2.0);
 		else theta = atan(yy/xx)/CV_PI*180.0;
 		cv::Point2f pt = cv::Point2f(	pca.mean.at<float>(0,0), 
-								pca.mean.at<float>(0,1));
+                                        pca.mean.at<float>(0,1));
 		this->m_VONormalizedEllipses[i] = VO_Ellipse(	pt,
 														3.0*sqrt(pca.eigenvalues.at<float>(0,0)),
 														3.0*sqrt(pca.eigenvalues.at<float>(1,0)),
@@ -193,16 +193,16 @@ void VO_Point2DDistributionModel::VO_ConstrainAllPoints(VO_Shape& ioShape)
 */
 void VO_Point2DDistributionModel::VO_Save(const std::string& fd)
 {
-    // create cv::Point2DDistributionModel subfolder for just cv::Point2DDistributionModel data
-    std::string fn = fd+"/cv::Point2DDistributionModel";
+    // create Point2DDistributionModel subfolder for just Point2DDistributionModel data
+    std::string fn = fd+"/Point2DDistributionModel";
     if (!boost::filesystem::is_directory(fn) )
         boost::filesystem::create_directory( fn );
 
     std::fstream fp;
     std::string tempfn;
 	
-	// cv::Point2DDistributionModel
-    tempfn = fn + "/cv::Point2DDistributionModel" + ".txt";
+    // Point2DDistributionModel
+    tempfn = fn + "/Point2DDistributionModel" + ".txt";
     fp.open(tempfn.c_str (), std::ios::out);
     fp << "NbOfPoints" << std::endl << this->m_VONormalizedEllipses.size() << std::endl;
     fp.close();fp.clear();
@@ -239,10 +239,10 @@ void VO_Point2DDistributionModel::VO_Load(const std::string& fd)
 */
 void VO_Point2DDistributionModel::VO_LoadParameters4Fitting(const std::string& fd)
 {
-    std::string fn = fd+"/cv::Point2DDistributionModel";
+    std::string fn = fd+"/Point2DDistributionModel";
     if (!boost::filesystem::is_directory(fn) )
     {
-        std::cout << "cv::Point2DDistributionModel subfolder is not existing. " << std::endl;
+        std::cout << "Point2DDistributionModel subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -251,8 +251,8 @@ void VO_Point2DDistributionModel::VO_LoadParameters4Fitting(const std::string& f
     std::string temp;
     unsigned int NbOfPoints;
 	
-	// cv::Point2DDistributionModel
-    tempfn = fn + "/cv::Point2DDistributionModel" + ".txt";
+    // Point2DDistributionModel
+    tempfn = fn + "/Point2DDistributionModel" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp >> NbOfPoints;
     fp.close();fp.clear();

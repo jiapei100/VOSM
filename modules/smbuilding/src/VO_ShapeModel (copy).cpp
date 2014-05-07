@@ -65,6 +65,7 @@
 #include <set>
 #include <algorithm>
 
+#include "opencv/cvaux.h"
 #include <boost/filesystem.hpp>
 #include "VO_Triangle2DStructure.h"
 #include "VO_ShapeModel.h"
@@ -340,7 +341,7 @@ bool VO_ShapeModel::VO_TriangleHasBeenCounted(const std::vector<VO_Triangle2DStr
  * @author    	JIA Pei
  * @version    	2010-02-07
  * @brief      	Build Edges
- * @param      	vertexes            Input - all vertexes/points composing the shape
+ * @param      	iShape              Input - all vertexes/points composing the shape
  * @param      	Subdiv              Input - sub division which is already computed beforehand
  * @param      	outEdges	        Output - edges
  * @return     	unsigned int        Number of edges

@@ -1,7 +1,7 @@
 TEMPLATE = lib
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG(debug, debug | release): TARGET = vo_smbuildingD
+CONFIG(debug, debug | release): TARGET = smbuildingD
 
 INCLUDEPATH += \
                 include \

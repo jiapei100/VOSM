@@ -152,7 +152,7 @@ private:
     VO_FacePart								m_vRightEar;
 	
 	/** Triangles' indexes. NbOfTriangles*3*/
-    std::vector< std::vector < unsigned int > > 		m_vvTriangleIndexes;
+    std::vector< std::vector < unsigned int > > 	m_vvTriangleIndexes;
 
 
     void									init()

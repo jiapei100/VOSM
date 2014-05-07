@@ -148,7 +148,7 @@ public:
     }
 
     /** Destructor */
-    ~VO_WarpingPoint() {}
+    virtual ~VO_WarpingPoint() {}
 
     /** Calculate Jacobian first part for later Jacobian matrix calculation */
     void                                CalcJacobianOne();

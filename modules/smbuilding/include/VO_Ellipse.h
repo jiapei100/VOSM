@@ -85,7 +85,7 @@ protected:
 	float						m_fAxisXHalfLen;		//	first radius
 	float						m_fAxisYHalfLen;		//	second radius
 	float						m_fTheta;				//	Rotation angle (degrees)
-	cv::Point2f						m_Center;				//	ellipse center
+    cv::Point2f					m_Center;				//	ellipse center
 
     void                    	CopyData(const VO_Ellipse& ellipse)
     {
