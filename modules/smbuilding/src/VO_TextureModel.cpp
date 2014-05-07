@@ -1583,8 +1583,8 @@ void VO_TextureModel::VO_BuildTextureModel(	const std::vector<std::string>& allL
 	this->m_iNbOfTextures 						= this->m_iNbOfPixels*this->m_iNbOfTextureRepresentations;
 	this->m_iNbOfEigenTexturesAtMost 			= MIN(this->m_iNbOfSamples, this->m_iNbOfTextures);
     this->m_fTruncatedPercent_Texture   		= TPTexture;
-	cv::Mat_<float> matNormalizedTextures			= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfTextures);
-	cv::Mat_<float> matNormalizedMeanTextures		= cv::Mat_<float>::zeros(1, m_iNbOfTextures);
+    cv::Mat_<float> matNormalizedTextures		= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfTextures);
+    //cv::Mat_<float> matNormalizedMeanTextures		= cv::Mat_<float>::zeros(1, m_iNbOfTextures);
 
 	// Normalize all textures
     this->m_fAverageTextureStandardDeviation 	= VO_TextureModel::VO_NormalizeAllTextures(this->m_vTextures, this->m_vNormalizedTextures);
@@ -1594,11 +1594,15 @@ void VO_TextureModel::VO_BuildTextureModel(	const std::vector<std::string>& allL
 //VO_TextureModel::VO_PutOneTextureToTemplateShape(this->m_VOReferenceTexture, this->m_vTemplateTriangle2D, this->m_ImageTemplateFace);
 //cv::imwrite("template.jpg",this->m_ImageTemplateFace);
 
-	matNormalizedMeanTextures = this->m_VONormalizedMeanTexture.GetTheTextureInARow();
+    //matNormalizedMeanTextures = this->m_VONormalizedMeanTexture.GetTheTextureInARow();
 	for(unsigned int i = 0; i < this->m_iNbOfSamples; ++i)
 	{
-		cv::Mat_<float> tmpRow = matNormalizedTextures.row(i);
-		this->m_vNormalizedTextures[i].GetTheTextureInARow().copyTo(tmpRow);
+        cv::Mat_<float> textureInARow = this->m_vNormalizedTextures[i].GetTheTextureInARow();
+
+        for(unsigned int j = 0; j < this->m_iNbOfShapes; j++)
+        {
+            matNormalizedTextures.at<float>(i,j) = textureInARow.at<float>(0,j);
+        }
 	}
     // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
     this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenTexturesAtMost) );
