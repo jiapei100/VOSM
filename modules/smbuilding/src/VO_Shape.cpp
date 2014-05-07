@@ -77,7 +77,7 @@ std::ostream& operator<<(std::ostream& os, const VO_Shape& shape)
 }
 
 
-std::istream& operator>>(std::istream &is, VO_Shape& shape)
+std::istream& operator>>(std::istream& is, VO_Shape& shape)
 {
     is >> shape.m_MatShape;
     return is;
