@@ -56,9 +56,8 @@
 * Contact:          jp4work@gmail.com                                                               *
 * URL:              http://www.visionopen.com                                                       *
 * Create Date:      2010-11-04                                                                      *
-* Modify Date:      2014-04-15                                                                      *
+* Modify Date:      2014-05-07                                                                      *
 ****************************************************************************************************/
-
 
 #include <iostream>
 #include <fstream>
@@ -73,22 +72,26 @@
 
 void usage_build()
 {
-    std::cout << "Usage: smbuild [options] save_directory annotation_directory image_directory shapeinfo_path database channels type levels percentage " << std::endl
+    std::cout << "Usage: test_smbuilding [options] save_directory annotation_directory image_directory shapeinfo_path database channels type levels percentage " << std::endl
         << "options: " << std::endl
-        << "   -o	output directory (default './') " << std::endl
-        << "   -a	annotation directory " << std::endl
-        << "   -i	image directory " << std::endl
-        << "   -s	path of the file shapeinfo " << std::endl
-        << "   -d	training database " << std::endl
-        << "   -c	channels (1 or 3, default 3) " << std::endl
-        << "   -t	statistical model type (SM, TM, AM, IA, FM, SMLTC, SMNDPROFILE. default SMNDPROFILE ) " << std::endl
-        << "   -l	level of parymid (default 4) " << std::endl
-        << "   -p	percentage of shape, texture and appearance PCA (default 0.95) " << std::endl;
+        << "   -o    output directory (default './') " << std::endl
+        << "   -a    annotation directory (required) " << std::endl
+        << "   -i    image directory (required) " << std::endl
+        << "   -s    path of the file shapeinfo (required) " << std::endl
+        << "   -d    training database (required, IMM, AGING, BIOID, XM2VTS, FRANCK, EMOUNT, JIAPEI ) " << std::endl
+        << "   -c    channels (1 or 3, default 3) " << std::endl
+        << "   -t    statistical model type (SM, TM, AM, IA, FM, SMLTC, SMNDPROFILE. default SMNDPROFILE ) " << std::endl
+        << "   -l    level of parymid (default 4) " << std::endl
+        << "   -p    percentage of shape, texture and appearance PCA (default 0.95) " << std::endl;
+        
+    std::cout <<"Note: If you are building SMLTC or SMNDPROFILE, you must specify " << std::endl
+        << " -c 1, namely, SMLTC and SMNDPROFILE can only deal with gray-level images. " << std::endl;
+    
     exit(0);
 }
 
 
-void parse_option(	int argc,
+void parse_option(  int argc,
                     char **argv,
                     std::string& outputDir,
                     std::vector<std::string>& annotationFNs,
@@ -101,11 +104,11 @@ void parse_option(	int argc,
                     double& percentage)
 {
     char *arg = NULL;
-    int optindex, handleoptions=1;
-
+    int optindex;
+    
     /* parse options */
-    optindex = 1;
-    while (optindex < argc)
+    optindex = 0;
+    while (++optindex < argc)
     {
         if(argv[optindex][0] != '-') break;
         if(++optindex >= argc) usage_build();
@@ -113,13 +116,13 @@ void parse_option(	int argc,
         switch(argv[optindex-1][1])
         {
         case 'o':
-            outputDir 		= argv[optindex];
+            outputDir       = argv[optindex];
             break;
         case 'a':
         {
             if ( ! boost::filesystem::is_directory( argv[optindex] ) )
             {
-                std::cerr << "landmark path does not exist!" << std::endl;
+                cerr << "landmark path does not exist!" << std::endl;
                 exit(EXIT_FAILURE);
             }
             annotationFNs   = VO_ScanFilesInDir::ScanNSortAnnotationInDirectory ( argv[optindex] );
@@ -129,7 +132,7 @@ void parse_option(	int argc,
         {
             if ( ! boost::filesystem::is_directory( argv[optindex] ) )
             {
-                std::cerr << "image path does not exist!" << std::endl;
+                cerr << "image path does not exist!" << std::endl;
                 exit(EXIT_FAILURE);
             }
             imageFNs        = VO_ScanFilesInDir::ScanNSortImagesInDirectory ( argv[optindex] );
@@ -139,49 +142,84 @@ void parse_option(	int argc,
         {
             if ( ! boost::filesystem::is_regular( argv[optindex] ) )
             {
-                std::cerr << "shapeinfo file does not exist!" << std::endl;
+                cerr << "shapeinfo file does not exist!" << std::endl;
                 exit(EXIT_FAILURE);
             }
-            shapeinfoFN 	= atoi(argv[optindex]);
+            shapeinfoFN     = argv[optindex];
         }
             break;
         case 'd':
-            database 		= atoi(argv[optindex]);
+        {
+            if(strcmp(argv[optindex], "PUT") == 0)
+                database    = CAnnotationDBIO::PUT;
+            else if(strcmp(argv[optindex], "IMM") == 0)
+                database    = CAnnotationDBIO::IMM;
+            else if(strcmp(argv[optindex], "AGING") == 0)
+                database    = CAnnotationDBIO::AGING;
+            else if(strcmp(argv[optindex], "BIOID") == 0)
+                database    = CAnnotationDBIO::BIOID;
+            else if(strcmp(argv[optindex], "XM2VTS") == 0)
+                database    = CAnnotationDBIO::XM2VTS;
+            else if(strcmp(argv[optindex], "FRANCK") == 0)
+                database    = CAnnotationDBIO::FRANCK;
+            else if(strcmp(argv[optindex], "EMOUNT") == 0)
+                database    = CAnnotationDBIO::EMOUNT;
+            else if(strcmp(argv[optindex], "JIAPEI") == 0)
+                database    = CAnnotationDBIO::JIAPEI;
+        }
             break;
         case 'c':
-            channels 		= atoi(argv[optindex]);
+            channels        = atoi(argv[optindex]);
             break;
         case 't':
-            type 			= atoi(argv[optindex]);
+        {
+            if(strcmp(argv[optindex], "SM") == 0)
+                type        = SHAPEMODEL;
+            else if(strcmp(argv[optindex], "TM") == 0)
+                type        = TEXTUREMODEL;
+            else if(strcmp(argv[optindex], "AM") == 0)
+                type        = APPEARANCEMODEL;
+            else if(strcmp(argv[optindex], "IA") == 0)
+                type        = INVERSEIMAGEALIGNMENT;
+            else if(strcmp(argv[optindex], "FM") == 0)
+                type        = AFM ;
+            else if(strcmp(argv[optindex], "SMLTC") == 0)
+                type        = ASMLTC;
+            else if(strcmp(argv[optindex], "SMNDPROFILE") == 0)
+                type        = ASMNDPROFILE;
+        }
             break;
         case 'l':
-            levels 			= atoi(argv[optindex]);
+            levels          = atoi(argv[optindex]);
             break;
         case 'p':
-            percentage 		= atoi(argv[optindex]);
+            percentage      = atof(argv[optindex]);
             break;
         default:
         {
-            std::cerr << "unknown options" << std::endl;
+            cerr << "unknown options" << std::endl;
             usage_build();
         }
             break;
         }
     }
-
+    
     if (annotationFNs.size() == 0)
     {
-        std::cerr << " No landmark loaded" << std::endl;
+        cerr << " No landmark loaded" << std::endl;
+        usage_build();
         exit(EXIT_FAILURE);
     }
     else if (imageFNs.size() == 0)
     {
-        std::cerr << " No image loaded" << std::endl;
+        cerr << " No image loaded" << std::endl;
+        usage_build();
         exit(EXIT_FAILURE);
     }
     else if (annotationFNs.size() != imageFNs.size())
     {
-        std::cerr << " The number of images should be equal to the number of landmarks" << std::endl;
+        cerr << " The number of images should be equal to the number of landmarks" << std::endl;
+        usage_build();
         exit(EXIT_FAILURE);
     }
 }
@@ -189,21 +227,21 @@ void parse_option(	int argc,
 
 int main(int argc, char **argv)
 {
-    std::string					outputDir = "./";
-    std::vector<std::string> 			AllImgFiles4Training;
-    std::vector<std::string> 			AllLandmarkFiles4Training;
-    std::string 					shapeinfoFileName;
-    unsigned int 			database;
-    unsigned int			channels = 3;
-    unsigned int			type = SHAPEMODEL;
-    unsigned int 			levels = 4;
-    double					percentage = 0.95;
-
-    parse_option(	argc,
+    std::string              outputDir = "./";
+    std::vector<std::string>      AllImgFiles4Training;
+    std::vector<std::string>      AllLandmarkFiles4Training;
+    std::string              shapeinfoFileName;
+    unsigned int        database = CAnnotationDBIO::EMOUNT;
+    unsigned int        channels = 3;
+    unsigned int        type = ASMNDPROFILE;
+    unsigned int        levels = 4;
+    double              percentage = 0.95;
+    
+    parse_option(   argc,
                     argv,
                     outputDir,
-                    AllImgFiles4Training,
                     AllLandmarkFiles4Training,
+                    AllImgFiles4Training,
                     shapeinfoFileName,
                     database,
                     channels,
@@ -211,69 +249,12 @@ int main(int argc, char **argv)
                     levels,
                     percentage);
 
-//	AllImgFiles4Training        = VO_IO::ScanNSortImagesInDirectory ( "/media/usb0/Research/Databases/face/2D/PUT/Images/training" );
-//	AllLandmarkFiles4Training   = VO_IO::ScanNSortAnnotationInDirectory ( "/media/usb0/Research/Databases/face/2D/PUT/Landmarks2/training" );
-//	shapeinfoFileName			= "/media/usb0/Research/Databases/face/2D/PUT/Landmarks2/training/ShapeInfo.txt";
-//	database					= CAnnotationDBIO::PUT;
-//	channels					= 3;
-//	levels						= 4;
-//
-//	AllImgFiles4Training        = VO_IO::ScanNSortImagesInDirectory ( "/media/usb0/Research/Databases/face/2D/IMM/images/training" );
-//	AllLandmarkFiles4Training   = VO_IO::ScanNSortAnnotationInDirectory ( "/media/usb0/Research/Databases/face/2D/IMM/annotations/training" );
-//	shapeinfoFileName			= "/media/usb0/Research/Databases/face/2D/IMM/annotations/training/ShapeInfo.txt";
-//	database					= CAnnotationDBIO::IMM;
-//	channels					= 3;
-//	levels						= 4;
-//
-//	AllImgFiles4Training        = VO_IO::ScanNSortImagesInDirectory ( "/media/usb0/Research/Databases/face/2D/BIOID/images/training" );
-//	AllLandmarkFiles4Training   = VO_IO::ScanNSortAnnotationInDirectory ( "/media/usb0/Research/Databases/face/2D/BIOID/annotations/training" );
-//	shapeinfoFileName			= "/media/usb0/Research/Databases/face/2D/BIOID/annotations/training/ShapeInfo.txt";
-//	database					= CAnnotationDBIO::BIOID;
-//	channels					= 1;
-//	levels						= 4;
-//
-//	AllImgFiles4Training        = VO_IO::ScanNSortImagesInDirectory ( "/media/usb0/Research/Databases/face/2D/fgnet-aging/images/training" );
-//	AllLandmarkFiles4Training   = VO_IO::ScanNSortAnnotationInDirectory ( "/media/usb0/Research/Databases/face/2D/fgnet-aging/annotations/training" );
-//	shapeinfoFileName			= "/media/usb0/Research/Databases/face/2D/fgnet-aging/annotations/training/ShapeInfo.txt";
-//	database					= CAnnotationDBIO::AGING;
-//	channels					= 1;
-//	levels						= 4;
-//
-//	AllImgFiles4Training        = VO_IO::ScanNSortImagesInDirectory ( "/media/usb0/Research/Databases/face/2D/FRANCK/images/training" );
-//	AllLandmarkFiles4Training   = VO_IO::ScanNSortAnnotationInDirectory ( "/media/usb0/Research/Databases/face/2D/FRANCK/annotations/training" );
-//	shapeinfoFileName			= "/media/usb0/Research/Databases/face/2D/FRANCK/annotations/training/ShapeInfo.txt";
-//	database					= CAnnotationDBIO::FRANCK;
-//	channels					= 1;
-//	levels						= 4;
-//
-//	AllImgFiles4Training        = VO_IO::ScanNSortImagesInDirectory ( "/media/usb0/Research/Databases/face/2D/XM2VTS/CDS001+CDS006/images/session_1" );
-//	AllLandmarkFiles4Training   = VO_IO::ScanNSortAnnotationInDirectory ( "/media/usb0/Research/Databases/face/2D/XM2VTS/CDS001+CDS006/annotations/session_1" );
-//	shapeinfoFileName			= "/media/usb0/Research/Databases/face/2D/XM2VTS/CDS001+CDS006/annotations/session_1/ShapeInfo.txt";
-//	database					= CAnnotationDBIO::XM2VTS;
-//	channels					= 3;
-//	levels						= 4;
-//
-//	AllImgFiles4Training        = VO_IO::ScanNSortImagesInDirectory ( "/media/usb0/Research/Databases/face/2D/emount/images/training" );
-//	AllLandmarkFiles4Training   = VO_IO::ScanNSortAnnotationInDirectory ( "/media/usb0/Research/Databases/face/2D/emount/annotations/training" );
-//	shapeinfoFileName			= "/media/usb0/Research/Databases/face/2D/emount/annotations/training/ShapeInfo.txt";
-//	database					= CAnnotationDBIO::EMOUNT;
-//	channels					= 3;
-//	levels						= 4;
-//
-//	AllImgFiles4Training        = VO_IO::ScanNSortImagesInDirectory ( "/media/usb0/Research/Databases/face/2D/JIAPei/images/training" );
-//	AllLandmarkFiles4Training   = VO_IO::ScanNSortAnnotationInDirectory ( "/media/usb0/Research/Databases/face/2D/JIAPei/annotations" );
-//	shapeinfoFileName			= "/media/usb0/Research/Databases/face/2D/JIAPei/annotations/ShapeInfo.txt";
-//	database					= CAnnotationDBIO::JIAPEI;
-//	channels					= 3;
-//	levels						= 4;
-
-
     switch(type)
     {
         case SHAPEMODEL:
         {
             VO_ShapeModel shapeModel;
-            shapeModel.VO_BuildShapeModel(	AllLandmarkFiles4Training,
+            shapeModel.VO_BuildShapeModel(  AllLandmarkFiles4Training,
                                             shapeinfoFileName,
                                             database,
                                             percentage,
@@ -284,9 +265,9 @@ int main(int argc, char **argv)
         case TEXTUREMODEL:
         {
             VO_TextureModel textureModel;
-            textureModel.VO_BuildTextureModel(	AllLandmarkFiles4Training,
+            textureModel.VO_BuildTextureModel(  AllLandmarkFiles4Training,
                                                 AllImgFiles4Training,
-                                                shapeinfoFileName,
+                                                shapeinfoFileName, 
                                                 database,
                                                 channels,
                                                 VO_Features::DIRECT,
@@ -299,9 +280,9 @@ int main(int argc, char **argv)
         case APPEARANCEMODEL:
         {
             VO_AAMBasic aamBasicModel;
-            aamBasicModel.VO_BuildAppearanceModel(	AllLandmarkFiles4Training,
+            aamBasicModel.VO_BuildAppearanceModel(  AllLandmarkFiles4Training,
                                                     AllImgFiles4Training,
-                                                    shapeinfoFileName,
+                                                    shapeinfoFileName, 
                                                     database,
                                                     channels,
                                                     levels,
@@ -316,7 +297,7 @@ int main(int argc, char **argv)
         case INVERSEIMAGEALIGNMENT:
         {
             VO_AAMInverseIA aamInverseIAModel;
-            aamInverseIAModel.VO_BuildAAMICIA(	AllLandmarkFiles4Training,
+            aamInverseIAModel.VO_BuildAAMICIA(  AllLandmarkFiles4Training,
                                                 AllImgFiles4Training,
                                                 shapeinfoFileName,
                                                 database,
@@ -332,7 +313,7 @@ int main(int argc, char **argv)
         case AFM:
         {
             VO_AFM featureModel;
-            featureModel.VO_BuildFeatureModel(	AllLandmarkFiles4Training,
+            featureModel.VO_BuildFeatureModel(  AllLandmarkFiles4Training,
                                                 AllImgFiles4Training,
                                                 shapeinfoFileName,
                                                 database,
@@ -366,9 +347,9 @@ int main(int argc, char **argv)
         case ASMNDPROFILE:
         {
             VO_ASMNDProfiles asmNDProfilesModel;
-            asmNDProfilesModel.VO_BuildASMNDProfiles(	AllLandmarkFiles4Training,
+            asmNDProfilesModel.VO_BuildASMNDProfiles(   AllLandmarkFiles4Training,
                                                         AllImgFiles4Training,
-                                                        shapeinfoFileName,
+                                                        shapeinfoFileName, 
                                                         database,
                                                         channels,
                                                         levels,
@@ -384,4 +365,3 @@ int main(int argc, char **argv)
 
     return 0;
 }
-

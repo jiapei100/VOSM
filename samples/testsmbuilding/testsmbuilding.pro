@@ -18,12 +18,12 @@ LIBS += \
         -L/opt/vosm/lib
 
 LIBS += \
-        -lsmfitting \
-        -lsmbuilding \
-        -lfeatureextraction \
-        -lintegraltransform \
-        -lcvcommon \
-        -lcommon \
+        -lsmfittingD \
+        -lsmbuildingD \
+        -lfeatureextractionD \
+        -lintegraltransformD \
+        -lcvcommonD \
+        -lcommonD \
         -lopencv_core \
         -lopencv_imgproc \
         -lopencv_highgui \
