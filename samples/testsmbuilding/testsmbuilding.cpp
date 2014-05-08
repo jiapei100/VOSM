@@ -122,7 +122,7 @@ void parse_option(  int argc,
         {
             if ( ! boost::filesystem::is_directory( argv[optindex] ) )
             {
-                cerr << "landmark path does not exist!" << std::endl;
+                std::cerr << "landmark path does not exist!" << std::endl;
                 exit(EXIT_FAILURE);
             }
             annotationFNs   = VO_ScanFilesInDir::ScanNSortAnnotationInDirectory ( argv[optindex] );
@@ -132,7 +132,7 @@ void parse_option(  int argc,
         {
             if ( ! boost::filesystem::is_directory( argv[optindex] ) )
             {
-                cerr << "image path does not exist!" << std::endl;
+                std::cerr << "image path does not exist!" << std::endl;
                 exit(EXIT_FAILURE);
             }
             imageFNs        = VO_ScanFilesInDir::ScanNSortImagesInDirectory ( argv[optindex] );
@@ -142,7 +142,7 @@ void parse_option(  int argc,
         {
             if ( ! boost::filesystem::is_regular( argv[optindex] ) )
             {
-                cerr << "shapeinfo file does not exist!" << std::endl;
+                std::cerr << "shapeinfo file does not exist!" << std::endl;
                 exit(EXIT_FAILURE);
             }
             shapeinfoFN     = argv[optindex];
@@ -197,7 +197,7 @@ void parse_option(  int argc,
             break;
         default:
         {
-            cerr << "unknown options" << std::endl;
+            std::cerr << "unknown options" << std::endl;
             usage_build();
         }
             break;
@@ -206,19 +206,19 @@ void parse_option(  int argc,
     
     if (annotationFNs.size() == 0)
     {
-        cerr << " No landmark loaded" << std::endl;
+        std::cerr << " No landmark loaded" << std::endl;
         usage_build();
         exit(EXIT_FAILURE);
     }
     else if (imageFNs.size() == 0)
     {
-        cerr << " No image loaded" << std::endl;
+        std::cerr << " No image loaded" << std::endl;
         usage_build();
         exit(EXIT_FAILURE);
     }
     else if (annotationFNs.size() != imageFNs.size())
     {
-        cerr << " The number of images should be equal to the number of landmarks" << std::endl;
+        std::cerr << " The number of images should be equal to the number of landmarks" << std::endl;
         usage_build();
         exit(EXIT_FAILURE);
     }
