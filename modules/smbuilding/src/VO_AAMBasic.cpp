@@ -741,7 +741,7 @@ void VO_AAMBasic::VO_EstPoseGradientMatrix(cv::Mat_<float>& oPoseGM)
 		else if (this->m_iNbOfChannels == 3)
             img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 1 );
 		else
-			cerr << "We can't deal with image channels not equal to 1 or 3!" << endl;
+            std::cerr << "We can't deal with image channels not equal to 1 or 3!" << std::endl;
 
 		if(recordIntermediateImgs)
 		{
@@ -1205,10 +1205,17 @@ void VO_AAMBasic::VO_BuildAppearanceModel(	const std::vector<std::string>& allLa
 	cv::Mat_<float> matNormalizedTextures			= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfTextures);
 	for(unsigned int i = 0; i < this->m_iNbOfSamples; ++i)
 	{
-		cv::Mat tmpRowShape 	= matAlignedShapes.row(i);
-		this->m_vAlignedShapes[i].GetTheShapeInARow().copyTo(tmpRowShape);
-		cv::Mat tmpRowTexture 	= matNormalizedTextures.row(i);
-		this->m_vNormalizedTextures[i].GetTheTextureInARow().copyTo(tmpRowTexture);
+        cv::Mat_<float> shapeInARow = this->m_vAlignedShapes[i].GetTheShapeInARow();
+        for(unsigned int j = 0; j < this->m_iNbOfShapes; j++)
+        {
+            matAlignedShapes.at<float>(i,j) = shapeInARow.at<float>(0,j);
+        }
+
+        cv::Mat_<float> textureInARow = this->m_vNormalizedTextures[i].GetTheTextureInARow();
+        for(unsigned int j = 0; j < this->m_iNbOfShapes; j++)
+        {
+            matNormalizedTextures.at<float>(i,j) = textureInARow.at<float>(0,j);
+        }
 	}
     cv::Mat_<float> AlignedShapesProject2Truncated 			= this->m_PCAAlignedShape.project(matAlignedShapes);
 	cv::Mat_<float> NormalizedTexturesProject2Truncated 	= this->m_PCANormalizedTexture.project(matNormalizedTextures);
@@ -1392,7 +1399,7 @@ void VO_AAMBasic ::VO_Load(const std::string& fd)
 	std::string fn = fd+"/AppearanceModel";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "AppearanceModel subfolder is not existing. " << endl;
+        std::cout << "AppearanceModel subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -1428,7 +1435,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     std::string fn = fd+"/AppearanceModel";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "AppearanceModel subfolder is not existing. " << endl;
+        std::cout << "AppearanceModel subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
