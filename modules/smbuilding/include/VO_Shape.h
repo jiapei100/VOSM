@@ -179,7 +179,7 @@ public:
 	float							dot(const VO_Shape& iShape);
 
 	void							Resize(unsigned int rows, unsigned int cols);
-    cv::Mat_<float>               		CenterOfGravity() const;
+    cv::Mat_<float>               	CenterOfGravity() const;
     // Transformations
     void                        	Centralize();
     void                        	Translate( const cv::Mat_<float>& translation );
@@ -355,8 +355,9 @@ public:
 	/** Set The shape in ND. iShape is of size 1*cols */
     void                        	SetTheShape(const cv::Mat_<float>& iShape, unsigned int dim)
 	{
+                                    if(dim <= 0) std::cerr << "dim must be natural integer, namely, >= 1" << std::endl;
 									assert (iShape.rows == 1 && iShape.cols%dim == 0);
-									this->m_MatShape = iShape.reshape(dim);
+                                    this->m_MatShape = iShape.reshape(iShape.cols/dim, dim);
 	}
 	/** Set a specific shape at some position */
 	void							SetAShape(float iS, unsigned int row, unsigned int col)
