@@ -507,11 +507,18 @@ void VO_Shape::Translate( const cv::Mat_<float>& translation )
 {
     if (translation.rows != this->m_MatShape.rows )
     {
-        std::cerr << "translation cv::Mat_ should have the same size as cv::Point dimention!";
+        std::cerr << "translation cv::Mat_ should have the same size as cv::Point dimention!" << std::endl;
         exit(EXIT_FAILURE);
     }
     for(unsigned int i = 0; i < this->m_MatShape.rows; i++)
-        this->m_MatShape.row(i) += translation(i,0);
+        // modified by Pei JIA. 2014-05-08
+        //this->m_MatShape.row(i) += translation(i,0);
+    {
+        for(unsigned int j = 0; j < this->m_MatShape.cols; j++)
+        {
+            this->m_MatShape.at<float>(i,j) += translation(i,0);
+        }
+    }
 }
 
 
@@ -543,7 +550,14 @@ void VO_Shape::Scale( const cv::Mat_<float>& svec)
         exit(EXIT_FAILURE);
     }
     for(unsigned int i = 0; i < this->m_MatShape.rows; i++)
-        this->m_MatShape.row(i) *= svec(i,0);
+        // modified by Pei JIA. 2014-05-08
+        //this->m_MatShape.row(i) *= svec(i,0);
+    {
+        for(unsigned int j = 0; j < this->m_MatShape.cols; j++)
+        {
+            this->m_MatShape.at<float>(i,j) *= svec(i,0);
+        }
+    }
 }
 
 
