@@ -191,8 +191,9 @@ public:
 	/** Set The texture in ND. iTexture is of size 1*cols. Not a hardcopy, but copy the header and data position */
     void                        	SetTheTexture(const cv::Mat_<float>& iTexture, unsigned int textureRep)
 	{
+                                    if(textureRep <= 0) std::cerr << "textureRep must be natural integer, namely, >= 1" << std::endl;
 									assert (iTexture.rows == 1 && iTexture.cols%textureRep == 0);
-									this->m_MatTexture = iTexture.reshape(textureRep);
+                                    this->m_MatTexture = iTexture.reshape(iTexture.cols/textureRep, textureRep);
 	}
 	
     void 							SetAPixel(const cv::Mat_<float>& iCol, int idx)
