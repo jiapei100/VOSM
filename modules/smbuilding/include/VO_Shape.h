@@ -357,7 +357,17 @@ public:
 	{
                                     if(dim <= 0) std::cerr << "dim must be natural integer, namely, >= 1" << std::endl;
 									assert (iShape.rows == 1 && iShape.cols%dim == 0);
-                                    this->m_MatShape = iShape.reshape(iShape.cols/dim, dim);
+                                    //modified by Pei JIA. 2014-05-08. OpenCV reshape() is buggy, never use it.
+                                    //this->m_MatShape = iShape.reshape(iShape.cols/dim, dim);
+                                    unsigned int cols = iShape.cols/dim;
+                                    this->m_MatShape = cv::Mat_<float>::zeros(dim, cols);
+                                    for(unsigned int i = 0; i < dim; i++)
+                                    {
+                                        for(unsigned int j = 0; j < cols; j++)
+                                        {
+                                            this->m_MatShape.at<float>(i, j) = iShape.at<float>(i*cols+j);
+                                        }
+                                    }
 	}
 	/** Set a specific shape at some position */
 	void							SetAShape(float iS, unsigned int row, unsigned int col)
