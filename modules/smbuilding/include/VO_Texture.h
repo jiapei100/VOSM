@@ -193,7 +193,17 @@ public:
 	{
                                     if(textureRep <= 0) std::cerr << "textureRep must be natural integer, namely, >= 1" << std::endl;
 									assert (iTexture.rows == 1 && iTexture.cols%textureRep == 0);
-                                    this->m_MatTexture = iTexture.reshape(iTexture.cols/textureRep, textureRep);
+                                    //modified by Pei JIA. 2014-05-08. OpenCV reshape() is buggy, never use it.
+                                    //this->m_MatTexture = iTexture.reshape(iTexture.cols/textureRep, textureRep);
+                                    unsigned int cols = iTexture.cols/textureRep;
+                                    this->m_MatTexture = cv::Mat_<float>::zeros(textureRep, cols);
+                                    for(int i = 0; i < textureRep; i++)
+                                    {
+                                        for(int j = 0; j < cols; j++)
+                                        {
+                                            this->m_MatTexture.at<float>(i, j) = iTexture.at<float>(i*cols+j);
+                                        }
+                                    }
 	}
 	
     void 							SetAPixel(const cv::Mat_<float>& iCol, int idx)
