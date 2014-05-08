@@ -653,10 +653,10 @@ void VO_AAMBasic::VO_EstCParamGradientMatrix(cv::Mat_<float>& oCParamGM)
 					std::string temp2Str = "CDisplaceLoadedImage" + stri + "_" + strj1 + "_" + strk + ".jpg";
 					std::string temp3Str = "CDisplaceTextureImage" + stri + "_" + strj + "_" + strk + ".jpg";
 					std::string temp4Str = "CDisplaceTextureImage" + stri + "_" + strj1 + "_" + strk + ".jpg";
-					std::string res1Str 	= "CDisplaceLoadedWarpedImage" + stri + "_" + strj + "_" + strk + ".jpg";
-					std::string res2Str 	= "CDisplaceLoadedWarpedImage" + stri + "_" + strj1 + "_" + strk + ".jpg";
-					std::string res3Str 	= "CDisplaceTextureWarpedImage" + stri + "_" + strj + "_" + strk + ".jpg";
-					std::string res4Str 	= "CDisplaceTextureWarpedImage" + stri + "_" + strj1 + "_" + strk + ".jpg";
+                    std::string res1Str = "CDisplaceLoadedWarpedImage" + stri + "_" + strj + "_" + strk + ".jpg";
+                    std::string res2Str = "CDisplaceLoadedWarpedImage" + stri + "_" + strj1 + "_" + strk + ".jpg";
+                    std::string res3Str = "CDisplaceTextureWarpedImage" + stri + "_" + strj + "_" + strk + ".jpg";
+                    std::string res4Str = "CDisplaceTextureWarpedImage" + stri + "_" + strj1 + "_" + strk + ".jpg";
 
                     cv::imwrite(temp1Str.c_str(), tempImage1 );
                     cv::imwrite(temp2Str.c_str(), tempImage2 );
