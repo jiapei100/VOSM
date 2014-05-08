@@ -97,10 +97,10 @@ protected:
 	/** Every VO_Shape is corresponding to an annotation file */
     std::string						m_sAnnotationFileName;
 	 
-    /** the shape model, NbOfDim * NbOfAnnotatedcv::Points */
+    /** the shape model, NbOfDim * NbOfAnnotatedPoints */
     cv::Mat_<float>        			m_MatShape;
 
-    /** whether this point in 3D coordinates is able to be seen on 2D screen - dealing with occlusion. NbOfAnnotatedcv::Points */
+    /** whether this point in 3D coordinates is able to be seen on 2D screen - dealing with occlusion. NbOfAnnotatedPoints */
     std::vector<bool>       		m_MatSeeable;
 
     void                        	CopyData(const VO_Shape& iShape)
