@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -1686,21 +1686,27 @@ void VO_TextureModel::VO_BuildTextureModel(	const std::vector<std::string>& allL
     VO_TextureModel::VO_PutEdgesOnTemplateFace(this->m_vEdge, this->m_VOReferenceShape, this->m_ImageTemplateFace, this->m_ImageEdges);
 
 	//////////////////////////////////////////////////////////////////////////
-	VO_Shape tmpRefShape = this->m_VOAlignedMeanShape*this->m_fAverageShapeSize;
+    VO_Shape tmpRefShape = this->m_VOAlignedMeanShape*this->m_fAverageShapeSize;
     std::vector<VO_Ellipse> refEllipses = this->m_VOPDM.GetPDMEllipses();
     VO_Point2DDistributionModel::VO_ScalePDMEllipses(refEllipses, this->m_fAverageShapeSize, refEllipses);
+    cv::Mat_<float> translatePt = cv::Mat_<float>::zeros(2, 1);
+    for(int i = 0; i < refEllipses.size(); i++)
+    {
+        translatePt(0,0) = tmpRefShape.GetA2DPoint(i).x;
+        translatePt(1,0) = tmpRefShape.GetA2DPoint(i).y;
+        refEllipses[i].Translate( translatePt );
+    }
     cv::Rect brect = VO_Ellipse::VO_CalcBoundingRect4MultipleEllipses (refEllipses);
-	cv::Mat_<float> ellipseMin = cv::Mat_<float>::zeros(2, 1);
-	ellipseMin(0,0) = brect.x;
-	ellipseMin(1,0) = brect.y;
-	this->m_ImageEllipses = cv::Mat::zeros(brect.height, brect.width, this->m_ImageTemplateFace.type());
-	tmpRefShape.Translate( -ellipseMin );
-    for(unsigned int i = 0; i < this->m_iNbOfPoints; i++)
-		refEllipses[i].Translate(-ellipseMin);
-	VO_TextureModel::VO_PutShapeOnTemplateFace(tmpRefShape, this->m_ImageEllipses, this->m_ImageEllipses);
-    //cv::imwrite("ttttt.jpg", this->m_ImageEllipses);
-	VO_TextureModel::VO_PutPDMEllipsesOnTemplateFace(refEllipses, this->m_ImageEllipses, this->m_ImageEllipses);
-	
+    cv::Mat_<float> ellipseMin = cv::Mat_<float>::zeros(2, 1);
+    ellipseMin(0,0) = -brect.x;
+    ellipseMin(1,0) = -brect.y;
+    tmpRefShape.Translate( ellipseMin );
+    for(unsigned int i = 0; i < refEllipses.size(); i++)
+        refEllipses[i].Translate(ellipseMin);
+
+    this->m_ImageEllipses = cv::Mat::zeros(brect.height, brect.width, this->m_ImageTemplateFace.type());
+    VO_TextureModel::VO_PutShapeOnTemplateFace(tmpRefShape, this->m_ImageEllipses, this->m_ImageEllipses);
+    VO_TextureModel::VO_PutPDMEllipsesOnTemplateFace(refEllipses, this->m_ImageEllipses, this->m_ImageEllipses);
 	//////////////////////////////////////////////////////////////////////////
 }
 
