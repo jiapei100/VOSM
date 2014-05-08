@@ -109,22 +109,22 @@ std::ostream& operator<<(std::ostream& os, const VO_FacePart& facepart)
         os << "m_vLipDownerInnerLine" << " ";
         break;
     case VO_FacePart::LEFTSIDEPOINTS:
-        os << "m_vLeftSidecv::Points" << " ";
+        os << "m_vLeftSidePoints" << " ";
         break;
     case VO_FacePart::RIGHTSIDEPOINTS:
-        os << "m_vRightSidecv::Points" << " ";
+        os << "m_vRightSidePoints" << " ";
         break;
     case VO_FacePart::MIDLINEPOINTS:
-        os << "m_vMidlinecv::Points" << " ";
+        os << "m_vMidlinePoints" << " ";
         break;
     case VO_FacePart::EYECORNERPOINTS:
-        os << "m_vEyeCornercv::Points" << " ";
+        os << "m_vEyeCornerPoints" << " ";
         break;
     case VO_FacePart::MOUTHCORNERPOINTS:
-        os << "m_vMouthCornercv::Points" << " ";
+        os << "m_vMouthCornerPoints" << " ";
         break;
     case VO_FacePart::PITCHAXISLINEPOINTS:
-        os << "m_vPitchAxisLinecv::Points" << " ";
+        os << "m_vPitchAxisLinePoints" << " ";
         break;
     case VO_FacePart::LEFTIRIS:
         os << "m_vLeftIris" << " ";
@@ -216,27 +216,27 @@ std::istream& operator>>(std::istream& is, VO_FacePart& facepart)
     {
         facepart.m_iType = VO_FacePart::LIPDOWNERINNERLINE;
     }
-    else if(temp == "m_vLeftSidecv::Points")
+    else if(temp == "m_vLeftSidePoints")
     {
         facepart.m_iType = VO_FacePart::LEFTSIDEPOINTS;
     }
-    else if(temp == "m_vRightSidecv::Points")
+    else if(temp == "m_vRightSidePoints")
     {
         facepart.m_iType = VO_FacePart::RIGHTSIDEPOINTS;
     }
-    else if(temp == "m_vMidlinecv::Points")
+    else if(temp == "m_vMidlinePoints")
     {
         facepart.m_iType = VO_FacePart::MIDLINEPOINTS;
     }
-    else if(temp == "m_vEyeCornercv::Points")
+    else if(temp == "m_vEyeCornerPoints")
     {
         facepart.m_iType = VO_FacePart::EYECORNERPOINTS;
     }
-    else if(temp == "m_vMouthCornercv::Points")
+    else if(temp == "m_vMouthCornerPoints")
     {
         facepart.m_iType = VO_FacePart::MOUTHCORNERPOINTS;
     }
-    else if(temp == "m_vPitchAxisLinecv::Points")
+    else if(temp == "m_vPitchAxisLinePoints")
     {
         facepart.m_iType = VO_FacePart::PITCHAXISLINEPOINTS;
     }
