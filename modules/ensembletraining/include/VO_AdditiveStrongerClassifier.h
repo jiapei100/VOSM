@@ -78,6 +78,7 @@
 class VO_AdditiveStrongerClassifier
 {
 protected:
+    /** A weak classifier */
 	VO_WeakClassifier			m_VOWeakClassifier;
 	
 	/** Number of samples */

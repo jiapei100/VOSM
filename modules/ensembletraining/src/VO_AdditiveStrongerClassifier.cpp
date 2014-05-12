@@ -63,6 +63,9 @@
 #include <queue>
 
 
+/**
+ * @brief Constructor
+ */
 VO_AdditiveStrongerClassifier::VO_AdditiveStrongerClassifier()
 {
 	this->m_iNbOfSamples				= 0;
@@ -71,6 +74,9 @@ VO_AdditiveStrongerClassifier::VO_AdditiveStrongerClassifier()
 }
 
 
+/**
+ * @brief Destructor
+ */
 VO_AdditiveStrongerClassifier::~VO_AdditiveStrongerClassifier()
 {
 	

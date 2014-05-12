@@ -63,6 +63,9 @@
 #include <queue>
 
 
+/**
+ * @brief Constructor
+ */
 VO_BoostingCascadeClassifier::VO_BoostingCascadeClassifier()
 {
 	this->m_iNbOfStages					= 0;
@@ -70,6 +73,9 @@ VO_BoostingCascadeClassifier::VO_BoostingCascadeClassifier()
 }
 
 
+/**
+ * @brief Destructor
+ */
 VO_BoostingCascadeClassifier::~VO_BoostingCascadeClassifier()
 {
 	

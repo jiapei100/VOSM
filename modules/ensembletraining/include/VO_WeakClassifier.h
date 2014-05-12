@@ -89,6 +89,7 @@ public:
 	/** Split */
 //	void					split_node_data( CvDTreeNode* node );
 	
+    /** Gets and Sets */
 	float					GetThreshold() const {return this->m_fThreshold;}
 	
 };

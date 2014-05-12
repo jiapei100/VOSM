@@ -73,8 +73,6 @@
 
 #include "VO_BoostingSingleEnsembleClassifier.h"
 
-using namespace std;
-using namespace cv;
 
 
 
@@ -102,6 +100,7 @@ private:
 	VO_Features*				m_VOFeatures;
 	
 public:
+    /** Boosting cascade structure */
 	enum {UNDEFINED = 0, SINGLECASCADE = 1, PARALLELCASCADE = 2, CASCADEDECISIONTREE = 3, BFSCASCADE = 4};
 
 	/** Constructor */
@@ -111,9 +110,9 @@ public:
 	~VO_BoostingCascadeClassifier();
 
 	/** training the boosting cascade classifier */
-    bool train( const string& _cascadeDirName,
-                const vector<string> _posFilenames,
-                const vector<string> _negFilenames,
+    bool train( const std::string& _cascadeDirName,
+                const std::vector<std::string> _posFilenames,
+                const std::vector<std::string> _negFilenames,
                 int _precalcValBufSize,
 				int _precalcIdxBufSize,
                 int _numStages,

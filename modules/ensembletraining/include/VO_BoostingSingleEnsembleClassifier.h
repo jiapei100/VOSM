@@ -82,7 +82,9 @@ protected:
 	float								m_fMaxWrongClassification;
 
 public:
+    /** Classifier type: discrete or real */
 	enum {DISCRETE = 0, REAL = 1};
+    /** Boosting optimization method: steepest descent, conjugate gradient, Newton Raphson */
 	enum {STEEPESTDESCENT = 0, CONJUGATEGRADIENT = 1, NEWTONRAPHSON = 2};
 	/** Margin1 -- e^{−yhf(x)}   Margin2 -- ln(1 + e^{−yhf(x))} */
 	enum {MARGIN1 = 0, MARGIN2 =1};
@@ -105,13 +107,18 @@ public:
 	/** predict */
     virtual float predict( int sampleIdx, bool returnSum = false ) const;
 
+    /** write features */
     void write( cv::FileStorage &fs, const cv::Mat& featureMap ) const;
 //    bool read( const FileNode &node, const CvFeatureEvaluator* _featureEvaluator,
 //               const CvCascadeBoostParams& _params );
+    /** mark used features in map */
     void markUsedFeaturesInMap( cv::Mat& featureMap );
 protected:
+    /** set parameters */
     virtual bool set_params( const CvBoostParams& _params );
+    /** update weights */
     virtual void update_weights( CvBoostTree* tree );
+    /** Did we achieve the desired error? */
     virtual bool isErrDesired();
 };
 

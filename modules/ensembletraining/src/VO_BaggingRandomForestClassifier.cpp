@@ -62,11 +62,17 @@
 #include "VO_BaggingRandomForestClassifier.h"
 #include <queue>
 
+/**
+ * @brief Constructor
+ */
 VO_BaggingRandomForestClassifier::VO_BaggingRandomForestClassifier()
 {
 
 }
 
+/**
+ * @brief Destructor
+ */
 VO_BaggingRandomForestClassifier::~VO_BaggingRandomForestClassifier()
 {
 
