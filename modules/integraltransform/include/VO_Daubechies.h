@@ -88,8 +88,10 @@ protected:
     void                    init();
 
 public:
+    /** Constructor */
     VO_Daubechies()         { this->init();}
 
+    /** Destructor */
     virtual ~VO_Daubechies(){}
 
     /** prepare the Daubechies mother wavelet */

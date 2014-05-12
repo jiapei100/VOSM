@@ -62,6 +62,9 @@
 #include "VO_CohenDaubechiesFeauveau.h"
 
 
+/**
+ * @brief VO_CohenDaubechiesFeauveau::init
+ */
 void VO_CohenDaubechiesFeauveau::init()
 {
     this->m_iWaveletType        = COHENDAUBECHIESFEAUVEAU;

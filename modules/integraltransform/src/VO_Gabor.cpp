@@ -63,18 +63,26 @@
 #include "VO_Gabor.h"
 
 
+/**
+ * @brief VO_Gabor::init
+ */
+void VO_Gabor::init()
+{
+}
+
+
+/**
+ * @brief Constructor
+ */
 VO_Gabor::VO_Gabor()
 {
     this->init();
 }
 
 
-/** Initialization */
-void VO_Gabor::init()
-{
-}
-
-
+/**
+ * @brief Destructor
+ */
 VO_Gabor::~VO_Gabor()
 {
 }
@@ -135,8 +143,8 @@ void VO_Gabor::VO_PrepareGaborKernel( unsigned int nstds,
 
 
 /**
- * @brief        Gabor filtering
- * @ref            http://en.wikipedia.org/wiki/Gabor_filter
+ * @brief       Gabor filtering
+ * @ref         http://en.wikipedia.org/wiki/Gabor_filter
  */
 float VO_Gabor::VO_GaborFiltering(const cv::Mat_<float>& iImg)
 {

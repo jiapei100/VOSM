@@ -70,7 +70,7 @@
 
 
 /** 
- * @author    JIA Pei
+ * @author   JIA Pei
  * @brief    Generalized class for short-time Fourier transform.
  */
 class VO_STFT : public VO_IntegralTransform

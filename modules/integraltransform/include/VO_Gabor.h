@@ -70,7 +70,7 @@
 
 
 /** 
- * @author    JIA Pei
+ * @author   JIA Pei
  * @brief    Gabor transform, a kind of short time Fourier transform.
  */
 class VO_Gabor : public VO_STFT
@@ -98,7 +98,10 @@ protected:
     void                init();
 
 public:
+    /** Constructor */
     VO_Gabor();
+
+    /** Destructor */
     virtual ~VO_Gabor();
 
     /** prepare the Gabor Kernel */

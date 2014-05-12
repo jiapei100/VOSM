@@ -125,13 +125,13 @@ public:
     /** destructor */
     virtual ~VO_DiscreteWavelet() {}
 
-    ///** Prepare the generalized mother wavelet */
+    /** Prepare the generalized mother wavelet */
     //virtual void    VO_PrepareWavelet(unsigned int waveN) = 0;
 
-    ///** Generalized wavelet transform, must be Mat_<float> */
+    /** Generalized wavelet transform, must be Mat_<float> */
     //virtual void    VO_ForwardTransform(const Mat_<float>& iImg, Mat_<float>& oImg) = 0;
 
-    ///** Inverse generalized wavelet transform, must be Mat_<float> */
+    /** Inverse generalized wavelet transform, must be Mat_<float> */
     //virtual void    VO_BackwardTransform(const Mat_<float>& iImg, Mat_<float>& oImg) = 0;
 
 };

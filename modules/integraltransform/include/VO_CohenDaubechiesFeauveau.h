@@ -70,7 +70,7 @@
 
 
 /** 
- * @author    JIA Pei
+ * @author   JIA Pei
  * @brief    Cohen Daubechies Feauveau discrete wavelet transform.
  */
 class VO_CohenDaubechiesFeauveau : public VO_DiscreteWavelet
@@ -80,8 +80,10 @@ protected:
     void                            init();
 
 public:
+    /** Constructor */
     VO_CohenDaubechiesFeauveau()    { this->init(); }
 
+    /** Destructor */
     virtual ~VO_CohenDaubechiesFeauveau() {}
     
     /** prepare the CohenDaubechiesFeauveau mother wavelet */

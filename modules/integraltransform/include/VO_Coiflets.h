@@ -80,15 +80,17 @@ protected:
     /** Daubechies coefficients */
     static float            coif[5][30];
 
-    /** Which Daub? */
+    /** Which Coiflets? */
     unsigned int            m_iCoifN;
 
     /** Initialization */
     void                    init();
 
 public:
+    /** Constructor */
     VO_Coiflets()           { this->init(); }
 
+    /** Destructor */
     virtual ~VO_Coiflets()  {}
 
     /** prepare the Coiflets mother wavelet */

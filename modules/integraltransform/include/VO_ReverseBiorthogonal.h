@@ -63,7 +63,7 @@
 #define __VO_REVERSEBIORTHOGONAL_H__
 
 /** 
- * @author    JIA Pei
+ * @author   JIA Pei
  * @brief    Reverse Biorthogonal discrete wavelet transform.
  */
  

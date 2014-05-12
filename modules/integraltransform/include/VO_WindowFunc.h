@@ -69,9 +69,9 @@
 
 
 /** 
- * @author        JIA Pei
+ * @author       JIA Pei
  * @brief        This is a class to generate 2D discrete window functions.
- *                 If it only contains 1 single row or col, it's a 1D window function.
+ *               If it only contains 1 single row or col, it's a 1D window function.
  */
 class VO_WindowFunc
 {

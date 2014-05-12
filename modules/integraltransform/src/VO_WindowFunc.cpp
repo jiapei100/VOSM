@@ -63,6 +63,22 @@
 #include "VO_WindowFunc.h"
 
 
+/**
+ * @brief VO_WindowFunc::init
+ */
+void VO_WindowFunc::init()
+{
+    this->m_iWindowSize         = cv::Size(0, 0);
+    this->m_iWindowFunc         = 0;
+    this->m_MatWindowedKernel.release();
+}
+
+
+/**
+ * @brief Constructor
+ * @param windowSize
+ * @param windowFunc
+ */
 VO_WindowFunc::VO_WindowFunc(cv::Size windowSize, unsigned int windowFunc)
 {
     this->init();
@@ -72,12 +88,9 @@ VO_WindowFunc::VO_WindowFunc(cv::Size windowSize, unsigned int windowFunc)
 }
 
 
-void VO_WindowFunc::init()
-{
-    this->m_iWindowSize         = cv::Size(0, 0);
-    this->m_iWindowFunc         = 0;
-    this->m_MatWindowedKernel.release();
-}
+/**
+ * @brief Destructor
+ */
 
 
 VO_WindowFunc::~VO_WindowFunc()

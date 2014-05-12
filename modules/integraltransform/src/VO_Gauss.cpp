@@ -71,18 +71,26 @@
 #include "VO_Gauss.h"
 
 
+/**
+ * @brief VO_Gauss::init
+ */
+void VO_Gauss::init()
+{
+}
+
+
+/**
+ * @brief Constructor
+ */
 VO_Gauss::VO_Gauss()
 {
     this->init();
 }
 
 
-/** Initialization */
-void VO_Gauss::init()
-{
-}
-
-
+/**
+ * @brief Desctructor
+ */
 VO_Gauss::~VO_Gauss()
 {
 }

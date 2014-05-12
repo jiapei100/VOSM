@@ -63,6 +63,9 @@
 #include "VO_Symlets.h"
 
 
+/**
+ * @brief VO_Symlets::init
+ */
 void VO_Symlets::init()
 {
     //this->m_iWaveletType    = HAAR;

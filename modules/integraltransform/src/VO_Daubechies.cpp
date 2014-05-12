@@ -65,7 +65,7 @@
 
 using namespace std;
 
-// Explained by JIA Pei, we can only deal with Daubechies until D20
+/// Daubechies transform parameters, only till D20
 float VO_Daubechies::daub[10][20] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1, 1},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.6830127, 1.1830127, 0.3169873, -0.1830127},
@@ -80,6 +80,9 @@ float VO_Daubechies::daub[10][20] = {
 };
 
 
+/**
+ * @brief VO_Daubechies::init
+ */
 void VO_Daubechies::init()
 {
     this->m_iDaubN = 0;

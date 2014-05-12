@@ -71,7 +71,7 @@
 
 
 /** 
- * @author    JIA Pei
+ * @author   JIA Pei
  * @brief    Symlets discrete wavelet transform.
  */
 class VO_Symlets : public VO_DiscreteWavelet
@@ -81,8 +81,10 @@ protected:
     void                    init();
 
 public:
+    /** Constructor */
     VO_Symlets()            {this->init();}
 
+    /** Destructor */
     virtual ~VO_Symlets() {}
 
     /** prepare the Symlets mother wavelet */

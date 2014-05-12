@@ -92,7 +92,10 @@ protected:
     void                init();
 
 public:
+    /** Constructor */
     VO_Gauss();
+
+    /** Destructor */
     virtual ~VO_Gauss();
 
     /** prepare the Gauss Kernel */

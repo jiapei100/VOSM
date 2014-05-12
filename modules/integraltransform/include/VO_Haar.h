@@ -69,7 +69,7 @@
 
 
 /** 
- * @author    JIA Pei
+ * @author   JIA Pei
  * @brief    Haar discrete wavelet transform.
  */
 class VO_Haar : public VO_DiscreteWavelet
@@ -85,8 +85,10 @@ protected:
     }
 
 public:
+    /** Constructor */
     VO_Haar()       {this->init();}
 
+    /** Destructor */
     ~VO_Haar() {}
 
     /** prepare the Haar mother wavelet */
