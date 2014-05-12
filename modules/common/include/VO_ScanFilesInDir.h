@@ -64,7 +64,7 @@
 #define  __VO_SCANFILEINDIR_H__
 
 #include <vector>
-#include <iostream>               // for std::cout
+#include <iostream>
 #include <string>
 
 #include "VO_Common.h"
@@ -80,19 +80,19 @@ class VO_ScanFilesInDir
 {
 public:
 
-    // scan all files with the "_file_extension" under "_path" directory and sort them
+    /** scan all files with the "_file_extension" under "_path" directory and sort them */
     static bool                         ScanDirectory(const boost::filesystem::path& dir_path, const std::string& file_extension, std::vector<std::string>& files);
 
-    // scan all annotation files
+    /** scan all annotation files */
     static std::vector<std::string>     ScanNSortAnnotationInDirectory(const std::string& dir_path);
 
-    // scan all image files
+    /** scan all image files */
     static std::vector<std::string>     ScanNSortImagesInDirectory(const std::string& dir_path);
 	
-	// scale all YML files
+    /** scale all YML files */
     static std::vector<std::string>     ScanNSortXMLYMLsInDirectory(const std::string& dir_path);
 	
-	// scale all text files
+    /** scale all text files */
     static std::vector<std::string>     ScanNSortTextFilesInDirectory(const std::string& dir_path);
 
 };

@@ -82,70 +82,82 @@
 
 
 
+/// Primary constants
+#define STRING_MAXSIZE                              1024
 #define INF											DBL_MAX
 
 #define ROW                                         1
 #define COL                                         2
 
 
-//////////////////////////////////////////////////////////////////////////
+/// Audio video integrated types
 #define AVNONE										0
 #define AVAUDIO										1
 #define AVVIDEO										2
 #define AVAUDIOVIDEO								3
 
+/// Audio only synchronization, evenly or using timestamp
 #define SYNCEVEN									1
 #define SYNCTIMESTAMP								2
 
+/// Audio video synchronization, none, audio-based, video-based
 #define INTER_NONSYNC								1
 #define INTER_SYNCAUDIO								2
 #define INTER_SYNCVIDEO								3
+#define INTER_SYNCAUDIOVIDEO                        4
 
+/// Audio processing
 #define	AUDIO_MFCC									1
 #define	AUDIO_RASTA									2
 #define	AUDIO_PLP									3
-#define	AUDIO_TECC									4					// Teager Energy
+#define	AUDIO_TECC									4       /// Teager Energy
 
 
-#define SR_LINEAR									1
+/// MFCC types
 
 #define MFCC_FRAMEOVERLAPCUT 						1
 #define MFCC_FRAMEOVERLAPACCUMULATE					2
 
+/// VAD types
 #define VAD_FRAMEENERGYFREQUENCY                    1
 #define VAD_SPECTRALENTROPYWITHENERGY				2
 #define VAD_AUTOCORRELATION							3
 #define VAD_WAVELET									4
 #define	VAD_SPEEX									10
 
+/// DTW types
 #define DTW_FULL									1
-#define DTW_GC_SakoeChibaBand						1
-#define DTW_GC_ItakuraParallelogram					2
+#define DTW_GC_SakoeChibaBand						2
+#define DTW_GC_ItakuraParallelogram					3
 
-#define LB_KEOGH									1
-#define LB_YI										2
-#define LB_KIM										3
-//////////////////////////////////////////////////////////////////////////
+#define DTW_LB_KEOGH								4
+#define DTW_LB_YI									5
+#define DTW_LB_KIM									6
 
 
+///
 #define CLAMP										1
 #define STRETCH										2
 
-// For detected face or tracking face constrain
-#define FACESMALLESTSIZE                            80		// for both detection and tracking
-#define FACEBIGGESTSIZE                             240		// for both detection and tracking
+/// constrains for detected face or tracking face
+#define FACESMALLESTSIZE                            80		/// for both detection and tracking
+#define FACEBIGGESTSIZE                             240		/// for both detection and tracking
 #define FACEPARTSMALLESTSIZE                        16
 #define FACEPARTBIGGESTSIZE                         128
-#define FRAMEEDGE									5		// if too close the image boundary, look on as lost
+#define FRAMEEDGE									5		/// if too close the image boundary, look on as lost
 
+/// detected face position shifting for AAM tracking
 #define AAMADABOOSTDOWNPERCENTAGE                   0.2
 
+/// face height/width ratio
 #define FACEHEIGHT2WIDTH                            1.1
 
+/// shape, texture, or appearance
 #define SHAPE                                       1
 #define TEXTURE                                     2
+#define APPEARANCE                                  3
 
-// a) Single image b) image sequence c) webcam d) video
+/// a) single image b) image sequence c) webcam d) video
 #define NOTHINGLOADED								0
 #define SINGLEIMAGE									1
 #define IMAGESEQUENCE								2
@@ -153,27 +165,31 @@
 #define AVI                                         4
 
 
+/// direction types
 #define HORIZONTAL                                  1
 #define VERTICAL                                    2
 #define ANY                                         3
 
+/// number of channels, for gray or rgb
 #define GRAYCHANNELS                                1
-#define COLORCHANNELS                               3   // R G B 3 channels
+#define COLORCHANNELS                               3   /// R G B 3 channels
 
+/// map types
 #define DIRECTMAP                                   1
 #define LINEARIZEMAP                                2
 
 
-// video show type
+/// video show type
 #define ORIGINAL                                    0
 #define DETECTED                                    1
-#define FIT                                         2
+#define FITTED                                      2
 
+/// normalization methods
 #define MEAN0NORM1                                  1
 #define VARY01                                      2
 
 
-#define STRING_MAXSIZE                              1024
+/** left channel, right channel, or both channels */
 
 enum { 
 	Audio_LChannel,
@@ -456,6 +472,7 @@ static std::vector<T> operator /= ( std::vector<T>& vect1, T1 value )
 //}
 
 
+/** output every element of a vector */
 template <class T>
 static std::ostream& operator<< ( std::ostream &os, const std::vector<T>& vec )
 {
@@ -468,6 +485,7 @@ static std::ostream& operator<< ( std::ostream &os, const std::vector<T>& vec )
 }
 
 
+/** input every element to a vector */
 template <class T>
 static std::istream& operator>> ( std::istream &is, std::vector<T>& vec )
 {
@@ -480,6 +498,7 @@ static std::istream& operator>> ( std::istream &is, std::vector<T>& vec )
 }
 
 
+/** output every element of a matrix */
 template <class T>
 static std::ostream& operator<< ( std::ostream &os, const std::vector< std::vector<T> >& vec )
 {
@@ -500,6 +519,7 @@ static std::ostream& operator<< ( std::ostream &os, const std::vector< std::vect
 }
 
 
+/** input every element to a matrix */
 template <class T>
 static std::istream& operator>> ( std::istream &is, std::vector< std::vector<T> >& vec )
 {
@@ -549,6 +569,7 @@ static bool IsContaining ( std::vector<T> v, std::vector<T> t )
 }
 
 
+/** sign of a double value */
 static int sign(double in)
 {
 	if (fabs(in) <= DBL_MIN ) return 0;
@@ -559,6 +580,7 @@ static int sign(double in)
 
 
 
+/** save a double array to a file */
 static void SaveData(const double * d,
                      unsigned int datasize,
                      const std::string& fn)
@@ -574,6 +596,7 @@ static void SaveData(const double * d,
 }
 
 
+/** save a double array to a file */
 static void SaveData(const std::vector<double>& d, const std::string& fn)
 {
 	std::ofstream fp;
@@ -586,8 +609,7 @@ static void SaveData(const std::vector<double>& d, const std::string& fn)
 	fp.close();
 }
 
-//////////////////////////////////////////////////////////////////////////
-/////////////Just make sure all ranges in ranges are exclusive////////////
+/** Judge a value is within which range, just make sure all ranges in ranges are exclusive */
 static int inWhichRange(std::vector< std::pair<int, int> > ranges, int nb)
 {
     for (int i = 0; i < ranges.size(); i++)
@@ -599,6 +621,7 @@ static int inWhichRange(std::vector< std::pair<int, int> > ranges, int nb)
 }
 
 
+/** Decompose all strings from an input string */
 static std::vector<std::string> decomposePageString(const std::string& istr)
 {
     std::vector<std::string> res;
@@ -615,6 +638,7 @@ static std::vector<std::string> decomposePageString(const std::string& istr)
 }
 
 
+/** Convert an integer to a string */
 static std::string convertInt(int number)
 {
    std::stringstream ss;    //create a stringstream
@@ -623,6 +647,7 @@ static std::string convertInt(int number)
 }
 
 
+/** Replace all character ch1 to ch2 in a string */
 static void replaceChar(std::string& str, const char ch1, const char ch2)
 {
     for (int i = 0; i < str.length(); ++i)
@@ -633,6 +658,7 @@ static void replaceChar(std::string& str, const char ch1, const char ch2)
 }
 
 
+/** Make a standard string by erase or replace some characters */
 static void makeStdString(std::string& str)
 {
     str.erase(std::remove(str.begin(), str.end(), 0x2C), str.end());	//	remove ','
@@ -645,6 +671,7 @@ static void makeStdString(std::string& str)
 }
 
 
+/** widechar string to string */
 static std::string ws2s(const std::wstring& ws)
 {
     std::string curLocale = setlocale(LC_ALL, NULL);        // curLocale = "C";
@@ -661,6 +688,7 @@ static std::string ws2s(const std::wstring& ws)
 }
 
 
+/** widechar string to string */
 static std::wstring s2ws(const std::string& s)
 {
     setlocale(LC_ALL, "chs");
@@ -676,6 +704,7 @@ static std::wstring s2ws(const std::string& s)
 }
 
 
+/** LCS Algorithm */
 static std::wstring Longest_Common_Substring(const std::wstring& _str1, const std::wstring& _str2)
 {
     if(_str1.empty() || _str2.empty())
@@ -717,6 +746,7 @@ static std::wstring Longest_Common_Substring(const std::wstring& _str1, const st
 }
 
 
+/** LCS Algorithm */
 static int Longest_Common_Subsequence(const std::wstring &_str1, const std::wstring &_str2)
 {
     if(_str1.empty() || _str2.empty())
@@ -754,6 +784,7 @@ static int Longest_Common_Subsequence(const std::wstring &_str1, const std::wstr
 }
 
 
+/** A vector of string to widechar string */
 static std::vector<std::wstring> VectorString2VectorWString(const std::vector<std::string> &_vstr)
 {
     std::vector<std::wstring> vwstr;
@@ -766,6 +797,7 @@ static std::vector<std::wstring> VectorString2VectorWString(const std::vector<st
 }
 
 
+/** Get the best match by using LCS algorithm, widechar string */
 static std::wstring get_the_best_match(const std::vector<std::wstring> &_database, const std::wstring &_query_str)
 {
     int best_match_idx = -1;
@@ -799,12 +831,14 @@ static std::wstring get_the_best_match(const std::vector<std::wstring> &_databas
 }
 
 
+/** Get the best match by using LCS algorithm, standard string */
 static std::string get_the_best_match(const std::vector<std::wstring> &_database, const std::string &_query_str)
 {
     return ws2s(get_the_best_match(_database, s2ws(_query_str)));
 }
 
 
+/** Get system time in string */
 static std::string getSystemTimeInString(bool year = true,
                                         bool mon = true,
                                         bool mday = true,
@@ -848,6 +882,7 @@ static std::string getSystemTimeInString(bool year = true,
 }
 
 
+/** Get current local time in string */
 static std::string GetCurrentLocalTimeInString()
 {
     time_t rawtime;
@@ -864,6 +899,7 @@ static std::string GetCurrentLocalTimeInString()
 }
 
 
+/** standardize a single filename */
 static std::string StandardizeFN(unsigned int idx,
     unsigned int totalNumber = 100000,
     const std::string& prefix="",
@@ -892,6 +928,7 @@ static std::string StandardizeFN(unsigned int idx,
 }
 
 
+/** standardize multiple filenames */
 static std::vector<std::string> StandardizeFNS(unsigned int idx,
     unsigned int totalNumber = 100000,
     unsigned int subNumber = 8,
@@ -935,6 +972,7 @@ static std::vector<std::string> StandardizeFNS(unsigned int idx,
 }
 
 
+/** write text to a log file */
 static void write_text_to_log_file( const std::string &text, const std::string& logfilename = "" )
 {
     std::string logfn = "";
@@ -955,6 +993,7 @@ static void write_text_to_log_file( const std::string &text, const std::string& 
 #include <windows.h>
 #include <dshow.h>
 
+/** Standard .wav header */
 typedef struct
 {
     char			szRIFF[4];
@@ -969,6 +1008,7 @@ typedef struct
 
 
 
+/** Convert widechar string to multibytes */
 static std::string ConvertWCSToMBS(const wchar_t* pstr, long wslen)
 {
     int len = ::WideCharToMultiByte(CP_ACP, 0, pstr, wslen, NULL, 0, NULL, NULL);
@@ -982,12 +1022,14 @@ static std::string ConvertWCSToMBS(const wchar_t* pstr, long wslen)
     return dblstr;
 }
 
+/** Convert BSTR to multibytes */
 static std::string ConvertBSTRToMBS(BSTR bstr)
 {
     int wslen = ::SysStringLen(bstr);
     return ConvertWCSToMBS((wchar_t*)bstr, wslen);
 }
 
+/** Convert multibytes to BSTR */
 static BSTR ConvertMBSToBSTR(const std::string& str)
 {
     int wslen = ::MultiByteToWideChar(CP_ACP, 0 /* no flags */,
@@ -1001,6 +1043,7 @@ static BSTR ConvertMBSToBSTR(const std::string& str)
     return wsdata;
 }
 
+/** Get device path */
 static std::string GetDevicePath(const IMoniker* pMoniker)
 {
     IPropertyBag *pPropBag = NULL;
@@ -1022,6 +1065,7 @@ static std::string GetDevicePath(const IMoniker* pMoniker)
 }
 
 
+/** Get device friendly name */
 static std::string GetDeviceFriendlyName(const IMoniker* pMoniker)
 {
     IPropertyBag *pPropBag = NULL;

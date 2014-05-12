@@ -79,7 +79,7 @@
  * @return     	bool                fail to scan or not
  * @note		http://www.boost.org/libs/filesystem/doc/index.htm
 */
-bool VO_ScanFilesInDir::ScanDirectory(const boost::filesystem::path& dir_path, const std::string &file_extension, std::vector<std::string>& files)
+bool VO_ScanFilesInDir::ScanDirectory(const boost::filesystem::path& dir_path, const std::string& file_extension, std::vector<std::string>& files)
 {
     if ( !exists( dir_path ) )
     {
@@ -111,7 +111,7 @@ bool VO_ScanFilesInDir::ScanDirectory(const boost::filesystem::path& dir_path, c
  * @param      	dir_path                    input parameter, path to read from
  * @return     	std::vector<std::string>    A vector of all scanned file names
 */
-std::vector<std::string> VO_ScanFilesInDir::ScanNSortAnnotationInDirectory(const std::string &dir_path)
+std::vector<std::string> VO_ScanFilesInDir::ScanNSortAnnotationInDirectory(const std::string& dir_path)
 {
     std::vector<std::string> annotationALL;
     std::vector< std::vector<std::string> > annotations;
@@ -150,10 +150,10 @@ std::vector<std::string> VO_ScanFilesInDir::ScanNSortAnnotationInDirectory(const
  * @author     	JIA Pei
  * @version    	2007-08-08
  * @brief      	Scan a directory and sort all files in format of .jpg .bmp .ppm .pgm .png .gif .tif
- * @param      	dir_boost::filesystem::path     input parameter, boost::filesystem::path to read from
- * @return     	std::vector<std::string>        A std::vector of all scanned file names
+ * @param      	dir_path                        input parameter, path to read from
+ * @return     	std::vector<std::string>        A vector of all scanned file names
 */
-std::vector<std::string> VO_ScanFilesInDir::ScanNSortImagesInDirectory(const std::string &dir_path)
+std::vector<std::string> VO_ScanFilesInDir::ScanNSortImagesInDirectory(const std::string& dir_path)
 {
     std::vector<std::string> imgALL;
     std::vector< std::vector<std::string> > imgs;
@@ -195,7 +195,7 @@ std::vector<std::string> VO_ScanFilesInDir::ScanNSortImagesInDirectory(const std
  * @author     	JIA Pei
  * @version    	2010-03-13
  * @brief      	Scan a directory and sort all files in format of .xml, .yml, .yaml
- * @param      	dir_boost::filesystem::path     input parameter, boost::filesystem::path to read from
+ * @param      	dir_path                        input parameter, path to read from
  * @return     	std::vector<std::string>        A std::vector of all scanned file names
 */
 std::vector<std::string> VO_ScanFilesInDir::ScanNSortXMLYMLsInDirectory(const std::string& dir_path)
@@ -236,8 +236,8 @@ std::vector<std::string> VO_ScanFilesInDir::ScanNSortXMLYMLsInDirectory(const st
  * @author     	JIA Pei
  * @version    	2010-03-13
  * @brief      	Scan a directory and sort all files in format of .txt
- * @param      	dir_boost::filesystem::path     input parameter, boost::filesystem::path to read from
- * @return     	std::vector<std::string>        A std::vector of all scanned file names
+ * @param      	dir_path                        input parameter, path to read from
+ * @return     	std::vector<std::string>        A vector of all scanned file names
 */
 std::vector<std::string> VO_ScanFilesInDir::ScanNSortTextFilesInDirectory(const std::string& dir_path)
 {

@@ -75,6 +75,13 @@
 #include "boost/filesystem/path.hpp"
 
 
+/**
+ * @author     	JIA Pei
+ * @version    	2012-10-01
+ * @brief      	Get local date by using boost functions
+ * @param      	None
+ * @return     	std::string         the current local date
+*/
 static std::string boostGetLocalDate()
 {
     std::string str;
@@ -85,6 +92,13 @@ static std::string boostGetLocalDate()
     return str;
 }
 
+/**
+ * @author     	JIA Pei
+ * @version    	2012-10-01
+ * @brief      	Get local time by using boost functions
+ * @param      	None
+ * @return     	std::string         the current local time
+*/
 static std::string boostGetLocalTime()
 {
     std::string str;
@@ -95,6 +109,13 @@ static std::string boostGetLocalTime()
     return str;
 }
 
+/**
+ * @author     	JIA Pei
+ * @version    	2012-10-01
+ * @brief      	Get local date and time by using boost functions
+ * @param      	None
+ * @return     	std::string         the current local date and time
+*/
 static std::string boostGetLocalDateTime()
 {
     std::string str = boostGetLocalDate();
@@ -104,6 +125,13 @@ static std::string boostGetLocalDateTime()
     return str;
 }
 
+/**
+ * @author     	JIA Pei
+ * @version    	2012-10-01
+ * @brief      	Get file path from an entire file name by using boost functions
+ * @param      	const std::string	the entire file name
+ * @return     	std::string         the obtained file path
+*/
 static std::string boostGetPathFromName(const std::string fn)
 {
 	std::string filename_noext = boost::filesystem::path(fn).stem().string();
