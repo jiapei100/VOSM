@@ -121,7 +121,7 @@ void VO_KeyPoint::CalcFaceKeyline(
 
 
 /**
- * @brief
+ * @brief       Calculate some key points on the face
  * @param       oPoint      output  point list
  * @param       iShape      input   shape
  * @param       iFaceParts  inut    faceparts

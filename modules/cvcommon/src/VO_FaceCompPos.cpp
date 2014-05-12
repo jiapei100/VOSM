@@ -64,6 +64,7 @@
 
 
 
+/** default constructor */
 VO_FaceCompPos::VO_FaceCompPos()
 {
     this->m_sCorrespondingImageFile     = "";
@@ -75,6 +76,7 @@ VO_FaceCompPos::VO_FaceCompPos()
 }
 
 
+/** a constructor */
 VO_FaceCompPos::VO_FaceCompPos(
     const std::string& fn, 
     const cv::Rect* rectObj, 
@@ -92,12 +94,21 @@ VO_FaceCompPos::VO_FaceCompPos(
 }
 
 
+/** destructor */
 VO_FaceCompPos::~VO_FaceCompPos()
 {
     
 }
 
 
+/**
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Scale a face component
+ * @param       nWidth    Input - width
+ * @param       nHeight   Input - height
+ * @return      void
+*/
 void VO_FaceCompPos::Scale(double nWidth, double nHeight)
 {
     this->m_rectObject.x            *= nWidth;
@@ -127,6 +138,13 @@ void VO_FaceCompPos::Scale(double nWidth, double nHeight)
 }
 
 
+/**
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Calculate centers of face components
+ * @param       None
+ * @return      std::vector<cv::Point2f>    5 centers
+*/
 std::vector<cv::Point2f> VO_FaceCompPos::VO_CalcFaceComponentsCenters() const
 {
     std::vector<cv::Point2f> res;
@@ -151,6 +169,14 @@ std::vector<cv::Point2f> VO_FaceCompPos::VO_CalcFaceComponentsCenters() const
 }
 
 
+/**
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Draw rects in a particular color on an image with
+ * @param       oImg        -- output image
+ * @param       color       -- input color
+ * @return      void
+*/
 void VO_FaceCompPos::VO_DrawRects(cv::Mat& oImg, cv::Scalar color)
 {
     cv::Point lefttop, rightbottom;

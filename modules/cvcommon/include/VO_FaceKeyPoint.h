@@ -102,6 +102,7 @@ public:
     /** Destructor */
     ~VO_KeyPoint() {}
 
+    /** Calculate some important lines on a face */
     static void CalcFaceKeyline(
         std::vector<float>& oLine, 
         const VO_Shape& iShape, 
@@ -109,6 +110,7 @@ public:
         VO_Shape& oSubshape, 
         unsigned int partIdx = VO_FacePart::MIDLINEPOINTS);
 
+    /** Calculate some important points on a face */
     static void CalcFaceKeyPoint(
         cv::Point2f& oPoint, 
         const VO_Shape& iShape, 

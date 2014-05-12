@@ -71,6 +71,7 @@
 #include "VO_BoostCommon.h"
 
 
+/// Common colors
 static cv::Scalar colors[] =
 {
     cv::Scalar(0,0,255),        // red
@@ -87,6 +88,7 @@ static cv::Scalar colors[] =
 };
 
 
+/** output every element of a cv::Mat */
 static std::ostream& operator<< ( std::ostream& os, const cv::Mat& mat )
 {
     unsigned int channels = mat.channels();
@@ -268,6 +270,7 @@ static std::ostream& operator<< ( std::ostream& os, const cv::Mat& mat )
 }
 
 
+/** input every element to a cv::Mat */
 static std::istream& operator>> ( std::istream& is, cv::Mat& mat )
 {
     unsigned int channels = mat.channels();
@@ -438,6 +441,7 @@ static std::istream& operator>> ( std::istream& is, cv::Mat& mat )
 }
 
 
+/** output every element of a cv::Mat_<T> */
 template <class T>
 static std::ostream& operator<< ( std::ostream& os, const cv::Mat_<T>& mat )
 {
@@ -453,27 +457,7 @@ static std::ostream& operator<< ( std::ostream& os, const cv::Mat_<T>& mat )
 }
 
 
-static std::ostream& operator<< ( std::ostream& os, const cv::Rect& rect )
-{
-    os << rect.x << " " << rect.y << " " << 
-            rect.width << " " << rect.height << std::endl;
-    return os;
-}
-
-
-static std::ostream& operator<< ( std::ostream &os, const cv::Point& pt )
-{
-    os << pt.x << " " << pt.y << std::endl;
-    return os;
-}
-
-static std::ostream& operator<< ( std::ostream &os, const cv::Point2f& pt )
-{
-    os << pt.x << " " << pt.y << std::endl;
-    return os;
-}
-
-
+/** input every element to a cv::Mat_<T> */
 template <class T>
 static std::istream& operator>> ( std::istream& is, cv::Mat_<T>& mat )
 {
@@ -486,6 +470,31 @@ static std::istream& operator>> ( std::istream& is, cv::Mat_<T>& mat )
     }
     return is;
 }
+
+
+/** output a cv::Rect */
+static std::ostream& operator<< ( std::ostream& os, const cv::Rect& rect )
+{
+    os << rect.x << " " << rect.y << " " << 
+            rect.width << " " << rect.height << std::endl;
+    return os;
+}
+
+
+/** output a cv::Point */
+static std::ostream& operator<< ( std::ostream &os, const cv::Point& pt )
+{
+    os << pt.x << " " << pt.y << std::endl;
+    return os;
+}
+
+/** output a cv::Point2f */
+static std::ostream& operator<< ( std::ostream &os, const cv::Point2f& pt )
+{
+    os << pt.x << " " << pt.y << std::endl;
+    return os;
+}
+
 
 
 /** Size compare */
@@ -1021,6 +1030,7 @@ static void strech ( const cv::Mat& iImg, cv::Mat& oImg, T low, T up )
 }
 
 
+/** cv::Point2f division */
 template<class T>
 static cv::Point2f operator / ( const cv::Point2f& pt, T t)
 {
@@ -1036,6 +1046,7 @@ static cv::Point2f operator / ( const cv::Point2f& pt, T t)
 }
 
 
+/** cv::Point2f add */
 static cv::Point2f operator+ ( const cv::Point2f& pt1, const cv::Point2f& pt2 )
 {
     cv::Point2f res;
@@ -1045,6 +1056,7 @@ static cv::Point2f operator+ ( const cv::Point2f& pt1, const cv::Point2f& pt2 )
 }
 
 
+/** cv::Point2f subtraction */
 static cv::Point2f operator- ( const cv::Point2f& pt1, const cv::Point2f& pt2 )
 {
     cv::Point2f res;
@@ -1054,6 +1066,7 @@ static cv::Point2f operator- ( const cv::Point2f& pt1, const cv::Point2f& pt2 )
 }
 
 
+/** cv::Point2f multiplication */
 template <class T>
 static cv::Rect operator* ( const cv::Rect& rect1, T value )
 {
@@ -1081,8 +1094,8 @@ static float cvDistFromAPoint2ALine2D(  const cv::Point2f& pt,
 /**
 * @brief    Save all images in sequence in a specific folder
 * @param    imgs        -- Input        the source images
-* @param    fdname        -- Input        the specific folder
-* @ref        OpenCV 2.x documentation
+* @param    fdname      -- Input        the specific folder
+* @ref      OpenCV 2.x documentation
  */
 static void SaveSequentialImagesInFolder(   const std::vector<cv::Mat>& imgs,
                                             const std::string& fdname)
@@ -1113,7 +1126,7 @@ static void SaveSequentialImagesInFolder(   const std::vector<cv::Mat>& imgs,
  * @param    A    -- Input    the source image
  * @param    B    -- Input    the filtering template
  * @param    C    -- Output    the convoluted image, must of the same size as A
- * @ref        OpenCV 2.x documentation
+ * @ref      OpenCV 2.x documentation
  */
 static void convolveDFT(const cv::Mat& A, const cv::Mat& B, cv::Mat& C)
 {

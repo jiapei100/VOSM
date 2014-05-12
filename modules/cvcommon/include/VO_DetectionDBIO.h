@@ -76,6 +76,7 @@
 
 
 
+/// Specifically for PUT database, a rect
 struct PUTYMLRect {
     std::string sx;
     int x;
@@ -87,6 +88,7 @@ struct PUTYMLRect {
     int height;
 };
 
+/// Specifically for PUT database, a filename + a rect
 struct PUTYMLdoc {
     std::string name;
     PUTYMLRect rect;

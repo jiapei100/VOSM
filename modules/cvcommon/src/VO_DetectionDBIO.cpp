@@ -89,6 +89,7 @@ void CDetectionDBIO::ReadAllFilesFromPUT4MVFD(
 }
 
 
+/** input a FileNode to a cv::Rect */
 //void operator >> (const YAML::Node& node, cv::Rect& rect) {
 void operator >> (const cv::FileNode& node, cv::Rect& rect)
 {
