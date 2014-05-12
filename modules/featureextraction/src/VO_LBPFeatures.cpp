@@ -70,13 +70,13 @@ void VO_LBPFeatures::init( )
 }
 
 
-void VO_LBPFeatures::WriteFeatures( FileStorage &fs, const Mat_<float>& featureMap ) const
+void VO_LBPFeatures::WriteFeatures( cv::FileStorage &fs, const cv::Mat_<float>& featureMap ) const
 {
     _writeFeatures( m_vAllFeatures, fs, featureMap );
 }
 
 
-void VO_LBPFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap )
+void VO_LBPFeatures::ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap )
 {
     
 }
@@ -88,7 +88,7 @@ void VO_LBPFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featureMa
  * @param       mode    Input    -- mode, for LBP, no use
  * @return      void
  */
- void VO_LBPFeatures::VO_GenerateAllFeatureInfo(const Size& size, unsigned int mode)
+ void VO_LBPFeatures::VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int mode)
  {
     this->m_CVSize = size;
     
@@ -110,7 +110,7 @@ void VO_LBPFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featureMa
  * @param       pt      Input    -- start point at the top left corner
  * @return      void
  */
-void VO_LBPFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
+void VO_LBPFeatures::VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt)
 {
     if( this->m_CVSize.width > iImg.cols ||
         this->m_CVSize.height > iImg.rows ||
@@ -119,16 +119,16 @@ void VO_LBPFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
         this->m_CVSize.width + pt.x > iImg.cols ||
         this->m_CVSize.height + pt.y > iImg.rows )
     {
-        cerr << "Feature rectangles are out of the image" << endl;
+        std::cerr << "Feature rectangles are out of the image" << std::endl;
     }
 
-    Rect rect(pt.x, pt.y, this->m_CVSize.width, this->m_CVSize.height);
-    Mat rectImg = iImg(rect);
+    cv::Rect rect(pt.x, pt.y, this->m_CVSize.width, this->m_CVSize.height);
+    cv::Mat rectImg = iImg(rect);
     
     // Calculate the integral image
     cv::integral(rectImg, this->m_MatIntegralImage, this->m_MatSquareImage, this->m_MatTiltedIntegralImage);
     
-    this->m_MatFeatures = Mat_<float>(1, this->m_iNbOfFeatures);
+    this->m_MatFeatures = cv::Mat_<float>(1, this->m_iNbOfFeatures);
     for(unsigned int i = 0; i < this->m_iNbOfFeatures; i++)
     {
         this->m_MatFeatures(0, i)    =    (float) this->m_vAllFeatures[i].calc(this->m_MatIntegralImage);
@@ -138,7 +138,7 @@ void VO_LBPFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
 
 VO_LBPFeatures::Feature::Feature()
 {
-    rect = Rect(0, 0, 0, 0);
+    rect = cv::Rect(0, 0, 0, 0);
 }
 
 
@@ -148,7 +148,7 @@ VO_LBPFeatures::Feature::Feature()
  */
 VO_LBPFeatures::Feature::Feature( int offset, int x, int y, int _blockWidth, int _blockHeight )
 {
-    Rect tr = rect = Rect(x, y, _blockWidth, _blockHeight);
+    cv::Rect tr = rect = cv::Rect(x, y, _blockWidth, _blockHeight);
     CV_SUM_OFFSETS( p[0], p[1], p[4], p[5], tr, offset )
     tr.x += 2*rect.width;
     CV_SUM_OFFSETS( p[2], p[3], p[6], p[7], tr, offset )
@@ -159,7 +159,7 @@ VO_LBPFeatures::Feature::Feature( int offset, int x, int y, int _blockWidth, int
 }
 
 
-void VO_LBPFeatures::Feature::write(FileStorage &fs) const
+void VO_LBPFeatures::Feature::write(cv::FileStorage &fs) const
 {
     fs << CC_RECT << "[:" << rect.x << rect.y << rect.width << rect.height << "]";
 }

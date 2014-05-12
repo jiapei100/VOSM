@@ -68,8 +68,7 @@
 #include "opencv/ml.h"
 
 
-using namespace std;
-using namespace cv;
+
 
 #define CC_FEATURES         FEATURES
 #define CC_FEATURE_PARAMS   "featureParams"
@@ -102,12 +101,12 @@ using namespace cv;
 
 
 template<class Feature>
-void _writeFeatures(const vector<Feature> features,
-                    FileStorage &fs,
-                    const Mat& featureMap )
+void _writeFeatures(const std::vector<Feature> features,
+                    cv::FileStorage &fs,
+                    const cv::Mat& featureMap )
 {
     fs << FEATURES << "[";
-    const Mat_<int>& featureMap_ = (const Mat_<int>&)featureMap;
+    const cv::Mat_<int>& featureMap_ = (const cv::Mat_<int>&)featureMap;
     for ( int fi = 0; fi < featureMap.cols; fi++ )
         if ( featureMap_(0, fi) >= 0 )
         {
@@ -124,7 +123,7 @@ void _writeFeatures(const vector<Feature> features,
 //{
 //
 //    fs >> FEATURES >> "[";
-//    const Mat_<int>& featureMap_ = (const Mat_<int>&)featureMap;
+//    const cv::Mat_<int>& featureMap_ = (const cv::Mat_<int>&)featureMap;
 //    for ( int fi = 0; fi < featureMap.cols; fi++ )
 //        if ( featureMap_(0, fi) >= 0 )
 //        {
@@ -148,7 +147,7 @@ friend class VO_ASMLTCs;
 friend class VO_FittingASMLTCs;
 protected:
     /** All features are stored as a row vector */
-    Mat_<float>                 m_MatFeatures;
+    cv::Mat_<float>                 m_MatFeatures;
 
     /** Feature type -- which type of the feature is it? LBP, Haar, Gabor, etc. */
     unsigned int                m_iFeatureType;
@@ -165,29 +164,29 @@ protected:
     unsigned int                m_iNbOfAdoptedFeatures;
 
     /** Adopted feature indexes */
-    vector<unsigned int>        m_vAdoptedFeatureIndexes;
+    std::vector<unsigned int>   m_vAdoptedFeatureIndexes;
 
     /** All features are extracted from an image patch of such a size */
-    Size                        m_CVSize;
+    cv::Size                    m_CVSize;
 
     /** Integral image */
-    Mat                         m_MatIntegralImage;
+    cv::Mat                     m_MatIntegralImage;
 
     /** Square image */            
-    Mat                         m_MatSquareImage;
+    cv::Mat                     m_MatSquareImage;
 
     /** Tilted integral image */
-    Mat                         m_MatTiltedIntegralImage;
+    cv::Mat                     m_MatTiltedIntegralImage;
 
     /** Normalization factor */
-    Mat                         m_MatNormFactor;
+    cv::Mat                     m_MatNormFactor;
 
     /** Initialization */
     void                        init()
     {
         this->m_MatFeatures.release();
         this->m_iFeatureType    = UNDEFINED;
-        this->m_CVSize          = Size(0, 0);
+        this->m_CVSize          = cv::Size(0, 0);
         this->m_MatIntegralImage.release();
         this->m_MatSquareImage.release();
         this->m_MatTiltedIntegralImage.release();
@@ -214,7 +213,7 @@ public:
     VO_Features()               {this->init();}
 
     /** Constructor */
-    VO_Features(unsigned int type, Size size) 
+    VO_Features(unsigned int type, cv::Size size)
     {
         this->init();
         this->m_iFeatureType    = type;
@@ -232,30 +231,30 @@ public:
     }
 
     /** Generate all features within such a size of window */
-    virtual void                VO_GenerateAllFeatureInfo(const Size& size, unsigned int generatingMode = 0) = 0;
-    virtual void                VO_GenerateAllFeatures(const Mat& iImg, Point pt = Point(0,0)) = 0;
+    virtual void                VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int generatingMode = 0) = 0;
+    virtual void                VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt = cv::Point(0,0)) = 0;
 
     /** Read and write */
-    virtual void                ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap ) = 0;
-    virtual void                WriteFeatures( FileStorage& fs, const Mat_<float>& featureMap ) const = 0;
+    virtual void                ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap ) = 0;
+    virtual void                WriteFeatures( cv::FileStorage& fs, const cv::Mat_<float>& featureMap ) const = 0;
 
     // Gets and Sets
     unsigned int                GetFeatureType() const { return this->m_iFeatureType; }
     unsigned int                GetNbOfFeatureCategories() const { return this->m_iNbOfFeatureCategories; }
     unsigned int                GetNbOfFeatures() const { return this->m_iNbOfFeatures; }
     unsigned int                GetNbOfAdoptedFeatures() const {return this->m_iNbOfAdoptedFeatures; }
-    vector<unsigned int>        GetAdoptedFeatureIndexes() const { return this->m_vAdoptedFeatureIndexes; }
-    Mat_<float>                 GetFeatures() const { return this->m_MatFeatures; }
-    Mat_<float>                 GetAdoptedFeatures() const
+    std::vector<unsigned int>   GetAdoptedFeatureIndexes() const { return this->m_vAdoptedFeatureIndexes; }
+    cv::Mat_<float>             GetFeatures() const { return this->m_MatFeatures; }
+    cv::Mat_<float>             GetAdoptedFeatures() const
     {
-                                Mat_<float> res = Mat_<float>::zeros(1, this->m_iNbOfAdoptedFeatures);
+                                cv::Mat_<float> res = cv::Mat_<float>::zeros(1, this->m_iNbOfAdoptedFeatures);
                                 for(unsigned int i = 0; i < this->m_iNbOfAdoptedFeatures; i++)
                                 {
                                     res(0, i) = this->m_MatFeatures(0, this->m_vAdoptedFeatureIndexes[i]);
                                 }
                                 return res;
     }
-    Size                        GetSize() const { return this->m_CVSize; }
+    cv::Size                    GetSize() const { return this->m_CVSize; }
 };
 
 #endif        // _VO_FEATURES_H_

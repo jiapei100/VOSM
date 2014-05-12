@@ -70,13 +70,13 @@ void VO_GaborFeatures::init( )
 }
 
 
-void VO_GaborFeatures::WriteFeatures( FileStorage &fs, const Mat_<float>& featureMap ) const
+void VO_GaborFeatures::WriteFeatures( cv::FileStorage &fs, const cv::Mat_<float>& featureMap ) const
 {
     _writeFeatures( m_vAllFeatures, fs, featureMap );
 }
 
 
-void VO_GaborFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap )
+void VO_GaborFeatures::ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap )
 {
     
 }
@@ -88,7 +88,7 @@ void VO_GaborFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& feature
  * @param      mode     Input    -- mode, for LBP, no use
  * @return     void
  */
- void VO_GaborFeatures::VO_GenerateAllFeatureInfo(const Size& size, unsigned int mode)
+ void VO_GaborFeatures::VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int mode)
  {
     this->m_CVSize = size;
     int NbOfTheta = mode == ALL ? DIRTHETA : UNDIRTHETA;
@@ -118,8 +118,8 @@ void VO_GaborFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& feature
                                     theta = 2.0f*CV_PI*(float)ntheta/(float)NbOfTheta;
                                     sigma_x = (float)sigma;
                                     sigma_y = (float)sigma/(float)gamma;
-                                    xmax = ceil( max(1.0f, max(fabs((float)nstds*sigma_x*cos((float)theta)),fabs((float)nstds*sigma_y*sin((float)theta))) ) );
-                                    ymax = ceil( max(1.0f, max(fabs((float)nstds*sigma_x*sin((float)theta)),fabs((float)nstds*sigma_y*cos((float)theta))) ) );
+                                    xmax = ceil( std::max(1.0, std::max(fabs((float)nstds*sigma_x*cos((float)theta)),fabs((float)nstds*sigma_y*sin((float)theta))) ) );
+                                    ymax = ceil( std::max(1.0, std::max(fabs((float)nstds*sigma_x*sin((float)theta)),fabs((float)nstds*sigma_y*cos((float)theta))) ) );
 
                                     if( (x+2*xmax+1 <= m_CVSize.width) && (y+2*ymax+1 <= this->m_CVSize.height) )
                                         this->m_vAllFeatures.push_back( Feature(offset, x, y, true,
@@ -149,7 +149,7 @@ void VO_GaborFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& feature
  * @param       pt      Input    -- start point at the top left corner
  * @return      void
  */
-void VO_GaborFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
+void VO_GaborFeatures::VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt)
 {
     if( this->m_CVSize.width > iImg.cols || 
         this->m_CVSize.height > iImg.rows || 
@@ -158,14 +158,14 @@ void VO_GaborFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
         this->m_CVSize.width + pt.x > iImg.cols || 
         this->m_CVSize.height + pt.y > iImg.rows )
     {
-        cerr << "Feature rectangles are out of the image" << endl;
+        std::cerr << "Feature rectangles are out of the image" << std::endl;
     }
 
-    Rect rect(pt.x, pt.y, this->m_CVSize.width, this->m_CVSize.height);
-    Mat_<float> rectImg = iImg(rect);
+    cv::Rect rect(pt.x, pt.y, this->m_CVSize.width, this->m_CVSize.height);
+    cv::Mat_<float> rectImg = iImg(rect);
 
 
-    this->m_MatFeatures = Mat_<float>(1, this->m_iNbOfFeatures);
+    this->m_MatFeatures = cv::Mat_<float>(1, this->m_iNbOfFeatures);
     for(unsigned int i = 0; i < this->m_iNbOfFeatures; i++)
     {
         if(this->m_vAllFeatures[i].isFiltering)
@@ -180,7 +180,7 @@ void VO_GaborFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
 VO_GaborFeatures::Feature::Feature()
 {
     isFiltering = true;
-    rect = Rect(0, 0, 0, 0);
+    rect = cv::Rect(0, 0, 0, 0);
 }
 
 
@@ -213,7 +213,7 @@ VO_GaborFeatures::Feature::Feature( int offset,
 }
 
 
-void VO_GaborFeatures::Feature::write(FileStorage &fs) const
+void VO_GaborFeatures::Feature::write(cv::FileStorage &fs) const
 {
     fs << CC_RECT << "[:" << rect.x << rect.y << rect.width << rect.height << "]";
 }

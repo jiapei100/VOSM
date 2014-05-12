@@ -82,22 +82,23 @@ protected:
     /** which Haar mode is to be used? BASIC, CORE or ALL? */
     unsigned int        m_iMode;
 
+    /** Internal class */
     class Feature
     {
     public:
         Feature();
         Feature( int offset, int x, int y, int _block_w, int _block_h  ); 
-        float           filter( const Mat_<float>& iImg );
-        void            calc( const Mat_<float>& iImg );
-        void            write( FileStorage &fs ) const;
+        float           filter( const cv::Mat_<float>& iImg );
+        void            calc( const cv::Mat_<float>& iImg );
+        void            write( cv::FileStorage &fs ) const;
 
         bool            isFiltering;
-        Rect            rect;
+        cv::Rect        rect;
         VO_Daubechies   daub;
-        Mat_<float>     freqs;
+        cv::Mat_<float> freqs;
     };
 
-    vector<Feature>     m_vAllFeatures;
+    std::vector<Feature>     m_vAllFeatures;
 
     /** Initialization */
     void                init();
@@ -122,12 +123,12 @@ public:
     virtual ~VO_DaubechiesFeatures () {this->m_vAllFeatures.clear();}
 
     /** Generate all features with a specific mode */
-    virtual void        VO_GenerateAllFeatureInfo(const Size& size, unsigned int generatingMode = DAUBECHIES4);
-    virtual void        VO_GenerateAllFeatures(const Mat& iImg, Point pt = Point(0,0));
+    virtual void        VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int generatingMode = DAUBECHIES4);
+    virtual void        VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt = cv::Point(0,0));
 
     /** Read and write */
-    virtual void        ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap );
-    virtual void        WriteFeatures( FileStorage& fs, const Mat_<float>& featureMap ) const;
+    virtual void        ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap );
+    virtual void        WriteFeatures( cv::FileStorage& fs, const cv::Mat_<float>& featureMap ) const;
 };
 
 
@@ -136,7 +137,7 @@ public:
 * @brief    Daubechies filtering
 * @param    iImg        Input    -- input image
  */
-inline float VO_DaubechiesFeatures::Feature::filter( const Mat_<float>& iImg )
+inline float VO_DaubechiesFeatures::Feature::filter( const cv::Mat_<float>& iImg )
 {
     return 0.0;
 }
@@ -146,7 +147,7 @@ inline float VO_DaubechiesFeatures::Feature::filter( const Mat_<float>& iImg )
 * @brief    calculate one feature
 * @param    iImg        Input    -- input image
  */
-inline void VO_DaubechiesFeatures::Feature::calc(const Mat_<float>& iImg)
+inline void VO_DaubechiesFeatures::Feature::calc(const cv::Mat_<float>& iImg)
 {
     daub.VO_ForwardTransform(iImg, freqs);
 }

@@ -70,13 +70,13 @@ void VO_HaarFeatures::init( )
 }
 
 
-void VO_HaarFeatures::WriteFeatures( FileStorage &fs, const Mat_<float>& featureMap ) const
+void VO_HaarFeatures::WriteFeatures( cv::FileStorage &fs, const cv::Mat_<float>& featureMap ) const
 {
     _writeFeatures( m_vAllFeatures, fs, featureMap );
 }
 
 
-void VO_HaarFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap )
+void VO_HaarFeatures::ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap )
 {
     
 }
@@ -88,7 +88,7 @@ void VO_HaarFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featureM
  * @param      mode    Input    -- mode, BASIC, CORE or ALL
  * @return     void
  */
- void VO_HaarFeatures::VO_GenerateAllFeatureInfo(const Size& size, unsigned int mode)
+ void VO_HaarFeatures::VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int mode)
  {
     this->m_CVSize = size;
     
@@ -225,7 +225,7 @@ void VO_HaarFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featureM
  * @param      pt       Input    -- start point at the top left corner
  * @return     void
  */
-void VO_HaarFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
+void VO_HaarFeatures::VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt)
 {
     if( this->m_CVSize.width > iImg.cols ||
         this->m_CVSize.height > iImg.rows ||
@@ -234,16 +234,16 @@ void VO_HaarFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
         this->m_CVSize.width + pt.x > iImg.cols ||
         this->m_CVSize.height + pt.y > iImg.rows )
     {
-        cerr << "Feature rectangles are out of the image" << endl;
+        std::cerr << "Feature rectangles are out of the image" << std::endl;
     }
 
-    Rect rect(pt.x, pt.y, this->m_CVSize.width, this->m_CVSize.height);
-    Mat rectImg = iImg(rect);
+    cv::Rect rect(pt.x, pt.y, this->m_CVSize.width, this->m_CVSize.height);
+    cv::Mat rectImg = iImg(rect);
 
     // Calculate the integral image
     cv::integral(rectImg, this->m_MatIntegralImage, this->m_MatSquareImage, this->m_MatTiltedIntegralImage);
 
-    this->m_MatFeatures = Mat_<float>(1, this->m_iNbOfFeatures);
+    this->m_MatFeatures = cv::Mat_<float>(1, this->m_iNbOfFeatures);
     for(unsigned int i = 0; i < this->m_iNbOfFeatures; i++)
     {
         this->m_MatFeatures(0, i)    =    this->m_vAllFeatures[i].calc(this->m_MatIntegralImage, this->m_MatTiltedIntegralImage);
@@ -255,7 +255,7 @@ void VO_HaarFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
 VO_HaarFeatures::Feature::Feature()
 {
     tilted = false;
-    rect[0].r = rect[1].r = rect[2].r = Rect(0,0,0,0);
+    rect[0].r = rect[1].r = rect[2].r = cv::Rect(0,0,0,0);
     rect[0].weight = rect[1].weight = rect[2].weight = 0;
 }
 
@@ -311,7 +311,7 @@ VO_HaarFeatures::Feature::Feature( int offset, bool _tilted,
 }
 
 
-void VO_HaarFeatures::Feature::write( FileStorage &fs ) const
+void VO_HaarFeatures::Feature::write( cv::FileStorage &fs ) const
 {
     fs << CC_RECTS << "[";
     for( int ri = 0; ri < CV_HAAR_FEATURE_MAX && rect[ri].r.width != 0; ++ri )

@@ -86,7 +86,7 @@
 class VO_DirectFeatures : public VO_Features
 {
 protected:
-    /** Intialization */
+    /** Initialization */
     void                    init();
 
 public:
@@ -97,12 +97,12 @@ public:
     virtual ~VO_DirectFeatures () {}
 
     /** Generate all features with a specific mode */
-    virtual void            VO_GenerateAllFeatureInfo(const Size& size, unsigned int generatingMode = 0);
-    virtual void            VO_GenerateAllFeatures(const Mat& iImg, Point pt = Point(0,0));
+    virtual void            VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int generatingMode = 0);
+    virtual void            VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt = cv::Point(0,0));
 
     /** Read and write */
-    virtual void            ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap );
-    virtual void            WriteFeatures( FileStorage& fs, const Mat_<float>& featureMap ) const;
+    virtual void            ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap );
+    virtual void            WriteFeatures( cv::FileStorage& fs, const cv::Mat_<float>& featureMap ) const;
 };
 
 

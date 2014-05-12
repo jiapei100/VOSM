@@ -63,6 +63,9 @@
 #include "VO_DirectFeatures.h"
 
 
+/**
+ * @brief Initialization
+ */
 void VO_DirectFeatures::init( )
 {
     VO_Features::init();
@@ -70,13 +73,13 @@ void VO_DirectFeatures::init( )
 }
 
 
-void VO_DirectFeatures::WriteFeatures( FileStorage &fs, const Mat_<float>& featureMap ) const
+void VO_DirectFeatures::WriteFeatures( cv::FileStorage &fs, const cv::Mat_<float>& featureMap ) const
 {
 
 }
 
 
-void VO_DirectFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap )
+void VO_DirectFeatures::ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap )
 {
     
 }
@@ -88,7 +91,7 @@ void VO_DirectFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featur
  * @param      mode     Input    -- mode, for LBP, no use
  * @return     void
  */
- void VO_DirectFeatures::VO_GenerateAllFeatureInfo(const Size& size, unsigned int mode)
+ void VO_DirectFeatures::VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int mode)
  {
     this->m_CVSize             = size;
     this->m_iNbOfFeatures     = this->m_CVSize.width*this->m_CVSize.height;
@@ -101,7 +104,7 @@ void VO_DirectFeatures::ReadFeatures( const FileStorage& fs, Mat_<float>& featur
  * @param      pt       Input    -- start point at the top left corner
  * @return     void
  */
-void VO_DirectFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
+void VO_DirectFeatures::VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt)
 {
     if( this->m_CVSize.width > iImg.cols || 
         this->m_CVSize.height > iImg.rows || 
@@ -110,14 +113,14 @@ void VO_DirectFeatures::VO_GenerateAllFeatures(const Mat& iImg, Point pt)
         this->m_CVSize.width + pt.x > iImg.cols || 
         this->m_CVSize.height + pt.y > iImg.rows )
     {
-        cerr << "Feature rectangles are out of the image" << endl;
+        std::cerr << "Feature rectangles are out of the image" << std::endl;
     }
 
-    Rect rect(pt.x, pt.y, this->m_CVSize.width, this->m_CVSize.height);
-    Mat rectImg = iImg(rect);
+    cv::Rect rect(pt.x, pt.y, this->m_CVSize.width, this->m_CVSize.height);
+    cv::Mat rectImg = iImg(rect);
 
 
-    this->m_MatFeatures = Mat_<float>(1, this->m_iNbOfFeatures);
+    this->m_MatFeatures = cv::Mat_<float>(1, this->m_iNbOfFeatures);
     for(unsigned int i = 0; i < this->m_CVSize.height; i++)
     {
         for(unsigned int j = 0; j < this->m_CVSize.width; j++)

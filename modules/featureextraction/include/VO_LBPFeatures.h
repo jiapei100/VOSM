@@ -83,14 +83,14 @@ protected:
     public:
         Feature();
         Feature( int offset, int x, int y, int _block_w, int _block_h  ); 
-        uchar   calc( const Mat& _sum ) const;
-        void    write( FileStorage &fs ) const;
+        uchar   calc( const cv::Mat& _sum ) const;
+        void    write( cv::FileStorage &fs ) const;
 
-        Rect    rect;
-        int     p[16];
+        cv::Rect    rect;
+        int         p[16];
     };
     
-    vector<Feature>             m_vAllFeatures;
+    std::vector<Feature>        m_vAllFeatures;
     
     /** Initialization */
     void                        init();
@@ -103,12 +103,12 @@ public:
     virtual ~VO_LBPFeatures()   {this->m_vAllFeatures.clear();}
 
     /** Generate all features with a specific mode */
-    virtual void                VO_GenerateAllFeatureInfo(const Size& size, unsigned int generatingMode = 0);
-    virtual void                VO_GenerateAllFeatures(const Mat& iImg, Point pt = Point(0,0));
+    virtual void                VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int generatingMode = 0);
+    virtual void                VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt = cv::Point(0,0));
     
     /** Read and write */
-    virtual void                ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap );
-    virtual void                WriteFeatures( FileStorage &fs, const Mat_<float>& featureMap ) const;
+    virtual void                ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap );
+    virtual void                WriteFeatures( cv::FileStorage &fs, const cv::Mat_<float>& featureMap ) const;
 };
 
 
@@ -116,7 +116,7 @@ public:
  * @brief            calculate one feature
  * @param            _sum            Input    -- integral image
  */
-inline uchar VO_LBPFeatures::Feature::calc(const Mat &_sum) const
+inline uchar VO_LBPFeatures::Feature::calc(const cv::Mat &_sum) const
 {
     const int* sum = _sum.ptr<int>(0);
     int cval = sum[p[5]] - sum[p[6]] - sum[p[9]] + sum[p[10]];

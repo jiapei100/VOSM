@@ -96,13 +96,13 @@ protected:
                 int x0, int y0, int w0, int h0, float wt0,
                 int x1, int y1, int w1, int h1, float wt1,
                 int x2 = 0, int y2 = 0, int w2 = 0, int h2 = 0, float wt2 = 0.0F ); 
-        float   calc( const Mat &sum, const Mat &tilted) const;
-        void    write( FileStorage &fs ) const;
+        float   calc( const cv::Mat &sum, const cv::Mat &tilted) const;
+        void    write( cv::FileStorage &fs ) const;
 
         bool    tilted;
         struct
         {
-            Rect r;
+            cv::Rect r;
             float weight;
         } rect[CV_HAAR_FEATURE_MAX];
 
@@ -112,7 +112,7 @@ protected:
         } fastRect[CV_HAAR_FEATURE_MAX];
     }; 
 
-    vector<Feature>             m_vAllFeatures;
+    std::vector<Feature>        m_vAllFeatures;
 
     /** Initialization */
     void                        init();
@@ -130,16 +130,16 @@ public:
     virtual ~VO_HaarFeatures () {this->m_vAllFeatures.clear();}
 
     /** Generate all features with a specific mode */
-    virtual void                VO_GenerateAllFeatureInfo(const Size& size, unsigned int generatingMode = 0);
-    virtual void                VO_GenerateAllFeatures(const Mat& iImg, Point pt = Point(0,0));
+    virtual void                VO_GenerateAllFeatureInfo(const cv::Size& size, unsigned int generatingMode = 0);
+    virtual void                VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Point pt = cv::Point(0,0));
 
     /** Read and write */
-    virtual void                ReadFeatures( const FileStorage& fs, Mat_<float>& featureMap );
-    virtual void                WriteFeatures( FileStorage& fs, const Mat_<float>& featureMap ) const;
+    virtual void                ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap );
+    virtual void                WriteFeatures( cv::FileStorage& fs, const cv::Mat_<float>& featureMap ) const;
 };
 
 
-inline float VO_HaarFeatures::Feature::calc( const Mat &_sum, const Mat &_tilted) const
+inline float VO_HaarFeatures::Feature::calc( const cv::Mat &_sum, const cv::Mat &_tilted) const
 {
     const int* img = tilted ? _tilted.ptr<int>(0) : _sum.ptr<int>(0);
     float ret = rect[0].weight * (img[fastRect[0].p0] - img[fastRect[0].p1] - img[fastRect[0].p2] + img[fastRect[0].p3] ) +
