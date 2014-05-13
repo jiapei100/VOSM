@@ -1584,7 +1584,7 @@ void VO_TextureModel::VO_BuildTextureModel(	const std::vector<std::string>& allL
 	this->m_iNbOfEigenTexturesAtMost 			= MIN(this->m_iNbOfSamples, this->m_iNbOfTextures);
     this->m_fTruncatedPercent_Texture   		= TPTexture;
     cv::Mat_<float> matNormalizedTextures		= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfTextures);
-    //cv::Mat_<float> matNormalizedMeanTextures		= cv::Mat_<float>::zeros(1, m_iNbOfTextures);
+    //cv::Mat_<float> matNormalizedMeanTextures	= cv::Mat_<float>::zeros(1, m_iNbOfTextures);
 
 	// Normalize all textures
     this->m_fAverageTextureStandardDeviation 	= VO_TextureModel::VO_NormalizeAllTextures(this->m_vTextures, this->m_vNormalizedTextures);
@@ -1604,25 +1604,27 @@ void VO_TextureModel::VO_BuildTextureModel(	const std::vector<std::string>& allL
             matNormalizedTextures.at<float>(i,j) = textureInARow.at<float>(0,j);
         }
 	}
-    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
-    this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenTexturesAtMost) );
-    //this->m_PCANormalizedTexture(matNormalizedTextures, matNormalizedMeanTextures, CV_PCA_DATA_AS_ROW, this->m_iNbOfEigenTexturesAtMost );
-	// to decide how many components to be selected
-    this->m_iNbOfTextureEigens = 0;
+//    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
+//    //this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenTexturesAtMost) );
+//    this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, matNormalizedMeanTextures, CV_PCA_USE_AVG, (int)(this->m_iNbOfEigenTexturesAtMost) );
+//	// to decide how many components to be selected
+//    this->m_iNbOfTextureEigens = 0;
 
-    double SumOfEigenValues = cv::sum( this->m_PCANormalizedTexture.eigenvalues ).val[0];
-    double ps = 0.0f;
+//    double SumOfEigenValues = cv::sum( this->m_PCANormalizedTexture.eigenvalues ).val[0];
+//    double ps = 0.0f;
 
-    for(unsigned int i = 0; i < this->m_iNbOfEigenTexturesAtMost; i++)
-    {
-        ps += this->m_PCANormalizedTexture.eigenvalues.at<float>(i,0 );
-        ++this->m_iNbOfTextureEigens;
-        if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Texture) break;
-    }
-	// m_iNbOfTextureEigens decided. For simplicity, we carry out PCA once again.
-    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
-    this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfTextureEigens) );
-    //this->m_PCANormalizedTexture(matNormalizedTextures, matNormalizedMeanTextures, CV_PCA_DATA_AS_ROW, this->m_iNbOfTextureEigens );
+//    for(unsigned int i = 0; i < this->m_iNbOfEigenTexturesAtMost; i++)
+//    {
+//        ps += this->m_PCANormalizedTexture.eigenvalues.at<float>(i,0 );
+//        ++this->m_iNbOfTextureEigens;
+//        if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Texture) break;
+//    }
+//	// m_iNbOfTextureEigens decided. For simplicity, we carry out PCA once again.
+//    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
+//    //this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfTextureEigens) );
+//    this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, matNormalizedMeanTextures, CV_PCA_USE_AVG, (int)(this->m_iNbOfTextureEigens) );
+    this->m_PCANormalizedTexture = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_USE_AVG, (double)(this->m_fTruncatedPercent_Texture) );
+    this->m_iNbOfTextureEigens = this->m_PCANormalizedTexture.eigenvalues.rows;
 
     //////////////////////////////////////////////////////////////////////////
     // Calculate m_vNormalizedPointWarpInfo

@@ -1232,22 +1232,24 @@ void VO_AAMBasic::VO_BuildAppearanceModel(	const std::vector<std::string>& allLa
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//    this->m_PCAAppearance = cv::PCA(matConcatenated, matMeanConcatenated, CV_PCA_USE_AVG, (int)(this->m_iNbOfEigenAppearanceAtMost) );
+//	// to decide how many components to be selected
+//    this->m_iNbOfAppearanceEigens = 0;
 
-	this->m_PCAAppearance(matConcatenated, matMeanConcatenated, CV_PCA_DATA_AS_ROW, this->m_iNbOfEigenAppearanceAtMost );
-	// to decide how many components to be selected
-    this->m_iNbOfAppearanceEigens = 0;
+//    double SumOfEigenValues = cv::sum( this->m_PCAAppearance.eigenvalues ).val[0];
+//    double ps = 0.0f;
 
-    double SumOfEigenValues = cv::sum( this->m_PCAAppearance.eigenvalues ).val[0];
-    double ps = 0.0f;
+//    for(unsigned int i = 0; i < this->m_iNbOfEigenAppearanceAtMost; i++)
+//    {
+//        ps += this->m_PCAAppearance.eigenvalues.at<float>(i, 0 );
+//        ++this->m_iNbOfAppearanceEigens;
+//        if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Appearance) break;
+//    }
+//	// m_iNbOfAppearanceEigens decided. For simplicity, we carry out PCA once again.
+//    this->m_PCAAppearance = cv::PCA(matConcatenated, matMeanConcatenated, CV_PCA_USE_AVG, (int)(this->m_iNbOfAppearanceEigens) );
+    this->m_PCAAppearance = cv::PCA(matConcatenated, cv::Mat(), CV_PCA_USE_AVG, (int)(this->m_iNbOfAppearanceEigens) );
+    this->m_iNbOfAppearanceEigens = this->m_PCAAppearance.eigenvalues.rows;
 
-    for(unsigned int i = 0; i < this->m_iNbOfEigenAppearanceAtMost; i++)
-    {
-        ps += this->m_PCAAppearance.eigenvalues.at<float>(i, 0 );
-        ++this->m_iNbOfAppearanceEigens;
-        if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Appearance) break;
-    }
-	// m_iNbOfAppearanceEigens decided. For simplicity, we carry out PCA once again.
-	this->m_PCAAppearance(matConcatenated, matMeanConcatenated, CV_PCA_DATA_AS_ROW, this->m_iNbOfAppearanceEigens );
     this->m_MatAppearanceProject2Truncated = this->m_PCAAppearance.project(matConcatenated);
 
     // extract the shape part of the combined eigen std::vectors

@@ -907,25 +907,27 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
             matAlignedShapes.at<float>(i,j) = shapeInARow.at<float>(0,j);
         }
 	}
-    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
-    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenShapesAtMost) );
-    //cv::PCACompute(matAlignedShapes, matAlignedMeanShape, OutputArray eigenvectors, this->m_iNbOfEigenShapesAtMost);
-	// to decide how many components to be selected
-    this->m_iNbOfShapeEigens = 0;
+//    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
+//    //this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenShapesAtMost) );
+//    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, matAlignedMeanShape, CV_PCA_USE_AVG, (int)(this->m_iNbOfEigenShapesAtMost) );
+//	// to decide how many components to be selected
+//    this->m_iNbOfShapeEigens = 0;
 
-    double SumOfEigenValues = cv::sum( this->m_PCAAlignedShape.eigenvalues ).val[0];
-    double ps = 0.0f;
+//    double SumOfEigenValues = cv::sum( this->m_PCAAlignedShape.eigenvalues ).val[0];
+//    double ps = 0.0f;
 
-    for(unsigned int i = 0; i < this->m_iNbOfEigenShapesAtMost; i++)
-    {
-        ps += this->m_PCAAlignedShape.eigenvalues.at<float>( i,0 );
-        ++this->m_iNbOfShapeEigens;
-        if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Shape) break;
-    }
-	// m_iNbOfShapeEigens decided. For simplicity, we carry out PCA once again.
-    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
-    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfShapeEigens) );
-    //this->m_PCAAlignedShape(matAlignedShapes, matAlignedMeanShape, CV_PCA_DATA_AS_ROW, this->m_iNbOfShapeEigens );
+//    for(unsigned int i = 0; i < this->m_iNbOfEigenShapesAtMost; i++)
+//    {
+//        ps += this->m_PCAAlignedShape.eigenvalues.at<float>( i,0 );
+//        ++this->m_iNbOfShapeEigens;
+//        if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Shape) break;
+//    }
+//	// m_iNbOfShapeEigens decided. For simplicity, we carry out PCA once again.
+//    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
+//    //this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfShapeEigens) );
+//    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, matAlignedMeanShape, CV_PCA_USE_AVG, (int)(this->m_iNbOfShapeEigens) );
+    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)(this->m_fTruncatedPercent_Shape) );
+    this->m_iNbOfShapeEigens = this->m_PCAAlignedShape.eigenvalues.rows;
 
     //////////////////////////////////////////////////////////////////////////
     // Calculate template shape mesh
