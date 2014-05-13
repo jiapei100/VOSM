@@ -61,8 +61,8 @@
 
 #include <iostream>
 #include <cstdio>
-#include "cv.h"
-#include "highgui.h"
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
 #include "VO_FaceKeyPoint.h"
 #include "VO_Algs_Recognition.h"
 
@@ -102,14 +102,14 @@ CRecognitionAlgs::~CRecognitionAlgs()
  * @return	bool		whether the tracked shape is acceptable?
  */
 bool CRecognitionAlgs::EvaluateFaceTrackedByProbabilityImage(CTrackingAlgs* trackalg,
-															const Mat& iImg,
+                                                            const cv::Mat& iImg,
 															const VO_Shape& iShape,
-															Size smallSize,
-															Size bigSize)
+                                                            cv::Size smallSize,
+                                                            cv::Size bigSize)
 {
 double t = (double)cvGetTickCount();
 
-	Rect rect =	iShape.GetShapeBoundRect();
+    cv::Rect rect =	iShape.GetShapeBoundRect();
 
 	trackalg->SetConfiguration(CTrackingAlgs::CAMSHIFT);
 	trackalg->Tracking( iImg,
@@ -127,7 +127,7 @@ double t = (double)cvGetTickCount();
 		res = true;
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "Camshift Tracking time cost: " << t << "millisec" << endl;
+std::cout << "Camshift Tracking time cost: " << t << "millisec" << std::endl;
 
     return res;
 }
@@ -143,9 +143,9 @@ cout << "Camshift Tracking time cost: " << t << "millisec" << endl;
  * @return	bool		whether the tracked shape is acceptable?
  */
 bool CRecognitionAlgs::EvaluateFaceTrackedByCascadeDetection(const CFaceDetectionAlgs* fd,
-															const Mat& iImg,
+                                                            const cv::Mat& iImg,
 															const VO_Shape& iShape,
-															const vector<VO_Shape2DInfo>& iShapeInfo, 
+                                                            const std::vector<VO_Shape2DInfo>& iShapeInfo,
 															const VO_FaceParts& iFaceParts)
 {
 double t = (double)cvGetTickCount();
@@ -153,9 +153,9 @@ double t = (double)cvGetTickCount();
     unsigned int ImgWidth				= iImg.cols;
     unsigned int ImgHeight				= iImg.rows;
 
-    vector<unsigned int> leftEyePoints 			= iFaceParts.VO_GetOneFacePart(VO_FacePart::LEFTEYE).GetIndexes();
-    vector<unsigned int> rightEyePoints 		= iFaceParts.VO_GetOneFacePart(VO_FacePart::RIGHTEYE).GetIndexes();
-    vector<unsigned int> lipOuterLinerPoints 	= iFaceParts.VO_GetOneFacePart(VO_FacePart::LIPOUTERLINE).GetIndexes();
+    std::vector<unsigned int> leftEyePoints 		= iFaceParts.VO_GetOneFacePart(VO_FacePart::LEFTEYE).GetIndexes();
+    std::vector<unsigned int> rightEyePoints 		= iFaceParts.VO_GetOneFacePart(VO_FacePart::RIGHTEYE).GetIndexes();
+    std::vector<unsigned int> lipOuterLinerPoints 	= iFaceParts.VO_GetOneFacePart(VO_FacePart::LIPOUTERLINE).GetIndexes();
 
     VO_Shape leftEyeShape				= iShape.GetSubShape(leftEyePoints);
     VO_Shape rightEyeShape				= iShape.GetSubShape(rightEyePoints);
@@ -183,18 +183,18 @@ double t = (double)cvGetTickCount();
     unsigned int possibleMouthWidth		= possibleMouthMaxX - possibleMouthMinX;
     unsigned int possibleMouthHeight	= possibleMouthMaxY - possibleMouthMinY;
 
-	Rect LeftEyePossibleWindow   		= Rect( possibleLeftEyeMinX, possibleLeftEyeMinY, possibleLeftEyeWidth, possibleLeftEyeHeight );
-    Rect RightEyePossibleWindow  		= Rect( possibleRightEyeMinX, possibleRightEyeMinY, possibleRightEyeWidth, possibleRightEyeHeight );
-    Rect MouthPossibleWindow     		= Rect( possibleMouthMinX, possibleMouthMinY, possibleMouthWidth, possibleMouthHeight );
-    Rect CurrentWindow    				= Rect( 0, 0, iImg.cols, iImg.rows );
-	Rect DetectedLeftEyeWindow, DetectedRightEyeWindow, DetectedMouthWindow;
+    cv::Rect LeftEyePossibleWindow   	= cv::Rect( possibleLeftEyeMinX, possibleLeftEyeMinY, possibleLeftEyeWidth, possibleLeftEyeHeight );
+    cv::Rect RightEyePossibleWindow  	= cv::Rect( possibleRightEyeMinX, possibleRightEyeMinY, possibleRightEyeWidth, possibleRightEyeHeight );
+    cv::Rect MouthPossibleWindow     	= cv::Rect( possibleMouthMinX, possibleMouthMinY, possibleMouthWidth, possibleMouthHeight );
+    cv::Rect CurrentWindow    			= cv::Rect( 0, 0, iImg.cols, iImg.rows );
+    cv::Rect DetectedLeftEyeWindow, DetectedRightEyeWindow, DetectedMouthWindow;
 
     bool LeftEyeDetected 				= const_cast<CFaceDetectionAlgs*>(fd)->VO_FacePartDetection ( iImg, LeftEyePossibleWindow, DetectedLeftEyeWindow, VO_FacePart::LEFTEYE);
     bool RightEyeDetected 				= const_cast<CFaceDetectionAlgs*>(fd)->VO_FacePartDetection ( iImg, RightEyePossibleWindow, DetectedRightEyeWindow, VO_FacePart::RIGHTEYE );
     bool MouthDetected 					= const_cast<CFaceDetectionAlgs*>(fd)->VO_FacePartDetection ( iImg, MouthPossibleWindow, DetectedMouthWindow, VO_FacePart::LIPOUTERLINE );
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.0f);
-cout << "Detection Confirmation time cost: " << t << "millisec" << endl;
+std::cout << "Detection Confirmation time cost: " << t << "millisec" << std::endl;
 
     if(LeftEyeDetected && RightEyeDetected && MouthDetected)
         return true;
@@ -231,16 +231,16 @@ float CRecognitionAlgs::ShapeDistance(const VO_Shape& shape1, const VO_Shape& sh
  * @param	WeakFitting			- input		only shape parameter is used?
  * @return	whether the fitting is acceptable
  */
-bool CRecognitionAlgs::CalcFittingEffect4StaticImage(	const Mat_<float>& avgSParam,
-														const Mat_<float>& icovSParam,
-														const Mat_<float>& avgTParam,
-														const Mat_<float>& icovTParam,
-														const Mat_<float>& iSParams,
-														const Mat_<float>& iTParams,
-														const Scalar& ShapeDistMean,
-														const Scalar& ShapeDistStddev,
-														const Scalar& TextureDistMean,
-														const Scalar& TextureDistStddev,
+bool CRecognitionAlgs::CalcFittingEffect4StaticImage(	const cv::Mat_<float>& avgSParam,
+                                                        const cv::Mat_<float>& icovSParam,
+                                                        const cv::Mat_<float>& avgTParam,
+                                                        const cv::Mat_<float>& icovTParam,
+                                                        const cv::Mat_<float>& iSParams,
+                                                        const cv::Mat_<float>& iTParams,
+                                                        const cv::Scalar& ShapeDistMean,
+                                                        const cv::Scalar& ShapeDistStddev,
+                                                        const cv::Scalar& TextureDistMean,
+                                                        const cv::Scalar& TextureDistStddev,
 														float& sDist,
 														float& tDist,
 														bool WeakFitting )
@@ -280,21 +280,21 @@ bool CRecognitionAlgs::CalcFittingEffect4StaticImage(	const Mat_<float>& avgSPar
  * @param	WeakFitting			- input		only shape parameter is used?
  * @return	whether the fitting is acceptable
  */
-bool CRecognitionAlgs::CalcFittingEffect4ImageSequence(	const Mat_<float>& avgSParam,
-														const Mat_<float>& icovSParam,
-														const Mat_<float>& avgTParam,
-														const Mat_<float>& icovTParam,
-														const Mat_<float>& iSParams,
-														const Mat_<float>& iTParams,
-														const Scalar& ShapeDistMean,
-														const Scalar& ShapeDistStddev,
-														const Scalar& TextureDistMean,
-														const Scalar& TextureDistStddev,
+bool CRecognitionAlgs::CalcFittingEffect4ImageSequence(	const cv::Mat_<float>& avgSParam,
+                                                        const cv::Mat_<float>& icovSParam,
+                                                        const cv::Mat_<float>& avgTParam,
+                                                        const cv::Mat_<float>& icovTParam,
+                                                        const cv::Mat_<float>& iSParams,
+                                                        const cv::Mat_<float>& iTParams,
+                                                        const cv::Scalar& ShapeDistMean,
+                                                        const cv::Scalar& ShapeDistStddev,
+                                                        const cv::Scalar& TextureDistMean,
+                                                        const cv::Scalar& TextureDistStddev,
 														bool WeakFitting )
 {
 	assert(iSParams.rows == iTParams.rows);
     unsigned int NbOfSamples = iSParams.rows;
-    vector<float> sDists, tDists;
+    std::vector<float> sDists, tDists;
     sDists.resize(NbOfSamples);
     tDists.resize(NbOfSamples);
 
@@ -361,7 +361,7 @@ bool CRecognitionAlgs::CalcFittingEffect4ImageSequence(	const Mat_<float>& avgSP
 void CRecognitionAlgs::CalcShapeFittingEffect(	const VO_Shape& refShape,
 												const VO_Shape& fittedShape,
 												float& deviation,
-												vector<float>& ptErrorFreq,
+                                                std::vector<float>& ptErrorFreq,
 												int nb)
 {
     assert(refShape.GetNbOfDim() == fittedShape.GetNbOfDim());
@@ -370,7 +370,7 @@ void CRecognitionAlgs::CalcShapeFittingEffect(	const VO_Shape& refShape,
     unsigned int NbOfPoints     = refShape.GetNbOfPoints();
 	ptErrorFreq.resize(nb);
 
-	vector<float> ptDists(NbOfPoints, 0.0f);
+    std::vector<float> ptDists(NbOfPoints, 0.0f);
 	for(unsigned int i = 0; i < NbOfPoints; i++)
 	{
 		ptDists[i] = 0.0f;
@@ -405,38 +405,44 @@ void CRecognitionAlgs::CalcShapeFittingEffect(	const VO_Shape& refShape,
  * @param	ptErrorFreq			- input		for curve to display frequency -- point distance
  * @return	whether the fitting is acceptable
  */
-void CRecognitionAlgs::SaveShapeRecogResults(	const string& fd,
-												const string& fnIdx,
+void CRecognitionAlgs::SaveShapeRecogResults(	const std::string& fd,
+                                                const std::string& fnIdx,
 												float deviation,
-												vector<float>& ptErrorFreq)
+                                                std::vector<float>& ptErrorFreq)
 {
-    string fn;
+    std::string fn;
     fn = fd + "/" + fnIdx + ".res";
     
-    fstream fp;
-    fp.open(fn.c_str (), ios::out);
+    std::fstream fp;
+    fp.open(fn.c_str (), std::ios::out);
 
-    fp << "Total Deviation" << endl << deviation << endl;				// deviation
-    fp << "Point Error -- Frequency" << endl;
+    fp << "Total Deviation" << std::endl << deviation << std::endl;				// deviation
+    fp << "Point Error -- Frequency" << std::endl;
     for(unsigned int i = 0; i < ptErrorFreq.size(); i++)
     {
         fp << ptErrorFreq[i] << " ";
     }
-    fp << endl;
+    fp << std::endl;
 	
     fp.close();fp.clear();
 }
 
 
-// Estimate face absolute orientations
-vector<float> CRecognitionAlgs::CalcAbsoluteOrientations(	const VO_Shape& iShape2D,
-															const VO_Shape& iShape3D,
-															VO_Shape& oShape2D)
+/**
+ * @brief Calculate object's absolute orientations
+ * @param iShape2D
+ * @param iShape3D
+ * @param oShape2D
+ * @return std::vector<float>
+ */
+std::vector<float> CRecognitionAlgs::CalcAbsoluteOrientations(	const VO_Shape& iShape2D,
+                                                                const VO_Shape& iShape3D,
+                                                                VO_Shape& oShape2D)
 {
 	assert (iShape2D.GetNbOfPoints() == iShape3D.GetNbOfPoints() );
 	unsigned int NbOfPoints = iShape3D.GetNbOfPoints();
-	Point3f pt3d;
-	Point2f pt2d;
+    cv::Point3f pt3d;
+    cv::Point2f pt2d;
 	float height1 = iShape2D.GetHeight();
 	float height2 = iShape3D.GetHeight();
 	VO_Shape tempShape2D = iShape2D;
@@ -497,7 +503,7 @@ vector<float> CRecognitionAlgs::CalcAbsoluteOrientations(	const VO_Shape& iShape
 	}
 
 	//return Euler angles
-	vector<float> pos(3);
+    std::vector<float> pos(3);
 	pos[0] = (float)atan(tan_alpha);	// yaw
 	pos[1] = (float)asin(sin_beta);		// pitch
 	pos[2] = (float)atan(tan_gamma);	// roll
@@ -505,7 +511,12 @@ vector<float> CRecognitionAlgs::CalcAbsoluteOrientations(	const VO_Shape& iShape
 }
 
 
-float CRecognitionAlgs::CalcFaceRoll(const vector<float>& iLine)
+/**
+ * @brief Calcuate face roll angle
+ * @param iLine
+ * @return float -- roll angle
+ */
+float CRecognitionAlgs::CalcFaceRoll(const std::vector<float>& iLine)
 {
 	float roll = 0.0f;
 
@@ -519,7 +530,14 @@ float CRecognitionAlgs::CalcFaceRoll(const vector<float>& iLine)
 }
 
 
-float CRecognitionAlgs::CalcFaceYaw(const vector<float>& iLine, const VO_Shape& iShape, const VO_FaceParts& iFaceParts)
+/**
+ * @brief Calcuate face yaw angle
+ * @param iLine
+ * @param iShape
+ * @param iFaceParts
+ * @return float -- yaw angle
+ */
+float CRecognitionAlgs::CalcFaceYaw(const std::vector<float>& iLine, const VO_Shape& iShape, const VO_FaceParts& iFaceParts)
 {
 	float yaw = 0.0f;
 	int dim = iShape.GetNbOfDim();
@@ -552,15 +570,15 @@ float CRecognitionAlgs::CalcFaceYaw(const vector<float>& iLine, const VO_Shape& 
 ///////////////////////////////////////////////////////////////////////////////
 
 	float leftDist = 0.0f, rightDist = 0.0f;
-	vector<unsigned int> leftSidePoints = iFaceParts.VO_GetOneFacePart(VO_FacePart::LEFTSIDEPOINTS).GetIndexes();
-	vector<unsigned int> rightSidePoints = iFaceParts.VO_GetOneFacePart(VO_FacePart::RIGHTSIDEPOINTS).GetIndexes();
+    std::vector<unsigned int> leftSidePoints = iFaceParts.VO_GetOneFacePart(VO_FacePart::LEFTSIDEPOINTS).GetIndexes();
+    std::vector<unsigned int> rightSidePoints = iFaceParts.VO_GetOneFacePart(VO_FacePart::RIGHTSIDEPOINTS).GetIndexes();
 	for(unsigned int i = 0; i < leftSidePoints.size(); ++i)
 	{
-            leftDist += cvDistFromAPoint2ALine2D(Point2f(iShape.GetAShape(dim*leftSidePoints[i]), iShape.GetAShape(dim*leftSidePoints[i]+1)),  iLine);
+            leftDist += cvDistFromAPoint2ALine2D(cv::Point2f(iShape.GetAShape(dim*leftSidePoints[i]), iShape.GetAShape(dim*leftSidePoints[i]+1)),  iLine);
 	}
 	for(unsigned int i = 0; i < rightSidePoints.size(); ++i)
 	{
-            rightDist += cvDistFromAPoint2ALine2D(Point2f(iShape.GetAShape(dim*rightSidePoints[i]), iShape.GetAShape(dim*rightSidePoints[i]+1)),  iLine);
+            rightDist += cvDistFromAPoint2ALine2D(cv::Point2f(iShape.GetAShape(dim*rightSidePoints[i]), iShape.GetAShape(dim*rightSidePoints[i]+1)),  iLine);
 	}
 
 	float r = leftDist/rightDist;
@@ -572,7 +590,12 @@ float CRecognitionAlgs::CalcFaceYaw(const vector<float>& iLine, const VO_Shape& 
 }
 
 
-// Refer to my PhD thesis, chapter 4
+/**
+ * @brief Calcuate face pitch angle -- Refer to my PhD thesis, chapter 4
+ * @param iShape
+ * @param iFaceParts
+ * @return float -- pitch angle
+ */
 float CRecognitionAlgs::CalcFacePitch(const VO_Shape& iShape, const VO_FaceParts& iFaceParts)
 {
 	float pitch = 0.0f;
@@ -615,15 +638,15 @@ float CRecognitionAlgs::CalcFacePitch(const VO_Shape& iShape, const VO_FaceParts
 // 	float NO = sqrt(2.0f)/2.0f*EQ;
 ///////////////////////////////////////////////////////////////////////////////
 
-	vector<unsigned int> nostrilPoints	 	= iFaceParts.VO_GetOneFacePart(VO_FacePart::NOSTRIL).GetIndexes();
+    std::vector<unsigned int> nostrilPoints	 	= iFaceParts.VO_GetOneFacePart(VO_FacePart::NOSTRIL).GetIndexes();
 	if(nostrilPoints.size() != 0)
 	{
-            vector<unsigned int> pitchAxisPoints	= iFaceParts.VO_GetOneFacePart(VO_FacePart::PITCHAXISLINEPOINTS).GetIndexes();
+            std::vector<unsigned int> pitchAxisPoints	= iFaceParts.VO_GetOneFacePart(VO_FacePart::PITCHAXISLINEPOINTS).GetIndexes();
 
-            Point2f ntPoint1 = Point2f(iShape.GetAShape(dim*nostrilPoints[0]), iShape.GetAShape(dim*nostrilPoints[0]+1));
-            Point2f ntPoint2 = Point2f(iShape.GetAShape(dim*nostrilPoints[1]), iShape.GetAShape(dim*nostrilPoints[1]+1));
-            Point2f paPoint1 = Point2f(iShape.GetAShape(dim*pitchAxisPoints[0]), iShape.GetAShape(dim*pitchAxisPoints[0]+1));
-            Point2f paPoint2 = Point2f(iShape.GetAShape(dim*pitchAxisPoints[1]), iShape.GetAShape(dim*pitchAxisPoints[1]+1));
+            cv::Point2f ntPoint1 = cv::Point2f(iShape.GetAShape(dim*nostrilPoints[0]), iShape.GetAShape(dim*nostrilPoints[0]+1));
+            cv::Point2f ntPoint2 = cv::Point2f(iShape.GetAShape(dim*nostrilPoints[1]), iShape.GetAShape(dim*nostrilPoints[1]+1));
+            cv::Point2f paPoint1 = cv::Point2f(iShape.GetAShape(dim*pitchAxisPoints[0]), iShape.GetAShape(dim*pitchAxisPoints[0]+1));
+            cv::Point2f paPoint2 = cv::Point2f(iShape.GetAShape(dim*pitchAxisPoints[1]), iShape.GetAShape(dim*pitchAxisPoints[1]+1));
 
             NNQ = ( (ntPoint1.y - paPoint1.y) + (ntPoint2.y - paPoint2.y) ) / 2.0f;
             ENQ = fabs(ntPoint1.x - paPoint1.x) > fabs(paPoint2.x - ntPoint2.x) ? fabs(ntPoint1.x - paPoint1.x + (ntPoint2.x - ntPoint1.x) / 2.0f) : fabs(paPoint2.x - ntPoint2.x + (ntPoint2.x - ntPoint1.x) / 2.0f);
@@ -633,9 +656,9 @@ float CRecognitionAlgs::CalcFacePitch(const VO_Shape& iShape, const VO_FaceParts
 	else
 	{
             unsigned int nosetipBottom = 0;
-            vector<unsigned int> nosePoints	 		= iFaceParts.VO_GetOneFacePart(VO_FacePart::NOSE).GetIndexes();
-            vector<unsigned int> midlinePoints	 	= iFaceParts.VO_GetOneFacePart(VO_FacePart::MIDLINEPOINTS).GetIndexes();
-            vector<unsigned int> pitchAxisPoints	= iFaceParts.VO_GetOneFacePart(VO_FacePart::PITCHAXISLINEPOINTS).GetIndexes();
+            std::vector<unsigned int> nosePoints        = iFaceParts.VO_GetOneFacePart(VO_FacePart::NOSE).GetIndexes();
+            std::vector<unsigned int> midlinePoints     = iFaceParts.VO_GetOneFacePart(VO_FacePart::MIDLINEPOINTS).GetIndexes();
+            std::vector<unsigned int> pitchAxisPoints	= iFaceParts.VO_GetOneFacePart(VO_FacePart::PITCHAXISLINEPOINTS).GetIndexes();
 
             for(unsigned int i = 0; i < nosePoints.size(); ++i)
             {
@@ -649,9 +672,9 @@ float CRecognitionAlgs::CalcFacePitch(const VO_Shape& iShape, const VO_FaceParts
                 }
             }
 
-            Point2f ntPoint  = Point2f(iShape.GetAShape(dim*nosetipBottom), iShape.GetAShape(dim*nosetipBottom+1));
-            Point2f paPoint1 = Point2f(iShape.GetAShape(dim*pitchAxisPoints[0]), iShape.GetAShape(dim*pitchAxisPoints[0]+1));
-            Point2f paPoint2 = Point2f(iShape.GetAShape(dim*pitchAxisPoints[1]), iShape.GetAShape(dim*pitchAxisPoints[1]+1));
+            cv::Point2f ntPoint  = cv::Point2f(iShape.GetAShape(dim*nosetipBottom), iShape.GetAShape(dim*nosetipBottom+1));
+            cv::Point2f paPoint1 = cv::Point2f(iShape.GetAShape(dim*pitchAxisPoints[0]), iShape.GetAShape(dim*pitchAxisPoints[0]+1));
+            cv::Point2f paPoint2 = cv::Point2f(iShape.GetAShape(dim*pitchAxisPoints[1]), iShape.GetAShape(dim*pitchAxisPoints[1]+1));
 
             NNQ = ( (ntPoint.y - paPoint1.y) + (ntPoint.y - paPoint2.y) ) / 2.0f;
             ENQ = fabs(ntPoint.x - paPoint1.x) > fabs(paPoint2.x - ntPoint.x) ? fabs(ntPoint.x - paPoint1.x) : fabs(paPoint2.x - ntPoint.x);
@@ -670,7 +693,14 @@ float CRecognitionAlgs::CalcFacePitch(const VO_Shape& iShape, const VO_FaceParts
 }
 
 
-void CRecognitionAlgs::CalcFittedFaceAngle2D(vector<float>& angles, const VO_Shape& iShape, const VO_FaceParts& iFaceParts)
+/**
+ * @brief For 2D face, calculate fitted face angles (two angles)
+ * @param angles
+ * @param iShape
+ * @param iFaceParts
+ * @return void
+ */
+void CRecognitionAlgs::CalcFittedFaceAngle2D(std::vector<float>& angles, const VO_Shape& iShape, const VO_FaceParts& iFaceParts)
 {
     angles.resize(3);
 
@@ -697,7 +727,7 @@ void CRecognitionAlgs::CalcFittedFaceAngle2D(vector<float>& angles, const VO_Sha
 // float ratio = eyewidth/facewidth;
 
 
-    vector<float> midline, eyecorner;
+    std::vector<float> midline, eyecorner;
     VO_KeyPoint::CalcFaceKeyline(midline, iShape, iFaceParts, tempShape, VO_FacePart::MIDLINEPOINTS);
     VO_KeyPoint::CalcFaceKeyline(eyecorner, iShape, iFaceParts, tempShape, VO_FacePart::EYECORNERPOINTS);
     angles[2] = CRecognitionAlgs::CalcFaceRoll(midline);
@@ -710,7 +740,13 @@ void CRecognitionAlgs::CalcFittedFaceAngle2D(vector<float>& angles, const VO_Sha
 }
 
 
-void CRecognitionAlgs::CalcFittedFaceAngle3D(vector<float>& angles, const VO_Shape& iShape, const VO_FaceParts& iFaceParts)
+/**
+ * @brief For 3D face, calculate fitted face angles (three angles)
+ * @param angles
+ * @param iShape
+ * @param iFaceParts
+ */
+void CRecognitionAlgs::CalcFittedFaceAngle3D(std::vector<float>& angles, const VO_Shape& iShape, const VO_FaceParts& iFaceParts)
 {
 // 	CvSeq* point_seq = cvCreateSeq( CV_32FC3, sizeof(CvSeq), sizeof(CvPoint3D32f), storage );
 // 	for(unsigned int i = 0; i < midlinePoints.size(); ++i)

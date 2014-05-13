@@ -63,12 +63,10 @@
 #define __TRACKINGALGS_H__
 
 
-#include "cv.h"
-#include "highgui.h"
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
 #include "VO_CVCommon.h"
 
-using namespace std;
-using namespace cv;
 
 
 /** 
@@ -81,7 +79,7 @@ class CTrackingAlgs
 friend class CLocalizationAlgs;
 protected:
 	/** Tracked object rectangle */
-	Rect 						m_CVTrackedObjectRect;
+    cv::Rect 					m_CVTrackedObjectRect;
 
 	/** Tracking Method */
 	unsigned int				m_iTrackingMethod;
@@ -102,9 +100,12 @@ public:
 	enum { PROBABILITYIMAGE = 1};
 	enum { NONE = 0, CAMSHIFT = 1, KALMANFILTER = 2, PARTICLEFILTER = 3, ASMAAM = 4};
 
+    /** Constructor */
 	CTrackingAlgs(unsigned int trackingmtd = CTrackingAlgs::CAMSHIFT, unsigned int trackermtd = CTrackingAlgs::PROBABILITYIMAGE);
+    /** Destructor */
 	~CTrackingAlgs();
 
+    /** Set configuration */
 	void						SetConfiguration(unsigned int trackingmtd = CTrackingAlgs::CAMSHIFT,
 												unsigned int trackermtd = CTrackingAlgs::PROBABILITYIMAGE)
 	{
@@ -112,48 +113,59 @@ public:
 								this->m_iTrackerMethod	= trackermtd;
 	}
 
-	void						UpdateTracker(const Mat& img, const Rect& obj);
+    /** Update the Tracker according to a rectangle */
+    void						UpdateTracker(const cv::Mat& img, const cv::Rect& obj);
 
-	double						Tracking( 	const Mat& img,
-											Rect& obj,
-											Size smallSize = Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
-											Size bigSize = Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE));
+    /** Do tracking */
+    double						Tracking( 	const cv::Mat& img,
+                                            cv::Rect& obj,
+                                            cv::Size smallSize = cv::Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
+                                            cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE));
 
-	static bool					CamshiftUpdateTracker(const Mat& img, const Rect& obj, MatND& hist);
+    /** Update Camshift Tracker */
+    static bool					CamshiftUpdateTracker(const cv::Mat& img, const cv::Rect& obj, cv::MatND& hist);
 
-	static double				CamshiftTracking( 	const Mat& img,
-													MatND& hist,
-													Rect& obj,
+    /** Camshift Tracking */
+    static double				CamshiftTracking( 	const cv::Mat& img,
+                                                    cv::MatND& hist,
+                                                    cv::Rect& obj,
 													bool& isTracked,
-													Size smallSize,
-													Size bigSize);
+                                                    cv::Size smallSize,
+                                                    cv::Size bigSize);
 
-	static double				KalmanTracking(	const Mat& img,
-												Rect& obj,
+    /** Kalman Tracking */
+    static double				KalmanTracking(	const cv::Mat& img,
+                                                cv::Rect& obj,
 												bool& isTracked,
-												Size smallSize,
-												Size bigSize);
+                                                cv::Size smallSize,
+                                                cv::Size bigSize);
 
-	static double				ParticleFilterTracking(	const Mat& img,
-														Rect& obj,
+    /** Particle Tracking */
+    static double				ParticleFilterTracking(	const cv::Mat& img,
+                                                        cv::Rect& obj,
 														bool& isTracked,
-														Size smallSize,
-														Size bigSize);
+                                                        cv::Size smallSize,
+                                                        cv::Size bigSize);
 
-	static double				ASMAAMTracking( const Mat& img,
-												Rect& obj,
+    /** Camshift Tracking */
+    static double				ASMAAMTracking( const cv::Mat& img,
+                                                cv::Rect& obj,
 												bool& isTracked,
-												Size smallSize,
-												Size bigSize);
+                                                cv::Size smallSize,
+                                                cv::Size bigSize);
 
 	/** Draw all detected objects on the image */
-	void                        VO_DrawTracking(Mat& ioImg, Scalar color = colors[6]);
+    void                        VO_DrawTracking(cv::Mat& ioImg, cv::Scalar color = colors[6]);
 
 	/** Are objects tracked? */
 	bool						IsObjectTracked() const {return this->m_bObjectTracked; }
 
 	/** Return tracked objects rectangles */
-	Rect 						GetTrackedObjectRect() const { return this->m_CVTrackedObjectRect; }
+    cv::Rect					GetTrackedObjectRect() const { return this->m_CVTrackedObjectRect; }
+
+    /** Gets and Sets */
+    unsigned int                GetTrackingMethod() const { return this->m_iTrackingMethod; }
+    unsigned int                GetTrackerMethod() const { return this->m_iTrackerMethod; }
 
 	static const int			vmin = 10;
 	static const int			vmax = 256;
@@ -166,7 +178,8 @@ public:
 	static const float*			ranges[];
 	static int 					channels[];
 
-	MatND						m_hist;
+    /** the histogram */
+    cv::MatND					m_hist;
 };
 
 #endif	// __TRACKINGALGS_H__

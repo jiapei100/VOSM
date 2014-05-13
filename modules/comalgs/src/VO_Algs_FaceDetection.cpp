@@ -61,15 +61,15 @@
 
 #include <iostream>
 #include <cstdio>
-#include "cv.h"
-#include "highgui.h"
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
 #include "VO_FacePart.h"
 #include "VO_FaceKeyPoint.h"
 #include "VO_Algs_FaceDetection.h"
 
 
 /** Initialization, only initialize for face detection, excluding face parts detection */
-void CFaceDetectionAlgs::init(const string& str, unsigned int mtd)
+void CFaceDetectionAlgs::init(const std::string& str, unsigned int mtd)
 {
 	CDetectionAlgs::init(str, mtd);
 
@@ -84,7 +84,7 @@ void CFaceDetectionAlgs::init(const string& str, unsigned int mtd)
 
 
 /** constructor */
-CFaceDetectionAlgs::CFaceDetectionAlgs(const string& str, unsigned int mtd)
+CFaceDetectionAlgs::CFaceDetectionAlgs(const std::string& str, unsigned int mtd)
 {
 	this->init(str, mtd);
 }
@@ -110,12 +110,12 @@ CFaceDetectionAlgs::~CFaceDetectionAlgs()
  * @param		mtd					Input - detection method
  * @return		facetype            Input - face type, frontal or profile, etc.
 */
-void CFaceDetectionAlgs::SetConfiguration(	const string& strfrontalface, 
-											const string& strprofileface, 
-											const string& strlefteye,
-											const string& strrighteye,
-											const string& strnose,
-											const string& strmouth,
+void CFaceDetectionAlgs::SetConfiguration(	const std::string& strfrontalface,
+                                            const std::string& strprofileface,
+                                            const std::string& strlefteye,
+                                            const std::string& strrighteye,
+                                            const std::string& strnose,
+                                            const std::string& strmouth,
 											unsigned int mtd,
 											unsigned int facetype)
 {
@@ -202,17 +202,16 @@ void CFaceDetectionAlgs::SetConfiguration(	const string& strfrontalface,
  * @brief      	Face Detection	-- refer to CDetectionAlgs::Detection
  * @param      	iImg     			Input - image to be searched within
  * @param		confinedArea		Input - only detecting the object within this confined area
- * @param		objs				Output - detected objects
  * @param      	scale				Input - scalar for img scaling
  * @param		smallSize			Input - detected object should be bigger than smallsize
  * @param		bigSize				Input - detected object should be smaller than bigSize
  * @return		double              Return - the entire detection time
 */
-double CFaceDetectionAlgs::FaceDetection(const Mat& iImg,
-										const Rect* confinedArea,
+double CFaceDetectionAlgs::FaceDetection(const cv::Mat& iImg,
+                                        const cv::Rect* confinedArea,
 										const double scale,
-										Size smallSize,
-										Size bigSize)
+                                        cv::Size smallSize,
+                                        cv::Size bigSize)
 {
 	double res = (double)cvGetTickCount();
 	
@@ -244,7 +243,7 @@ double CFaceDetectionAlgs::FaceDetection(const Mat& iImg,
 		this->m_VOFaceComponents.SetObjectRect( this->m_vDetectedFaceRects[0] );
 		this->m_VOFaceComponents0.SetObjectRect( this->m_vDetectedFaceRects[0] );
 		this->m_CVDetectedFaceWindow2SM = CFaceDetectionAlgs::VO_FaceRectFromDetection2SM( iImg.size(), this->m_VOFaceComponents0.m_rectObject );
-		this->m_VOFaceComponents0.m_rectObject = Rect(0, 0, this->m_CVDetectedFaceWindow2SM.width, this->m_CVDetectedFaceWindow2SM.height);
+        this->m_VOFaceComponents0.m_rectObject = cv::Rect(0, 0, this->m_CVDetectedFaceWindow2SM.width, this->m_CVDetectedFaceWindow2SM.height);
 		this->m_CVDetectedFaceImagePatch2SM = iImg(this->m_CVDetectedFaceWindow2SM );
 	}
 	else
@@ -261,7 +260,6 @@ double CFaceDetectionAlgs::FaceDetection(const Mat& iImg,
  * @brief      	Face Detection
  * @param      	iImg				Input - the input image, in which the face detection will be carried out
  * @param		confinedArea		Input - only detecting the object within this confined area
- * @param      	face                Input - whether to detect face? always true!
  * @param      	lefteye             Input - whether to detect lefteye?
  * @param      	righteye            Input - whether to detect righteye?
  * @param      	nose                Input - whether to detect nose?
@@ -272,15 +270,15 @@ double CFaceDetectionAlgs::FaceDetection(const Mat& iImg,
  * @return     	double              Return - the entire detection time
  * @note		This function defaultly detect face
 */
-double CFaceDetectionAlgs::FullFaceDetection ( 	const Mat& iImg,
-												const Rect* confinedArea,
+double CFaceDetectionAlgs::FullFaceDetection ( 	const cv::Mat& iImg,
+                                                const cv::Rect* confinedArea,
 												bool lefteye,
 												bool righteye,
 												bool nose,
 												bool mouth,
 												const double scale,
-												Size smallSize,
-												Size bigSize )
+                                                cv::Size smallSize,
+                                                cv::Size bigSize )
 {
 	double res = (double)cvGetTickCount();
 
@@ -292,7 +290,7 @@ double CFaceDetectionAlgs::FullFaceDetection ( 	const Mat& iImg,
 		this->m_VOFaceComponents.SetObjectRect( this->m_vDetectedFaceRects[0] );
 		this->m_VOFaceComponents0.SetObjectRect( this->m_vDetectedFaceRects[0] );
 		this->m_CVDetectedFaceWindow2SM = CFaceDetectionAlgs::VO_FaceRectFromDetection2SM( iImg.size(), this->m_VOFaceComponents0.m_rectObject );
-		this->m_VOFaceComponents0.m_rectObject = Rect(0, 0, this->m_CVDetectedFaceWindow2SM.width, this->m_CVDetectedFaceWindow2SM.height);
+        this->m_VOFaceComponents0.m_rectObject = cv::Rect(0, 0, this->m_CVDetectedFaceWindow2SM.width, this->m_CVDetectedFaceWindow2SM.height);
 		this->m_CVDetectedFaceImagePatch2SM = iImg(this->m_CVDetectedFaceWindow2SM );
 	}
 	else
@@ -334,7 +332,7 @@ double CFaceDetectionAlgs::FullFaceDetection ( 	const Mat& iImg,
  * @param		nose				Input - whether to detect nose
  * @param		mouth				Input - whether to detect mouth
 */
-double CFaceDetectionAlgs::VO_FaceComponentsDetection(const Mat& iImg,
+double CFaceDetectionAlgs::VO_FaceComponentsDetection(const cv::Mat& iImg,
 													 int faceOrient,
 													 bool lefteye,
 													 bool righteye,
@@ -501,12 +499,15 @@ double CFaceDetectionAlgs::VO_FaceComponentsDetection(const Mat& iImg,
  * @param      	facepart     	Input - Which face part is it to be detected in. VO_FacePart::LEFTEYE, VO_FacePart::RIGHTEYE, VO_FacePart::NOSE, MOUTH
  * @return     	bool         	Return - Whether the face component has been detected or not
 */
-bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWindow, Rect& oWindow, unsigned int facepart)
+bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
+                                               const cv::Rect& iWindow,
+                                               cv::Rect& oWindow,
+                                               unsigned int facepart)
 {
     bool result = false;
-	Mat smallImgROI = iImg(iWindow);
+    cv::Mat smallImgROI = iImg(iWindow);
  
-	vector<Rect> detectedfp;
+    std::vector<cv::Rect> detectedfp;
     switch ( facepart )
     {
         case VO_FacePart::LEFTEYE:
@@ -519,10 +520,10 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 														0,
 														detectedfp,
 														1.0,
-														Size(iImg.cols/4, iImg.cols/8),
-														Size(iImg.cols, iImg.cols*2/3) );
-//														Size(18, 12),
-//														Size(54, 36) );
+                                                        cv::Size(iImg.cols/4, iImg.cols/8),
+                                                        cv::Size(iImg.cols, iImg.cols*2/3) );
+//														cv::Size(18, 12),
+//														cv::Size(54, 36) );
 				break;
 				case VO_AdditiveStrongerClassifier::BOOSTING:
 					CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierLeftEye,
@@ -530,10 +531,10 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 														0,
 														detectedfp,
 														1.0,
-														Size(iImg.cols/4, iImg.cols/8),
-														Size(iImg.cols, iImg.cols*2/3) );
-//														Size(18, 12),
-//														Size(54, 36) );
+                                                        cv::Size(iImg.cols/4, iImg.cols/8),
+                                                        cv::Size(iImg.cols, iImg.cols*2/3) );
+//														cv::Size(18, 12),
+//														cv::Size(54, 36) );
 				break;
 			}
 		}
@@ -548,10 +549,10 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 														0,
 														detectedfp,
 														1.0,
-														Size(iImg.cols/4, iImg.cols/8),
-														Size(iImg.cols, iImg.cols*2/3) );
-//														Size(18, 12),
-//														Size(54, 36) );
+                                                        cv::Size(iImg.cols/4, iImg.cols/8),
+                                                        cv::Size(iImg.cols, iImg.cols*2/3) );
+//														cv::Size(18, 12),
+//														cv::Size(54, 36) );
 				break;
 				case VO_AdditiveStrongerClassifier::BOOSTING:
 					CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierRightEye,
@@ -559,10 +560,10 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 														0,
 														detectedfp,
 														1.0,
-														Size(iImg.cols/4, iImg.cols/8),
-														Size(iImg.cols, iImg.cols*2/3) );
-//														Size(18, 12),
-//														Size(54, 36) );
+                                                        cv::Size(iImg.cols/4, iImg.cols/8),
+                                                        cv::Size(iImg.cols, iImg.cols*2/3) );
+//														cv::Size(18, 12),
+//														cv::Size(54, 36) );
 				break;
 			}
 		}
@@ -577,10 +578,10 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 														0,
 														detectedfp,
 														1.0,
-														Size(iImg.cols/6, iImg.rows/6),
-														Size(iImg.cols, iImg.rows) );
-//														Size(18, 15),
-//														Size(54, 45) );
+                                                        cv::Size(iImg.cols/6, iImg.rows/6),
+                                                        cv::Size(iImg.cols, iImg.rows) );
+//														cv::Size(18, 15),
+//														cv::Size(54, 45) );
 				break;
 				case VO_AdditiveStrongerClassifier::BOOSTING:
 					CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierNose,
@@ -588,10 +589,10 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 														0,
 														detectedfp,
 														1.0,
-														Size(iImg.cols/6, iImg.rows/6),
-														Size(iImg.cols, iImg.rows) );
-//														Size(18, 15),
-//														Size(54, 45) );
+                                                        cv::Size(iImg.cols/6, iImg.rows/6),
+                                                        cv::Size(iImg.cols, iImg.rows) );
+//														cv::Size(18, 15),
+//														cv::Size(54, 45) );
 				break;
 			}
 		}
@@ -606,10 +607,10 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 														0,
 														detectedfp,
 														1.0,
-														Size(iImg.cols/6, iImg.rows/6),
-														Size(iImg.cols, iImg.rows) );
-//														Size(25, 15),
-//														Size(75, 45) );
+                                                        cv::Size(iImg.cols/6, iImg.rows/6),
+                                                        cv::Size(iImg.cols, iImg.rows) );
+//														cv::Size(25, 15),
+//														cv::Size(75, 45) );
 				break;
 				case VO_AdditiveStrongerClassifier::BOOSTING:
 					CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierMouth,
@@ -617,10 +618,10 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 														0,
 														detectedfp,
 														1.0,
-														Size(iImg.cols/6, iImg.rows/6),
-														Size(iImg.cols, iImg.rows) );
-//														Size(25, 15),
-//														Size(75, 45) );
+                                                        cv::Size(iImg.cols/6, iImg.rows/6),
+                                                        cv::Size(iImg.cols, iImg.rows) );
+//														cv::Size(25, 15),
+//														cv::Size(75, 45) );
 				break;
 			}
 		}
@@ -645,8 +646,8 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const Mat& iImg, const Rect& iWin
 
 /**
  * @brief 		detect face directions
- * @param		iImg		-- must be detected face image patch
  * @param		faceOrient	-- frontal
+ * @return		int	-- face directions
  */
 int CFaceDetectionAlgs::VO_DetectFaceDirection(int faceOrient)
 {
@@ -664,19 +665,25 @@ int CFaceDetectionAlgs::VO_DetectFaceDirection(int faceOrient)
 	else
 		return CFaceDetectionAlgs::UNDETECTED;
 }
-														
-int CFaceDetectionAlgs::VO_DetectFaceDirection(const VO_FaceCompPos& facecomponents,
-														const Rect& possiblenose,
-														const Rect& nosecentralarea)
+/**
+ * @brief Detect Face Directions
+ * @param facecomponents    -- input, face components positions
+ * @param possiblenose      -- input, possible nose position, a rectangle
+ * @param nosecentralarea   -- input, detected nose central area, a rectangle
+ * @return int -- face directions
+ */
+int CFaceDetectionAlgs::VO_DetectFaceDirection( const VO_FaceCompPos& facecomponents,
+                                                const cv::Rect& possiblenose,
+                                                const cv::Rect& nosecentralarea)
 {
 	int dir = CFaceDetectionAlgs::DIR_FRONTAL;
 
 	int leftright = 0;
 	int updown = 0;
 
-	vector<Point2f>	centers = facecomponents.VO_CalcFaceComponentsCenters();
+    std::vector<cv::Point2f>    centers = facecomponents.VO_CalcFaceComponentsCenters();
 	float middleX = (centers[1].x + centers[2].x)/2.0;
-	Point2f possiblenoseCenter;
+    cv::Point2f possiblenoseCenter;
 	possiblenoseCenter.x = possiblenose.x + possiblenose.width/2.0f;
     possiblenoseCenter.y = possiblenose.y + possiblenose.height/2.0f;
 	
@@ -716,15 +723,15 @@ int CFaceDetectionAlgs::VO_DetectFaceDirection(const VO_FaceCompPos& facecompone
  * @param      	mouth           	Input - whether to detect mouth?
  * @param		color				Input - line color
 */
-void CFaceDetectionAlgs::VO_DrawDetection ( Mat& ioImg, 
+void CFaceDetectionAlgs::VO_DrawDetection ( cv::Mat& ioImg,
 											bool face,  
 											bool lefteye, 
 											bool righteye, 
 											bool nose, 
 											bool mouth,
-											Scalar color)
+                                            cv::Scalar color)
 {
-    Point pt1, pt2, pt;
+    cv::Point pt1, pt2, pt;
 
     // Face
     if ( face )
@@ -791,8 +798,7 @@ void CFaceDetectionAlgs::VO_DrawDetection ( Mat& ioImg,
 
 											
 /**
- * @param		ptType		point type, which point is it?
- * @return 		Point2f		the point coordinates
+ * @brief Calculate Face Keypoints
  */
 void CFaceDetectionAlgs::CalcFaceKeyPoints()
 {
@@ -842,10 +848,11 @@ void CFaceDetectionAlgs::CalcFaceKeyPoints()
 
 
 /**
+ * @brief       Get detected face key points
  * @param		ptType		point type, which point is it?
  * @return 		Point2f		the point coordinates
  */
-Point2f	CFaceDetectionAlgs::GetDetectedFaceKeyPoint(unsigned int ptType) const
+cv::Point2f	CFaceDetectionAlgs::GetDetectedFaceKeyPoint(unsigned int ptType) const
 {
 	switch(ptType)
 	{
@@ -887,9 +894,10 @@ Point2f	CFaceDetectionAlgs::GetDetectedFaceKeyPoint(unsigned int ptType) const
  * @param 		iFaceRect		the detected face rectangle
  * @return		Rect			the adjusted face rectangle
  */
-Rect CFaceDetectionAlgs::VO_FaceRectFromDetection2SM (const Size& imgSize, const Rect& iFaceRect )
+cv::Rect CFaceDetectionAlgs::VO_FaceRectFromDetection2SM (const cv::Size& imgSize,
+                                                          const cv::Rect& iFaceRect )
 {
-    Rect res;
+    cv::Rect res;
 
     // Note: copied from aamlibrary and asmlibrary
     static const float CONF_VjHeightShift = 0.15f;  	// shift height down by 15%
@@ -931,9 +939,9 @@ Rect CFaceDetectionAlgs::VO_FaceRectFromDetection2SM (const Size& imgSize, const
  * @param		dir				face directions
  * @return		Rect			the possible rectangle for this specific face rectangle
  */
-Rect CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(int imgWidth, int imgHeight, unsigned int facepart, unsigned int dir)
+cv::Rect CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(int imgWidth, int imgHeight, unsigned int facepart, unsigned int dir)
 {
-	Rect rect;
+    cv::Rect rect;
     switch(dir)
     {
     case LEFTPROFILE:
@@ -946,19 +954,19 @@ Rect CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(int imgWidth, int
 			switch(facepart)
 			{
 			case VO_FacePart::LEFTEYE:
-				rect    = Rect ( ( int ) ( imgWidth/20.0f ), ( int ) ( imgHeight/10.0f ), ( int ) ( 9.0f*imgWidth/20.0f ), ( int ) ( 3*imgHeight/10.0f ) );
+                rect    = cv::Rect ( ( int ) ( imgWidth/20.0f ), ( int ) ( imgHeight/10.0f ), ( int ) ( 9.0f*imgWidth/20.0f ), ( int ) ( 3*imgHeight/10.0f ) );
 				break;
 			case VO_FacePart::RIGHTEYE:
-				rect	= Rect ( ( int ) ( 1.0f*imgWidth/2.0f ), ( int ) ( imgHeight/10.0f ), ( int ) ( 9.0f*imgWidth/20.0f ), ( int ) ( 3*imgHeight/10.0f ) );
+                rect	= cv::Rect ( ( int ) ( 1.0f*imgWidth/2.0f ), ( int ) ( imgHeight/10.0f ), ( int ) ( 9.0f*imgWidth/20.0f ), ( int ) ( 3*imgHeight/10.0f ) );
 				break;
 			case VO_FacePart::NOSE:
-				rect    = Rect ( ( int ) ( imgWidth/4.0f ), ( int ) ( imgHeight/5.0f ), ( int ) ( imgWidth/2.0f ), ( int ) ( 3.0*imgHeight/5.0f ) );
+                rect    = cv::Rect ( ( int ) ( imgWidth/4.0f ), ( int ) ( imgHeight/5.0f ), ( int ) ( imgWidth/2.0f ), ( int ) ( 3.0*imgHeight/5.0f ) );
 				break;
 			case VO_FacePart::LIPOUTERLINE:
-				rect    = Rect ( ( int ) ( imgWidth/5.0f ), ( int ) ( 1.0f*imgHeight/2.0f ), ( int ) ( 3.0f*imgWidth/5.0f ), ( int ) ( 1.0f*imgHeight/2.0f ) );
+                rect    = cv::Rect ( ( int ) ( imgWidth/5.0f ), ( int ) ( 1.0f*imgHeight/2.0f ), ( int ) ( 3.0f*imgWidth/5.0f ), ( int ) ( 1.0f*imgHeight/2.0f ) );
 				break;
 			case VO_FacePart::NOSECENTRALAREA:
-				rect	= Rect ( ( int ) ( 0.48*imgWidth ), ( int ) ( 0.45*imgHeight ), ( int ) ( 0.05*imgWidth ), ( int ) ( 0.05*imgHeight ) );
+                rect	= cv::Rect ( ( int ) ( 0.48*imgWidth ), ( int ) ( 0.45*imgHeight ), ( int ) ( 0.05*imgWidth ), ( int ) ( 0.05*imgHeight ) );
 				break;
 			default:
 				break;

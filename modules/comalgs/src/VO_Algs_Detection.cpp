@@ -108,11 +108,11 @@ CDetectionAlgs::~CDetectionAlgs()
  * @param		bigSize			Input - detected object should be smaller than bigSize
  * @return		detection time cost
 */
-double CDetectionAlgs::Detection(const Mat& iImg,
-									const Rect* confinedArea,
+double CDetectionAlgs::Detection(const cv::Mat& iImg,
+                                    const cv::Rect* confinedArea,
 									const double scale,
-									Size smallSize,
-									Size bigSize)
+                                    cv::Size smallSize,
+                                    cv::Size bigSize)
 {
 	double res = (double)cvGetTickCount();
 	
@@ -161,34 +161,34 @@ double CDetectionAlgs::Detection(const Mat& iImg,
  * @param		bigSize			Input - detected object should be smaller than bigSize
  * @return		detection time cost
 */
-double CDetectionAlgs::BoostingDetection( const CascadeClassifier& cascade,
-										const Mat& img,
-										const Rect* confinedArea,
-										vector<Rect>& objs,
+double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier& cascade,
+                                        const cv::Mat& img,
+                                        const cv::Rect* confinedArea,
+                                        std::vector<cv::Rect>& objs,
 										const double scale,
-										Size smallSize,
-										Size bigSize)
+                                        cv::Size smallSize,
+                                        cv::Size bigSize)
 {
 	double res = (double)cvGetTickCount();
 	objs.clear();
-	Mat confinedImg;
+    cv::Mat confinedImg;
 	if(confinedArea)
 		confinedImg = img(*confinedArea);
 	else
 		confinedImg = img;
 
-	Mat gray, smallImg( cvRound (confinedImg.rows/scale), cvRound(confinedImg.cols/scale), CV_8UC1 );
+    cv::Mat gray, smallImg( cvRound (confinedImg.rows/scale), cvRound(confinedImg.cols/scale), CV_8UC1 );
 
 	if(confinedImg.channels() == 3)
-		cvtColor( confinedImg, gray, CV_BGR2GRAY );
+        cv::cvtColor( confinedImg, gray, CV_BGR2GRAY );
 	else
 		gray = confinedImg;
-	resize( gray, smallImg, smallImg.size(), 0, 0, INTER_LINEAR );
-	equalizeHist( smallImg, smallImg );
+    cv::resize( gray, smallImg, smallImg.size(), 0, 0, cv::INTER_LINEAR );
+    cv::equalizeHist( smallImg, smallImg );
 
 	/////////////////detection/////////////////////////////////////////
 	//t = (double)cvGetTickCount();
-	const_cast<CascadeClassifier&>(cascade).detectMultiScale( smallImg, objs,
+    const_cast<cv::CascadeClassifier&>(cascade).detectMultiScale( smallImg, objs,
 															1.1, 2, 0
 															//|CascadeClassifier::DO_CANNY_PRUNING
 															//|CascadeClassifier::FIND_BIGGEST_OBJECT
@@ -200,7 +200,7 @@ double CDetectionAlgs::BoostingDetection( const CascadeClassifier& cascade,
 	///////////////////////sort///////////////////////////////////////
 	if (objs.size() > 0)
 	{
-		qsort( (void *)&(objs[0]), objs.size(), sizeof(Size), cvSizeCompare );
+        qsort( (void *)&(objs[0]), objs.size(), sizeof(cv::Size), cvSizeCompare );
 		// re-position
 		if (confinedArea)
 		{
@@ -262,13 +262,13 @@ double CDetectionAlgs::BoostingDetection( const CascadeClassifier& cascade,
  * @param		bigSize			Input - detected object should be smaller than bigSize
  * @return		detection time cost
 */
-double CDetectionAlgs::BaggingDetection( const RTreeClassifier& rtree,
-										const Mat& img,
-										const Rect* confinedArea,
-										vector<Rect>& objs,
+double CDetectionAlgs::BaggingDetection( const cv::RTreeClassifier& rtree,
+                                        const cv::Mat& img,
+                                        const cv::Rect* confinedArea,
+                                        std::vector<cv::Rect>& objs,
 										const double scale,
-										Size smallSize,
-										Size bigSize)
+                                        cv::Size smallSize,
+                                        cv::Size bigSize)
 {
 	double res = (double)cvGetTickCount();
 
@@ -277,12 +277,17 @@ double CDetectionAlgs::BaggingDetection( const RTreeClassifier& rtree,
 }
 
 
-void CDetectionAlgs::VO_DrawDetection(Mat& ioImg, Scalar color)
+/**
+ * @brief Draw detected rectangles on an image
+ * @param ioImg -- input output image after being drawn on
+ * @param color -- the color
+ */
+void CDetectionAlgs::VO_DrawDetection(cv::Mat& ioImg, cv::Scalar color)
 {
 	unsigned int NbOfDetectedObjs = this->m_vDetectedObjectRects.size();
 
-	Rect curRect;
-	Point lefttop, rightbottom;
+    cv::Rect curRect;
+    cv::Point lefttop, rightbottom;
 
     if ( NbOfDetectedObjs > 0 )
     {

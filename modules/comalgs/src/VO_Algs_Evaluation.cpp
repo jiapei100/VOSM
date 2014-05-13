@@ -67,7 +67,8 @@
  * @param	pt		- input		the concerned point
  * @param	rect	- input		the concerned rectangle
  */
-bool CEvaluationAlgs::IsPointInRect(const Point2d& pt, const Rect& rect)
+bool CEvaluationAlgs::IsPointInRect(const cv::Point2d& pt,
+                                    const cv::Rect& rect)
 {
 	if(pt.x >= rect.x && pt.x < rect.x+rect.width &&
 		pt.y >= rect.y && pt.y < rect.y+rect.height)
@@ -82,7 +83,10 @@ bool CEvaluationAlgs::IsPointInRect(const Point2d& pt, const Rect& rect)
  * @param 	oar				- output	overlapped area ratio, overlapped area / entire area covered by two rectangles
  * @param	co				- output	center offset, the distance between two centers of detected object and loaded object
  */
-void CEvaluationAlgs::StandardDetectionEvaluation(const Rect& detectedObjRect, const Rect& loadedObjRect, double& oar, double& co)
+void CEvaluationAlgs::StandardDetectionEvaluation(const cv::Rect& detectedObjRect,
+                                                  const cv::Rect& loadedObjRect,
+                                                  double& oar,
+                                                  double& co)
 {
 	unsigned int LeftMost, TopMost, RightMost, BottomMost;
 	LeftMost = (detectedObjRect.x < loadedObjRect.x) ? detectedObjRect.x : loadedObjRect.x;
@@ -94,7 +98,7 @@ void CEvaluationAlgs::StandardDetectionEvaluation(const Rect& detectedObjRect, c
 
 	unsigned int overlappedarea = 0;
 	unsigned int entirearea = 0;
-	Point2d pt;
+    cv::Point2d pt;
 	bool isInFirst, isInSecond;
 	for(unsigned int i = LeftMost; i < RightMost; ++i)
 	{
@@ -162,7 +166,9 @@ void CEvaluationAlgs::StandardDetectionEvaluation(const Rect& detectedObjRect, c
  * @param	leftEyeCenter	- output		center of the left eye
  * @param	rightEyeCenter	- output		center of the right eye
  */
-void CEvaluationAlgs::PridictEyeCenters(const Rect& face, Point2d& leftEyeCenter, Point2d& rightEyeCenter)
+void CEvaluationAlgs::EstimateEyeCenters(const cv::Rect& face,
+                                        cv::Point2d& leftEyeCenter,
+                                        cv::Point2d& rightEyeCenter)
 {
 	leftEyeCenter.x 	= (double)face.width/20.0 + 9.0*(double)face.width/20.0*0.5+face.x;
 	leftEyeCenter.y 	= (double)face.height/10.0 + (double)face.height/3.0*0.5+face.y;
@@ -178,16 +184,16 @@ void CEvaluationAlgs::PridictEyeCenters(const Rect& face, Point2d& leftEyeCenter
  * @param	rightEyeCenters		- input		a vector of detected right eye centers
  * @return	a vector of dEyes	-- refer to Cristinacce paper
  */
-vector<double> CEvaluationAlgs::CristinacceDEyes(const vector<Rect>& detectedFaces,
-											const vector<Point2d>& leftEyeCenters,
-											const vector<Point2d>& rightEyeCenters )
+std::vector<double> CEvaluationAlgs::CristinacceDEyes(  const std::vector<cv::Rect>& detectedFaces,
+                                                        const std::vector<cv::Point2d>& leftEyeCenters,
+                                                        const std::vector<cv::Point2d>& rightEyeCenters )
 {
 	assert(detectedFaces.size() == leftEyeCenters.size() );
 	assert(detectedFaces.size() == rightEyeCenters.size() );
 
-	Point2d predictedLeftEyeCenter, predictedRightEyeCenter;
+    cv::Point2d predictedLeftEyeCenter, predictedRightEyeCenter;
 	unsigned int NbOfSamples = detectedFaces.size();
-	vector<double> dEyes(NbOfSamples, 0.0);
+    std::vector<double> dEyes(NbOfSamples, 0.0);
 	double dLeft, dRight, dLeftRight;
 	for (unsigned int i = 0; i < NbOfSamples; i++)
 	{
@@ -199,7 +205,7 @@ vector<double> CEvaluationAlgs::CristinacceDEyes(const vector<Rect>& detectedFac
 		}
 		else
 		{
-			CEvaluationAlgs::PridictEyeCenters(detectedFaces[i], predictedLeftEyeCenter, predictedRightEyeCenter);
+            CEvaluationAlgs::EstimateEyeCenters(detectedFaces[i], predictedLeftEyeCenter, predictedRightEyeCenter);
 			dLeft = sqrt ( pow( (predictedLeftEyeCenter.x - leftEyeCenters[i].x), 2.0)
 				+ pow( (predictedLeftEyeCenter.y - leftEyeCenters[i].y), 2.0) );
 			dRight = sqrt ( pow( (predictedRightEyeCenter.x - rightEyeCenters[i].x), 2.0)
@@ -221,13 +227,13 @@ vector<double> CEvaluationAlgs::CristinacceDEyes(const vector<Rect>& detectedFac
  * @param	maxdEyes	- input		max dEyes
  * @param	nb			- input		how many evaluation levels that is to be used
  */
-vector<int> CEvaluationAlgs::DEyesEval(	const vector<double>& dEyess,
-										unsigned int& wrongDet,
-										double mindEyes,
-										double maxdEyes,
-										unsigned int nb )
+std::vector<int> CEvaluationAlgs::DEyesEval(const std::vector<double>& dEyess,
+                                            unsigned int& wrongDet,
+                                            double mindEyes,
+                                            double maxdEyes,
+                                            unsigned int nb )
 {
-	vector<int> res(nb, 0);
+    std::vector<int> res(nb, 0);
 	double interval = (maxdEyes-mindEyes)/(double)nb;
 	double curdEye = 0.0;
 	
@@ -261,13 +267,13 @@ vector<int> CEvaluationAlgs::DEyesEval(	const vector<double>& dEyess,
  * @param	faceCompCenters		- input		loaded face compoenents' centers (realistic face information)
  * @return	a vector of MSEs
  */
-vector<double>	CEvaluationAlgs::MSEFaceComp(const vector<Rect>& detectedFaceComp,
-										const vector<Point2d>& faceCompCenters )
+std::vector<double>	CEvaluationAlgs::MSEFaceComp(const std::vector<cv::Rect>& detectedFaceComp,
+                                                const std::vector<cv::Point2d>& faceCompCenters )
 {
 	assert(detectedFaceComp.size() == faceCompCenters.size() );
 	unsigned int size = detectedFaceComp.size();
 	double xCenter, yCenter;
-	vector<double> mse(size, 0.0);
+    std::vector<double> mse(size, 0.0);
 
 	for(unsigned int i = 0; i < size; i++)
 	{

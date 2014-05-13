@@ -61,8 +61,8 @@
 
 #include <iostream>
 #include <cstdio>
-#include "cv.h"
-#include "highgui.h"
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
 #include "VO_Algs_Classification.h"
 
 
@@ -94,7 +94,7 @@ CClassificationAlgs::~CClassificationAlgs()
 
 
 /** set configuration */
-void CClassificationAlgs::SetConfiguration(const string& trainedclassifier, unsigned int mtd)
+void CClassificationAlgs::SetConfiguration(const std::string& trainedclassifier, unsigned int mtd)
 {
 	this->m_iClassificationMethod	= mtd;
 	this->Load(trainedclassifier);
@@ -109,10 +109,10 @@ void CClassificationAlgs::SetConfiguration(const string& trainedclassifier, unsi
  * @param		categories		Input - column vector
  * @return		classification time cost
 */
-void CClassificationAlgs::Training(const Mat_<float>& data, const Mat_<int>& categories)
+void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<int>& categories)
 {
 	unsigned int NbOfSamples = data.rows;
-	set<int> ClassSet;
+    std::set<int> ClassSet;
 	for(int i = 0; i < categories.rows; i++)
 	{
 		ClassSet.insert(categories(i, 0));
@@ -125,20 +125,20 @@ void CClassificationAlgs::Training(const Mat_<float>& data, const Mat_<int>& cat
 			this->m_CVDtree.train( 	data,
 									CV_ROW_SAMPLE,
 									categories,
-									Mat(),
-									Mat(),
-									Mat(),
-									Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
 									CvDTreeParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, false, false, 0 ) );
 		break;
 		case CClassificationAlgs::Boost:
 		    this->m_CVBoost.train( 	data,
 									CV_ROW_SAMPLE,
 									categories,
-									Mat(),
-									Mat(),
-									Mat(),
-									Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
 									CvBoostParams(CvBoost::DISCRETE, 50, 0.95, INT_MAX, false, 0),
 									false );
 		break;
@@ -146,27 +146,27 @@ void CClassificationAlgs::Training(const Mat_<float>& data, const Mat_<int>& cat
 			this->m_CVRTrees.train( data, 
 									CV_ROW_SAMPLE,
 									categories,
-									Mat(),
-									Mat(),
-									Mat(),
-									Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
 									CvRTParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, true, 0, 100, 0, CV_TERMCRIT_ITER ) );
 		break;
 		case CClassificationAlgs::ExtremeRandomForest:
 			this->m_CVERTrees.train(data,
 									CV_ROW_SAMPLE,
 									categories,
-									Mat(),
-									Mat(),
-									Mat(),
-									Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
 									CvRTParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, true, 0, 100, 0, CV_TERMCRIT_ITER ) );
 		break;
 		case CClassificationAlgs::SVM:
 			this->m_CVSVM.train(	data,
 									categories,
-									Mat(),
-									Mat(),
+                                    cv::Mat(),
+                                    cv::Mat(),
 									CvSVMParams(CvSVM::C_SVC, CvSVM::RBF,
 									0, 1, 0,
 									1, 0, 0,
@@ -183,7 +183,7 @@ void CClassificationAlgs::Training(const Mat_<float>& data, const Mat_<int>& cat
  * @param      	data     		Input - input data
  * @return		classification time cost
 */
-int CClassificationAlgs::Classification(const Mat_<float>& sample )
+int CClassificationAlgs::Classification(const cv::Mat_<float>& sample )
 {
 	int res = -1;
 	switch(this->m_iClassificationMethod)
@@ -228,7 +228,7 @@ int CClassificationAlgs::Classification(const Mat_<float>& sample )
  * @param      	fn     			Input - file to save
  * @return		void
 */
-void CClassificationAlgs::Save(const string& fn ) const
+void CClassificationAlgs::Save(const std::string& fn ) const
 {
 	switch(this->m_iClassificationMethod)
 	{
@@ -270,7 +270,7 @@ void CClassificationAlgs::Save(const string& fn ) const
  * @return		void
  * @note		You have to specify m_iClassificationMethod first
 */
-void CClassificationAlgs::Load(const string& fn)
+void CClassificationAlgs::Load(const std::string& fn)
 {
 	switch(this->m_iClassificationMethod)
 	{

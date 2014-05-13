@@ -64,12 +64,8 @@
 
 #include <vector>
 #include <iostream>
-#include "cv.h"
-#include "highgui.h"
-
-
-using namespace std;
-using namespace cv;
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
 
 
 /** 
@@ -80,16 +76,35 @@ using namespace cv;
 class CEvaluationAlgs
 {
 public:
-	static bool 			IsPointInRect(const Point2d& pt, const Rect& rect);
-	static void				StandardDetectionEvaluation(const Rect& detectedObjRect, const Rect& loadedObjRect, double& oar, double& co);
+    /** Is a point in a rect? */
+    static bool                 IsPointInRect(const cv::Point2d& pt, const cv::Rect& rect);
 
-	static void				PridictEyeCenters(const Rect& face, Point2d& leftEyeCenter, Point2d& rightEyeCenter);
+    /** A standard way to evaluate detection result. */
+    static void                 StandardDetectionEvaluation(const cv::Rect& detectedObjRect,
+                                                            const cv::Rect& loadedObjRect,
+                                                            double& oar,
+                                                            double& co);
 
-	static vector<double>	CristinacceDEyes(const vector<Rect>& detectedFaces, const vector<Point2d>& leftEyeCenters, const vector<Point2d>& rightEyeCenters );
-	static vector<int>		DEyesEval(const vector<double>& dEyess, unsigned int& dEyeWrong, double mindEyes = 0.0, double maxdEyes = 0.5, unsigned int nb = 100 );
+    /** Estimate 2 eye centers. */
+    static void                 EstimateEyeCenters( const cv::Rect& face,
+                                                    cv::Point2d& leftEyeCenter,
+                                                    cv::Point2d& rightEyeCenter);
 
-	static vector<double>	MSEFaceComp(const vector<Rect>& detectedFaceComp, const vector<Point2d>& faceCompCenters );
+    /** Cristinacce Distance to evaluate the eye detection accuracy. */
+    static std::vector<double>	CristinacceDEyes(const std::vector<cv::Rect>& detectedFaces,
+                                                 const std::vector<cv::Point2d>& leftEyeCenters,
+                                                 const std::vector<cv::Point2d>& rightEyeCenters );
 
+    /** DEyes - Refer to Cristinacce's paper  */
+    static std::vector<int>		DEyesEval(const std::vector<double>& dEyess,
+                                          unsigned int& dEyeWrong,
+                                          double mindEyes = 0.0,
+                                          double maxdEyes = 0.5,
+                                          unsigned int nb = 100 );
+
+    /** Cristinacce Distance to evaluate the eye detection accuracy. */
+    static std::vector<double>	MSEFaceComp(const std::vector<cv::Rect>& detectedFaceComp,
+                                            const std::vector<cv::Point2d>& faceCompCenters );
 	
 };
 

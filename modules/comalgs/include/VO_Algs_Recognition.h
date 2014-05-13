@@ -63,9 +63,9 @@
 #define __RECOGNITIONALGS_H__
 
 #include <cstring>
-#include "cv.h"
-#include "cvaux.h"
-#include "highgui.h"
+#include "opencv/cv.h"
+#include "opencv/cvaux.h"
+#include "opencv/highgui.h"
 #include "VO_CVCommon.h"
 #include "VO_AdditiveStrongerClassifier.h"
 #include "VO_Algs_FaceDetection.h"
@@ -76,8 +76,6 @@
 
 #define FOCAL_LENGTH 10000000000
 
-using namespace std;
-using namespace cv;
 
 
 /** 
@@ -98,81 +96,81 @@ public:
 
 	/** Global Texture Constraint using Probability image, basically an evaluation method for current fitting effect */
 	static bool					EvaluateFaceTrackedByProbabilityImage(	CTrackingAlgs* trackalg,
-																		const Mat& iImg,
+                                                                        const cv::Mat& iImg,
 																		const VO_Shape& iShape,
-																		Size smallSize = Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
-																		Size bigSize = Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE) );
+                                                                        cv::Size smallSize = cv::Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
+                                                                        cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE) );
 
 	/** An evaluation method for current fitting effect, basic on face components detection */
 	static bool					EvaluateFaceTrackedByCascadeDetection(	const CFaceDetectionAlgs* fd,
-																		const Mat& iImg,
+                                                                        const cv::Mat& iImg,
 																		const VO_Shape& iShape,
-																		const vector<VO_Shape2DInfo>& iShapeInfo, 
+                                                                        const std::vector<VO_Shape2DInfo>& iShapeInfo,
 																		const VO_FaceParts& iFaceParts);
 
 	/** Calculate shape distance */
 	static float				ShapeDistance(const VO_Shape& shape1, const VO_Shape& shape2);
 
 	/** Calculate fitting effect for static images */
-	static bool     			CalcFittingEffect4StaticImage(	const Mat_<float>& avgSParam,
-																const Mat_<float>& icovSParam,
-																const Mat_<float>& avgTParam,
-																const Mat_<float>& icovTParam,
-																const Mat_<float>& iSParams,
-																const Mat_<float>& iTParams,
-																const Scalar& ShapeDistMean,
-																const Scalar& ShapeDistStddev,
-																const Scalar& TextureDistMean,
-																const Scalar& TextureDistStddev,
+    static bool     			CalcFittingEffect4StaticImage(	const cv::Mat_<float>& avgSParam,
+                                                                const cv::Mat_<float>& icovSParam,
+                                                                const cv::Mat_<float>& avgTParam,
+                                                                const cv::Mat_<float>& icovTParam,
+                                                                const cv::Mat_<float>& iSParams,
+                                                                const cv::Mat_<float>& iTParams,
+                                                                const cv::Scalar& ShapeDistMean,
+                                                                const cv::Scalar& ShapeDistStddev,
+                                                                const cv::Scalar& TextureDistMean,
+                                                                const cv::Scalar& TextureDistStddev,
 																float& sDist,
 																float& tDist,
 																bool WeakFitting = true );
 
 	/** Calculate fitting effect for dynamic images sequence */
-    static bool     			CalcFittingEffect4ImageSequence(const Mat_<float>& avgSParam,
-																const Mat_<float>& icovSParam,
-																const Mat_<float>& avgTParam,
-																const Mat_<float>& icovTParam,
-																const Mat_<float>& iSParams,
-																const Mat_<float>& iTParams,
-																const Scalar& ShapeDistMean,
-																const Scalar& ShapeDistStddev,
-																const Scalar& TextureDistMean,
-																const Scalar& TextureDistStddev,
+    static bool     			CalcFittingEffect4ImageSequence(const cv::Mat_<float>& avgSParam,
+                                                                const cv::Mat_<float>& icovSParam,
+                                                                const cv::Mat_<float>& avgTParam,
+                                                                const cv::Mat_<float>& icovTParam,
+                                                                const cv::Mat_<float>& iSParams,
+                                                                const cv::Mat_<float>& iTParams,
+                                                                const cv::Scalar& ShapeDistMean,
+                                                                const cv::Scalar& ShapeDistStddev,
+                                                                const cv::Scalar& TextureDistMean,
+                                                                const cv::Scalar& TextureDistStddev,
 																bool WeakFitting = true );
 
 	/** Calculate face fitting effect */
     static void     			CalcShapeFittingEffect(	const VO_Shape& refShape,
 														const VO_Shape& fittedShape,
 														float& deviation,
-														vector<float>& ptErrorFreq,
+                                                        std::vector<float>& ptErrorFreq,
 														int nb = 20);
 
 	/** Save shape recognition results */
-    static void     			SaveShapeRecogResults(	const string& fd,
-														const string& fnIdx,
+    static void     			SaveShapeRecogResults(	const std::string& fd,
+                                                        const std::string& fnIdx,
 														float deviation,
-														vector<float>& ptErrorFreq);
+                                                        std::vector<float>& ptErrorFreq);
 
 	/** Calculate face absolute orientations */
-	static vector<float>		CalcAbsoluteOrientations(	const VO_Shape& iShape2D,
+    static std::vector<float>	CalcAbsoluteOrientations(	const VO_Shape& iShape2D,
 															const VO_Shape& iShape3D,
 															VO_Shape& oShape2D);
 
 	/** Recognize face roll angle */
-    static float				CalcFaceRoll(const vector<float>& iLine);
+    static float				CalcFaceRoll(const std::vector<float>& iLine);
 
 	/** Recognize face yaw angle */
-    static float				CalcFaceYaw(const vector<float>& iLine, const VO_Shape& iShape, const VO_FaceParts& iFaceParts);
+    static float				CalcFaceYaw(const std::vector<float>& iLine, const VO_Shape& iShape, const VO_FaceParts& iFaceParts);
 
 	/** Recognize face pitch angle */
     static float				CalcFacePitch(const VO_Shape& iShape, const VO_FaceParts& iFaceParts);
 
 	/** Recognize face angles using 2D model */
-    static void 				CalcFittedFaceAngle2D(vector<float>& angles, const VO_Shape& iShape, const VO_FaceParts& iFaceParts);
+    static void 				CalcFittedFaceAngle2D(std::vector<float>& angles, const VO_Shape& iShape, const VO_FaceParts& iFaceParts);
 
 	/** Recognize face angles using 3D model */
-    static void					CalcFittedFaceAngle3D(vector<float>& angles, const VO_Shape& iShape, const VO_FaceParts& iFaceParts);
+    static void					CalcFittedFaceAngle3D(std::vector<float>& angles, const VO_Shape& iShape, const VO_FaceParts& iFaceParts);
 
 };
 

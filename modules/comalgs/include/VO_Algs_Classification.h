@@ -70,8 +70,7 @@
 #include "VO_CVCommon.h"
 #include "VO_AdditiveStrongerClassifier.h"
 
-using namespace std;
-using namespace cv;
+
 
 
 /** 
@@ -114,15 +113,20 @@ public:
 	/** Destructor */
 	~CClassificationAlgs();
 
-	void						SetConfiguration(const string& trainedclassifier, unsigned int mtd);
+    /** set configuration for classifier */
+    void						SetConfiguration(const std::string& trainedclassifier, unsigned int mtd);
 
-	void						Training(const Mat_<float>& data, const Mat_<int>& categories);
+    /** Classifier training */
+    void						Training(const cv::Mat_<float>& data, const cv::Mat_<int>& categories);
 
-	int							Classification(	const Mat_<float>& sample);
+    /** Do classification */
+    int							Classification(	const cv::Mat_<float>& sample);
 	
-	void						Save(const string& fn) const;
+    /** save configuration */
+    void						Save(const std::string& fn) const;
 	
-	void						Load(const string& fn);
+    /** load configuration */
+    void						Load(const std::string& fn);
 	
 	/** Gets and sets */
 	unsigned int				GetClassificationMethod() const {return this->m_iClassificationMethod ;}

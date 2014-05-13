@@ -63,14 +63,12 @@
 #define __DETECTIONALGS_H__
 
 #include <cstring>
-#include "cv.h"
-#include "cvaux.h"
-#include "highgui.h"
+#include "opencv/cv.h"
+#include "opencv/cvaux.h"
+#include "opencv/highgui.h"
 #include "VO_CVCommon.h"
 #include "VO_AdditiveStrongerClassifier.h"
 
-using namespace std;
-using namespace cv;
 
 
 /** 
@@ -82,34 +80,35 @@ class CDetectionAlgs
 friend class CLocalizationAlgs;
 protected:
 	/** Detected face rectangles */
-	vector<Rect> 				m_vDetectedObjectRects;
+    std::vector<cv::Rect>   	m_vDetectedObjectRects;
 
 	/** Detection Method */
 	unsigned int				m_iDetectionMethod;
 	
 	/** Either load a cascade file for boosting, or a boostrap file for rtree */
-	string						m_sFile2BLoad;
+    std::string					m_sFile2BLoad;
 
 	/** bagging random forest classifier */
-	RTreeClassifier				m_rtreeClassifier;
+    cv::RTreeClassifier			m_rtreeClassifier;
 	
 	/** boosting cascade classifier */
-	CascadeClassifier			m_cascadeClassifier;
+    cv::CascadeClassifier		m_cascadeClassifier;
 
 	/** Whether .... is detected */
     bool                        m_bObjectDetected;
 
 	/** Initializationi */
-	void						init(const string& str, unsigned int mtd);
+    void						init(const std::string& str, unsigned int mtd);
 
 public:
 	/** Constructor */
-	CDetectionAlgs(const string& str="", unsigned int mtd=VO_AdditiveStrongerClassifier::BOOSTING);
+    CDetectionAlgs(const std::string& str="", unsigned int mtd=VO_AdditiveStrongerClassifier::BOOSTING);
 
 	/** Destructor */
 	~CDetectionAlgs();
 
-	void						SetConfiguration(const string& str, unsigned int mtd)
+    /** Set configuration for detection algorithm */
+    void						SetConfiguration(const std::string& str, unsigned int mtd)
 	{
 								this->m_iDetectionMethod		= mtd;
 								switch(this->m_iDetectionMethod)
@@ -127,45 +126,52 @@ public:
 									break;
 								}
 	}
-	void						SetBaggingRTree(const string& str)
+    /** Set bagging */
+    void						SetBaggingRTree(const std::string& str)
 	{
 								this->m_sFile2BLoad			= str;
 								this->m_rtreeClassifier.read( this->m_sFile2BLoad.c_str() );
 	}
-	void						SetBoostingCascade(const string& str)
+    /** Set boosting */
+    void						SetBoostingCascade(const std::string& str)
 	{
 								this->m_sFile2BLoad			= str;
 								this->m_cascadeClassifier.load( this->m_sFile2BLoad );
 	}
 
-	double						Detection(	const Mat& img,
-											const Rect* confinedArea,
+    /** Do Detection */
+    double						Detection(	const cv::Mat& img,
+                                            const cv::Rect* confinedArea,
 											const double scale = 1.0,
-											Size smallSize = Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
-											Size bigSize = Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE) );
-	static double				BaggingDetection( 	const RTreeClassifier& rtree,
-													const Mat& img,
-													const Rect* confinedArea,
-													vector<Rect>& objs,
+                                            cv::Size smallSize = cv::Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
+                                            cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE) );
+
+    /** Start Bagging Detection */
+    static double				BaggingDetection( 	const cv::RTreeClassifier& rtree,
+                                                    const cv::Mat& img,
+                                                    const cv::Rect* confinedArea,
+                                                    std::vector<cv::Rect>& objs,
 													const double scale = 1.0,
-													Size smallSize = Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
-													Size bigSize = Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE));
-	static double				BoostingDetection( 	const CascadeClassifier& cascade,
-													const Mat& img,
-													const Rect* confinedArea,
-													vector<Rect>& objs,
+                                                    cv::Size smallSize = cv::Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
+                                                    cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE));
+
+    /** Start Boosting Detection */
+    static double				BoostingDetection( 	const cv::CascadeClassifier& cascade,
+                                                    const cv::Mat& img,
+                                                    const cv::Rect* confinedArea,
+                                                    std::vector<cv::Rect>& objs,
 													const double scale = 1.0,
-													Size smallSize = Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
-													Size bigSize = Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE));
+                                                    cv::Size smallSize = cv::Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
+                                                    cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE));
 
 	/** Draw all detected objects on the image */
-	void                        VO_DrawDetection(Mat& ioImg, Scalar color = colors[6]);
+    void                        VO_DrawDetection(cv::Mat& ioImg, cv::Scalar color = colors[6]);
 
 	/** Is object detected? */
 	bool						IsObjectDetected() const {return this->m_bObjectDetected; }
 	
 	/** Return detected face parts rectangles */
-	vector<Rect> 				GetDetectedObjectRects() const { return this->m_vDetectedObjectRects; }
+    std::vector<cv::Rect> 		GetDetectedObjectRects() const { return this->m_vDetectedObjectRects; }
 };
 
 #endif	// __DETECTIONALGS_H__

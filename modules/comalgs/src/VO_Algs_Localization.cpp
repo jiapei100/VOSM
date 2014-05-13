@@ -59,13 +59,12 @@
 * Modify Date:      2014-04-17                                                                      *
 ****************************************************************************************************/
 
-#include "VO_Algs_Localization.h"
+#include "VO_Algs_Locating.h"
 
-using namespace cv;
 
 
 /** Initialization */
-void CLocalizationAlgs::init(const string& str, unsigned int detectionMtd, unsigned int trackingMtd)
+void CLocatingAlgs::init(const std::string& str, unsigned int detectionMtd, unsigned int trackingMtd)
 {
 	this->m_detectionAlgs.SetConfiguration(str, detectionMtd);
 	this->m_trackingAlgs.SetConfiguration(trackingMtd);
@@ -73,14 +72,14 @@ void CLocalizationAlgs::init(const string& str, unsigned int detectionMtd, unsig
 }
 	
 	
-/** CLocalizationAlgs constructor */
-CLocalizationAlgs::CLocalizationAlgs(const string& str, unsigned int detectionMtd, unsigned int trackingMtd)
+/** CLocatingAlgs constructor */
+CLocatingAlgs::CLocatingAlgs(const std::string& str, unsigned int detectionMtd, unsigned int trackingMtd)
 {
 	init(str, detectionMtd, trackingMtd);
 }
 
-/** CLocalizationAlgs destructor */
-CLocalizationAlgs::~CLocalizationAlgs()
+/** CLocatingAlgs destructor */
+CLocatingAlgs::~CLocatingAlgs()
 {
 
 }
@@ -88,22 +87,22 @@ CLocalizationAlgs::~CLocalizationAlgs()
 /** 
  * @author     	JIA Pei
  * @version    	2009-10-04
- * @brief      	Object Localization
+ * @brief      	Object Locating
  * @param      	img     		Input - image to be searched within
  * @param		objPos			Output - localized objects' positions
  * @return		localization time cost
 */
-double CLocalizationAlgs::Localization(	const Mat& img,
-										Size smallSize,
-										Size bigSize)
+double CLocatingAlgs::Locating(	const cv::Mat& img,
+                                cv::Size smallSize,
+                                cv::Size bigSize)
 {
-	return ( CLocalizationAlgs::Localization(	img,
-												this->m_detectionAlgs,
-												this->m_trackingAlgs,
-												this->m_bObjectLocalized,
-												this->m_CVLocalizedObjectRect,
-												smallSize,
-												bigSize) );
+    return ( CLocatingAlgs::Locating(   img,
+                                        this->m_detectionAlgs,
+                                        this->m_trackingAlgs,
+                                        this->m_bObjectLocalized,
+                                        this->m_CVLocalizedObjectRect,
+                                        smallSize,
+                                        bigSize) );
 }
 
 
@@ -122,19 +121,19 @@ double CLocalizationAlgs::Localization(	const Mat& img,
  * @param		bigSize			Input - detected object should be smaller than bigSize
  * @return		localization time cost
 */
-double CLocalizationAlgs::Localization(	const Mat& img,
-										CDetectionAlgs& detectAlg,
-										CTrackingAlgs& trackAlg,
-										bool& isLocalized,
-										Rect& objPos,
-										const Size& smallSize,
-										const Size& bigSize)
+double CLocatingAlgs::Locating(	const cv::Mat& img,
+                                CDetectionAlgs& detectAlg,
+                                CTrackingAlgs& trackAlg,
+                                bool& isLocalized,
+                                cv::Rect& objPos,
+                                const cv::Size& smallSize,
+                                const cv::Size& bigSize)
 {
 	double res = (double)cvGetTickCount();
 	double scale = 1.0;
 
 	// only detection is used
-	if ( trackAlg.m_iTrackingMethod == CTrackingAlgs::NONE )
+    if ( trackAlg.GetTrackingMethod() == CTrackingAlgs::NONE )
 	{
 		detectAlg.Detection(img,
 							NULL,
@@ -181,10 +180,15 @@ double CLocalizationAlgs::Localization(	const Mat& img,
 }
 
 
-void CLocalizationAlgs::VO_DrawLocalization(Mat& ioImg, Scalar color)
+/**
+ * @brief Draw a rectangle which locates the conerned object
+ * @param ioImg
+ * @param color
+ */
+void CLocatingAlgs::VO_DrawLocating(cv::Mat& ioImg, cv::Scalar color)
 {
-	Rect curRect;
-	Point lefttop, rightbottom;
+    cv::Rect curRect;
+    cv::Point lefttop, rightbottom;
 
     if ( this->m_bObjectLocalized )
     {
