@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -458,7 +458,7 @@ void VO_AAMInverseIA::VO_CalcInverseHessian()
     // HessianMatrix to zeros
     cv::Mat_<float> HessianMatrix = cv::Mat_<float>::zeros ( this->m_iNbOfShapeEigens+4, this->m_iNbOfShapeEigens+4);
 
-    cv::gemm(this->m_MatModifiedSteepestDescentImages, this->m_MatModifiedSteepestDescentImages, 1, cv::Mat(), 0, HessianMatrix, GEMM_1_T);
+    cv::gemm(this->m_MatModifiedSteepestDescentImages, this->m_MatModifiedSteepestDescentImages, 1, cv::Mat(), 0, HessianMatrix, cv::GEMM_1_T);
 
     cv::invert( HessianMatrix, this->m_MatHessianMatrixInverse, CV_SVD );
 }
@@ -472,7 +472,7 @@ void VO_AAMInverseIA::VO_CalcInverseHessian()
 */
 void VO_AAMInverseIA::VO_CalcICIAPreMatrix()
 {
-    cv::gemm(this->m_MatHessianMatrixInverse, this->m_MatModifiedSteepestDescentImages, 1, cv::Mat(), 0, this->m_MatICIAPreMatrix, GEMM_2_T);
+    cv::gemm(this->m_MatHessianMatrixInverse, this->m_MatModifiedSteepestDescentImages, 1, cv::Mat(), 0, this->m_MatICIAPreMatrix, cv::GEMM_2_T);
 }
 
 
@@ -553,49 +553,49 @@ void VO_AAMInverseIA::VO_Save(const std::string& fd)
 
     // m_MatSimilarityTransform
     tempfn = fn + "/m_MatSimilarityTransform" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_MatSimilarityTransform" << std::endl;
     fp << this->m_MatSimilarityTransform;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages4ShapeModel
     tempfn = fn + "/m_MatSteepestDescentImages4ShapeModel" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_MatSteepestDescentImages4ShapeModel" << std::endl;
     fp << this->m_MatSteepestDescentImages4ShapeModel;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages4GlobalShapeNormalization
     tempfn = fn + "/m_MatSteepestDescentImages4GlobalShapeNormalization" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_MatSteepestDescentImages4GlobalShapeNormalization" << std::endl;
     fp << this->m_MatSteepestDescentImages4GlobalShapeNormalization;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages
     tempfn = fn + "/m_MatSteepestDescentImages" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_MatSteepestDescentImages" << std::endl;
     fp << this->m_MatSteepestDescentImages;
     fp.close();fp.clear();
 
     // m_MatModifiedSteepestDescentImages
     tempfn = fn + "/m_MatModifiedSteepestDescentImages" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_MatModifiedSteepestDescentImages" << std::endl;
     fp << this->m_MatModifiedSteepestDescentImages;
     fp.close();fp.clear();
 
     // m_MatHessianMatrixInverse
     tempfn = fn + "/m_MatHessianMatrixInverse" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_MatHessianMatrixInverse" << std::endl;
     fp << this->m_MatHessianMatrixInverse;
     fp.close();fp.clear();
 
     // m_MatICIAPreMatrix
     tempfn = fn + "/m_MatICIAPreMatrix" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_MatICIAPreMatrix" << std::endl;
     fp << this->m_MatICIAPreMatrix;
     fp.close();fp.clear();
@@ -616,7 +616,7 @@ void VO_AAMInverseIA ::VO_Load(const std::string& fd)
     std::string fn = fd+"/AAMICIA";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "AAMICIA subfolder is not existing. " << endl;
+        std::cout << "AAMICIA subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -626,54 +626,54 @@ void VO_AAMInverseIA ::VO_Load(const std::string& fd)
 
     //// AAMICIA
     //tempfn = fn + "/AAMICIA" + ".txt";
-    //fp.open(tempfn.c_str (), ios::in);
+    //fp.open(tempfn.c_str (), std::ios::in);
     //fp.close();fp.clear();
 
     // m_MatSimilarityTransform
     tempfn = fn + "/m_MatSimilarityTransform" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatSimilarityTransform
     fp >> this->m_MatSimilarityTransform;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages4ShapeModel
     tempfn = fn + "/m_MatSteepestDescentImages4ShapeModel" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatSteepestDescentImages4ShapeModel
     fp >> this->m_MatSteepestDescentImages4ShapeModel;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages4GlobalShapeNormalization
     tempfn = fn + "/m_MatSteepestDescentImages4GlobalShapeNormalization" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatSteepestDescentImages4GlobalShapeNormalization
     fp >> this->m_MatSteepestDescentImages4GlobalShapeNormalization;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages
     tempfn = fn + "/m_MatSteepestDescentImages" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatSteepestDescentImages
     fp >> this->m_MatSteepestDescentImages;
     fp.close();fp.clear();
 
     // m_MatModifiedSteepestDescentImages
     tempfn = fn + "/m_MatModifiedSteepestDescentImages" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatModifiedSteepestDescentImages
     fp >> this->m_MatModifiedSteepestDescentImages;
     fp.close();fp.clear();
 
     // m_MatHessianMatrixInverse
     tempfn = fn + "/m_MatHessianMatrixInverse" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatHessianMatrixInverse
     fp >> this->m_MatHessianMatrixInverse;
     fp.close();fp.clear();
 
     // m_MatICIAPreMatrix
     tempfn = fn + "/m_MatICIAPreMatrix" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatICIAPreMatrix
     fp >> this->m_MatICIAPreMatrix;
     fp.close();fp.clear();
@@ -694,7 +694,7 @@ void VO_AAMInverseIA ::VO_LoadParameters4Fitting(const std::string& fd)
     std::string fn = fd+"/AAMICIA";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "AAMICIA subfolder is not existing. " << endl;
+        std::cout << "AAMICIA subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -705,7 +705,7 @@ void VO_AAMInverseIA ::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatICIAPreMatrix
     this->m_MatICIAPreMatrix = cv::Mat_<float>::zeros(this->m_iNbOfShapeEigens+4, this->m_iNbOfTextures);
     tempfn = fn + "/m_MatICIAPreMatrix" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatICIAPreMatrix
     fp >> this->m_MatICIAPreMatrix;
     fp.close();fp.clear();
@@ -713,7 +713,7 @@ void VO_AAMInverseIA ::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatSimilarityTransform
     this->m_MatSimilarityTransform = cv::Mat_<float>::zeros(4, this->m_iNbOfShapes);
     tempfn = fn + "/m_MatSimilarityTransform" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;			// m_MatSimilarityTransform
     fp >> this->m_MatSimilarityTransform;
     fp.close();fp.clear();

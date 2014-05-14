@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -114,7 +114,7 @@ void VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(	std::vector<unsigned int>&
 	/////////////////////////////////////////////////////////////////////////////////
 	if(NbOfProfileInLevel0%2 == 0)
 	{
-		cerr << "Number of Profiles in level 0 must be an odd " << endl;
+        std::cerr << "Number of Profiles in level 0 must be an odd " << std::endl;
 		exit(1);
 	}
 	/////////////////////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ void VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(	std::vector<unsigned int>&
 		{
 			if( (NbOfProfileInLevel0 - (NbOfLevels-1)*2) <= 0 )
 			{
-				cerr << "Too many multi scale levels. DESCENDING. VO_ASMNDProfiles. " << endl;
+                std::cerr << "Too many multi scale levels. DESCENDING. VO_ASMNDProfiles. " << std::endl;
 				exit(1);
 			}
 			for(unsigned int i = 1; i < NbOfLevels; i++)
@@ -140,12 +140,12 @@ void VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(	std::vector<unsigned int>&
 		{
 			if( ( (float)(NbOfProfileInLevel0 - 1) / ( pow( 2.0f, (float)(NbOfLevels) ) ) ) < 2.0 )
 			{
-				cerr << "Too many multi scale levels. PYRAMID. VO_ASMNDProfiles. " << endl;
+                std::cerr << "Too many multi scale levels. PYRAMID. VO_ASMNDProfiles. " << std::endl;
 				exit(1);
 			}
 			if( ( (NbOfProfileInLevel0 - 1) / (unsigned int) ( pow( 2.0f, (float)(NbOfLevels) ) ) ) % 2 != 0 )
 			{
-				cerr << "Multi scale levels are not suitable for PYRAMID. " << endl;
+                std::cerr << "Multi scale levels are not suitable for PYRAMID. " << std::endl;
 				exit(1);
 			}
 			for(unsigned int i = 1; i < NbOfLevels; i++)
@@ -184,7 +184,7 @@ void VO_ASMNDProfiles::VO_LoadProfileTrainingData ()
 
     for( unsigned int i = 0; i < this->m_iNbOfSamples; ++i )
     {
-			img = imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
+        img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
 
 		sampleScale = this->m_vShapes[i].GetCentralizedShapeSize();
 
@@ -194,7 +194,7 @@ void VO_ASMNDProfiles::VO_LoadProfileTrainingData ()
 			scale = refScale/sampleScale/PyrScale;
 
             resizedShape = this->m_vShapes[i]*scale;
-            cv::resize(img, resizedImg, Size( (int)(img.cols*scale), (int)(img.rows*scale) ) );
+            cv::resize(img, resizedImg, cv::Size( (int)(img.cols*scale), (int)(img.rows*scale) ) );
 
 // static std::stringstream ss;
 // static std::string ssi;
@@ -256,7 +256,7 @@ void VO_ASMNDProfiles::VO_CalcStatistics4AllProfiles()
 				// Actually Covariance cv::Matrix is semi-positive definite. But I am not sure
 				// whether it is invertible or not!!!
 				// In my opinion it is un-invert, since C = X.t() * X!!!
-				cv::invert(Covar, this->m_vvvCVMInverseOfSg[i][j][k], DECOMP_SVD);
+                cv::invert(Covar, this->m_vvvCVMInverseOfSg[i][j][k], cv::DECOMP_SVD);
             }
         }
     }
@@ -293,10 +293,10 @@ void VO_ASMNDProfiles::VO_BuildASMNDProfiles ( const std::vector<std::string>& a
 												bool useKnownTriangles )
 {
 	if (allLandmarkFiles4Training.size() != allImgFiles4Training.size() )
-		cerr << "allLandmarkFiles4Training should have the same number of allImgFiles4Training! " << endl;
+        std::cerr << "allLandmarkFiles4Training should have the same number of allImgFiles4Training! " << std::endl;
 		
 	if(profdim != 1 && profdim != 2 && profdim != 4 )
-		cerr << "m_iNbOfProfileDim should only be 1, 2, or 4! " << endl;
+        std::cerr << "m_iNbOfProfileDim should only be 1, 2, or 4! " << std::endl;
 		
 	this->VO_BuildShapeModel(allLandmarkFiles4Training, shapeinfoFileName, database, TPShape, useKnownTriangles);
 	this->m_iNbOfChannels						= channels;
@@ -356,31 +356,31 @@ void VO_ASMNDProfiles::VO_Save ( const std::string& fd )
 
     // ASMNDProfiles
     tempfn = fn + "/ASMNDProfiles" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_iNbOfProfileDim" << endl << this->m_iNbOfProfileDim << endl;
-    fp << "m_iNbOfProfilesPerPixelAtLevels[0]" << endl << this->m_iNbOfProfilesPerPixelAtLevels[0] << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_iNbOfProfileDim" << std::endl << this->m_iNbOfProfileDim << std::endl;
+    fp << "m_iNbOfProfilesPerPixelAtLevels[0]" << std::endl << this->m_iNbOfProfilesPerPixelAtLevels[0] << std::endl;
     fp.close();fp.clear();
 
     // m_vvMeanNormalizedProfile
     tempfn = fn + "/m_vvMeanNormalizedProfile" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_vvMeanNormalizedProfile" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_vvMeanNormalizedProfile" << std::endl;
 	// fp << this->m_vvMeanNormalizedProfile;
 	// You can output everything by the above line, but you won't have level and node description in the output file.
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
     {
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			fp << "level " << i << " node " << j << endl;
-			fp << this->m_vvMeanNormalizedProfile[i][j] << endl;
+            fp << "level " << i << " node " << j << std::endl;
+            fp << this->m_vvMeanNormalizedProfile[i][j] << std::endl;
         }
     }
     fp.close();fp.clear();
 
     // m_vvvCVMInverseOfSg
     tempfn = fn + "/m_vvvCVMInverseOfSg" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_vvvCVMInverseOfSg" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_vvvCVMInverseOfSg" << std::endl;
 	//fp << this->m_vvvCVMInverseOfSg;
 	// You can output everything by the above line, but you won't have level and node description in the output file.
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
@@ -389,8 +389,8 @@ void VO_ASMNDProfiles::VO_Save ( const std::string& fd )
         {
 			for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
 			{
-				fp << "level " << i << " node " << j << " dim " << k << endl;
-				fp << this->m_vvvCVMInverseOfSg[i][j][k] << endl;
+                fp << "level " << i << " node " << j << " dim " << k << std::endl;
+                fp << this->m_vvvCVMInverseOfSg[i][j][k] << std::endl;
 			}
         }
     }
@@ -405,7 +405,7 @@ void VO_ASMNDProfiles::VO_Load ( const std::string& fd )
     std::string fn = fd+"/ASMNDProfiles";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "ASMNDProfiles subfolder is not existing. " << endl;
+        std::cout << "ASMNDProfiles subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -415,7 +415,7 @@ void VO_ASMNDProfiles::VO_Load ( const std::string& fd )
 
     // ASMNDProfiles
     tempfn = fn + "/ASMNDProfiles" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp >> this->m_iNbOfProfileDim;						// m_iNbOfProfileDim
 	this->m_iNbOfProfilesPerPixelAtLevels.resize(this->m_iNbOfPyramidLevels);
     fp >> temp >> this->m_iNbOfProfilesPerPixelAtLevels[0];		// m_iNbOfProfilesPerPixelAtLevels[0]
@@ -424,7 +424,7 @@ void VO_ASMNDProfiles::VO_Load ( const std::string& fd )
 
     // m_vvMeanNormalizedProfile
     tempfn = fn + "/m_vvMeanNormalizedProfile" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     this->m_vvMeanNormalizedProfile.resize(this->m_iNbOfPyramidLevels);
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
@@ -439,7 +439,7 @@ void VO_ASMNDProfiles::VO_Load ( const std::string& fd )
 
     // m_vvvCVMInverseOfSg
     tempfn = fn + "/m_vvvCVMInverseOfSg" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     this->m_vvvCVMInverseOfSg.resize(this->m_iNbOfPyramidLevels);
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
@@ -465,7 +465,7 @@ void VO_ASMNDProfiles::VO_LoadParameters4Fitting ( const std::string& fd )
     std::string fn = fd+"/ASMNDProfiles";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "ASMNDProfiles subfolder is not existing. " << endl;
+        std::cout << "ASMNDProfiles subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -475,7 +475,7 @@ void VO_ASMNDProfiles::VO_LoadParameters4Fitting ( const std::string& fd )
 
     // ASMNDProfiles
     tempfn = fn + "/ASMNDProfiles" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp >> this->m_iNbOfProfileDim;						// m_iNbOfProfileDim
 	this->m_iNbOfProfilesPerPixelAtLevels.resize(this->m_iNbOfPyramidLevels);
     fp >> temp >> this->m_iNbOfProfilesPerPixelAtLevels[0];		// m_iNbOfProfilesPerPixelAtLevels[0]
@@ -484,7 +484,7 @@ void VO_ASMNDProfiles::VO_LoadParameters4Fitting ( const std::string& fd )
 
     // m_vvMeanNormalizedProfile
     tempfn = fn + "/m_vvMeanNormalizedProfile" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     getline(fp, temp);
     this->m_vvMeanNormalizedProfile.resize(this->m_iNbOfPyramidLevels);
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
@@ -508,7 +508,7 @@ void VO_ASMNDProfiles::VO_LoadParameters4Fitting ( const std::string& fd )
 
     // m_vvvCVMInverseOfSg
     tempfn = fn + "/m_vvvCVMInverseOfSg" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     getline(fp, temp);
     this->m_vvvCVMInverseOfSg.resize(this->m_iNbOfPyramidLevels);
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)

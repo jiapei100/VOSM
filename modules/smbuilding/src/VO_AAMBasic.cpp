@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -174,7 +174,7 @@ void VO_AAMBasic::VO_DoCParamExperiments()
 		else if (this->m_iNbOfChannels == 3)
             img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 1 );
 		else
-			cerr << "We can't deal with image channels not equal to 1 or 3!" << endl;
+            std::cerr << "We can't deal with image channels not equal to 1 or 3!" << std::endl;
 
 		if(recordIntermediateImgs)
 		{
@@ -266,7 +266,7 @@ void VO_AAMBasic::VO_DoCParamExperiments()
 
                 nExperiment++;
             }
-            //cout << "Experiment" << nExperiment << "of" << X->cols << "done (c)..." << endl;
+            //cout << "Experiment" << nExperiment << "of" << X->cols << "done (c)..." << std::endl;
         }
 
         //////////////////////////////////////////////////////////////////////////
@@ -285,27 +285,27 @@ void VO_AAMBasic::VO_DoCParamExperiments()
         boost::filesystem::create_directory( folderstrC );
 
         fstream fp;
-        fp.open(folderfilestrX.c_str (), ios::out);
-        fp << this->m_vimgFiles[i].substr (14,5) << "-X" << endl;
+        fp.open(folderfilestrX.c_str (), std::ios::out);
+        fp << this->m_vimgFiles[i].substr (14,5) << "-X" << std::endl;
         for (unsigned int m = 0; m < X->rows; m++)
         {
 			for (unsigned int n = 0; n < X->cols; n++)
 			{			
 				fp << X(m, n) << " ";
 			}
-			fp << endl;
+            fp << std::endl;
         }
         fp.close();fp.clear();
 
-        fp.open(folderfilestrC.c_str (), ios::out);
-        fp << this->m_vimgFiles[i].substr (14,5) << "-C" << endl;
+        fp.open(folderfilestrC.c_str (), std::ios::out);
+        fp << this->m_vimgFiles[i].substr (14,5) << "-C" << std::endl;
         for (unsigned int m = 0; m < C->rows; m++)
         {
 			for (unsigned int n = 0; n < C->cols; n++)
 			{			
 				fp << C(m, n) << " ";
 			}
-			fp << endl;
+            fp << std::endl;
         }
         fp.close();fp.clear();
 		*/
@@ -443,7 +443,7 @@ void VO_AAMBasic::VO_DoPoseExperiments()
 
                 ++nExperiment;
             }
-            //cout << "Experiment" << nExperiment << "of" << X->cols << "done (pose)..." << endl;
+            //cout << "Experiment" << nExperiment << "of" << X->cols << "done (pose)..." << std::endl;
         }
 
         //////////////////////////////////////////////////////////////////////////
@@ -462,27 +462,27 @@ void VO_AAMBasic::VO_DoPoseExperiments()
         boost::filesystem::create_directory( folderstrC );
 
         fstream fp;
-        fp.open(folderfilestrX.c_str (), ios::out);
-        fp << this->m_vimgFiles[i].substr (14,5) << "-X" << endl;
+        fp.open(folderfilestrX.c_str (), std::ios::out);
+        fp << this->m_vimgFiles[i].substr (14,5) << "-X" << std::endl;
         for (unsigned int m = 0; m < X->rows; m++)
         {
 			for (unsigned int n = 0; n < X->cols; n++)
 			{			
 				fp << X(m, n) << " ";
 			}
-			fp << endl;
+            fp << std::endl;
         }
         fp.close();fp.clear();
 
-        fp.open(folderfilestrC.c_str (), ios::out);
-        fp << this->m_vimgFiles[i].substr (14,5) << "-C" << endl;
+        fp.open(folderfilestrC.c_str (), std::ios::out);
+        fp << this->m_vimgFiles[i].substr (14,5) << "-C" << std::endl;
         for (unsigned int m = 0; m < C->rows; m++)
         {
 			for (unsigned int n = 0; n < C->cols; n++)
 			{			
 				fp << C(m, n) << " ";
 			}
-			fp << endl;
+            fp << std::endl;
         }
         fp.close();fp.clear();
 		*/
@@ -626,7 +626,7 @@ void VO_AAMBasic::VO_EstCParamGradientMatrix(cv::Mat_<float>& oCParamGM)
 
 //	VO_Texture tempTexture;
 //	cv::Mat oImg(tempImage1);
-//	cout << this->m_VOReferenceShape << endl;
+//	cout << this->m_VOReferenceShape << std::endl;
 //	cv::imwrite("template.jpg", this->m_ImageTemplateFace);
 //	VO_TextureModel::VO_LoadOneTextureFromShape(this->m_VOReferenceShape, this->m_ImageTemplateFace, this->m_vTemplateTriangle2D, this->m_vTemplatePointWarpInfo, tempTexture);
 //	VO_TextureModel::VO_PutOneTextureToTemplateShape(tempTexture, this->m_vTemplateTriangle2D, oImg);
@@ -904,8 +904,8 @@ void VO_AAMBasic::VO_ShapeTexture2Appearance( VO_Shape iShape, VO_Texture iTextu
 	cv::Mat_<float> b_t = this->m_PCANormalizedTexture.project(iTexture.GetTheTextureInARow());	// 1*80259->1*36
 	app = cv::Mat_<float>::zeros(1, b_s.cols + b_t.cols);
 	
-	cv::Mat_<float> roib_s 	= app(Range(0, 1), Range(0, b_s.cols) );
-	cv::Mat_<float> roib_t 	= app(Range(0, 1), Range(b_s.cols, b_s.cols + b_t.cols) );
+    cv::Mat_<float> roib_s 	= app(cv::Range(0, 1), cv::Range(0, b_s.cols) );
+    cv::Mat_<float> roib_t 	= app(cv::Range(0, 1), cv::Range(b_s.cols, b_s.cols + b_t.cols) );
 	b_s.copyTo(roib_s);
 	b_t.copyTo(roib_t);
 }
@@ -938,8 +938,8 @@ void VO_AAMBasic::VO_SParamTParamProjectToCParam(const cv::Mat_<float>& inS, con
 {
 	cv::Mat_<float> tempConcatenated = cv::Mat_<float>::zeros(1, this->m_iNbOfShapeEigens + this->m_iNbOfTextureEigens);
 
-	cv::Mat_<float> tempShape = tempConcatenated( Range(0,1), Range(0, this->m_iNbOfShapeEigens) );
-	cv::Mat_<float> tempTexture = tempConcatenated( Range(0,1), Range(this->m_iNbOfShapeEigens, this->m_iNbOfAppearance) );
+    cv::Mat_<float> tempShape = tempConcatenated( cv::Range(0,1), cv::Range(0, this->m_iNbOfShapeEigens) );
+    cv::Mat_<float> tempTexture = tempConcatenated( cv::Range(0,1), cv::Range(this->m_iNbOfShapeEigens, this->m_iNbOfAppearance) );
 	inS.copyTo(tempShape);
     tempShape *= this->m_MatWeightsScaleShape2Texture;
 	inT.copyTo(tempTexture);
@@ -974,8 +974,8 @@ void VO_AAMBasic::VO_CParamBackProjectToSParamTParam(const cv::Mat_<float>& inC,
 {
     cv::Mat_<float> tempConcatenated = this->m_PCAAppearance.backProject(inC);
 
-	outS = tempConcatenated( Range(0,1), Range(0, this->m_iNbOfShapeEigens) );
-	outT = tempConcatenated( Range(0,1), Range(this->m_iNbOfShapeEigens, this->m_iNbOfAppearance) );
+    outS = tempConcatenated( cv::Range(0,1), cv::Range(0, this->m_iNbOfShapeEigens) );
+    outT = tempConcatenated( cv::Range(0,1), cv::Range(this->m_iNbOfShapeEigens, this->m_iNbOfAppearance) );
     outS *= this->m_MatWeightsScaleShape2Texture.inv();
 }
 
@@ -1225,8 +1225,8 @@ void VO_AAMBasic::VO_BuildAppearanceModel(	const std::vector<std::string>& allLa
     cv::Mat_<float> matConcatenated 				= cv::Mat_<float>::zeros( this->m_iNbOfSamples, this->m_iNbOfAppearance);
 	cv::Mat_<float> matMeanConcatenated				= cv::Mat_<float>::zeros(1, this->m_iNbOfAppearance);		// Obviously, matMeanConcatenated should be all zeros
 
-	cv::Mat roiShape 	= matConcatenated(Range(0, this->m_iNbOfSamples), Range(0, this->m_iNbOfShapeEigens) );
-	cv::Mat roiTexture 	= matConcatenated(Range(0, this->m_iNbOfSamples), Range(this->m_iNbOfShapeEigens, this->m_iNbOfAppearance) );
+    cv::Mat roiShape 	= matConcatenated(cv::Range(0, this->m_iNbOfSamples), cv::Range(0, this->m_iNbOfShapeEigens) );
+    cv::Mat roiTexture 	= matConcatenated(cv::Range(0, this->m_iNbOfSamples), cv::Range(this->m_iNbOfShapeEigens, this->m_iNbOfAppearance) );
 	WeightedAlignedShapesProject2Truncated.copyTo(roiShape);
 	NormalizedTexturesProject2Truncated.copyTo(roiTexture);
 
@@ -1253,10 +1253,10 @@ void VO_AAMBasic::VO_BuildAppearanceModel(	const std::vector<std::string>& allLa
     this->m_MatAppearanceProject2Truncated = this->m_PCAAppearance.project(matConcatenated);
 
     // extract the shape part of the combined eigen std::vectors
-    this->m_MatPcs = this->m_PCAAppearance.eigenvectors (Range(0, this->m_iNbOfAppearanceEigens), Range(0, this->m_iNbOfShapeEigens));
+    this->m_MatPcs = this->m_PCAAppearance.eigenvectors (cv::Range(0, this->m_iNbOfAppearanceEigens), cv::Range(0, this->m_iNbOfShapeEigens));
 
     // extract the texture part of the combined eigen std::vectors
-    this->m_MatPcg = this->m_PCAAppearance.eigenvectors (Range(0, this->m_iNbOfAppearanceEigens), Range(this->m_iNbOfShapeEigens, this->m_iNbOfAppearance));
+    this->m_MatPcg = this->m_PCAAppearance.eigenvectors (cv::Range(0, this->m_iNbOfAppearanceEigens), cv::Range(this->m_iNbOfShapeEigens, this->m_iNbOfAppearance));
 
     // calculate m_MatQs = m_PCAAlignedShape.eigenvectors * m_MatWeightsScaleShape2Texture^{-1} * m_MatPcs
     this->m_MatQs = this->m_PCAAlignedShape.eigenvectors.t() * this->m_MatWeightsScaleShape2Texture.inv() * this->m_MatPcs.t();
@@ -1286,101 +1286,101 @@ void VO_AAMBasic::VO_Save(const std::string& fd)
     if (!boost::filesystem::is_directory(fn) )
         boost::filesystem::create_directory( fn );
 
-    fstream fp;
+    std::fstream fp;
     std::string tempfn;
 
     // AppearanceModel
     tempfn = fn + "/AppearanceModel" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
 
-    fp << "m_iNbOfAppearance" << endl << this->m_iNbOfAppearance << endl;							// m_iNbOfAppearance
-    fp << "m_iNbOfEigenAppearanceAtMost" << endl << this->m_iNbOfEigenAppearanceAtMost << endl;		// m_iNbOfEigenAppearanceAtMost
-	fp << "m_iNbOfAppearanceEigens" << endl << this->m_iNbOfAppearanceEigens << endl;				// m_iNbOfAppearanceEigens
-    fp << "m_fTruncatedPercent_Appearance" << endl << this->m_fTruncatedPercent_Appearance << endl;	// m_fTruncatedPercent_Appearance
+    fp << "m_iNbOfAppearance" << std::endl << this->m_iNbOfAppearance << std::endl;                             // m_iNbOfAppearance
+    fp << "m_iNbOfEigenAppearanceAtMost" << std::endl << this->m_iNbOfEigenAppearanceAtMost << std::endl;		// m_iNbOfEigenAppearanceAtMost
+    fp << "m_iNbOfAppearanceEigens" << std::endl << this->m_iNbOfAppearanceEigens << std::endl;                 // m_iNbOfAppearanceEigens
+    fp << "m_fTruncatedPercent_Appearance" << std::endl << this->m_fTruncatedPercent_Appearance << std::endl;	// m_fTruncatedPercent_Appearance
 
     fp.close();fp.clear();
 
     // m_MatWeightsScaleShape2Texture
     tempfn = fn + "/m_MatWeightsScaleShape2Texture" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatWeightsScaleShape2Texture" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatWeightsScaleShape2Texture" << std::endl;
     fp << this->m_MatWeightsScaleShape2Texture;
     fp.close();fp.clear();
 	
 	// m_PCAAppearanceMean
     tempfn = fn + "/m_PCAAppearanceMean" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_PCAAppearanceMean" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_PCAAppearanceMean" << std::endl;
     fp << cv::Mat_<float>(this->m_PCAAppearance.mean);
     fp.close();fp.clear();
 
     // m_PCAAppearanceEigenValues
     tempfn = fn + "/m_PCAAppearanceEigenValues" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_PCAAppearanceEigenValues" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_PCAAppearanceEigenValues" << std::endl;
     fp << cv::Mat_<float>(this->m_PCAAppearance.eigenvalues);
     fp.close();fp.clear();
 
     // m_PCAAppearanceEigenVectors
     tempfn = fn + "/m_PCAAppearanceEigenVectors" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_PCAAppearanceEigenVectors" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_PCAAppearanceEigenVectors" << std::endl;
     fp << cv::Mat_<float>(this->m_PCAAppearance.eigenvectors);
     fp.close();fp.clear();
 
     // m_MatPcs
     tempfn = fn + "/m_MatPcs" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatPcs" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatPcs" << std::endl;
     fp << this->m_MatPcs;
     fp.close();fp.clear();
 
     // m_MatPcg
     tempfn = fn + "/m_MatPcg" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatPcg" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatPcg" << std::endl;
     fp << this->m_MatPcg;
     fp.close();fp.clear();
 
     // m_MatQs
     tempfn = fn + "/m_MatQs" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatQs" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatQs" << std::endl;
     fp << this->m_MatQs;
     fp.close();fp.clear();
 
     // m_MatQg
     tempfn = fn + "/m_MatQg" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatQg" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatQg" << std::endl;
     fp << this->m_MatQg;
     fp.close();fp.clear();
 
     // m_MatRc
     tempfn = fn + "/m_MatRc" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatRc" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatRc" << std::endl;
     fp << this->m_MatRc;
     fp.close();fp.clear();
 
     // m_MatRt
     tempfn = fn + "/m_MatRt" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatRt" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatRt" << std::endl;
     fp << this->m_MatRt;
     fp.close();fp.clear();
 
     // m_MatCParamGradientMatrix
     tempfn = fn + "/m_MatCParamGradientMatrix" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatCParamGradientMatrix" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatCParamGradientMatrix" << std::endl;
     fp << this->m_MatCParamGradientMatrix;
     fp.close();fp.clear();
 
     // m_MatPoseGradientMatrix, we may ignore this first
     tempfn = fn + "/m_MatPoseGradientMatrix" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_MatPoseGradientMatrix" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_MatPoseGradientMatrix" << std::endl;
     fp << this->m_MatPoseGradientMatrix;
     fp.close();fp.clear();
 
@@ -1411,7 +1411,7 @@ void VO_AAMBasic ::VO_Load(const std::string& fd)
 //	
 //	// m_MatAppearanceProject2Truncated
 //	tempfn = fn + "/m_MatAppearanceProject2Truncated" + ".txt";
-//    fp.open(tempfn.c_str (), ios::in);
+//    fp.open(tempfn.c_str (), std::ios::in);
 //    fp >> temp;
 //    fp >> this->m_MatAppearanceProject2Truncated;
 //    fp.close();fp.clear();
@@ -1447,7 +1447,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
 
     // AppearanceModel
     tempfn = fn + "/AppearanceModel" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
 
     fp >> temp >> this->m_iNbOfAppearance;
     fp >> temp >> this->m_iNbOfEigenAppearanceAtMost;
@@ -1460,7 +1460,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_PCAAppearanceMean
 	this->m_PCAAppearance.mean = cv::Mat_<float>::zeros(1, this->m_iNbOfAppearance);
     tempfn = fn + "/m_PCAAppearanceMean" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_PCAAppearance.mean;
     fp.close();fp.clear();
@@ -1468,7 +1468,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
 	// m_PCAAppearanceEigenValues
 	this->m_PCAAppearance.eigenvalues = cv::Mat_<float>::zeros(this->m_iNbOfAppearanceEigens, 1);
     tempfn = fn + "/m_PCAAppearanceEigenValues" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_PCAAppearance.eigenvalues;
     fp.close();fp.clear();
@@ -1476,7 +1476,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
 	// m_PCAAppearanceEigenVectors
     this->m_PCAAppearance.eigenvectors = cv::Mat_<float>::zeros(this->m_iNbOfAppearanceEigens, this->m_iNbOfAppearance);
     tempfn = fn + "/m_PCAAppearanceEigenVectors" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_PCAAppearance.eigenvectors;
     fp.close();fp.clear();
@@ -1484,7 +1484,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatWeightsScaleShape2Texture
     this->m_MatWeightsScaleShape2Texture = cv::Mat_<float>::zeros(this->m_iNbOfShapeEigens, this->m_iNbOfShapeEigens);
     tempfn = fn + "/m_MatWeightsScaleShape2Texture" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatWeightsScaleShape2Texture;
     fp.close();fp.clear();
@@ -1492,7 +1492,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatPcs
     this->m_MatPcs = cv::Mat_<float>::zeros(this->m_iNbOfAppearanceEigens, this->m_iNbOfShapeEigens);
     tempfn = fn + "/m_MatPcs" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatPcs;
     fp.close();fp.clear();
@@ -1500,7 +1500,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatPcg
     this->m_MatPcg = cv::Mat_<float>::zeros(this->m_iNbOfAppearanceEigens, this->m_iNbOfTextureEigens);
     tempfn = fn + "/m_MatPcg" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatPcg;
     fp.close();fp.clear();
@@ -1508,7 +1508,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatQs
     this->m_MatQs = cv::Mat_<float>::zeros(this->m_iNbOfShapes, this->m_iNbOfAppearanceEigens);
     tempfn = fn + "/m_MatQs" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatQs;
     fp.close();fp.clear();
@@ -1516,7 +1516,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatQg
     this->m_MatQg = cv::Mat_<float>::zeros(this->m_iNbOfTextures, this->m_iNbOfAppearanceEigens);
     tempfn = fn + "/m_MatQg" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatQg;
     fp.close();fp.clear();
@@ -1524,7 +1524,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatRc
     this->m_MatRc = cv::Mat_<float>::zeros(this->m_iNbOfAppearanceEigens, this->m_iNbOfTextures);
     tempfn = fn + "/m_MatRc" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatRc;
     fp.close();fp.clear();
@@ -1532,7 +1532,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatRt
     this->m_MatRt = cv::Mat_<float>::zeros(4, this->m_iNbOfTextures);
     tempfn = fn + "/m_MatRt" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatRt;
     fp.close();fp.clear();
@@ -1540,7 +1540,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatCParamGradientMatrix
     this->m_MatCParamGradientMatrix = cv::Mat_<float>::zeros(this->m_iNbOfTextures, this->m_iNbOfAppearanceEigens);
     tempfn = fn + "/m_MatCParamGradientMatrix" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatCParamGradientMatrix;
     fp.close();fp.clear();
@@ -1548,7 +1548,7 @@ void VO_AAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     // m_MatPoseGradientMatrix, we may ignore this first
     this->m_MatPoseGradientMatrix = cv::Mat_<float>::zeros(this->m_iNbOfTextures, 4);
     tempfn = fn + "/m_MatPoseGradientMatrix" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     fp >> this->m_MatPoseGradientMatrix;
     fp.close();fp.clear();

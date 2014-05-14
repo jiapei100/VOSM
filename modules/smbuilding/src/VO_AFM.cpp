@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -140,10 +140,10 @@ void VO_AFM::VO_BuildFeatureModel ( const std::vector<std::string>& allLandmarkF
 							float TPShape,
 							bool useKnownTriangles,
 							unsigned int ltcMtd,
-							Size imgSize)
+                            cv::Size imgSize)
 {
 	if (allLandmarkFiles4Training.size() != allImgFiles4Training.size() )
-		cerr << "allLandmarkFiles4Training should have the same number of allImgFiles4Training! " << endl;
+         std::cerr << "allLandmarkFiles4Training should have the same number of allImgFiles4Training! " << std::endl;
 
 	this->VO_BuildShapeModel(allLandmarkFiles4Training, shapeinfoFileName, database, TPShape, useKnownTriangles);
     this->m_iNbOfPyramidLevels      			= levels;
@@ -166,7 +166,7 @@ void VO_AFM::VO_BuildFeatureModel ( const std::vector<std::string>& allLandmarkF
  * @param		imgSize					Input	-- image size
  * @return		cv::Rect					of size imgSize*imgSize
  */
-cv::Rect VO_AFM::VO_CalcImagePatchRect(const cv::Mat& iImg, const cv::Point2f& pt, Size imgSize)
+cv::Rect VO_AFM::VO_CalcImagePatchRect(const cv::Mat& iImg, const cv::Point2f& pt, cv::Size imgSize)
 {
     // ensure the small image patch is within the image
     cv::Rect rect;
@@ -213,7 +213,7 @@ void VO_AFM::VO_LoadFeatureTrainingData(unsigned int mtd)
 	{
 		unsigned int count = 0;
         this->m_vLTCs[i].Resize(this->m_iNbOfPoints, this->m_localImageSize.width*this->m_localImageSize.height);
-		img = imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
+        img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
 
 		double start = (double)cvGetTickCount();
 		// Explained by JIA Pei -- wavelet feature extraction
@@ -299,7 +299,7 @@ void VO_AFM::VO_Save ( const std::string& fd )
 
     // AFM
     tempfn = fn + "/AFM" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
 
     fp << "m_iLocalFeatureExtractionMethod" << std::endl << this->m_iLocalFeatureExtractionMethod << std::endl;
     fp << "m_localImageSize" << std::endl << this->m_localImageSize.height << " " << this->m_localImageSize.width << std::endl;
@@ -308,22 +308,22 @@ void VO_AFM::VO_Save ( const std::string& fd )
 
     // m_PCANormalizedLTCMean
     tempfn = fn + "/m_PCANormalizedLTCMean" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_PCANormalizedLTCMean" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_PCANormalizedLTCMean" << std::endl;
     fp << cv::Mat_<float>(this->m_PCANormalizedFeatures.mean);
     fp.close();fp.clear();
 
     // m_PCANormalizedLTCeigenvectors
     tempfn = fn + "/m_PCANormalizedLTCeigenvectors" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_PCANormalizedLTCeigenvectors" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_PCANormalizedLTCeigenvectors" << std::endl;
     fp << cv::Mat_<float>(this->m_PCANormalizedFeatures.eigenvectors);
     fp.close();fp.clear();
 
     // m_PCANormalizedLTCEigenvalues
     tempfn = fn + "/m_PCANormalizedLTCEigenvalues" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_PCANormalizedLTCEigenvalues" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_PCANormalizedLTCEigenvalues" << std::endl;
     fp << cv::Mat_<float>(this->m_PCANormalizedFeatures.eigenvalues);
     fp.close();fp.clear();
 

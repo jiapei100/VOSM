@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -148,11 +148,11 @@ bool VO_FeatureModel::VO_LoadFeatureTrainingData( 	const std::vector<std::string
 	for(unsigned int i = 0; i < this->m_iNbOfSamples; ++i)
 	{
 		if(channels == 1)
-			img = imread ( allImgFiles4Training[i].c_str (), 0 );
+            img = cv::imread ( allImgFiles4Training[i].c_str (), 0 );
 		else if (channels == 3)
-			img = imread ( allImgFiles4Training[i].c_str (), 1 );
+            img = cv::imread ( allImgFiles4Training[i].c_str (), 1 );
 		else
-			cerr << "We can't deal with image channels not equal to 1 or 3!" << endl;
+            std::cerr << "We can't deal with image channels not equal to 1 or 3!" << std::endl;
 
 		double start = (double)cvGetTickCount();
 		// Explained by JIA Pei -- Feature extraction over the whole image, so many methods.
@@ -164,7 +164,7 @@ bool VO_FeatureModel::VO_LoadFeatureTrainingData( 	const std::vector<std::string
 														this->m_iTextureRepresentationMethod) )
 
         {
-            cout << "Texture Fail to Load at image " << i << endl;
+            std::cout << "Texture Fail to Load at image " << i << std::endl;
             return false;
         }
 

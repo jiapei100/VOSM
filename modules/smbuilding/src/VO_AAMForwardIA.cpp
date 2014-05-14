@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -144,7 +144,7 @@ void VO_AAMForwardIA::VO_Save(const std::string& fd)
     if (!boost::filesystem::is_directory(fn) )
         boost::filesystem::create_directory( fn );
 
-    fstream fp;
+    std::fstream fp;
     std::string tempfn;
 
 }

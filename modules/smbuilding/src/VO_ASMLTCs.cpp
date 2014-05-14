@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -126,10 +126,10 @@ void VO_ASMLTCs::VO_BuildASMLTCs (	const std::vector<std::string>& allLandmarkFi
 									float TPShape,
 									bool useKnownTriangles,
 									unsigned int ltcMtd,
-									Size imgSize)
+                                    cv::Size imgSize)
 {
 	if (allLandmarkFiles4Training.size() != allImgFiles4Training.size() )
-		cerr << "allLandmarkFiles4Training should have the same number of allImgFiles4Training! " << endl;
+        std::cerr << "allLandmarkFiles4Training should have the same number of allImgFiles4Training! " << std::endl;
 
 	this->VO_BuildShapeModel(allLandmarkFiles4Training, shapeinfoFileName, database, TPShape, useKnownTriangles);
     this->m_iNbOfPyramidLevels      			= levels;
@@ -196,9 +196,9 @@ void VO_ASMLTCs::VO_BuildASMLTCs (	const std::vector<std::string>& allLandmarkFi
  * @param		iImg					Input	-- the concerned image
  * @param		pt						Input	-- the point in the center of the image patch
  * @param		imgSize					Input	-- image patch size
- * @return		cv::Rect					of size imgSize*imgSize
+ * @return		cv::Rect				of size imgSize*imgSize
  */
-cv::Rect VO_ASMLTCs::VO_CalcImagePatchRect(const cv::Mat& iImg, const cv::Point2f& pt, Size imgSize)
+cv::Rect VO_ASMLTCs::VO_CalcImagePatchRect(const cv::Mat& iImg, const cv::Point2f& pt, cv::Size imgSize)
 {
     // ensure the small image patch is within the image
     cv::Rect rect;
@@ -243,7 +243,7 @@ void VO_ASMLTCs::VO_LoadLTCTrainingData()
 	
 	for(unsigned int i = 0; i < this->m_iNbOfSamples; ++i)
 	{
-		img = imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
+        img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
 
 		sampleScale = this->m_vShapes[i].GetCentralizedShapeSize();
 
@@ -253,7 +253,7 @@ void VO_ASMLTCs::VO_LoadLTCTrainingData()
 			scale = refScale/sampleScale/PyrScale;
 
             resizedShape = this->m_vShapes[i]*scale;
-            cv::resize(img, resizedImg, Size( (int)(img.cols*scale), (int)(img.rows*scale) ) );
+            cv::resize(img, resizedImg, cv::Size( (int)(img.cols*scale), (int)(img.rows*scale) ) );
 
 // static std::stringstream ss;
 // static std::string ssi;
@@ -298,7 +298,7 @@ void VO_ASMLTCs::VO_LoadLTCTrainingData()
 void VO_ASMLTCs::VO_LoadLTC4OneAnnotatedPoint(	const cv::Mat& iImg,
 												const VO_Shape& theShape,
 												unsigned int ptIdx,
-												Size imgSize,
+                                                cv::Size imgSize,
 												VO_Features* vofeatures,
 												int shiftX,
 												int shiftY)
@@ -332,7 +332,7 @@ void VO_ASMLTCs::VO_CalcStatistics4AllLTCs()
 								this->m_vvLTCMeans[i][j],
 								CV_COVAR_NORMAL+CV_COVAR_ROWS+CV_COVAR_SCALE,
 								CV_32F);
-			this->m_vvCVMInverseOfLTCCov[i][j] = Covar.inv(DECOMP_SVD);
+            this->m_vvCVMInverseOfLTCCov[i][j] = Covar.inv(cv::DECOMP_SVD);
 		}
 	}
 }
@@ -348,7 +348,7 @@ void VO_ASMLTCs::VO_CalcStatistics4AllLTCs()
  * @return		void
  */
 void VO_ASMLTCs::VO_HardSaveWaveletSingleChannelImage(const std::string& fn, 
-														Size imgSize,
+                                                        cv::Size imgSize,
 														unsigned int displayMtd)
 {
 	cv::Mat img = cv::Mat::ones(imgSize, CV_8UC1);(imgSize, CV_8UC1);
@@ -416,40 +416,40 @@ void VO_ASMLTCs::VO_Save ( const std::string& fd )
 
     // ASMLTCs
     tempfn = fn + "/ASMLTCs" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
+    fp.open(tempfn.c_str (), std::ios::out);
 
-    fp << "m_iLTCMethod" << endl << this->m_iLTCMethod << endl;
-    fp << "m_iNbOfLTC4PerPoint" << endl << this->m_iNbOfLTC4PerPoint << endl;
-	fp << "m_localImageSize" << endl << this->m_localImageSize.height << " " << this->m_localImageSize.width << endl;
+    fp << "m_iLTCMethod" << std::endl << this->m_iLTCMethod << std::endl;
+    fp << "m_iNbOfLTC4PerPoint" << std::endl << this->m_iNbOfLTC4PerPoint << std::endl;
+    fp << "m_localImageSize" << std::endl << this->m_localImageSize.height << " " << this->m_localImageSize.width << std::endl;
     fp.close();fp.clear();
 
     // m_vvLTCMeans
     tempfn = fn + "/m_vvLTCMeans" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_vvLTCMeans" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_vvLTCMeans" << std::endl;
 	for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
     {
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			fp << "level " << i << " node " << j << endl;
-			fp << this->m_vvLTCMeans[i][j] << endl;
+            fp << "level " << i << " node " << j << std::endl;
+            fp << this->m_vvLTCMeans[i][j] << std::endl;
         }
     }
     fp.close();fp.clear();
 
     // m_vvCVMInverseOfLTCCov
     tempfn = fn + "/m_vvCVMInverseOfLTCCov" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_vvCVMInverseOfLTCCov" << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_vvCVMInverseOfLTCCov" << std::endl;
 	for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
     {
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			fp << "level " << i << " node " << j << endl;
-			fp << this->m_vvCVMInverseOfLTCCov[i][j] << endl;
+            fp << "level " << i << " node " << j << std::endl;
+            fp << this->m_vvCVMInverseOfLTCCov[i][j] << std::endl;
         }
     }
-    fp << this->m_vvCVMInverseOfLTCCov << endl;
+    fp << this->m_vvCVMInverseOfLTCCov << std::endl;
     fp.close();fp.clear();
 }
 
@@ -479,7 +479,7 @@ void VO_ASMLTCs::VO_LoadParameters4Fitting ( const std::string& fd )
     std::string fn = fd+"/ASMLTCs";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "VO_ASMLTCs subfolder is not existing. " << endl;
+        std::cout << "VO_ASMLTCs subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -489,7 +489,7 @@ void VO_ASMLTCs::VO_LoadParameters4Fitting ( const std::string& fd )
 
     // ASMLTCs
     tempfn = fn + "/ASMLTCs" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp >> this->m_iLTCMethod;
     fp >> temp >> this->m_iNbOfLTC4PerPoint;
 	fp >> temp >> this->m_localImageSize.height >> this->m_localImageSize.width;
@@ -518,7 +518,7 @@ void VO_ASMLTCs::VO_LoadParameters4Fitting ( const std::string& fd )
 
     // m_vvLTCMeans
     tempfn = fn + "/m_vvLTCMeans" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     getline(fp, temp);
 	this->m_vvLTCMeans.resize(this->m_iNbOfPyramidLevels);
 	for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
@@ -540,7 +540,7 @@ void VO_ASMLTCs::VO_LoadParameters4Fitting ( const std::string& fd )
 	
 	// m_vvCVMInverseOfLTCCov
     tempfn = fn + "/m_vvCVMInverseOfLTCCov" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
 	this->m_vvCVMInverseOfLTCCov.resize(this->m_iNbOfPyramidLevels);
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
     {

@@ -44,7 +44,7 @@
 *                   vision. Technical report, Imaging Science and Biomedical Engineering,           *
 *                   University of Manchester, March 8 2004.                                         *
 *                                                                                                   *
-*                   4) I. cv::Matthews and S. Baker. Active appearance models revisited.                *
+*                   4) I. Matthews and S. Baker. Active appearance models revisited.                *
 *                   International Journal of Computer Vision, 60(2):135–164, November 2004.         *
 *                                                                                                   *
 *                   5) M. B. Stegmann, Active Appearance Models: Theory, Extensions and Cases,      *
@@ -125,8 +125,8 @@ void VO_AXM::VO_Save ( const std::string& fd )
 
     // AXM
     tempfn = fn + "/AXM" + ".txt";
-    fp.open(tempfn.c_str (), ios::out);
-    fp << "m_iNbOfPyramidLevels" << endl << this->m_iNbOfPyramidLevels << endl;
+    fp.open(tempfn.c_str (), std::ios::out);
+    fp << "m_iNbOfPyramidLevels" << std::endl << this->m_iNbOfPyramidLevels << std::endl;
     fp.close();fp.clear();
 }
 
@@ -161,7 +161,7 @@ void VO_AXM::VO_Load ( const std::string& fd )
 	std::string fn = fd+"/AXM";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "AXM subfolder is not existing. " << endl;
+        std::cout << "AXM subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -171,7 +171,7 @@ void VO_AXM::VO_Load ( const std::string& fd )
 
     // AXM
     tempfn = fn + "/AXM" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp >> this->m_iNbOfPyramidLevels;					// m_iNbOfPyramidLevels
     fp.close();fp.clear();
 }
@@ -207,7 +207,7 @@ void VO_AXM::VO_LoadParameters4Fitting ( const std::string& fd )
 	std::string fn = fd+"/AXM";
     if (!boost::filesystem::is_directory(fn) )
     {
-        cout << "AXM subfolder is not existing. " << endl;
+        std::cout << "AXM subfolder is not existing. " << std::endl;
         exit(EXIT_FAILURE);
     }
 
@@ -217,7 +217,7 @@ void VO_AXM::VO_LoadParameters4Fitting ( const std::string& fd )
 
     // AXM
     tempfn = fn + "/AXM" + ".txt";
-    fp.open(tempfn.c_str (), ios::in);
+    fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp >> this->m_iNbOfPyramidLevels;					// m_iNbOfPyramidLevels
     fp.close();fp.clear();
 }
