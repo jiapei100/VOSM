@@ -160,7 +160,7 @@ public:
     /** Destructor */
     virtual ~VO_TextureModel();
 
-    /**Calculate point warping information */
+    /** Calculate point warping information */
     static unsigned int         	VO_CalcPointWarpingInfo(const std::vector<VO_Triangle2DStructure>& templateTriangles, std::vector<VO_WarpingPoint>& warpInfo);
 
     /** Load a texture std::vector from the image "img", in terms of "iShape", with a texture building method */

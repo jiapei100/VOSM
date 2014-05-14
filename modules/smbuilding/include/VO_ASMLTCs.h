@@ -89,7 +89,7 @@ friend class VO_FittingASMLTCs;
 friend class VO_FittingASMNDProfiles;
 friend class VO_FittingAFM;
 protected:
-	/** */
+    /** Local texture constrained ASM, local features */
 	VO_Features*					m_pVOfeatures;
 
 	/** Local texture constrained methods */
@@ -111,7 +111,7 @@ protected:
     std::vector< std::vector< cv::Mat_<float> > >	m_vvCVMInverseOfLTCCov;
 
     /** image cv::Size for wavelet transform */
-	Size 							m_localImageSize;
+    cv::Size 						m_localImageSize;
 
 	/** Initialization */
 	void 							init();

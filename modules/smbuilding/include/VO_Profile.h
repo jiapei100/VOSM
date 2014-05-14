@@ -89,7 +89,7 @@ private:
 
     void                    		CopyData(const VO_Profile& iProfile) {iProfile.m_MatProf.copyTo(this->m_MatProf);}
 public:
-    // Constructors and Destructor
+    /** Constructors and Destructor */
     VO_Profile()  { this->m_MatProf.release(); }
     VO_Profile(unsigned int length, unsigned int dim = 1) {this->m_MatProf = cv::Mat_<float>::zeros(length, dim);}
     VO_Profile(const VO_Profile& iProf) {this->CopyData (iProf);}
@@ -97,7 +97,7 @@ public:
     virtual ~VO_Profile() { this->m_MatProf.release(); }
     const float operator()(unsigned int i) const { return this->m_MatProf(i, 0); }
 
-    // operators
+    /** operators */
     VO_Profile&                		operator=(const VO_Profile& iProfile);
     VO_Profile&                		operator=(const cv::Mat_<float>& iProfile);
     VO_Profile&                		operator=(float value);
@@ -122,6 +122,7 @@ public:
 	float  							operator() (unsigned row, unsigned col) const;
 	float							dot(const VO_Profile& iProfile);
 
+    /** resize */
 	void							Resize(unsigned int rows, unsigned int cols);
 
 	/** Key function to extract ND profile std::vector around one landmark */
@@ -141,9 +142,10 @@ public:
 																	unsigned int NbOfProfilesPerPixel = 17,
 																	float* pDeltaX = NULL,
 																	float* pDeltaY = NULL);
-    /* Normalization for every dim */
+    /** Normalization for every dim */
     void                    		Normalize();
 
+    /** Gets and Sets */
     unsigned int            		GetProfileLength() const { return this->m_MatProf.rows; }
 	unsigned int            		GetProfileDim() const { return this->m_MatProf.cols; }
     cv::Mat_<float>           		GetTheProfile() const { return this->m_MatProf; }

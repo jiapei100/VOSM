@@ -845,7 +845,7 @@ std::vector<float> VO_Shape::GetRotation( const VO_Shape& ref ) const
  * @author	    JIA Pei
  * @version		2010-05-19
  * @brief		Ensure the shape is within the size
- * @param	    isize	    		input parameter - the size
+ * @param	    iSize	    		input parameter - the size
  * @return	    void
 */
 void VO_Shape::ConstrainShapeInSize(const cv::Size& iSize)

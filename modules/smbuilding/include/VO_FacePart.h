@@ -88,6 +88,7 @@ private:
     /** index std::vector */
     std::vector<unsigned int>			m_vIndexes;
 
+    /** Initialization */
     void								init()
     {
                                         this->m_iType = 0;			// actually, type 0 is just a default value, which is not used at all
@@ -95,6 +96,7 @@ private:
                                         this->m_vIndexes.clear();
     }
 
+    /** copy a facepart */
     void                				CopyData(const VO_FacePart &iFacePart)
     {
                                         this->m_iType 				= iFacePart.GetType();
@@ -131,8 +133,10 @@ public:
 										return *this;
     }
 
+    /** clear */
     void								clear() { this->init();}
 
+    /** Gets and Sets */
     unsigned int						GetType() const {return this->m_iType;}
     bool								IsClosedOrNot() const {return this->m_bClosed;}
     std::vector<unsigned int>			GetIndexes() const {return this->m_vIndexes;}

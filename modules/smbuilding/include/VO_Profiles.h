@@ -81,14 +81,15 @@ private:
     std::vector<VO_Profile>     m_vProfiles;
 	
 public:
-    // Constructors and Destructor
+    /** Constructors and Destructor */
     VO_Profiles()  				{ this->m_vProfiles.clear(); }
     virtual ~VO_Profiles() 		{ this->m_vProfiles.clear(); }
 
-    // operators
+    /** operators */
 	VO_Profile        			operator[](unsigned int idx) { return this->m_vProfiles[idx]; }
 
 
+    /** Gets and Sets */
     unsigned int            	GetProfileDim() const { return this->m_vProfiles.size(); }
     VO_Profile           		GetOneProfile(unsigned int idx) const { return this->m_vProfiles[idx];}
 

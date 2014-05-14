@@ -155,6 +155,7 @@ private:
     std::vector< std::vector < unsigned int > > 	m_vvTriangleIndexes;
 
 
+    /** Initialization */
     void									init()
     {
 											this->m_vChin.clear();
@@ -184,6 +185,7 @@ private:
 											this->m_vvTriangleIndexes.clear();
     }
 
+    /** copy all face parts */
     void									CopyData(const VO_FaceParts &iFaceParts)
     {
 											this->m_vChin 					= iFaceParts.VO_GetOneFacePart(VO_FacePart::CHIN);
@@ -230,12 +232,14 @@ public:
 											return *this;
     }
 
+    /** clear */
     void clear() 							{ this->init(); }
 
-    VO_FacePart         					VO_GetOneFacePart( unsigned int partIdx) const;
-	void         							VO_SetOneFacePart(const VO_FacePart& iFacePart);
+    /** Gets and Sets */
+    VO_FacePart                                 VO_GetOneFacePart( unsigned int partIdx) const;
+    void                                        VO_SetOneFacePart(const VO_FacePart& iFacePart);
     std::vector< std::vector < unsigned int > > GetTriangleIndexes() const {return this->m_vvTriangleIndexes;}
-    void									SetTriangleIndexes(const std::vector< std::vector < unsigned int > >& iTriangleIndexes) { this->m_vvTriangleIndexes = iTriangleIndexes ;}
+    void                                        SetTriangleIndexes(const std::vector< std::vector < unsigned int > >& iTriangleIndexes) { this->m_vvTriangleIndexes = iTriangleIndexes ;}
 };
 
 #endif      // __VO_FACEPARTS_H__

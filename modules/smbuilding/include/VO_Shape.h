@@ -103,6 +103,7 @@ protected:
     /** whether this point in 3D coordinates is able to be seen on 2D screen - dealing with occlusion. NbOfAnnotatedPoints */
     std::vector<bool>       		m_MatSeeable;
 
+    /** copy a shape */
     void                        	CopyData(const VO_Shape& iShape)
     {
 									// copy cv::Mat_ data (i.e. the point coordinates)
@@ -153,7 +154,7 @@ public:
 	/** Clone */
 	void							clone(const VO_Shape& iShape) {this->CopyData(iShape);}
 
-    // operators
+    /** operators */
     VO_Shape&                		operator=(const VO_Shape& iShape);
 	VO_Shape&                		operator=(const cv::Mat_<float>& iShape);
     VO_Shape&                		operator=(float value);
@@ -178,41 +179,64 @@ public:
 	float  							operator() (unsigned row, unsigned col) const;
 	float							dot(const VO_Shape& iShape);
 
+    /** resize */
 	void							Resize(unsigned int rows, unsigned int cols);
+    /** calculate Center of Gravity */
     cv::Mat_<float>               	CenterOfGravity() const;
-    // Transformations
+    /** centralize */
     void                        	Centralize();
+    /** translate a shape */
     void                        	Translate( const cv::Mat_<float>& translation );
+    /** scale a shape with a particular scalar s for 3 coordinates */
     void                        	Scale( float s);
+    /** scale a shape with a vector, 3 scalars */
     void                        	Scale( const cv::Mat_<float>& svec);
+    /** scale a shape's X direction */
 	void                        	ScaleX( float sX);
+    /** scale a shape's Y direction */
 	void                        	ScaleY( float sY);
+    /** scale a shape's Z direction */
 	void                        	ScaleZ( float sZ);
+    /** rotate a shape */
     void                        	Rotate( const std::vector<float>& angles);
+    /** normalize a shape */
     void                       		Normalize();
+    /** transform a shape */
 	void							Transform(const cv::Mat_<float>& t);
     void							Transform(float scale, std::vector<float> rotateAngles, cv::Mat_<float> translation);
+    /** get the centralized shape's size */
     float                       	GetCentralizedShapeSize() const;
+    /** get the norm of a shape */
     float                       	GetShapeNorm() const;
 	/** This function is still to be evaluated !! */
     std::vector<float>              GetRotation( const VO_Shape& ref ) const;
 
+    /** constrain a shape in a particular Rectangle */
 	void							ConstrainShapeInSize(const cv::Size& isize);
+    /** constrain a shape in a particular image */
 	void							ConstrainShapeInImage(const cv::Mat& iImg);
 
-    // Align the shapes with respect to position, scale and orientation.
+    /** Align the shapes with respect to position, scale and orientation. */
     void                        	AlignTo( const VO_Shape& ref, float* scale = NULL, std::vector<float>* angles = NULL, cv::Mat_<float>* translation = NULL);
+    /** Affine transform of current shape */
 	void							Affine2D(const cv::Mat_<float>& affineMat);
+    /** Transformation that aligns this to 'ref' */
     void                        	AlignTransformation( const VO_Shape& ref, float& scale, std::vector<float>& angles, cv::Mat_<float>& translation ) const;
+    /** Procrustes Analysis */
     void                        	ProcrustesAnalysis( const VO_Shape& ref, float& norm, std::vector<float>& angles, cv::Mat_<float>& translation );
+    /** Inverse Procrustes Analysis */
     void                        	InverseProcrustesAnalysis( const float& norm, const std::vector<float>& angles, const cv::Mat_<float>& translation );
+    /** Global shape normalization in 2D */
 	static void						GlobalShapeNormalization2D(const VO_Shape& iShape, VO_Shape& oShape, const cv::Mat_<float>& q);
 	void							GlobalShapeNormalization2D(const cv::Mat_<float>& q);
     static void						GlobalShapeNormalization2D(const VO_Shape& iShape, VO_Shape& oShape, float scale, const std::vector<float>& angles, const cv::Mat_<float>& translation);
     void							GlobalShapeNormalization2D(float scale, const std::vector<float>& angles, const cv::Mat_<float>& translation);
+    /** Similarty Transform to Global Shape Normalization */
     static void						SimilarityTrans2GlobalShapeNormalization(float scale, const std::vector<float>& angles, const cv::Mat_<float>& translation, cv::Mat_<float>& q);
+    /** Global Shape Normalization to Similarty Transform */
     static void						GlobalShapeNormalization2SimilarityTrans(const cv::Mat_<float>& q, float& scale, std::vector<float>& angles, cv::Mat_<float>& translation );
 
+    /** All kinds of Min Max functions */
     cv::Mat_<float>					Min() const;
     float                       	MinX() const;
     float                       	MinY() const;
@@ -228,11 +252,16 @@ public:
 	void                       		MinMaxX(double* minX, double* maxX) const;
 	void                       		MinMaxY(double* minY, double* maxY) const;
 	void                       		MinMaxZ(double* minZ, double* maxZ) const;
+    /** Get the left top point of the shape */
     cv::Point						GetLeftTop() const {cv::Point res; res.x = MinX(); res.y = MinY(); return res;}
+    /** Get the right bottom point of the shape */
     cv::Point						GetRightBottom() const {cv::Point res; res.x = MaxX(); res.y = MaxY(); return res;}
+    /** Get the left bottom point of the shape */
     cv::Point						GetLeftBottom() const {cv::Point res; res.x = MinX(); res.y = MaxY(); return res;}
+    /** Get the right top point of the shape */
     cv::Point                       GetRightTop() const {cv::Point res; res.x = MaxX(); res.y = MinY(); return res;}
 //	cv::Rect_<float>					GetShapecv::Rect() const {cv::cv::Rect_<float> res; res.x = MinX(); res.y = MinY(); res.width = GetWidth(); res.height = GetHeight(); return res;}
+    /** Get the outbound rectangle of the shape, in float */
     cv::Rect_<float>				GetShapeRect() const
 	{
 									double minX, maxX, minY, maxY;
@@ -245,6 +274,7 @@ public:
 									res.height = (float)(maxY - minY);
 									return res;
 	}
+    /** Get the outbound rectangle of the shape, in int */
     cv::Rect						GetShapeBoundRect() const
 	{								
 									double minX, maxX, minY, maxY;
@@ -257,6 +287,7 @@ public:
 									res.height = ceil(maxY) - res.y;
 									return res;
 	}
+    /** transform the shape to a point list */
     cv::Mat                         ToPointList() const
     {
 									cv::Mat res(1, m_MatShape.cols, CV_32FC2);
@@ -267,6 +298,7 @@ public:
 									return res;
     }
 
+    /** calculate HausDorff Distance of a shape */
 	double							HausDorffDist(const VO_Shape& iShape);
 	
 	/** Is the current point "pt" in current shape? */

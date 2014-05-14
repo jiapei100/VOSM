@@ -98,6 +98,7 @@ protected:
     /** In the path, which point does this point connected to? */
     unsigned int        m_iTo;
 
+    /** copy VO_Shape2DInfo */
     void                CopyData(const VO_Shape2DInfo& iShapeInfo)
     {
                         this->m_iPath   = iShapeInfo.GetPath();
@@ -164,7 +165,7 @@ public:
     /** Set the point index, which this point connected to  in path */
     void                SetTo(unsigned int iTo) { this->m_iTo = iTo;}
 
-    // read VO_Shape2DInfo
+    /** read VO_Shape2DInfo */
     static void    		ReadShape2DInfo(const std::string& filename, std::vector<VO_Shape2DInfo>& oShapeInfo, VO_FaceParts& faceparts );
 };
 

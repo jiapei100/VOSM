@@ -95,6 +95,7 @@ private:
     /** Generalized texture representation, the texture model. NbOfTextureRepresentation * NbOfPixels */
     cv::Mat_<float>        			m_MatTexture;
 
+    /** copy a texture */
     void                        	CopyData( const VO_Texture& iTexture )
     {
 									iTexture.m_MatTexture.copyTo(this->m_MatTexture);
@@ -116,7 +117,7 @@ public:
 	/** Clone */
 	void							clone(const VO_Texture& iTexture) {this->CopyData(iTexture);}
 
-    // operators
+    /** operators */
     VO_Texture&            			operator=(const VO_Texture& iTexture);
     VO_Texture&                		operator=(const cv::Mat_<float>& iTexture);
     VO_Texture&            			operator=(float value);
@@ -141,12 +142,19 @@ public:
 	float  							operator() (unsigned row, unsigned col) const;
 	float							dot(const VO_Texture& iTexture);
 
+    /** resize */
 	void							Resize(unsigned int rows, unsigned int cols);
+    /** centralize a texture */
 	void                       		Centralize();
+    /** scale a texture */
     void                        	Scale( float s);
+    /** shift a texture */
 	void                        	Shift( float s);
+    /** normalize a texture */
 	void                        	Normalize();
+    /** get the norm of a standardized texture */
 	float                       	GetStandardizedTextureNorm() const;
+    /** get the norm of a texture */
     float                       	GetTextureNorm() const;
 
 	/** Clamp the texture, constrain between infimum and supremum */
@@ -158,7 +166,7 @@ public:
 	/** Get Number of pixels */
     unsigned int                	GetNbOfPixels() const { return this->m_MatTexture.cols; }
 
-    /** Get the texture std::vector */
+    /** Get the texture cv::Mat_<float> */
     cv::Mat_<float>               	GetTheTexture() const { return this->m_MatTexture;}
 
 	/** Get a texture */
@@ -180,7 +188,7 @@ public:
 	}
 
     /** Get the texture value at texture std::vector position i */
-    cv::Mat_<float>                	 GetACol(unsigned int idx) const	{ return this->m_MatTexture.col(idx); }
+    cv::Mat_<float>                 GetACol(unsigned int idx) const	{ return this->m_MatTexture.col(idx); }
 
 	/** Get the texture value at texture std::vector position i */
     cv::Mat_<float>                 GetAPixel(unsigned int idx) const	{ return this->m_MatTexture.col(idx); }
@@ -206,6 +214,7 @@ public:
                                     }
 	}
 	
+    /** Set single Pixel */
     void 							SetAPixel(const cv::Mat_<float>& iCol, int idx)
 	{
 									assert (iCol.rows == this->m_MatTexture.rows && iCol.cols == 1);

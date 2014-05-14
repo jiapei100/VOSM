@@ -80,13 +80,14 @@ class VO_Ellipse
 friend std::ostream& operator<<(std::ostream& os, const VO_Ellipse& ellipse);
 friend std::istream& operator>>(std::istream& is, VO_Ellipse& ellipse);
 protected:
-	float						m_fPhimin;				//	Minimum angle (degrees)
-	float						m_fPhimax;				// 	Maximum angle (degrees)
-	float						m_fAxisXHalfLen;		//	first radius
-	float						m_fAxisYHalfLen;		//	second radius
-	float						m_fTheta;				//	Rotation angle (degrees)
-    cv::Point2f					m_Center;				//	ellipse center
+    float						m_fPhimin;				///	Minimum angle (degrees)
+    float						m_fPhimax;				///	Maximum angle (degrees)
+    float						m_fAxisXHalfLen;		///	first radius
+    float						m_fAxisYHalfLen;		///	second radius
+    float						m_fTheta;				///	Rotation angle (degrees)
+    cv::Point2f					m_Center;				///	ellipse center
 
+    /** Copy an ellipse */
     void                    	CopyData(const VO_Ellipse& ellipse)
     {
 								this->m_fPhimax 			= ellipse.m_fPhimax;
@@ -205,7 +206,7 @@ public:
 	/** Find bounding rectangle for multiple ellipses, this rectangle should cover all ellipses */
     static cv::Rect				VO_CalcBoundingRect4MultipleEllipses(const std::vector<VO_Ellipse>& ellipses);
 
-	// Gets and sets
+    /** Gets and sets */
 	float						GetLongAxis() const
 	{
 		return 					this->m_fAxisXHalfLen >= this->m_fAxisYHalfLen ? 

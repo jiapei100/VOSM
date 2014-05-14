@@ -121,7 +121,7 @@ public:
     /** Load parameters for fitting */
     void                        	VO_LoadParameters4Fitting(const std::string& fd);
 	
-	// Gets and Sets
+    /** Gets and Sets */
     std::vector<VO_Ellipse>			GetPDMEllipses() const { return this->m_VONormalizedEllipses; }
 
 };
