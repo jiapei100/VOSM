@@ -70,6 +70,9 @@
 #include "smb.h"
 
 
+/**
+ * @brief How to use testsmbuilding?
+ */
 void usage_build()
 {
     std::cout << "Usage: test_smbuilding [options] save_directory annotation_directory image_directory shapeinfo_path database channels type levels percentage " << std::endl
@@ -91,6 +94,9 @@ void usage_build()
 }
 
 
+/**
+ * @brief parse the arguments
+ */
 void parse_option(  int argc,
                     char **argv,
                     std::string& outputDir,
@@ -323,7 +329,7 @@ int main(int argc, char **argv)
                                                 percentage,
                                                 false,
                                                 VO_DiscreteWavelet::HAAR,
-                                                Size(16, 16) );
+                                                cv::Size(16, 16) );
             featureModel.VO_Save(outputDir);
         }
         break;
@@ -340,7 +346,7 @@ int main(int argc, char **argv)
                                         percentage,
                                         false,
                                         VO_Features::DIRECT,
-                                        Size(16, 16) );
+                                        cv::Size(16, 16) );
             asmLTCModel.VO_Save(outputDir);
         }
         break;

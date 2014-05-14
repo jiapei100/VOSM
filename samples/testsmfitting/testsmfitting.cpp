@@ -72,6 +72,9 @@
 #include "VO_FaceKeyPoint.h"
 
 
+/**
+ * @brief How to use testsmfitting?
+ */
 void usage_build()
 {
     std::cout << "Usage: smfitting [options] trained_data type testing_images testing_annotations database staticORdynamic recording" << std::endl
@@ -119,12 +122,16 @@ void usage_build()
 	exit(0);
 }
 
+
+/**
+ * @brief parse the arguments
+ */
 void parse_option(	int argc,
 					char **argv,
-					string& trainedData,
+                    std::string& trainedData,
 					unsigned int& type,
-					vector<string>& imageFNs,
-					vector<string>& annotationFNs,
+                    std::vector<std::string>& imageFNs,
+                    std::vector<std::string>& annotationFNs,
 					unsigned int& database,
 					bool& staticOrNot,
 					bool& recordOrNot)
@@ -260,13 +267,13 @@ void parse_option(	int argc,
 
 int main(int argc, char **argv)
 {
-	string 					traineddatadir;
-	unsigned int 			fittingmtd = VO_AXM::ASM_PROFILEND;
-	unsigned int 			database = CAnnotationDBIO::EMOUNT;
-	vector<string> 			AllImgFiles4Testing;
-	vector<string> 			AllLandmarkFiles4Evaluation;
-	bool					staticOrNot = true;
-	bool					record = false;
+    std::string                 traineddatadir;
+    unsigned int                fittingmtd = VO_AXM::ASM_PROFILEND;
+    unsigned int                database = CAnnotationDBIO::EMOUNT;
+    std::vector<std::string> 	AllImgFiles4Testing;
+    std::vector<std::string> 	AllLandmarkFiles4Evaluation;
+    bool                        staticOrNot = true;
+    bool                        record = false;
 	
 	parse_option(	argc,
 					argv,
@@ -312,8 +319,8 @@ int main(int argc, char **argv)
 	}
 
 
-    vector<cv::Mat> oImages;
-	vector<VO_Shape> oShapes;
+    std::vector<cv::Mat> oImages;
+    std::vector<VO_Shape> oShapes;
 	int nb = 20;
 	bool doEvaluation = false;
     cv::Mat_<float> nbOfIterations;
@@ -332,7 +339,7 @@ int main(int argc, char **argv)
 	CAnnotationDBIO::VO_LoadShapeTrainingData( AllLandmarkFiles4Evaluation, database, oShapes);
 
 	CFaceDetectionAlgs fd;
-	Point2f ptLeftEyeCenter, ptRightEyeCenter, ptMouthCenter;
+    cv::Point2f ptLeftEyeCenter, ptRightEyeCenter, ptMouthCenter;
 	fd.SetConfiguration("/usr/local/share/opencv/lbpcascades/lbpcascade_frontalface.xml", 
 						"/usr/local/share/opencv/haarcascades/haarcascade_profileface.xml",
 						"/usr/local/share/opencv/haarcascades/haarcascade_mcs_lefteye.xml",
@@ -353,7 +360,7 @@ int main(int argc, char **argv)
 		detectionTimes = 0;
 		for(unsigned int i = 0; i < AllImgFiles4Testing.size(); i++)
 		{
-			iImage = imread(AllImgFiles4Testing[i]);
+            iImage = cv::imread(AllImgFiles4Testing[i]);
 			// Explained by JIA Pei. You can use cv::resize() to ensure before fitting starts,
 			// every image to be tested is of a standard size, say (320, 240)
 			iImage.copyTo(resizedImage);
@@ -361,7 +368,7 @@ int main(int argc, char **argv)
 			iImage.copyTo(fittedImage);
 			size_t found1 = AllImgFiles4Testing[i].find_last_of("/\\");
 			size_t found2 = AllImgFiles4Testing[i].find_last_of(".");
-			string prefix = AllImgFiles4Testing[i].substr(found1+1, found2-1-found1);
+            std::string prefix = AllImgFiles4Testing[i].substr(found1+1, found2-1-found1);
 			
 			detectionTimes++;
 			fd.FullFaceDetection( 	resizedImage,
@@ -371,8 +378,8 @@ int main(int argc, char **argv)
 									true,
 									true,
 									1.0,
-									Size(80,80),
-									Size( min(resizedImage.rows,resizedImage.cols), min(resizedImage.rows,resizedImage.cols) ) ); // Size(240,240)
+                                    cv::Size(80,80),
+                                    cv::Size( std::min(resizedImage.rows,resizedImage.cols), std::min(resizedImage.rows,resizedImage.cols) ) ); // Size(240,240)
 
 			if( fd.IsFaceDetected() )
 			{
@@ -413,7 +420,7 @@ int main(int argc, char **argv)
 												4,
 												record );
 				nbOfIterations(0,i) = (float)(fitting2dsm->GetNbOfIterations());
-				fittingShape = fitting2dsm->VO_GetFittedShape();
+                fittingShape = fitting2dsm->GetFittedShape();
 				times(0,i) = fitting2dsm->GetFittingTime();
 //				cout << nbOfIterations(0,i) << std::endl;
 			}
@@ -422,11 +429,11 @@ int main(int argc, char **argv)
 			{
 				// Explained by JIA Pei. For static images, we can save all intermediate images of the fitting process.
 				SaveSequentialImagesInFolder(oImages, prefix);
-				string fn = prefix+".jpg";
+                std::string fn = prefix+".jpg";
 				if(oImages.size() > 0)
 				{
 					fittedImage = oImages.back();
-					imwrite(fn.c_str(), fittedImage);
+                    cv::imwrite(fn.c_str(), fittedImage);
 					oImages.clear();
 				}
 			}
@@ -434,9 +441,9 @@ int main(int argc, char **argv)
 			// For evaluation
 			if(doEvaluation)
 			{
-				vector<float> ptErrorFreq;
+                std::vector<float> ptErrorFreq;
 				float deviation = 0.0f;
-				vector<unsigned int> unsatisfiedPtList;
+                std::vector<unsigned int> unsatisfiedPtList;
 				unsatisfiedPtList.clear();
 				CRecognitionAlgs::CalcShapeFittingEffect(	oShapes[i],
 															fittingShape,
@@ -453,15 +460,15 @@ int main(int argc, char **argv)
 			}
 		}
 		
-        cout << "detection times = " << detectionTimes << std::endl;
+        std::cout << "detection times = " << detectionTimes << std::endl;
 		float avgIter = cv::mean(nbOfIterations).val[0];
-        cout << avgIter << std::endl;
+        std::cout << avgIter << std::endl;
 		float avgTime = cv::mean(times).val[0];
-        cout << avgTime << std::endl;
-		Scalar avgDev, stdDev;
+        std::cout << avgTime << std::endl;
+        cv::Scalar avgDev, stdDev;
 		cv::meanStdDev(deviations, avgDev, stdDev);
-        cout << avgDev.val[0] << " " << stdDev.val[0] << std::endl << std::endl;
-		vector<float> avgErrorFreq(nb, 0.0f);
+        std::cout << avgDev.val[0] << " " << stdDev.val[0] << std::endl << std::endl;
+        std::vector<float> avgErrorFreq(nb, 0.0f);
 		for(int j = 0; j < nb; j++)
 		{
             cv::Mat_<float> col = ptsErrorFreq.col(j);
@@ -477,15 +484,15 @@ int main(int argc, char **argv)
 		detectionTimes = 0;
 		for(unsigned int i = 0; i < AllImgFiles4Testing.size(); i++)
 		{
-			iImage = imread(AllImgFiles4Testing[i]);
+            iImage = cv::imread(AllImgFiles4Testing[i]);
 			// Explained by JIA Pei. You can use cv::resize() to ensure before fitting starts,
 			// every image to be tested is of a standard size, say (320, 240)
 			// iImage.copyTo(resizedImage);	// 
-			cv::resize(iImage, resizedImage, Size(320, 240) );
+            cv::resize(iImage, resizedImage, cv::Size(320, 240) );
 			iImage.copyTo(fittedImage);
 			size_t found1 = AllImgFiles4Testing[i].find_last_of("/\\");
 			size_t found2 = AllImgFiles4Testing[i].find_last_of(".");
-			string prefix = AllImgFiles4Testing[i].substr(found1+1, found2-1-found1);
+            std::string prefix = AllImgFiles4Testing[i].substr(found1+1, found2-1-found1);
 
 			if(!isTracked)
 			{
@@ -497,8 +504,8 @@ int main(int argc, char **argv)
 										true,
 										true,
 										1.0,
-										Size(80,80),
-										Size( min(resizedImage.rows,resizedImage.cols), min(resizedImage.rows,resizedImage.cols) ) ); // Size(240,240)
+                                        cv::Size(80,80),
+                                        cv::Size( std::min(resizedImage.rows,resizedImage.cols), std::min(resizedImage.rows,resizedImage.cols) ) ); // Size(240,240)
 				if( fd.IsFaceDetected() )
 				{
 					fd.CalcFaceKeyPoints();
@@ -733,26 +740,26 @@ int main(int argc, char **argv)
 														iImage,
 														fittingShape,
                                                         cv::Size(80,80),
-                                                        cv::Size( min(iImage.rows,iImage.cols), min(iImage.rows,iImage.cols) ) );
+                                                        cv::Size( std::min(iImage.rows,iImage.cols), std::min(iImage.rows,iImage.cols) ) );
 			}
 
 			nbOfIterations(0,i) = (float)(fitting2dsm->GetNbOfIterations());
-			fittingShape = fitting2dsm->VO_GetFittedShape();
+            fittingShape = fitting2dsm->GetFittedShape();
 			times(0,i) = fitting2dsm->GetFittingTime();
 			
 
 			if(record)
 			{
-				string fn = prefix+".jpg";
+                std::string fn = prefix+".jpg";
                 cv::imwrite(fn.c_str(), fittedImage);
 			}
 			
 			// For evaluation
 			if(doEvaluation)
 			{
-				vector<float> ptErrorFreq;
+                std::vector<float> ptErrorFreq;
 				float deviation = 0.0f;
-				vector<unsigned int> unsatisfiedPtList;
+                std::vector<unsigned int> unsatisfiedPtList;
 				unsatisfiedPtList.clear();
 				CRecognitionAlgs::CalcShapeFittingEffect(	oShapes[i],
 															fittingShape,
