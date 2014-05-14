@@ -86,6 +86,7 @@ private:
     void                    init();
 
 public:
+    /** The NDProfile ASM model */
     VO_ASMNDProfiles*       m_VOASMNDProfile;
 
     /** constructor */
@@ -94,6 +95,7 @@ public:
     /** destructor */
     ~VO_FittingASMNDProfiles();
 
+    /** Find the best matching by 1D Profile ASM, in a single level */
     static int              VO_FindBestMatchingProfile1D(   const cv::Mat& iImg,
                                                             const cv::Point2f& ThisPoint,
                                                             const cv::Mat_<float>& iMean,
@@ -103,6 +105,7 @@ public:
                                                             float& DeltaX,
                                                             float& DeltaY);
 
+    /** Update shape, in a single iteration */
     static int              UpdateShape(    const VO_ASMNDProfiles* asmmodel,
                                             const cv::Mat& iImg,
                                             VO_Shape& ioShape,
@@ -112,6 +115,7 @@ public:
                                             unsigned int offSetTolerance,
                                             unsigned int profdim = 2);
 
+    /** Pyramid Fitting */
     void                    PyramidFit( VO_Shape& ioShape,
                                         const cv::Mat& iImg,
                                         std::vector<cv::Mat>& oImages,
@@ -121,6 +125,7 @@ public:
                                         unsigned int profdim = 2,
                                         bool record = false);
 
+    /** Pyramid Fitting */
     void                    PyramidFit( VO_Shape& ioShape,
                                         const cv::Mat& iImg,
                                         unsigned int iLev,

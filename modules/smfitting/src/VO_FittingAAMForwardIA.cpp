@@ -87,7 +87,7 @@ void VO_FittingAAMForwardIA::init()
     VO_Fitting2DSM::init();
     this->m_VOAAMForwardIA          = new VO_AAMForwardIA();
 
-    string fn = "/home/jiapei/Desktop/forwardiaaamtime.txt";
+    std::string fn = "/home/jiapei/Desktop/forwardiaaamtime.txt";
 }
 
 
@@ -97,7 +97,7 @@ void VO_FittingAAMForwardIA::init()
  * @brief      Load all AAM data from a specified folder for later fitting, to member variable m_VOAAMForwardIA
  * @param      fd         Input - the folder that AAM to be loaded from
 */
-void VO_FittingAAMForwardIA::VO_LoadParameters4Fitting(const string& fd)
+void VO_FittingAAMForwardIA::VO_LoadParameters4Fitting(const std::string& fd)
 {
     this->m_VOAAMForwardIA->VO_LoadParameters4Fitting(fd);
     
@@ -113,29 +113,45 @@ void VO_FittingAAMForwardIA::VO_LoadParameters4Fitting(const string& fd)
 }
 
 
-float VO_FittingAAMForwardIA::VO_FAIAAAMFitting(const Mat& iImg,
-                                                vector<Mat>& oImages,
+/**
+ * @brief FAIA AAM Fitting, for static image sequences
+ * @param iImg
+ * @param oImages
+ * @param epoch
+ * @param record
+ * @return
+ */
+float VO_FittingAAMForwardIA::VO_FAIAAAMFitting(const cv::Mat& iImg,
+                                                std::vector<cv::Mat>& oImages,
                                                 unsigned int epoch,
                                                 bool record)
 {
 double t = (double)cvGetTickCount();
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "FAIA time cost: " << t << " millisec" << endl;
+std::cout << "FAIA time cost: " << t << " millisec" << std::endl;
 
     return t;
 }
 
 
-float VO_FittingAAMForwardIA::VO_FAIAAAMFitting(const Mat& iImg,
+/**
+ * @brief VO_FAIA AAM Fitting, for dyanmic video
+ * @param iImg
+ * @param ioShape
+ * @param oImg
+ * @param epoch
+ * @return
+ */
+float VO_FittingAAMForwardIA::VO_FAIAAAMFitting(const cv::Mat& iImg,
                                                 VO_Shape& ioShape,
-                                                Mat& oImg,
+                                                cv::Mat& oImg,
                                                 unsigned int epoch)
 {
 double t = (double)cvGetTickCount();
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "FAIA fitting time cost: " << t << " millisec" << endl;
+std::cout << "FAIA fitting time cost: " << t << " millisec" << std::endl;
 this->m_fFittingTime = t;
 
     return t;

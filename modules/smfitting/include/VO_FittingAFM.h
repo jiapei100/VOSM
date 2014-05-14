@@ -81,9 +81,11 @@
 class VO_FittingAFM : public VO_Fitting2DSM
 {
 private:
+    /** Initialization */
     void                    init();
 
 public:
+    /** The AFM model */
     VO_AFM*                 m_VOAFM;
 
     /** Constructor */
@@ -93,13 +95,13 @@ public:
     ~VO_FittingAFM();
     
     /** Load AFM fitting training results */
-    void                    VO_LoadParameters4Fitting(const string& fd);
+    void                    VO_LoadParameters4Fitting(const std::string& fd);
 
     /** Start AFM fitting, for static images, recording all iterations of every single image */
-    float                   VO_AFMFitting(const Mat& iImg, vector<Mat>& oImages, unsigned int afmType = VO_AXM::AFM, unsigned int epoch = EPOCH, bool record = false);
+    float                   VO_AFMFitting(const cv::Mat& iImg, std::vector<cv::Mat>& oImages, unsigned int afmType = VO_AXM::AFM, unsigned int epoch = EPOCH, bool record = false);
     
     /** Start AFM fitting, for dynamic image sequence */
-    float                   VO_AFMFitting(const Mat& iImg, VO_Shape& ioShape, Mat& oImg, unsigned int afmType = VO_AXM::AFM, unsigned int epoch = EPOCH);
+    float                   VO_AFMFitting(const cv::Mat& iImg, VO_Shape& ioShape, cv::Mat& oImg, unsigned int afmType = VO_AXM::AFM, unsigned int epoch = EPOCH);
 
 };
 

@@ -23,7 +23,7 @@
 *                                                                                                   *
 *                   b) Redistribution's in binary form must reproduce this whole paragraph of       *
 *                   copyright notice, including this list of conditions and all the following       *
-*                   contents in this copyright paragraph, and/or other materials provided with      *
+*                   contents in this copyright paragraph, and/or other cv::Materials provided with      *
 *                   the distribution.                                                               *
 *                                                                                                   *
 *                   c) The name of the copyright holders may not be used to endorse or promote      *
@@ -82,17 +82,17 @@ class VO_FittingAAMInverseIA : public VO_Fitting2DSM
 {
 private:
     /** For non-rigid transform */
-    Mat_<float>                     m_MatCurrentP;
-    Mat_<float>                     m_MatEstimatedP;
-    Mat_<float>                     m_MatDeltaP;                // 1*20
+    cv::Mat_<float>                 m_MatCurrentP;
+    cv::Mat_<float>                 m_MatEstimatedP;
+    cv::Mat_<float>                 m_MatDeltaP;                // 1*20
     
     /** For rigid transform */
-    Mat_<float>                     m_MatCurrentQ;
-    Mat_<float>                     m_MatEstimatedQ;
-    Mat_<float>                     m_MatDeltaQ;                // 1*4
+    cv::Mat_<float>                 m_MatCurrentQ;
+    cv::Mat_<float>                 m_MatEstimatedQ;
+    cv::Mat_<float>                 m_MatDeltaQ;                // 1*4
     
     /** For both rigid and non-rigid transform */
-    Mat_<float>                     m_MatDeltaPQ;
+    cv::Mat_<float>                 m_MatDeltaPQ;
 
     /** errors */
     float                           m_E;
@@ -101,26 +101,28 @@ private:
     /** Initialization */
     void                            init();
 
-    void                            VO_PParamQParam2ModelAlignedShape(  const Mat_<float>& p,
-                                                                        const Mat_<float>& q,
+    /** calculate the aligned modeled shape, from the trained appearance model */
+    void                            VO_PParamQParam2ModelAlignedShape(  const cv::Mat_<float>& p,
+                                                                        const cv::Mat_<float>& q,
                                                                         VO_Shape& oAlignedShape);
 
     /** calculate the real-size modeled shape, from the trained appearance model */
-    void                            VO_PParamQParam2FittingShape(   const Mat_<float>& p,
-                                                                    const Mat_<float>& q,
+    void                            VO_PParamQParam2FittingShape(   const cv::Mat_<float>& p,
+                                                                    const cv::Mat_<float>& q,
                                                                     VO_Shape& oShape,
                                                                     float& scale,
-                                                                    vector<float>& rotateAngles,
-                                                                    Mat_<float>& matCOG,
+                                                                    std::vector<float>& rotateAngles,
+                                                                    cv::Mat_<float>& matCOG,
                                                                     unsigned int mtd = VO_Fitting2DSM::USEGLOBALSHAPENORMALIZATION);
 
     /** The process of CMU Inverse Compositional. Developed by Yao Wei! */
-    void                            VO_CMUInverseCompositional( const Mat_<float>& matDeltaP,
-                                                                const Mat_<float>& matDeltaQ,
+    void                            VO_CMUInverseCompositional( const cv::Mat_<float>& matDeltaP,
+                                                                const cv::Mat_<float>& matDeltaQ,
                                                                 const VO_Shape& s,
                                                                 VO_Shape& NewS);
 
 public:
+    /** The inverse Image Alignment AAM */
     VO_AAMInverseIA*                m_VOAAMInverseIA;
 
     /** Constructor */
@@ -130,19 +132,19 @@ public:
     ~VO_FittingAAMInverseIA();
 
     /** Load ICIA AAM fitting training results */
-    void                            VO_LoadParameters4Fitting(const string& fd);
+    void                            VO_LoadParameters4Fitting(const std::string& fd);
 
     /** Start Inverse Additive Image Alignment fitting, for static images, recording all iterations of every single image */
-    float                           VO_IAIAAAMFitting(const Mat& iImg, vector<Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
+    float                           VO_IAIAAAMFitting(const cv::Mat& iImg, std::vector<cv::Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
 
     /** Start Inverse Additive Image Alignment fitting, for dynamic image sequence */
-    float                           VO_IAIAAAMFitting(const Mat& iImg, VO_Shape& ioShape, Mat& oImg, unsigned int epoch = EPOCH);
+    float                           VO_IAIAAAMFitting(const cv::Mat& iImg, VO_Shape& ioShape, cv::Mat& oImg, unsigned int epoch = EPOCH);
 
     /** Start CMU Inverse Compositional Image Alignment fitting, for static images, recording all iterations of every single image */
-    float                           VO_ICIAAAMFitting(const Mat& iImg, vector<Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
+    float                           VO_ICIAAAMFitting(const cv::Mat& iImg, std::vector<cv::Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
 
     /** Start CMU Inverse Compositional Image Alignment fitting, for dynamic image sequence */
-    float                           VO_ICIAAAMFitting(const Mat& iImg, VO_Shape& ioShape, Mat& oImg, unsigned int epoch = EPOCH);
+    float                           VO_ICIAAAMFitting(const cv::Mat& iImg, VO_Shape& ioShape, cv::Mat& oImg, unsigned int epoch = EPOCH);
 
 };
 

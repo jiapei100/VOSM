@@ -91,8 +91,14 @@ void VO_FittingAAMInverseIA::init()
 }
 
 
-void VO_FittingAAMInverseIA::VO_PParamQParam2ModelAlignedShape( const Mat_<float>& p,
-                                                                const Mat_<float>& q,
+/**
+ * @brief P/Q parameters to estimate the modelled aligned shape
+ * @param p  -- input, a transform matrix
+ * @param q  -- input, a transform matrix
+ * @param oAlignedShape  -- output, the aligned shape
+ */
+void VO_FittingAAMInverseIA::VO_PParamQParam2ModelAlignedShape( const cv::Mat_<float>& p,
+                                                                const cv::Mat_<float>& q,
                                                                 VO_Shape& oAlignedShape)
 {
     // generate shape and texture from p parameters
@@ -101,12 +107,22 @@ void VO_FittingAAMInverseIA::VO_PParamQParam2ModelAlignedShape( const Mat_<float
 }
 
 
-void VO_FittingAAMInverseIA::VO_PParamQParam2FittingShape(  const Mat_<float>& p,
-                                                            const Mat_<float>& q,
+/**
+ * @brief P/Q parameters to estimate the modelled real size shape
+ * @param p  -- input, a transform matrix
+ * @param q  -- input, a transform matrix
+ * @param oAlignedShape  -- output, the aligned shape
+ * @param scale -- output, scaling
+ * @param rotateAngles -- ouput, rotation
+ * @param matCOG -- output, COG
+ * @param mtd -- input, method to be used
+ */
+void VO_FittingAAMInverseIA::VO_PParamQParam2FittingShape(  const cv::Mat_<float>& p,
+                                                            const cv::Mat_<float>& q,
                                                             VO_Shape& oShape,
                                                             float& scale,
-                                                            vector<float>& rotateAngles,
-                                                            Mat_<float>& matCOG,
+                                                            std::vector<float>& rotateAngles,
+                                                            cv::Mat_<float>& matCOG,
                                                             unsigned int mtd)
 {
     switch(mtd)
@@ -122,8 +138,8 @@ void VO_FittingAAMInverseIA::VO_PParamQParam2FittingShape(  const Mat_<float>& p
         {
             this->m_VOAAMInverseIA->VO_SParamBackProjectToAlignedShape(p, this->m_VOModelAlignedShape);
             float updatescale = 1.0;
-            vector<float> updateangles(1);
-            Mat_<float> updatetranslation = Mat_<float>::zeros(2, 1);
+            std::vector<float> updateangles(1);
+            cv::Mat_<float> updatetranslation = cv::Mat_<float>::zeros(2, 1);
             VO_Shape::GlobalShapeNormalization2SimilarityTrans(q, updatescale, updateangles, updatetranslation );
             scale *= updatescale;
             rotateAngles[0] = -rotateAngles[0]+updateangles[0];
@@ -144,7 +160,7 @@ void VO_FittingAAMInverseIA::VO_PParamQParam2FittingShape(  const Mat_<float>& p
  * @brief      Load all AAM data from a specified folder for later fitting, to member variable m_VOAAMInverseIA
  * @param      fd         Input - the folder that AAM to be loaded from
 */
-void VO_FittingAAMInverseIA::VO_LoadParameters4Fitting(const string& fd)
+void VO_FittingAAMInverseIA::VO_LoadParameters4Fitting(const std::string& fd)
 {
     this->m_VOAAMInverseIA->VO_LoadParameters4Fitting(fd);
 
@@ -157,13 +173,13 @@ void VO_FittingAAMInverseIA::VO_LoadParameters4Fitting(const string& fd)
     this->m_vPointWarpInfo              = this->m_VOAAMInverseIA->m_vNormalizedPointWarpInfo;
 
     // VO_FittingAAMInverseIA
-    this->m_MatCurrentP                 = Mat_<float>::zeros(1, this->m_VOAAMInverseIA->m_iNbOfShapeEigens);
-    this->m_MatEstimatedP               = Mat_<float>::zeros(1, this->m_VOAAMInverseIA->m_iNbOfShapeEigens);
-    this->m_MatDeltaP                   = Mat_<float>::zeros(1, this->m_VOAAMInverseIA->m_iNbOfShapeEigens);
-    this->m_MatCurrentQ                 = Mat_<float>::zeros(1, 4);
-    this->m_MatEstimatedQ               = Mat_<float>::zeros(1, 4);
-    this->m_MatDeltaQ                   = Mat_<float>::zeros(1, 4);
-    this->m_MatDeltaPQ                  = Mat_<float>::zeros(1, this->m_VOAAMInverseIA->m_iNbOfShapeEigens+4);
+    this->m_MatCurrentP                 = cv::Mat_<float>::zeros(1, this->m_VOAAMInverseIA->m_iNbOfShapeEigens);
+    this->m_MatEstimatedP               = cv::Mat_<float>::zeros(1, this->m_VOAAMInverseIA->m_iNbOfShapeEigens);
+    this->m_MatDeltaP                   = cv::Mat_<float>::zeros(1, this->m_VOAAMInverseIA->m_iNbOfShapeEigens);
+    this->m_MatCurrentQ                 = cv::Mat_<float>::zeros(1, 4);
+    this->m_MatEstimatedQ               = cv::Mat_<float>::zeros(1, 4);
+    this->m_MatDeltaQ                   = cv::Mat_<float>::zeros(1, 4);
+    this->m_MatDeltaPQ                  = cv::Mat_<float>::zeros(1, this->m_VOAAMInverseIA->m_iNbOfShapeEigens+4);
 }
 
 
@@ -176,8 +192,8 @@ void VO_FittingAAMInverseIA::VO_LoadParameters4Fitting(const string& fd)
  * @param       epoch           Input - the iteration epoch
  * @note        Refer to "AAM Revisited, page 34, figure 13", particularly, those steps.
 */
-float VO_FittingAAMInverseIA::VO_IAIAAAMFitting(const Mat& iImg,
-                                                vector<Mat>& oImages,
+float VO_FittingAAMInverseIA::VO_IAIAAAMFitting(const cv::Mat& iImg,
+                                                std::vector<cv::Mat>& oImages,
                                                 unsigned int epoch,
                                                 bool record)
 {
@@ -189,7 +205,7 @@ double t = (double)cvGetTickCount();
     this->m_iIteration = 0;
 if(record)
 {
-    Mat temp0 = iImg.clone();
+    cv::Mat temp0 = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMInverseIA, temp0);
     oImages.push_back(temp0);
 }
@@ -203,18 +219,18 @@ if(record)
     this->m_VOFittingShape.ConstrainShapeInImage(this->m_ImageProcessing);
 if(record)
 {
-    Mat temp1 = iImg.clone();
+    cv::Mat temp1 = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMInverseIA, temp1);
     oImages.push_back(temp1);
 }
 
     // Set m_MatEstimatedP, m_MatDeltaP, m_MatCurrentQ, m_MatEstimatedQ, m_MatDeltaQ, m_MatDeltaPQ, etc.
-    this->m_MatEstimatedP   = Mat_<float>::zeros(this->m_MatEstimatedP.size());
-    this->m_MatDeltaP       = Mat_<float>::zeros(this->m_MatDeltaP.size());
-    this->m_MatEstimatedQ   = Mat_<float>::zeros(this->m_MatEstimatedQ.size());
-    this->m_MatCurrentQ     = Mat_<float>::zeros(this->m_MatCurrentQ.size());
-    this->m_MatDeltaQ       = Mat_<float>::zeros(this->m_MatDeltaQ.size());
-    this->m_MatDeltaPQ      = Mat_<float>::zeros(this->m_MatDeltaPQ.size());
+    this->m_MatEstimatedP   = cv::Mat_<float>::zeros(this->m_MatEstimatedP.size());
+    this->m_MatDeltaP       = cv::Mat_<float>::zeros(this->m_MatDeltaP.size());
+    this->m_MatEstimatedQ   = cv::Mat_<float>::zeros(this->m_MatEstimatedQ.size());
+    this->m_MatCurrentQ     = cv::Mat_<float>::zeros(this->m_MatCurrentQ.size());
+    this->m_MatDeltaQ       = cv::Mat_<float>::zeros(this->m_MatDeltaQ.size());
+    this->m_MatDeltaPQ      = cv::Mat_<float>::zeros(this->m_MatDeltaPQ.size());
 
     // Step (1) Warp I with W(x;p) followed by N(x;q) to compute I(N(W(x;p);q))
     this->VO_PParamQParam2FittingShape( this->m_MatCurrentP,
@@ -226,7 +242,7 @@ if(record)
     this->m_VOFittingShape.ConstrainShapeInImage(this->m_ImageProcessing);
 if(record)
 {
-    Mat temp2 = iImg.clone();
+    cv::Mat temp2 = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMInverseIA, temp2);
     oImages.push_back(temp2);
 }
@@ -241,15 +257,15 @@ if(record)
     {
         ++this->m_iIteration;
         float estScale = this->m_fScale;
-        vector<float> estRotateAngles = this->m_vRotateAngles;
-        Mat_<float> estCOG = this->m_MatCenterOfGravity.clone();
+        std::vector<float> estRotateAngles = this->m_vRotateAngles;
+        cv::Mat_<float> estCOG = this->m_MatCenterOfGravity.clone();
 
         // Step (7) -- a bit modification
-        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMInverseIA->m_MatICIAPreMatrix, -1, Mat(), 0, this->m_MatDeltaPQ, GEMM_2_T);
+        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMInverseIA->m_MatICIAPreMatrix, -1, cv::Mat(), 0, this->m_MatDeltaPQ, cv::GEMM_2_T);
 
         // Step (8) -- a bit modification. Get DeltaP DeltaQ respectively
-        this->m_MatDeltaQ = this->m_MatDeltaPQ(Rect( 0, 0, this->m_MatDeltaQ.cols, 1));
-        this->m_MatDeltaP = this->m_MatDeltaPQ(Rect( this->m_MatDeltaQ.cols, 0, this->m_MatDeltaP.cols, 1));
+        this->m_MatDeltaQ = this->m_MatDeltaPQ(cv::Rect( 0, 0, this->m_MatDeltaQ.cols, 1));
+        this->m_MatDeltaP = this->m_MatDeltaPQ(cv::Rect( this->m_MatDeltaQ.cols, 0, this->m_MatDeltaP.cols, 1));
 
         // Step (9) -- Additive
         cv::add(this->m_MatCurrentQ, this->m_MatDeltaQ, this->m_MatEstimatedQ);
@@ -273,7 +289,7 @@ if(record)
             // Unlike what's happening in Basic AAM, 
             // since m_fScale, m_vRotateAngles and m_MatCenterOfGravity have not been updated in ICIA,
             // m_MatCurrentT should not be assigned to 0 now!
-//            this->m_MatCurrentQ = Mat_<float>::zeros(this->m_MatCurrentQ.size());
+//            this->m_MatCurrentQ = cv::Mat_<float>::zeros(this->m_MatCurrentQ.size());
             this->m_MatEstimatedQ.copyTo(this->m_MatCurrentQ);
             this->m_MatEstimatedP.copyTo(this->m_MatCurrentP);
             this->m_VOFittingShape.clone(this->m_VOEstimatedShape);
@@ -281,7 +297,7 @@ if(record)
             this->m_E_previous = this->m_E;
 if(record)
 {
-    Mat temp = iImg.clone();
+    cv::Mat temp = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMInverseIA, temp);
     oImages.push_back(temp);
 }
@@ -309,7 +325,7 @@ if(record)
     this->m_VOAAMInverseIA->VO_CalcAllParams4AnyTexture(this->m_VOFittingTexture, this->m_MatModelNormalizedTextureParam);
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "IAIA AAM fitting time cost: " << t << " millisec" << endl;
+std::cout << "IAIA AAM fitting time cost: " << t << " millisec" << std::endl;
 
     return t;
 }
@@ -324,9 +340,9 @@ cout << "IAIA AAM fitting time cost: " << t << " millisec" << endl;
  * @param       oImg            Output - the fitted image
  * @param       epoch           Input - the iteration epoch
 */
-float VO_FittingAAMInverseIA::VO_IAIAAAMFitting(const Mat& iImg,
+float VO_FittingAAMInverseIA::VO_IAIAAAMFitting(const cv::Mat& iImg,
                                                 VO_Shape& ioShape,
-                                                Mat& oImg,
+                                                cv::Mat& oImg,
                                                 unsigned int epoch)
 {
     this->m_VOFittingShape.clone(ioShape);
@@ -345,12 +361,12 @@ double t = (double)cvGetTickCount();
     this->m_VOFittingShape.ConstrainShapeInImage(this->m_ImageProcessing);
 
     // Set m_MatEstimatedP, m_MatDeltaP, m_MatCurrentQ, m_MatEstimatedQ, m_MatDeltaQ, m_MatDeltaPQ, etc.
-    this->m_MatEstimatedP   = Mat_<float>::zeros(this->m_MatEstimatedP.size());
-    this->m_MatDeltaP       = Mat_<float>::zeros(this->m_MatDeltaP.size());
-    this->m_MatEstimatedQ   = Mat_<float>::zeros(this->m_MatEstimatedQ.size());
-    this->m_MatCurrentQ     = Mat_<float>::zeros(this->m_MatCurrentQ.size());
-    this->m_MatDeltaQ       = Mat_<float>::zeros(this->m_MatDeltaQ.size());
-    this->m_MatDeltaPQ      = Mat_<float>::zeros(this->m_MatDeltaPQ.size());
+    this->m_MatEstimatedP   = cv::Mat_<float>::zeros(this->m_MatEstimatedP.size());
+    this->m_MatDeltaP       = cv::Mat_<float>::zeros(this->m_MatDeltaP.size());
+    this->m_MatEstimatedQ   = cv::Mat_<float>::zeros(this->m_MatEstimatedQ.size());
+    this->m_MatCurrentQ     = cv::Mat_<float>::zeros(this->m_MatCurrentQ.size());
+    this->m_MatDeltaQ       = cv::Mat_<float>::zeros(this->m_MatDeltaQ.size());
+    this->m_MatDeltaPQ      = cv::Mat_<float>::zeros(this->m_MatDeltaPQ.size());
 
     // Step (1) Warp I with W(x;p) followed by N(x;q) to compute I(N(W(x;p);q))
     this->VO_PParamQParam2FittingShape( this->m_MatCurrentP,
@@ -371,15 +387,15 @@ double t = (double)cvGetTickCount();
     {
         ++this->m_iIteration;
         float estScale = this->m_fScale;
-        vector<float> estRotateAngles = this->m_vRotateAngles;
-        Mat_<float> estCOG = this->m_MatCenterOfGravity.clone();
+        std::vector<float> estRotateAngles = this->m_vRotateAngles;
+        cv::Mat_<float> estCOG = this->m_MatCenterOfGravity.clone();
 
         // Step (7) -- a bit modification
-        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMInverseIA->m_MatICIAPreMatrix, -1, Mat(), 0, this->m_MatDeltaPQ, GEMM_2_T);
+        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMInverseIA->m_MatICIAPreMatrix, -1, cv::Mat(), 0, this->m_MatDeltaPQ, cv::GEMM_2_T);
 
         // Step (8) -- a bit modification. Get DeltaP DeltaQ respectively
-        this->m_MatDeltaQ = this->m_MatDeltaPQ(Rect( 0, 0, this->m_MatDeltaQ.cols, 1));
-        this->m_MatDeltaP = this->m_MatDeltaPQ(Rect( this->m_MatDeltaQ.cols, 0, this->m_MatDeltaP.cols, 1));
+        this->m_MatDeltaQ = this->m_MatDeltaPQ(cv::Rect( 0, 0, this->m_MatDeltaQ.cols, 1));
+        this->m_MatDeltaP = this->m_MatDeltaPQ(cv::Rect( this->m_MatDeltaQ.cols, 0, this->m_MatDeltaP.cols, 1));
 
         // Step (9) -- Additive
         cv::add(this->m_MatCurrentQ, this->m_MatDeltaQ, this->m_MatEstimatedQ);
@@ -403,7 +419,7 @@ double t = (double)cvGetTickCount();
             // Unlike what's happening in Basic AAM, 
             // since m_fScale, m_vRotateAngles and m_MatCenterOfGravity have not been updated in ICIA,
             // m_MatCurrentT should not be assigned to 0 now!
-//            this->m_MatCurrentQ = Mat_<float>::zeros(this->m_MatCurrentQ.size());
+//            this->m_MatCurrentQ = cv::Mat_<float>::zeros(this->m_MatCurrentQ.size());
             this->m_MatEstimatedQ.copyTo(this->m_MatCurrentQ);
             this->m_MatEstimatedP.copyTo(this->m_MatCurrentP);
             this->m_VOFittingShape.clone(this->m_VOEstimatedShape);
@@ -437,7 +453,7 @@ double t = (double)cvGetTickCount();
     ioShape.clone(this->m_VOFittingShape);
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "IAIA AAM fitting time cost: " << t << " millisec" << endl;
+std::cout << "IAIA AAM fitting time cost: " << t << " millisec" << std::endl;
 this->m_fFittingTime = t;
 
     return t;
@@ -452,8 +468,8 @@ this->m_fFittingTime = t;
  * @param       oImages         Output - the fitted shape
  * @param       epoch           Input - the iteration epoch
 */
-float VO_FittingAAMInverseIA::VO_ICIAAAMFitting(const Mat& iImg,
-                                                vector<Mat>& oImages,
+float VO_FittingAAMInverseIA::VO_ICIAAAMFitting(const cv::Mat& iImg,
+                                                std::vector<cv::Mat>& oImages,
                                                 unsigned int epoch,
                                                 bool record)
 {
@@ -465,7 +481,7 @@ double t = (double)cvGetTickCount();
 
 if(record)
 {
-    Mat temp0 = iImg.clone();
+    cv::Mat temp0 = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMInverseIA, temp0);
     oImages.push_back(temp0);
 }
@@ -479,15 +495,15 @@ if(record)
     this->m_VOFittingShape.ConstrainShapeInImage(this->m_ImageProcessing);
 if(record)
 {
-    Mat temp1 = iImg.clone();
+    cv::Mat temp1 = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMInverseIA, temp1);
     oImages.push_back(temp1);
 }
 
-    this->m_MatDeltaP        = Mat_<float>::zeros(this->m_MatDeltaP.size());
-    this->m_MatDeltaQ        = Mat_<float>::zeros(this->m_MatDeltaQ.size());
-    this->m_MatCurrentQ        = Mat_<float>::zeros(this->m_MatCurrentQ.size());
-    this->m_MatDeltaPQ        = Mat_<float>::zeros(this->m_MatDeltaPQ.size());
+    this->m_MatDeltaP        = cv::Mat_<float>::zeros(this->m_MatDeltaP.size());
+    this->m_MatDeltaQ        = cv::Mat_<float>::zeros(this->m_MatDeltaQ.size());
+    this->m_MatCurrentQ      = cv::Mat_<float>::zeros(this->m_MatCurrentQ.size());
+    this->m_MatDeltaPQ       = cv::Mat_<float>::zeros(this->m_MatDeltaPQ.size());
 
     // Step (1) Warp I with W(x;p) followed by N(x;q) to compute I(N(W(x;p);q))
     this->VO_PParamQParam2FittingShape( this->m_MatCurrentP,
@@ -499,7 +515,7 @@ if(record)
     this->m_VOFittingShape.ConstrainShapeInImage(this->m_ImageProcessing);
 if(record)
 {
-    Mat temp2 = iImg.clone();
+    cv::Mat temp2 = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMInverseIA, temp2);
     oImages.push_back(temp2);
 }
@@ -515,11 +531,11 @@ if(record)
         ++this->m_iIteration;
 
         // Step (7) -- a bit modification
-        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMInverseIA->m_MatICIAPreMatrix, -1, Mat(), 0, this->m_MatDeltaPQ, GEMM_2_T);
+        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMInverseIA->m_MatICIAPreMatrix, -1, cv::Mat(), 0, this->m_MatDeltaPQ, cv::GEMM_2_T);
 
         // Step (8) -- a bit modification. Get DeltaP DeltaQ respectively
-        this->m_MatDeltaQ = this->m_MatDeltaPQ(Rect( 0, 0, this->m_MatDeltaQ.cols, 1));
-        this->m_MatDeltaP = this->m_MatDeltaPQ(Rect( this->m_MatDeltaQ.cols, 0, this->m_MatDeltaP.cols, 1));
+        this->m_MatDeltaQ = this->m_MatDeltaPQ(cv::Rect( 0, 0, this->m_MatDeltaQ.cols, 1));
+        this->m_MatDeltaP = this->m_MatDeltaPQ(cv::Rect( this->m_MatDeltaQ.cols, 0, this->m_MatDeltaP.cols, 1));
 
         // Step (9) -- CMU Inverse Compositional
         this->VO_CMUInverseCompositional( this->m_MatDeltaP, this->m_MatDeltaQ, this->m_VOFittingShape, this->m_VOEstimatedShape );
@@ -542,7 +558,7 @@ if(record)
             // Unlike what's happening in Basic AAM, 
             // since m_fScale, m_vRotateAngles and m_MatCenterOfGravity have not been updated in ICIA,
             // m_MatCurrentT should not be assigned to 0 now!
-//            this->m_MatCurrentQ = Mat_<float>::zeros(this->m_MatCurrentQ.size());
+//            this->m_MatCurrentQ = cv::Mat_<float>::zeros(this->m_MatCurrentQ.size());
             this->m_VOFittingShape.clone(this->m_VOEstimatedShape);
             this->m_VOAAMInverseIA->VO_CalcAllParams4AnyShapeWithConstrain( this->m_VOFittingShape,
                                                                             this->m_MatCurrentP,
@@ -554,7 +570,7 @@ if(record)
             this->m_E_previous = this->m_E;
 if(record)
 {
-    Mat temp = iImg.clone();
+    cv::Mat temp = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMInverseIA, temp);
     oImages.push_back(temp);
 }
@@ -582,7 +598,7 @@ if(record)
     this->m_VOAAMInverseIA->VO_CalcAllParams4AnyTexture(this->m_VOFittingTexture, this->m_MatModelNormalizedTextureParam);
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "ICIA AAM fitting time cost: " << t << " millisec" << endl;
+std::cout << "ICIA AAM fitting time cost: " << t << " millisec" << std::endl;
 
     return t;
 }
@@ -597,9 +613,9 @@ cout << "ICIA AAM fitting time cost: " << t << " millisec" << endl;
  * @param       oImg            Output - the fitted image
  * @param       epoch           Input - the iteration epoch
 */
-float VO_FittingAAMInverseIA::VO_ICIAAAMFitting(const Mat& iImg,
+float VO_FittingAAMInverseIA::VO_ICIAAAMFitting(const cv::Mat& iImg,
                                                 VO_Shape& ioShape,
-                                                Mat& oImg,
+                                                cv::Mat& oImg,
                                                 unsigned int epoch)
 {
     this->m_VOFittingShape.clone(ioShape);
@@ -617,10 +633,10 @@ double t = (double)cvGetTickCount();
                                                                     this->m_MatCenterOfGravity);
     this->m_VOFittingShape.ConstrainShapeInImage(this->m_ImageProcessing);
 
-    this->m_MatDeltaP       = Mat_<float>::zeros(this->m_MatDeltaP.size());
-    this->m_MatDeltaQ       = Mat_<float>::zeros(this->m_MatDeltaQ.size());
-    this->m_MatCurrentQ     = Mat_<float>::zeros(this->m_MatCurrentQ.size());
-    this->m_MatDeltaPQ      = Mat_<float>::zeros(this->m_MatDeltaPQ.size());
+    this->m_MatDeltaP       = cv::Mat_<float>::zeros(this->m_MatDeltaP.size());
+    this->m_MatDeltaQ       = cv::Mat_<float>::zeros(this->m_MatDeltaQ.size());
+    this->m_MatCurrentQ     = cv::Mat_<float>::zeros(this->m_MatCurrentQ.size());
+    this->m_MatDeltaPQ      = cv::Mat_<float>::zeros(this->m_MatDeltaPQ.size());
 
     // Step (1) Warp I with W(x;p) followed by N(x;q) to compute I(N(W(x;p);q))
     this->VO_PParamQParam2FittingShape( this->m_MatCurrentP,
@@ -642,11 +658,11 @@ double t = (double)cvGetTickCount();
         ++this->m_iIteration;
 
         // Step (7) -- a bit modification
-        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMInverseIA->m_MatICIAPreMatrix, -1, Mat(), 0, this->m_MatDeltaPQ, GEMM_2_T);
+        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMInverseIA->m_MatICIAPreMatrix, -1, cv::Mat(), 0, this->m_MatDeltaPQ, cv::GEMM_2_T);
 
         // Step (8) -- a bit modification. Get DeltaP DeltaQ respectively
-        this->m_MatDeltaQ = this->m_MatDeltaPQ(Rect( 0, 0, this->m_MatDeltaQ.cols, 1));
-        this->m_MatDeltaP = this->m_MatDeltaPQ(Rect( this->m_MatDeltaQ.cols, 0, this->m_MatDeltaP.cols, 1));
+        this->m_MatDeltaQ = this->m_MatDeltaPQ(cv::Rect( 0, 0, this->m_MatDeltaQ.cols, 1));
+        this->m_MatDeltaP = this->m_MatDeltaPQ(cv::Rect( this->m_MatDeltaQ.cols, 0, this->m_MatDeltaP.cols, 1));
 
         // Step (9) -- CMU Inverse Compositional
         this->VO_CMUInverseCompositional( this->m_MatDeltaP, this->m_MatDeltaQ, this->m_VOFittingShape, this->m_VOEstimatedShape );
@@ -669,7 +685,7 @@ double t = (double)cvGetTickCount();
             // Unlike what's happening in Basic AAM, 
             // since m_fScale, m_vRotateAngles and m_MatCenterOfGravity have not been updated in ICIA,
             // m_MatCurrentT should not be assigned to 0 now!
-//            this->m_MatCurrentQ = Mat_<float>::zeros(this->m_MatCurrentQ.size());
+//            this->m_MatCurrentQ = cv::Mat_<float>::zeros(this->m_MatCurrentQ.size());
             this->m_VOFittingShape.clone(this->m_VOEstimatedShape);
             this->m_VOAAMInverseIA->VO_CalcAllParams4AnyShapeWithConstrain( this->m_VOFittingShape,
                                                                             this->m_MatCurrentP,
@@ -706,7 +722,7 @@ double t = (double)cvGetTickCount();
     ioShape.clone(this->m_VOFittingShape);
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "ICIA AAM fitting time cost: " << t << " millisec" << endl;
+std::cout << "ICIA AAM fitting time cost: " << t << " millisec" << std::endl;
 this->m_fFittingTime = t;
 
     return t;
@@ -721,8 +737,8 @@ this->m_fFittingTime = t;
  * @param       - s             Input -- the shape
  * @param       - estShape      Output -- newly estimated shape by Inverse compositional
  */
-void VO_FittingAAMInverseIA::VO_CMUInverseCompositional(const Mat_<float>& matDeltaP,
-                                                        const Mat_<float>& matDeltaQ,
+void VO_FittingAAMInverseIA::VO_CMUInverseCompositional(const cv::Mat_<float>& matDeltaP,
+                                                        const cv::Mat_<float>& matDeltaQ,
                                                         const VO_Shape& s,
                                                         VO_Shape& estShape)
 {
@@ -732,9 +748,9 @@ void VO_FittingAAMInverseIA::VO_CMUInverseCompositional(const Mat_<float>& matDe
 //    __shape.CalcShape(__inv_pq, __update_s0);    // __update_s0 = N.W(s0, -delta_p, -delta_q)
 
     //Secondly: Composing the Incremental Warp with the Current Warp Estimate.
-    Point2f res, tmp;
+    cv::Point2f res, tmp;
     int count = 0;
-    vector<unsigned int> vertexIdxes;
+    std::vector<unsigned int> vertexIdxes;
 
     for(unsigned int i = 0; i < this->m_VOAAMInverseIA->m_iNbOfPoints; i++)
     {
@@ -761,7 +777,7 @@ void VO_FittingAAMInverseIA::VO_CMUInverseCompositional(const Mat_<float>& matDe
         }
         // average the result so as to smooth the warp at each vertex
         if(count == 0)
-            cerr << "There must be something wrong when CMU Inverse Compositional !" << endl;
+            std::cerr << "There must be something wrong when CMU Inverse Compositional !" << std::endl;
         res.x /= count;
         res.y /= count;
         estShape.SetA2DPoint(res, i);

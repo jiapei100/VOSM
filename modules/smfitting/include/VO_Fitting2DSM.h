@@ -75,7 +75,7 @@
 
 
 /** 
- * @author        JIA Pei
+ * @author       JIA Pei
  * @brief        Generalized class for 2D statistical model fitting algorithms.
  */
 class VO_Fitting2DSM
@@ -84,7 +84,7 @@ public:
     /** Maximum iteration times */
     static const int                EPOCH = 10;
 
-    /** pClose */
+    /** pClose, to calculate an evaluation value, if the evaluation value is close enough to say: it's fitted. */
     static float                    pClose;
 
 protected:
@@ -235,8 +235,8 @@ public:
 
     float                           GetFittingTime() const { return this->m_fFittingTime; }
     unsigned int                    GetNbOfIterations() const { return this->m_iIteration; }
-    VO_Shape                        VO_GetFittedShape() const { return this->m_VOFittingShape; }
-    VO_Texture                      VO_GetFittedTexture()
+    VO_Shape                        GetFittedShape() const { return this->m_VOFittingShape; }
+    VO_Texture                      GetFittedTexture()
     {
                                     VO_TextureModel::VO_LoadOneTextureFromShape(this->m_VOFittingShape,
                                                                                 this->m_ImageInput,
@@ -254,7 +254,7 @@ public:
                                                                     const cv::Point2f& ptRightEyeCenter,
                                                                     const cv::Point2f& ptMouthCenter );
 
-    /** */
+    /** Estimate the fitted shape for the first time */
     static VO_Shape                 VO_FirstEstimationByScaling(const VO_Shape& iShape,
                                                                 const cv::Rect& rect);
 

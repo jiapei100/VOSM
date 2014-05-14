@@ -84,14 +84,14 @@ public:
 
 private:
     /** For non-rigid transform */
-    cv::Mat_<float>                 m_MatDeltaC;
-    cv::Mat_<float>                 m_MatEstimatedC;
-    cv::Mat_<float>                 m_MatCurrentC;
+    cv::Mat_<float>             m_MatDeltaC;
+    cv::Mat_<float>             m_MatEstimatedC;
+    cv::Mat_<float>             m_MatCurrentC;
 
     /** For rigid transform */
-    cv::Mat_<float>                 m_MatDeltaT;
-    cv::Mat_<float>                 m_MatEstimatedT;
-    cv::Mat_<float>                 m_MatCurrentT;
+    cv::Mat_<float>             m_MatDeltaT;
+    cv::Mat_<float>             m_MatEstimatedT;
+    cv::Mat_<float>             m_MatCurrentT;
 
     /** errors */
     float                       m_E;
@@ -111,6 +111,7 @@ private:
                                                                 unsigned int mtd = VO_Fitting2DSM::USESIMILARITYTRANSFORM);
 
 public:
+    /** The basic AAM model */
     VO_AAMBasic*                m_VOAAMBasic;
 
     /** Constructor */
@@ -120,19 +121,19 @@ public:
     ~VO_FittingAAMBasic();
 
     /** Load Basic AAM fitting training results */
-    void                        VO_LoadParameters4Fitting(const string& fd);
+    void                        VO_LoadParameters4Fitting(const std::string& fd);
 
     /** Start Basic AAM fitting, for static images, recording all iterations of every single image */
-    float                       VO_BasicAAMFitting(const Mat& iImg, std::vector<Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
+    float                       VO_BasicAAMFitting(const cv::Mat& iImg, std::vector<cv::Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
 
     /** Start Basic AAM fitting, for dynamic image sequence */
-    float                       VO_BasicAAMFitting(const Mat& iImg, VO_Shape& ioShape, Mat& oImg, unsigned int epoch = EPOCH);
+    float                       VO_BasicAAMFitting(const cv::Mat& iImg, VO_Shape& ioShape, cv::Mat& oImg, unsigned int epoch = EPOCH);
 
     /** Start Direct AAM fitting, for static images, recording all iterations of every single image */
-    float                       VO_DirectAAMFitting(const Mat& iImg, std::vector<Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
+    float                       VO_DirectAAMFitting(const cv::Mat& iImg, std::vector<cv::Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
 
     /** Start Direct AAM fitting, for dynamic image sequence */
-    float                       VO_DirectAAMFitting(const Mat& iImg, VO_Shape& ioShape, Mat& oImg,  unsigned int epoch = EPOCH);
+    float                       VO_DirectAAMFitting(const cv::Mat& iImg, VO_Shape& ioShape, cv::Mat& oImg,  unsigned int epoch = EPOCH);
 };
 
 #endif

@@ -88,12 +88,12 @@ void VO_FittingAFM::init()
     VO_Fitting2DSM::init();
     this->m_VOAFM           = new VO_AFM();
 
-    string fn = "/home/jiapei/Desktop/forwardiaaamtime.txt";
+    std::string fn = "/home/jiapei/Desktop/forwardiaaamtime.txt";
 }
 
 
 /** Load ICIA AAM fitting training results */
-void VO_FittingAFM::VO_LoadParameters4Fitting(const string& fd)
+void VO_FittingAFM::VO_LoadParameters4Fitting(const std::string& fd)
 {
     this->m_VOAFM->VO_LoadParameters4Fitting(fd);
 
@@ -106,9 +106,17 @@ void VO_FittingAFM::VO_LoadParameters4Fitting(const string& fd)
     this->m_vPointWarpInfo              = this->m_VOAFM->m_vNormalizedPointWarpInfo;
 }
     
-    
-float VO_FittingAFM::VO_AFMFitting( const Mat& iImg,
-                                    vector<Mat>& oImages,
+/**
+ * @brief AFM Fitting
+ * @param iImg -- input, image
+ * @param oImages -- output, iamges in the fitting process
+ * @param afmType -- AFM type
+ * @param epoch -- iteration times
+ * @param record -- take record or not?
+ * @return float -- fitting time
+ */
+float VO_FittingAFM::VO_AFMFitting( const cv::Mat& iImg,
+                                    std::vector<cv::Mat>& oImages,
                                     unsigned int afmType,
                                     unsigned int epoch,
                                     bool record)
@@ -124,15 +132,24 @@ double t = (double)cvGetTickCount();
     }
     
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "Basic fitting time cost: " << t << " millisec" << endl;
+std::cout << "Basic fitting time cost: " << t << " millisec" << std::endl;
 
     return t;
 }
 
 
-float VO_FittingAFM::VO_AFMFitting( const Mat& iImg,
+/**
+ * @brief AFM Fitting
+ * @param iImg -- input, image
+ * @param ioShape -- output, shape during the fitting process
+ * @param oImg -- output, image
+ * @param afmType -- AFM type
+ * @param epoch -- iteration times
+ * @return float -- fitting time
+ */
+float VO_FittingAFM::VO_AFMFitting( const cv::Mat& iImg,
                                     VO_Shape& ioShape,
-                                    Mat& oImg,
+                                    cv::Mat& oImg,
                                     unsigned int afmType,
                                     unsigned int epoch)
 {
@@ -147,7 +164,7 @@ double t = (double)cvGetTickCount();
     }
     
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "Basic fitting time cost: " << t << " millisec" << endl;
+std::cout << "Basic fitting time cost: " << t << " millisec" << std::endl;
 this->m_fFittingTime = t;
     
     return t;

@@ -87,6 +87,7 @@ private:
     void                    init();
 
 public:
+    /** The Local Texture Constrained ASM model */
     VO_ASMLTCs*             m_VOASMLTC;
 
     /** constructor */
@@ -95,54 +96,58 @@ public:
     /** destructor */
     ~VO_FittingASMLTCs();
 
+    /** Find the best matching by LTC ASM, in a single level */
     static float            VO_FindBestMatchingLTC( const VO_ASMLTCs* asmmodel,
-                                                    const Mat& iImg,
+                                                    const cv::Mat& iImg,
                                                     const VO_Shape& iShape,
-                                                    const vector<VO_Shape2DInfo>& iShapeInfo,
-                                                    const Mat_<float>& iMean,
-                                                    const Mat_<float>& iCovInverse,
+                                                    const std::vector<VO_Shape2DInfo>& iShapeInfo,
+                                                    const cv::Mat_<float>& iMean,
+                                                    const cv::Mat_<float>& iCovInverse,
                                                     unsigned int ptIdx,
                                                     unsigned int offSetTolerance,
-                                                    Point2f& ioLocation,
+                                                    cv::Point2f& ioLocation,
                                                     unsigned int LTCType );
 
+    /** Update shape, in a single iteration */
     static int              UpdateShape(const VO_ASMLTCs* asmmodel,
-                                        const Mat& iImg,
+                                        const cv::Mat& iImg,
                                         VO_Shape& ioShape,
-                                        const vector<VO_Shape2DInfo>& iShapeInfo,
-                                        const vector< Mat_<float> >& iMeans,
-                                        const vector< Mat_<float> >& iCovInverses,
+                                        const std::vector<VO_Shape2DInfo>& iShapeInfo,
+                                        const std::vector< cv::Mat_<float> >& iMeans,
+                                        const std::vector< cv::Mat_<float> >& iCovInverses,
                                         unsigned int offSetTolerance = 3);
 
+    /** Pyramid Fitting */
     void                    PyramidFit( VO_Shape& iShape,
-                                        const Mat& iImg,
-                                        vector<Mat>& oImages,
+                                        const cv::Mat& iImg,
+                                        std::vector<cv::Mat>& oImages,
                                         unsigned int iLev,
                                         float PClose = 0.90f,
                                         unsigned int epoch = VO_Fitting2DSM::EPOCH,
                                         bool record = false);
 
+    /** Pyramid Fitting */
     void                    PyramidFit( VO_Shape& ioShape,
-                                        const Mat& iImg,
+                                        const cv::Mat& iImg,
                                         unsigned int iLev,
                                         float PClose = 0.90f,
                                         unsigned int epoch = VO_Fitting2DSM::EPOCH);
 
     /** Load ASM LTC fitting trained data */
-    void                    VO_LoadParameters4Fitting(const string& fd);
+    void                    VO_LoadParameters4Fitting(const std::string& fd);
 
     /** Start ASM LTC fitting, for static images, recording all iterations of every single image */
-    float                   VO_ASMLTCFitting(   const Mat& iImg,
-                                                vector<Mat>& oImages,
+    float                   VO_ASMLTCFitting(   const cv::Mat& iImg,
+                                                std::vector<cv::Mat>& oImages,
                                                 unsigned int trmethod = VO_Features::DIRECT,
                                                 unsigned int epoch = EPOCH,
                                                 unsigned int pyramidlevel = 3,
                                                 bool record = false);
 
     /** Start ASM LTC fitting, for dynamic image sequence */
-    float                   VO_ASMLTCFitting(   const Mat& iImg,
+    float                   VO_ASMLTCFitting(   const cv::Mat& iImg,
                                                 VO_Shape& ioShape,
-                                                Mat& oImg,
+                                                cv::Mat& oImg,
                                                 unsigned int trmethod = VO_Features::DIRECT,
                                                 unsigned int epoch = 4,
                                                 unsigned int pyramidlevel = 3);

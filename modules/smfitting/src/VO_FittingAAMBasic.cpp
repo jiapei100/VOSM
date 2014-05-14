@@ -67,7 +67,7 @@
 
 
 /** For damp, damp coefficients */
-vector<float> VO_FittingAAMBasic::k_values;
+std::vector<float> VO_FittingAAMBasic::k_values;
 
 
 /** Default Constructor */
@@ -111,13 +111,13 @@ void VO_FittingAAMBasic::init()
  * @param       rotateAngles            Input and Output -- rotation
  * @param       matCOG                  Input and Output -- translation
  */
-void VO_FittingAAMBasic::VO_CParamTParam2FittingShape(  const Mat_<float>& c,
-                                                        const Mat_<float>& t,
+void VO_FittingAAMBasic::VO_CParamTParam2FittingShape(  const cv::Mat_<float>& c,
+                                                        const cv::Mat_<float>& t,
                                                         VO_Texture& modelNormalizedTexture,
                                                         VO_Shape& oShape,
                                                         float& scale,
-                                                        vector<float>& rotateAngles,
-                                                        Mat_<float>& matCOG,
+                                                        std::vector<float>& rotateAngles,
+                                                        cv::Mat_<float>& matCOG,
                                                         unsigned int mtd)
 {
    // generate shape and texture from C parameters
@@ -138,8 +138,8 @@ void VO_FittingAAMBasic::VO_CParamTParam2FittingShape(  const Mat_<float>& c,
     default:
         {
             float updatescale = 1.0;
-            vector<float> updateangles(1);
-            Mat_<float> updatetranslation = Mat_<float>::zeros(2, 1);
+            std::vector<float> updateangles(1);
+            cv::Mat_<float> updatetranslation = cv::Mat_<float>::zeros(2, 1);
             VO_Shape::GlobalShapeNormalization2SimilarityTrans(t, updatescale, updateangles, updatetranslation );
             scale *= updatescale;
             rotateAngles[0] = -rotateAngles[0]+updateangles[0];
@@ -173,12 +173,12 @@ void VO_FittingAAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
     this->m_vPointWarpInfo                  = this->m_VOAAMBasic->m_vNormalizedPointWarpInfo;
 
     // VO_FittingAAMBasic
-    this->m_MatDeltaC                       = Mat_<float>::zeros(1, this->m_VOAAMBasic->m_iNbOfAppearanceEigens);
-    this->m_MatEstimatedC                   = Mat_<float>::zeros(1, this->m_VOAAMBasic->m_iNbOfAppearanceEigens);
-    this->m_MatCurrentC                     = Mat_<float>::zeros(1, this->m_VOAAMBasic->m_iNbOfAppearanceEigens);
-    this->m_MatDeltaT                       = Mat_<float>::zeros(1, 4);
-    this->m_MatEstimatedT                   = Mat_<float>::zeros(1, 4);
-    this->m_MatCurrentT                     = Mat_<float>::zeros(1, 4);
+    this->m_MatDeltaC                       = cv::Mat_<float>::zeros(1, this->m_VOAAMBasic->m_iNbOfAppearanceEigens);
+    this->m_MatEstimatedC                   = cv::Mat_<float>::zeros(1, this->m_VOAAMBasic->m_iNbOfAppearanceEigens);
+    this->m_MatCurrentC                     = cv::Mat_<float>::zeros(1, this->m_VOAAMBasic->m_iNbOfAppearanceEigens);
+    this->m_MatDeltaT                       = cv::Mat_<float>::zeros(1, 4);
+    this->m_MatEstimatedT                   = cv::Mat_<float>::zeros(1, 4);
+    this->m_MatCurrentT                     = cv::Mat_<float>::zeros(1, 4);
 }
 
 
@@ -190,8 +190,8 @@ void VO_FittingAAMBasic::VO_LoadParameters4Fitting(const std::string& fd)
  * @param          oImages         Output - the fitted shape
  * @param          epoch           Input - the iteration epoch
 */
-float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
-                                                vector<Mat>& oImages,
+float VO_FittingAAMBasic::VO_BasicAAMFitting(   const cv::Mat& iImg,
+                                                std::vector<cv::Mat>& oImages,
                                                 unsigned int epoch,
                                                 bool record)
 {
@@ -202,7 +202,7 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
 
     if(record)
     {
-        Mat temp0 = iImg.clone();
+        cv::Mat temp0 = iImg.clone();
         VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMBasic, temp0);
         oImages.push_back(temp0);
     }
@@ -216,7 +216,7 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
     this->m_VOFittingShape.ConstrainShapeInImage(this->m_ImageProcessing);
     if(record)
     {
-        Mat temp1 = iImg.clone();
+        cv::Mat temp1 = iImg.clone();
         VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMBasic, temp1);
         oImages.push_back(temp1);
     }
@@ -236,11 +236,11 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
                                                         this->m_MatModelNormalizedTextureParam,
                                                         this->m_MatCurrentC );
     // Set m_MatCurrentT, m_MatDeltaT, m_MatEstimatedT, m_MatDeltaC, m_MatEstimatedC, etc.
-    this->m_MatCurrentT     = Mat_<float>::zeros(this->m_MatCurrentT.size());
-    this->m_MatDeltaT       = Mat_<float>::zeros(this->m_MatDeltaT.size());
-    this->m_MatEstimatedT   = Mat_<float>::zeros(this->m_MatEstimatedT.size());
-    this->m_MatDeltaC       = Mat_<float>::zeros(this->m_MatDeltaC.size());
-    this->m_MatEstimatedC   = Mat_<float>::zeros(this->m_MatEstimatedC.size());
+    this->m_MatCurrentT     = cv::Mat_<float>::zeros(this->m_MatCurrentT.size());
+    this->m_MatDeltaT       = cv::Mat_<float>::zeros(this->m_MatDeltaT.size());
+    this->m_MatEstimatedT   = cv::Mat_<float>::zeros(this->m_MatEstimatedT.size());
+    this->m_MatDeltaC       = cv::Mat_<float>::zeros(this->m_MatDeltaC.size());
+    this->m_MatEstimatedC   = cv::Mat_<float>::zeros(this->m_MatEstimatedC.size());
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     // explained by JIA Pei. 2010-05-20
@@ -271,7 +271,7 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     if(record)
     {
-        Mat temp2 = iImg.clone();
+        cv::Mat temp2 = iImg.clone();
         VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMBasic, temp2);
         oImages.push_back(temp2);
     }
@@ -285,14 +285,14 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
     {
         ++this->m_iIteration;
         float estScale = this->m_fScale;
-        vector<float> estRotateAngles = this->m_vRotateAngles;
-        Mat_<float> estCOG = this->m_MatCenterOfGravity.clone();
+        std::vector<float> estRotateAngles = this->m_vRotateAngles;
+        cv::Mat_<float> estCOG = this->m_MatCenterOfGravity.clone();
         bool cBetter     = false;
         bool poseBetter = false;
 
         /**First shape parameters, c parameters. refer to equation (9.3)
         * Cootes "Statistical Model of Appearance for Computer Vision" */
-        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMBasic->m_MatRc, -1, Mat(), 0, this->m_MatDeltaC, GEMM_2_T);
+        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMBasic->m_MatRc, -1, cv::Mat(), 0, this->m_MatDeltaC, cv::GEMM_2_T);
 
         // damp -- C
         for(unsigned int i = 0; i < k_values.size(); i++)
@@ -333,7 +333,7 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
 
         /** Second pose, t parameters. refer to equation (9.3)
         * Cootes "Statistical Model of Appearance for Computer Vision" */
-        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMBasic->m_MatRt, -1, Mat(), 0, this->m_MatDeltaT, GEMM_2_T);
+        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMBasic->m_MatRt, -1, cv::Mat(), 0, this->m_MatDeltaT, cv::GEMM_2_T);
 
         // damp -- T
         for(unsigned int i = 0; i < k_values.size(); i++)
@@ -359,7 +359,7 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
             {
                 // Since m_fScale, m_vRotateAngles and m_MatCenterOfGravity have been updated,
                 // m_MatCurrentT should be assigned to 0 now!
-                this->m_MatCurrentT = Mat_<float>::zeros(this->m_MatCurrentT.size());
+                this->m_MatCurrentT = cv::Mat_<float>::zeros(this->m_MatCurrentT.size());
 //                this->m_MatEstimatedT.copyTo(this->m_MatCurrentT);
                 this->m_VOFittingShape.clone(this->m_VOEstimatedShape);
                 this->m_VOTextureError.clone(this->m_VOEstimatedTextureError);
@@ -376,7 +376,7 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
         {
             if(record)
             {
-                Mat temp = iImg.clone();
+                cv::Mat temp = iImg.clone();
                 VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOAAMBasic, temp);
                 oImages.push_back(temp);
             }
@@ -387,7 +387,7 @@ float VO_FittingAAMBasic::VO_BasicAAMFitting(    const Mat& iImg,
     }while( ( fabs(this->m_E) > FLT_EPSILON ) && (this->m_iIteration < epoch)/* && (cv::norm(this->m_MatDeltaC) > FLT_EPSILON) */ );
     
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "Basic fitting time cost: " << t << " millisec" << endl;
+std::cout << "Basic fitting time cost: " << t << " millisec" << std::endl;
 
     return t;
 }
@@ -402,9 +402,9 @@ cout << "Basic fitting time cost: " << t << " millisec" << endl;
  * @param       oImg            Output - the fitted image
  * @param       epoch           Input - the iteration epoch
 */
-float VO_FittingAAMBasic::VO_BasicAAMFitting(const Mat& iImg,
+float VO_FittingAAMBasic::VO_BasicAAMFitting(const cv::Mat& iImg,
                                             VO_Shape& ioShape,
-                                            Mat& oImg,
+                                            cv::Mat& oImg,
                                             unsigned int epoch)
 {
     this->m_VOFittingShape.clone(ioShape);
@@ -435,11 +435,11 @@ double t = (double)cvGetTickCount();
                                                         this->m_MatModelNormalizedTextureParam,
                                                         this->m_MatCurrentC );
     // Set m_MatCurrentT, m_MatDeltaT, m_MatEstimatedT, m_MatDeltaC, m_MatEstimatedC, etc.
-    this->m_MatCurrentT     = Mat_<float>::zeros(this->m_MatCurrentT.size());
-    this->m_MatDeltaT       = Mat_<float>::zeros(this->m_MatDeltaT.size());
-    this->m_MatEstimatedT   = Mat_<float>::zeros(this->m_MatEstimatedT.size());
-    this->m_MatDeltaC       = Mat_<float>::zeros(this->m_MatDeltaC.size());
-    this->m_MatEstimatedC   = Mat_<float>::zeros(this->m_MatEstimatedC.size());
+    this->m_MatCurrentT     = cv::Mat_<float>::zeros(this->m_MatCurrentT.size());
+    this->m_MatDeltaT       = cv::Mat_<float>::zeros(this->m_MatDeltaT.size());
+    this->m_MatEstimatedT   = cv::Mat_<float>::zeros(this->m_MatEstimatedT.size());
+    this->m_MatDeltaC       = cv::Mat_<float>::zeros(this->m_MatDeltaC.size());
+    this->m_MatEstimatedC   = cv::Mat_<float>::zeros(this->m_MatEstimatedC.size());
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     // explained by JIA Pei. 2010-05-20
@@ -477,14 +477,14 @@ double t = (double)cvGetTickCount();
     do
     {
         float estScale = this->m_fScale;
-        vector<float> estRotateAngles = this->m_vRotateAngles;
-        Mat_<float> estCOG  = this->m_MatCenterOfGravity.clone();
+        std::vector<float> estRotateAngles = this->m_vRotateAngles;
+        cv::Mat_<float> estCOG  = this->m_MatCenterOfGravity.clone();
         bool cBetter        = false;
         bool poseBetter     = false;
 
         /**First shape parameters, c parameters. refer to equation (9.3)
         * Cootes "Statistical Model of Appearance for Computer Vision" */
-        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMBasic->m_MatRc, -1, Mat(), 0.0, this->m_MatDeltaC, GEMM_2_T);
+        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMBasic->m_MatRc, -1, cv::Mat(), 0.0, this->m_MatDeltaC, cv::GEMM_2_T);
 
         // damp -- C
         for(unsigned int i = 0; i < k_values.size(); i++)
@@ -525,7 +525,7 @@ double t = (double)cvGetTickCount();
 
         /** Second pose, t parameters. refer to equation (9.3)
         * Cootes "Statistical Model of Appearance for Computer Vision" */
-        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMBasic->m_MatRt, -1, Mat(), 0, this->m_MatDeltaT, GEMM_2_T);
+        cv::gemm(this->m_VOTextureError.GetTheTextureInARow(), this->m_VOAAMBasic->m_MatRt, -1, cv::Mat(), 0, this->m_MatDeltaT, cv::GEMM_2_T);
 
         // damp -- T
         for(unsigned int i = 0; i < k_values.size(); i++)
@@ -551,7 +551,7 @@ double t = (double)cvGetTickCount();
             {
                 // Since m_fScale, m_vRotateAngles and m_MatCenterOfGravity have been updated,
                 // m_MatCurrentT should be assigned to 0 now!
-                this->m_MatCurrentT = Mat_<float>::zeros(this->m_MatCurrentT.size());
+                this->m_MatCurrentT = cv::Mat_<float>::zeros(this->m_MatCurrentT.size());
                 //                this->m_MatEstimatedT.copyTo(this->m_MatCurrentT);
                 this->m_VOFittingShape.clone(this->m_VOEstimatedShape);
                 this->m_VOTextureError.clone(this->m_VOEstimatedTextureError);
@@ -576,7 +576,7 @@ double t = (double)cvGetTickCount();
     }while( ( fabs(this->m_E) > FLT_EPSILON ) && (this->m_iIteration < epoch)/* && (cv::norm(this->m_MatDeltaC) > FLT_EPSILON) */ );
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "Basic fitting time cost: " << t << " millisec" << endl;
+std::cout << "Basic fitting time cost: " << t << " millisec" << std::endl;
 this->m_fFittingTime = t;
 
     VO_Fitting2DSM::VO_DrawMesh(ioShape, this->m_VOAAMBasic, oImg);
@@ -593,15 +593,15 @@ this->m_fFittingTime = t;
  * @param          epoch           Input - the iteration epoch
  * @param          oImages         Output - the fitted shape
 */
-float VO_FittingAAMBasic::VO_DirectAAMFitting(const Mat& iImg,
-                                                vector<Mat>& oImages,
+float VO_FittingAAMBasic::VO_DirectAAMFitting(const cv::Mat& iImg,
+                                                std::vector<cv::Mat>& oImages,
                                                 unsigned int epoch,
                                                 bool record)
 {
 double t = (double)cvGetTickCount();
 
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "Direct fitting time cost: " << t << " millisec" << endl;
+std::cout << "Direct fitting time cost: " << t << " millisec" << std::endl;
     
     return t;
 }
@@ -616,15 +616,15 @@ cout << "Direct fitting time cost: " << t << " millisec" << endl;
  * @param       oImg            Output - the fitted image
  * @param       epoch           Input - the iteration epoch
 */
-float VO_FittingAAMBasic::VO_DirectAAMFitting(const Mat& iImg,
+float VO_FittingAAMBasic::VO_DirectAAMFitting(const cv::Mat& iImg,
                                                 VO_Shape& ioShape,
-                                                Mat& oImg,
+                                                cv::Mat& oImg,
                                                 unsigned int epoch)
 {
 double t = (double)cvGetTickCount();
     
 t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
-cout << "Direct fitting time cost: " << t << " millisec" << endl;
+std::cout << "Direct fitting time cost: " << t << " millisec" << std::endl;
 
     return t;
 }

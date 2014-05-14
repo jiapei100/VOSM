@@ -73,8 +73,8 @@
 
 
 /** 
- * @author        JIA Pei
- * @brief        Forward image alignment (IA) AAM fitting algorithm.
+ * @author      JIA Pei
+ * @brief       Forward image alignment (IA) AAM fitting algorithm.
  * @note        FIXME
  */
 class VO_FittingAAMForwardIA : public VO_Fitting2DSM
@@ -83,6 +83,7 @@ private:
     void                        init();
 
 public:
+    /** The forward Image Alignment AAM */
     VO_AAMForwardIA*            m_VOAAMForwardIA;
 
     /** Constructor */
@@ -92,13 +93,13 @@ public:
     ~VO_FittingAAMForwardIA();
     
     /** Load FCIA AAM fitting training results */
-    void                        VO_LoadParameters4Fitting(const string& fd);
+    void                        VO_LoadParameters4Fitting(const std::string& fd);
 
     /** Start Forward Additive Image Alignment fitting, for static images, recording all iterations of every single image */
-    float                       VO_FAIAAAMFitting(const Mat& iImg, vector<Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
+    float                       VO_FAIAAAMFitting(const cv::Mat& iImg, std::vector<cv::Mat>& oImages, unsigned int epoch = EPOCH, bool record = false);
     
     /** Start Forward Additive Image Alignment fitting, for dynamic image sequence */
-    float                       VO_FAIAAAMFitting(const Mat& iImg, VO_Shape& ioShape, Mat& oImg, unsigned int epoch = EPOCH);
+    float                       VO_FAIAAAMFitting(const cv::Mat& iImg, VO_Shape& ioShape, cv::Mat& oImg, unsigned int epoch = EPOCH);
 };
 
 #endif

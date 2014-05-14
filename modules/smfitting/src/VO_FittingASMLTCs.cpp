@@ -97,7 +97,7 @@ void VO_FittingASMLTCs::init()
  * @brief      Load all AAM data from a specified folder for later fitting, to member variable m_VOASMLTC
  * @param      fd         Input - the folder that AAM to be loaded from
  */
-void VO_FittingASMLTCs::VO_LoadParameters4Fitting(const string& fd)
+void VO_FittingASMLTCs::VO_LoadParameters4Fitting(const std::string& fd)
 {
     this->m_VOASMLTC->VO_LoadParameters4Fitting(fd);
 
@@ -121,8 +121,8 @@ void VO_FittingASMLTCs::VO_LoadParameters4Fitting(const string& fd)
  * @param       pyramidlevel    Input - pyramid level, 1, 2, 3 or 4 at most
  * @note        Refer to "AAM Revisited, page 34, figure 13", particularly, those steps.
 */
-float VO_FittingASMLTCs::VO_ASMLTCFitting(  const Mat& iImg,
-                                            vector<Mat>& oImages,
+float VO_FittingASMLTCs::VO_ASMLTCFitting(  const cv::Mat& iImg,
+                                            std::vector<cv::Mat>& oImages,
                                             unsigned int trmethod,
                                             unsigned int epoch,
                                             unsigned int pyramidlevel,
@@ -136,7 +136,7 @@ double t = (double)cvGetTickCount();
 
 if(record)
 {
-    Mat temp = iImg.clone();
+    cv::Mat temp = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOASMLTC, temp);
     oImages.push_back(temp);
 }
@@ -150,7 +150,7 @@ if(record)
     this->m_VOFittingShape.ConstrainShapeInImage(this->m_ImageProcessing);
 if(record)
 {
-    Mat temp1 = iImg.clone();
+    cv::Mat temp1 = iImg.clone();
     VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape, this->m_VOASMLTC, temp1);
     oImages.push_back(temp1);
 }
@@ -163,7 +163,7 @@ if(record)
 
     int w = (int)(iImg.cols*this->m_fScale2);
     int h = (int)(iImg.rows*this->m_fScale2);
-    Mat SearchImage = Mat(Size( w, h ), this->m_ImageProcessing.type(), this->m_ImageProcessing.channels());
+    cv::Mat SearchImage = cv::Mat(cv::Size( w, h ), this->m_ImageProcessing.type(), this->m_ImageProcessing.channels());
 
     float PyrScale = pow(2.0f, (float) (this->m_iNbOfPyramidLevels-1.0f) );
     this->m_VOFittingShape /= PyrScale;
@@ -174,13 +174,13 @@ if(record)
     for (int iLev = this->m_iNbOfPyramidLevels-1; iLev >= 0; iLev--)
     {
         // Set image roi, instead of cvCreateImage a new image to speed up
-        Mat siROI = SearchImage(Rect(0, 0, (int)(w/PyrScale), (int)(h/PyrScale) ) );
+        cv::Mat siROI = SearchImage(cv::Rect(0, 0, (int)(w/PyrScale), (int)(h/PyrScale) ) );
         cv::resize(this->m_ImageProcessing, siROI, siROI.size());
 
 if(record)
 {
-        Mat temp2 = Mat(iImg.size(), iImg.type(), iImg.channels());
-        Mat temp2ROI = temp2(Range (0, (int)(iImg.rows/PyrScale) ), Range (0, (int)(iImg.cols/PyrScale) ) );
+        cv::Mat temp2 = cv::Mat(iImg.size(), iImg.type(), iImg.channels());
+        cv::Mat temp2ROI = temp2(cv::Range (0, (int)(iImg.rows/PyrScale) ), cv::Range (0, (int)(iImg.cols/PyrScale) ) );
         cv::resize(iImg, temp2ROI, temp2ROI.size() );
         oImages.push_back(temp2);
         VO_Fitting2DSM::VO_DrawMesh(this->m_VOFittingShape / this->m_fScale2, this->m_VOASMLTC, temp2);
@@ -226,9 +226,9 @@ printf("MRASM fitting time cost: %.2f millisec\n", t);
  * @param       pyramidlevel    Input - pyramid level, 1, 2, 3 or 4 at most
  * @note        Refer to "AAM Revisited, page 34, figure 13", particularly, those steps.
 */
-float VO_FittingASMLTCs::VO_ASMLTCFitting(  const Mat& iImg,
+float VO_FittingASMLTCs::VO_ASMLTCFitting(  const cv::Mat& iImg,
                                             VO_Shape& ioShape,
-                                            Mat& oImg,
+                                            cv::Mat& oImg,
                                             unsigned int trmethod,
                                             unsigned int epoch,
                                             unsigned int pyramidlevel)
@@ -256,7 +256,7 @@ double t = (double)cvGetTickCount();
 
     int w = (int)(iImg.cols*this->m_fScale2);
     int h = (int)(iImg.rows*this->m_fScale2);
-    Mat SearchImage = Mat(Size( w, h ), this->m_ImageProcessing.type(), this->m_ImageProcessing.channels() );
+    cv::Mat SearchImage = cv::Mat(cv::Size( w, h ), this->m_ImageProcessing.type(), this->m_ImageProcessing.channels() );
 
     float PyrScale = pow(2.0f, (float) (this->m_iNbOfPyramidLevels-1.0f) );
     this->m_VOFittingShape /= PyrScale;
@@ -267,7 +267,7 @@ double t = (double)cvGetTickCount();
     for (int iLev = this->m_iNbOfPyramidLevels-1; iLev >= 0; iLev--)
     {
         // Set image roi, instead of cvCreateImage a new image to speed up
-        Mat siROI = SearchImage(Rect(0, 0, (int)(w/PyrScale), (int)(h/PyrScale) ) );
+        cv::Mat siROI = SearchImage(cv::Rect(0, 0, (int)(w/PyrScale), (int)(h/PyrScale) ) );
         cv::resize(this->m_ImageProcessing, siROI, siROI.size());
 
         int nGoodLandmarks = 0;
@@ -304,17 +304,28 @@ this->m_fFittingTime = t;
 
 
 /**
-Find the best offset for one point
-*/
+ * @brief Find the best offset for one point
+ * @param asmmodel      -- input, the ASM model
+ * @param iImg          -- input, the image
+ * @param iShape        -- input, the shape
+ * @param iShapeInfo    -- input, shape info
+ * @param iMean         -- input, mean
+ * @param iCovInverse   -- input, con inverse
+ * @param ptIdx         -- input, point index
+ * @param offSetTolerance- input, offset tolerance
+ * @param ioLocation    -- input output, location
+ * @param LTCType       -- input, LTC type
+ * @return float        -- the distance between two matches
+ */
 float VO_FittingASMLTCs::VO_FindBestMatchingLTC(const VO_ASMLTCs* asmmodel,
-                                                const Mat& iImg,
+                                                const cv::Mat& iImg,
                                                 const VO_Shape& iShape,
-                                                const vector<VO_Shape2DInfo>& iShapeInfo,
-                                                const Mat_<float>& iMean,
-                                                const Mat_<float>& iCovInverse,
+                                                const std::vector<VO_Shape2DInfo>& iShapeInfo,
+                                                const cv::Mat_<float>& iMean,
+                                                const cv::Mat_<float>& iCovInverse,
                                                 unsigned int ptIdx,
                                                 unsigned int offSetTolerance,
-                                                Point2f& ioLocation,
+                                                cv::Point2f& ioLocation,
                                                 unsigned int LTCType)
 {
     float BestFit = FLT_MAX;
@@ -325,7 +336,7 @@ float VO_FittingASMLTCs::VO_FindBestMatchingLTC(const VO_ASMLTCs* asmmodel,
     float xx = ioLocation.x - (float)cvRound(ioLocation.x);
     float yy = ioLocation.y - (float)cvRound(ioLocation.y);
 
-    Mat tmpFeatures;
+    cv::Mat tmpFeatures;
     // Find the best in just one direction
     for (int x = -(int)offSetTolerance; x <= (int)offSetTolerance; ++x)
     {
@@ -369,19 +380,30 @@ float VO_FittingASMLTCs::VO_FindBestMatchingLTC(const VO_ASMLTCs* asmmodel,
 }
 
 
+/**
+ * @brief update the shape
+ * @param asmmodel      -- input, the ASM model
+ * @param iImg          -- input, the image
+ * @param ioShape       -- input output, the shape
+ * @param iShapeInfo    -- input, shape info
+ * @param iMean         -- input, mean
+ * @param iCovInverse   -- input, con inverse
+ * @param offSetTolerance- input, offset tolerance
+ * @return int -- number of fitted landmarks
+ */
 int VO_FittingASMLTCs::UpdateShape(const VO_ASMLTCs* asmmodel,
-                                   const Mat& iImg,
+                                   const cv::Mat& iImg,
                                    VO_Shape& ioShape,
-                                   const vector<VO_Shape2DInfo>& iShapeInfo,
-                                   const vector< Mat_<float> >& iMeans,
-                                   const vector< Mat_<float> >& iCovInverses,
+                                   const std::vector<VO_Shape2DInfo>& iShapeInfo,
+                                   const std::vector< cv::Mat_<float> >& iMeans,
+                                   const std::vector< cv::Mat_<float> >& iCovInverses,
                                    unsigned int offSetTolerance)
 {
     int nGoodLandmarks = 0;
     float dist = 0.0f;
     unsigned int NbOfPoints     = ioShape.GetNbOfPoints();
     unsigned int NbOfShapeDim   = ioShape.GetNbOfDim();
-    Point2f pt;
+    cv::Point2f pt;
 
 
     // Take care of the  image patch first.
@@ -411,23 +433,10 @@ int VO_FittingASMLTCs::UpdateShape(const VO_ASMLTCs* asmmodel,
 }
 
 
-//-----------------------------------------------------------------------------
-// Pyramid ASM Fitting Algorithm at certain level
-//
-// An iterative approach to improving the fit of the instance, this->m_VOShape, to an image
-// proceeds as follows:
-// 1. Examine a region of the image around each point Point-ith to find the best
-// nearby match for the point Point'-ith.   ---> UpdateShape
-// 2. Update the parameters(s, sigma, tx, ty; b) to best fit the new found points
-// X.       ---> ConformShapeToModel
-// 3. Repeat until convergence.
-//
-// For more details, ref to [Cootes & Taylor, 2004].
-//-----------------------------------------------------------------------------
 /**
  * @author      JIA Pei
  * @version     2010-05-20
- * @brief       Find the best offset for one point
+ * @brief       Pyramid ASM Fitting Algorithm at certain level
  * @param       ioShape     Input and output - the input and output shape
  * @param       iImg        Input - image to be fitted
  * @param       oImages     Output - the output images
@@ -436,10 +445,19 @@ int VO_FittingASMLTCs::UpdateShape(const VO_ASMLTCs* asmmodel,
  *                                  are judged as converged, the iteration of this pyramid can stop
  * @param       epoch       Input - the maximum iteration times
  * @note        Refer to "AAM Revisited, page 34, figure 13", particularly, those steps.
-*/
+ * @process
+ * An iterative approach to improving the fit of the instance, this->m_VOShape, to an image
+ * proceeds as follows:
+ * 1. Examine a region of the image around each point Point-ith to find the best
+ * nearby match for the point Point'-ith.   ---> UpdateShape
+ * 2. Update the parameters(s, sigma, tx, ty; b) to best fit the new found points
+ * X.       ---> ConformShapeToModel
+ * 3. Repeat until convergence.
+ * For more details, ref to [Cootes & Taylor, 2004].
+ */
 void VO_FittingASMLTCs::PyramidFit( VO_Shape& ioShape,
-                                    const Mat& iImg,
-                                    vector<Mat>& oImages,
+                                    const cv::Mat& iImg,
+                                    std::vector<cv::Mat>& oImages,
                                     unsigned int iLev,
                                     float PClose,
                                     unsigned int epoch,
@@ -473,8 +491,8 @@ void VO_FittingASMLTCs::PyramidFit( VO_Shape& ioShape,
 if(record)
 {
     // If we get better fitting result, record this fitting result
-    Mat temp3 = Mat(this->m_ImageInput.size(), this->m_ImageInput.type(), this->m_ImageInput.channels());
-    Mat temp3ROI = temp3(Range (0, (int)(this->m_ImageInput.rows/PyrScale) ), Range (0, (int)(this->m_ImageInput.cols/PyrScale) ) );
+    cv::Mat temp3 = cv::Mat(this->m_ImageInput.size(), this->m_ImageInput.type(), this->m_ImageInput.channels());
+    cv::Mat temp3ROI = temp3(cv::Range (0, (int)(this->m_ImageInput.rows/PyrScale) ), cv::Range (0, (int)(this->m_ImageInput.cols/PyrScale) ) );
     cv::resize(this->m_ImageInput, temp3ROI, temp3ROI.size());
     VO_Fitting2DSM::VO_DrawMesh(tempShape / this->m_fScale2, this->m_VOASMLTC, temp3);
     oImages.push_back(temp3);
@@ -489,21 +507,25 @@ if(record)
 }
 
 
-//-----------------------------------------------------------------------------
-// Pyramid ASM Fitting Algorithm at certain level
-//
-// An iterative approach to improving the fit of the instance, this->m_VOShape, to an image
-// proceeds as follows:
-// 1. Examine a region of the image around each point Point-ith to find the best
-// nearby match for the point Point'-ith.   ---> UpdateShape
-// 2. Update the parameters(s, sigma, tx, ty; b) to best fit the new found points
-// X.       ---> ConformShapeToModel
-// 3. Repeat until convergence.
-//
-// For more details, ref to [Cootes & Taylor, 2004].
-//-----------------------------------------------------------------------------
+/**
+ * @brief Pyramid ASM Fitting Algorithm at certain level
+ * @param ioShape -- input output, the shape
+ * @param iImg -- input, image
+ * @param iLev -- intput, level index
+ * @param PClose -- input, how close the
+ * @param epoch -- input, number of iterations
+ * @process
+ * An iterative approach to improving the fit of the instance, this->m_VOShape, to an image
+ * proceeds as follows:
+ * 1. Examine a region of the image around each point Point-ith to find the best
+ * nearby match for the point Point'-ith.   ---> UpdateShape
+ * 2. Update the parameters(s, sigma, tx, ty; b) to best fit the new found points
+ * X.       ---> ConformShapeToModel
+ * 3. Repeat until convergence.
+ * For more details, ref to [Cootes & Taylor, 2004].
+ */
 void VO_FittingASMLTCs::PyramidFit(VO_Shape& ioShape,
-                                   const Mat& iImg,
+                                   const cv::Mat& iImg,
                                    unsigned int iLev,
                                    float PClose,
                                    unsigned int epoch)

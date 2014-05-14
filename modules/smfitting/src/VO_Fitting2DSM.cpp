@@ -160,6 +160,12 @@ cv::Mat_<float> VO_Fitting2DSM::VO_FirstEstimationBySingleWarp(const VO_FacePart
 }
 
 
+/**
+ * @brief First Estimation of the fitted shape by scaling only
+ * @param iShape -- input shape
+ * @param rect   -- the rectangle to calculate the scalar
+ * @return VO_Shape -- the scaled shape
+ */
 VO_Shape VO_Fitting2DSM::VO_FirstEstimationByScaling(   const VO_Shape& iShape,
                                                         const cv::Rect& rect )
 {
@@ -183,10 +189,14 @@ VO_Shape VO_Fitting2DSM::VO_FirstEstimationByScaling(   const VO_Shape& iShape,
 
 
 /**
- * @author         JIA Pei
- * @version        2010-05-15
- * @brief          Calculate error image by
- * @param        
+ * @author      JIA Pei
+ * @version     2010-05-15
+ * @brief       Calculate error image by
+ * @param       iImg -- input image
+ * @param       iShape -- input shape
+ * @param       iTexture -- input texture
+ * @param       textureDiff -- difference between two textures
+ * @return      float -- error between 2 textures
 */
 float VO_Fitting2DSM::VO_CalcErrorImage(const cv::Mat& iImg,
                                         const VO_Shape& iShape,
