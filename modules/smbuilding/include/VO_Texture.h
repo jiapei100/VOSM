@@ -184,7 +184,17 @@ public:
     /** Get the texture cv::Mat_ in a row, b1b2b3...g1g2g3...r1r2r3... */
     cv::Mat_<float>        			GetTheTextureInARow() const
 	{
-									return this->m_MatTexture.reshape(1);
+                                    //modified by Pei JIA. 2014-05-14. OpenCV reshape() is buggy, never use it.
+                                    //return this->m_MatTexture.reshape(1);
+                                    cv::Mat_<float> res(1, this->m_MatTexture.rows*this->m_MatTexture.cols);
+                                    for(unsigned int i = 0; i < this->m_MatTexture.rows; i++)
+                                    {
+                                        for(unsigned int j = 0; j < this->m_MatTexture.cols; j++)
+                                        {
+                                             res.at<float>(0, i*this->m_MatTexture.cols+j) = this->m_MatTexture.at<float>(i, j);
+                                        }
+                                    }
+                                    return res;
 	}
 
     /** Get the texture value at texture std::vector position i */

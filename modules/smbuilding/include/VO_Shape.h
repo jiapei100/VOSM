@@ -343,7 +343,17 @@ public:
 	/** Get the shape cv::Mat_ in a row, x1x2x3...y1y2y3...z1z2z3... */
     cv::Mat_<float>        			GetTheShapeInARow() const
 	{
-									return this->m_MatShape.reshape(1);
+                                    //modified by Pei JIA. 2014-05-14. OpenCV reshape() is buggy, never use it.
+                                    //return this->m_MatShape.reshape(1);
+                                    cv::Mat_<float> res(1, this->m_MatShape.rows*this->m_MatShape.cols);
+                                    for(unsigned int i = 0; i < this->m_MatShape.rows; i++)
+                                    {
+                                        for(unsigned int j = 0; j < this->m_MatShape.cols; j++)
+                                        {
+                                             res.at<float>(0, i*this->m_MatShape.cols+j) = this->m_MatShape.at<float>(i, j);
+                                        }
+                                    }
+                                    return res;
 	}
 
 	/** Get a single col in cv::Mat_<float> */
