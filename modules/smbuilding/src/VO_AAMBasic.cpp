@@ -1199,7 +1199,7 @@ void VO_AAMBasic::VO_BuildAppearanceModel(	const std::vector<std::string>& allLa
     cv::setIdentity(this->m_MatWeightsScaleShape2Texture, val);
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Assign concatenated
+    /// Assign concatenated
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	cv::Mat_<float> matAlignedShapes 				= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfShapes);
 	cv::Mat_<float> matNormalizedTextures			= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfTextures);
@@ -1232,23 +1232,9 @@ void VO_AAMBasic::VO_BuildAppearanceModel(	const std::vector<std::string>& allLa
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//    this->m_PCAAppearance = cv::PCA(matConcatenated, matMeanConcatenated, CV_PCA_USE_AVG, (int)(this->m_iNbOfEigenAppearanceAtMost) );
-//	// to decide how many components to be selected
-//    this->m_iNbOfAppearanceEigens = 0;
-
-//    double SumOfEigenValues = cv::sum( this->m_PCAAppearance.eigenvalues ).val[0];
-//    double ps = 0.0f;
-
-//    for(unsigned int i = 0; i < this->m_iNbOfEigenAppearanceAtMost; i++)
-//    {
-//        ps += this->m_PCAAppearance.eigenvalues.at<float>(i, 0 );
-//        ++this->m_iNbOfAppearanceEigens;
-//        if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Appearance) break;
-//    }
-//	// m_iNbOfAppearanceEigens decided. For simplicity, we carry out PCA once again.
-//    this->m_PCAAppearance = cv::PCA(matConcatenated, matMeanConcatenated, CV_PCA_USE_AVG, (int)(this->m_iNbOfAppearanceEigens) );
-    this->m_PCAAppearance = cv::PCA(matConcatenated, cv::Mat(), CV_PCA_USE_AVG, (int)(this->m_iNbOfAppearanceEigens) );
+    this->m_PCAAppearance = cv::PCA(matConcatenated, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)(this->m_fTruncatedPercent_Appearance) );
     this->m_iNbOfAppearanceEigens = this->m_PCAAppearance.eigenvalues.rows;
+    this->m_PCANormalizedTexture.mean.setTo(0);
 
     this->m_MatAppearanceProject2Truncated = this->m_PCAAppearance.project(matConcatenated);
 

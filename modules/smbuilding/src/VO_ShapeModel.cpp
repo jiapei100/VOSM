@@ -881,7 +881,6 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
 	this->m_iNbOfEigenShapesAtMost 				= MIN(this->m_iNbOfSamples, this->m_iNbOfShapes);
     this->m_fTruncatedPercent_Shape 			= TPShape;
     cv::Mat_<float> matAlignedShapes			= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfShapes);
-    //cv::Mat_<float> matAlignedMeanShape			= cv::Mat_<float>::zeros(1, this->m_iNbOfShapes);
 
     // Align all shapes
     this->m_fAverageShapeSize = VO_ShapeModel::VO_AlignAllShapes(this->m_vShapes, this->m_vAlignedShapes);
@@ -893,11 +892,12 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
     this->m_VOReferenceShape.Translate( -refMin );
 
 	//////////////////////////////////////////////////////////////////////////
-    // Build VO_Point2DDistributionModel /////////////////////////////////////
+    /// Build VO_Point2DDistributionModel ////////////////////////////////////
     this->m_VOPDM.VO_BuildPointDistributionModel(this->m_vAlignedShapes);
 	//////////////////////////////////////////////////////////////////////////
 
-    //matAlignedMeanShape = this->m_VOAlignedMeanShape.GetTheShapeInARow();
+    //////////////////////////////////////////////////////////////////////////
+    /// Assign matAlignedShapes //////////////////////////////////////////////
     for(unsigned int i = 0; i < this->m_iNbOfSamples; i++)
 	{
         cv::Mat_<float> shapeInARow = this->m_vAlignedShapes[i].GetTheShapeInARow();
@@ -906,31 +906,23 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
         {
             matAlignedShapes.at<float>(i,j) = shapeInARow.at<float>(0,j);
         }
-	}
-//    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
-//    //this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfEigenShapesAtMost) );
-//    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, matAlignedMeanShape, CV_PCA_USE_AVG, (int)(this->m_iNbOfEigenShapesAtMost) );
-//	// to decide how many components to be selected
-//    this->m_iNbOfShapeEigens = 0;
-
-//    double SumOfEigenValues = cv::sum( this->m_PCAAlignedShape.eigenvalues ).val[0];
-//    double ps = 0.0f;
-
-//    for(unsigned int i = 0; i < this->m_iNbOfEigenShapesAtMost; i++)
-//    {
-//        ps += this->m_PCAAlignedShape.eigenvalues.at<float>( i,0 );
-//        ++this->m_iNbOfShapeEigens;
-//        if( ps/SumOfEigenValues >= this->m_fTruncatedPercent_Shape) break;
-//    }
-//	// m_iNbOfShapeEigens decided. For simplicity, we carry out PCA once again.
-//    // Modifed by Pei JIA, 2014-05-07. PCA changed after OpenCV 2.4.9
-//    //this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (int)(this->m_iNbOfShapeEigens) );
-//    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, matAlignedMeanShape, CV_PCA_USE_AVG, (int)(this->m_iNbOfShapeEigens) );
-    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)(this->m_fTruncatedPercent_Shape) );
-    this->m_iNbOfShapeEigens = this->m_PCAAlignedShape.eigenvalues.rows;
+    }
+    //////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////
-    // Calculate template shape mesh
+    /// Calculate PCA ////////////////////////////////////////////////////////
+    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)(this->m_fTruncatedPercent_Shape) );
+    this->m_iNbOfShapeEigens = this->m_PCAAlignedShape.eigenvalues.rows;
+    this->m_PCAAlignedShape.mean = this->m_VOAlignedMeanShape.GetTheShapeInARow();
+//    for(int i = 0; i < this->m_PCAAlignedShape.mean.rows; i++)
+//    {
+//        for(int j = 0; j < this->m_PCAAlignedShape.mean.cols; j++)
+//            std::cout << this->m_PCAAlignedShape.mean.at<float>(i, j) << std::endl;
+//    }
+    //////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////
+    /// Calculate template shape mesh ////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     if (this->m_FaceParts.GetTriangleIndexes().size() != 0)
         useKnownTriangles = true;
@@ -944,7 +936,7 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
 	this->m_iNbOfEdges = this->m_vEdge.size();
 	this->m_iNbOfTriangles = this->m_vTemplateTriangle2D.size();
 	
-    // 2) Calculate m_vNormalizedTriangle2D - make sure the mesh has been built first, so that we have m_iNbOfTriangles
+    /// 2) Calculate m_vNormalizedTriangle2D - make sure the mesh has been built first, so that we have m_iNbOfTriangles
     std::vector<cv::Point2f> tempVertexes;
     std::vector<unsigned int> iVertexes;
     tempVertexes.resize(3);
