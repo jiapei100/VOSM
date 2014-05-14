@@ -23,7 +23,7 @@
 *                                                                                                   *
 *                   b) Redistribution's in binary form must reproduce this whole paragraph of       *
 *                   copyright notice, including this list of conditions and all the following       *
-*                   contents in this copyright paragraph, and/or other cv::Materials provided with      *
+*                   contents in this copyright paragraph, and/or other materials provided with      *
 *                   the distribution.                                                               *
 *                                                                                                   *
 *                   c) The name of the copyright holders may not be used to endorse or promote      *
