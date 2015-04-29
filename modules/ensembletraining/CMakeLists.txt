@@ -1,3 +1,11 @@
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../utils/include" "${CMAKE_CURRENT_SOURCE_DIR}/../featureextraction/include")
-set(deps opencv_core opencv_imgproc opencv_highgui)
-define_vosm_module(ensembletraining vosm_utils vosm_featureextraction ${deps})
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_SOURCE_DIR}/../featureextraction/include")
+
+# Set library source
+set(LIB_SRC src/VO_AdditiveStrongerClassifier.cpp src/VO_BoostingSingleEnsembleClassifier.cpp src/VO_BaggingRandomForestClassifier.cpp src/VO_WeakClassifier.cpp src/VO_BoostingCascadeClassifier.cpp)
+
+# Generate shared library
+add_library(ensembletraining_shared SHARED ${LIB_SRC} )
+set_target_properties(ensembletraining_shared PROPERTIES OUTPUT_NAME "vosm_ensembletraining")
+get_target_property(OUTPUT_NAME ensembletraining_shared OUTPUT_NAME)
+message(STATUS "Shared library outname:" $(OUTPUT_NAME))
+

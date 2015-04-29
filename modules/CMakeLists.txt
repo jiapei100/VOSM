@@ -1,0 +1,8 @@
+add_subdirectory(common)
+add_subdirectory(comalgs)
+add_subdirectory(cvcommon)
+add_subdirectory(ensembletraining)
+add_subdirectory(featureextraction)
+add_subdirectory(integraltransform)
+add_subdirectory(smbuilding)
+add_subdirectory(smfitting)
