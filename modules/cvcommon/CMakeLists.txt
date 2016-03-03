@@ -7,5 +7,11 @@ set(LIB_SRC src/VO_AnnotationDBIO.cpp src/VO_FaceCompPos.cpp src/VO_DetectionDBI
 add_library(cvcommon_shared SHARED ${LIB_SRC} )
 set_target_properties(cvcommon_shared PROPERTIES OUTPUT_NAME "vosm_cvcommon")
 get_target_property(OUTPUT_NAME cvcommon_shared OUTPUT_NAME)
-message(STATUS "Shared library outname:" $(OUTPUT_NAME))
+message(STATUS "Shared library outname:" ${OUTPUT_NAME})
 
+
+file(GLOB INSTALL_HEADERS
+    "include/*.h"
+)
+install(TARGETS cvcommon_shared DESTINATION lib/vosm)
+install(FILES ${INSTALL_HEADERS} DESTINATION include/vosm)
