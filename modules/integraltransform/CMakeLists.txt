@@ -7,5 +7,10 @@ set(LIB_SRC src/VO_CohenDaubechiesFeauveau.cpp src/VO_Gabor.cpp src/VO_STFT.cpp 
 add_library(integraltransform_shared SHARED ${LIB_SRC} )
 set_target_properties(integraltransform_shared PROPERTIES OUTPUT_NAME "vosm_integraltransform")
 get_target_property(OUTPUT_NAME integraltransform_shared OUTPUT_NAME)
-message(STATUS "Shared library outname:" $(OUTPUT_NAME))
+message(STATUS "Shared library outname:" ${OUTPUT_NAME})
 
+file(GLOB INSTALL_HEADERS
+    "include/*.h"
+)
+install(TARGETS integraltransform_shared DESTINATION lib/vosm)
+install(FILES ${INSTALL_HEADERS} DESTINATION include/vosm)
