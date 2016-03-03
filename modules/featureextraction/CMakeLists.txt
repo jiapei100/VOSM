@@ -7,5 +7,10 @@ set(LIB_SRC src/VO_DaubechiesFeatures.cpp src/VO_GaborFeatures.cpp src/VO_LBPFea
 add_library(featureextraction_shared SHARED ${LIB_SRC} )
 set_target_properties(featureextraction_shared PROPERTIES OUTPUT_NAME "vosm_featureextraction")
 get_target_property(OUTPUT_NAME featureextraction_shared OUTPUT_NAME)
-message(STATUS "Shared library outname:" $(OUTPUT_NAME))
+message(STATUS "Shared library outname:" ${OUTPUT_NAME})
 
+file(GLOB INSTALL_HEADERS
+    "include/*.h"
+)
+install(TARGETS featureextraction_shared DESTINATION lib/vosm)
+install(FILES ${INSTALL_HEADERS} DESTINATION include/vosm)
