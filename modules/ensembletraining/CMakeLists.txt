@@ -7,5 +7,10 @@ set(LIB_SRC src/VO_AdditiveStrongerClassifier.cpp src/VO_BoostingSingleEnsembleC
 add_library(ensembletraining_shared SHARED ${LIB_SRC} )
 set_target_properties(ensembletraining_shared PROPERTIES OUTPUT_NAME "vosm_ensembletraining")
 get_target_property(OUTPUT_NAME ensembletraining_shared OUTPUT_NAME)
-message(STATUS "Shared library outname:" $(OUTPUT_NAME))
+message(STATUS "Shared library outname:" ${OUTPUT_NAME})
 
+file(GLOB INSTALL_HEADERS
+    "include/*.h"
+)
+install(TARGETS ensembletraining_shared DESTINATION lib/vosm)
+install(FILES ${INSTALL_HEADERS} DESTINATION include/vosm)
