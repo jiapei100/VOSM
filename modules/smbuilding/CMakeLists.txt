@@ -7,5 +7,10 @@ set(LIB_SRC src/VO_AAMBasic.cpp src/VO_FeatureModel.cpp src/VO_AAMForwardIA.cpp 
 add_library(smbuilding_shared SHARED ${LIB_SRC} )
 set_target_properties(smbuilding_shared PROPERTIES OUTPUT_NAME "vosm_smbuilding")
 get_target_property(OUTPUT_NAME smbuilding_shared OUTPUT_NAME)
-message(STATUS "Shared library outname:" $(OUTPUT_NAME))
+message(STATUS "Shared library outname:" ${OUTPUT_NAME})
 
+file(GLOB INSTALL_HEADERS
+    "include/*.h"
+)
+install(TARGETS smbuilding_shared DESTINATION lib/vosm)
+install(FILES ${INSTALL_HEADERS} DESTINATION include/vosm)
