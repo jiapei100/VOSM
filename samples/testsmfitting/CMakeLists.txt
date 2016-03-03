@@ -8,11 +8,22 @@ if (BUILD_EXAMPLES)
     
 	include_directories(
 		"${CMAKE_SOURCE_DIR}/modules/smbuilding/include"
-		"${CMAKE_SOURCE_DIR}/modules/utils/include"
+        "${CMAKE_SOURCE_DIR}/modules/common/include"
 		"${CMAKE_SOURCE_DIR}/modules/cvcommon/include"
 		"${CMAKE_SOURCE_DIR}/modules/featureextraction/include"
 		"${CMAKE_SOURCE_DIR}/modules/integraltransform/include"
+        "${CMAKE_SOURCE_DIR}/modules/comalgs/include"
+        "${CMAKE_SOURCE_DIR}/modules/ensembletraining/include"
+        "${CMAKE_SOURCE_DIR}/modules/smfitting/include"
 	)
+
+    find_package(Boost COMPONENTS filesystem system regex REQUIRED)
+    find_package(OpenCV REQUIRED)
+
+    set(VOSM_LIB_DIR ${CMAKE_BINARY_DIR}/modules/)
+
+    link_directories(${VOSM_LIB_DIR}/common/ ${VOSM_LIB_DIR}/smbuilding/ 
+                     ${VOSM_LIB_DIR}/featureextraction/ ${VOSM_LIB_DIR}/integraltransform/ ${VOSM_LIB_DIR}/cvcommon/ ${VOSM_LIB_DIR}/comalgs/ ${VOSM_LIB_DIR}/ensembletraining/ ${VOSM_LIB_DIR}/smfitting/ )
 
     # ---------------------------------------------
     #      Define executable targets
@@ -23,13 +34,10 @@ if (BUILD_EXAMPLES)
 		set_target_properties(${the_target} PROPERTIES
 		    OUTPUT_NAME "vo_${name}"
 		    PROJECT_LABEL "(EXAMPLE) vo_${name}")
-    	add_dependencies(${the_target} smbuilding featureextraction integraltransform cvcommon utils
-			boost_regex boost_filesystem
-			opencv_core opencv_flann opencv_imgproc opencv_highgui
-    	    opencv_ml opencv_video opencv_objdetect opencv_features2d
-    	    opencv_calib3d opencv_legacy opencv_contrib)
-    	target_link_libraries(${the_target} ${VOSM_LINKER_LIBS} smbuilding featureextraction integraltransform cvcommon utils
-			boost_regex boost_filesystem
+
+    	target_link_libraries(${the_target} vosm_common vosm_smbuilding vosm_featureextraction vosm_integraltransform vosm_cvcommon vosm_comalgs vosm_ensembletraining vosm_smfitting
+            #${VOSM_COMMON_LIBRARY} ${VOSM_SMB_LIBRARY} ${VOSM_FEATURE_LIBRARY} #${VOSM_INTERGRAL_LIBRARY} ${VOSM_CVCOMMON_LIBRARY} ${VOSM_COMALGS_LIBRARY} #${VOSM_ENSEMBLE_LIBRARY} ${VOSM_SMFITTING_LIBRARY}
+			boost_regex boost_filesystem boost_system
 			opencv_core opencv_flann opencv_imgproc opencv_highgui opencv_ml opencv_video opencv_objdetect
     	    opencv_features2d opencv_calib3d opencv_legacy opencv_contrib)
 
