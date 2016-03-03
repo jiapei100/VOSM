@@ -8,5 +8,10 @@ set(LIB_SRC src/VO_Fitting2DSM.cpp src/VO_FittingAFM.cpp src/VO_FittingAAMBasic.
 add_library(smfitting_shared SHARED ${LIB_SRC} )
 set_target_properties(smfitting_shared PROPERTIES OUTPUT_NAME "vosm_smfitting")
 get_target_property(OUTPUT_NAME smfitting_shared OUTPUT_NAME)
-message(STATUS "Shared library outname:" $(OUTPUT_NAME))
+message(STATUS "Shared library outname:" ${OUTPUT_NAME})
 
+file(GLOB INSTALL_HEADERS
+    "include/*.h"
+)
+install(TARGETS smfitting_shared DESTINATION lib/vosm)
+install(FILES ${INSTALL_HEADERS} DESTINATION include/vosm)
