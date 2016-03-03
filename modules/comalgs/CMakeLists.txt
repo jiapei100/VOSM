@@ -8,5 +8,10 @@ set(LIB_SRC src/VO_Algs_Classification.cpp src/VO_Algs_FaceDetection.cpp src/VO_
 add_library(comalgs_shared SHARED ${LIB_SRC})
 set_target_properties(comalgs_shared PROPERTIES OUTPUT_NAME "vosm_comalgs")
 get_target_property(OUTPUT_NAME comalgs_shared OUTPUT_NAME)
-message(STATUS "Shared library outname:" $(OUTPUT_NAME))
+message(STATUS "Shared library outname:" ${OUTPUT_NAME})
 
+file(GLOB INSTALL_HEADERS
+    "include/*.h"
+)
+install(TARGETS comalgs_shared DESTINATION lib/vosm)
+install(FILES ${INSTALL_HEADERS} DESTINATION include/vosm)
