@@ -9,6 +9,7 @@ link_directories(/usr/local/lib)
 
 # must go before the project command
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Configs" FORCE)
+set(BUILD_EXAMPLES ON CACHE BOOL "Build examples" FORCE)
 if(DEFINED CMAKE_BUILD_TYPE AND CMAKE_VERSION VERSION_GREATER "2.8")
   set_property( CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${CMAKE_CONFIGURATION_TYPES} )
 endif()
@@ -30,5 +31,3 @@ find_library(OPENCV_LEGACY_LIB opencv_legacy $ENV{OPENCV_LEGACY_LIB})
 
 add_subdirectory(modules)
 add_subdirectory(samples)
-
-
