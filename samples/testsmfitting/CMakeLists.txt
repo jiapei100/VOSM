@@ -25,6 +25,23 @@ if (BUILD_EXAMPLES)
     link_directories(${VOSM_LIB_DIR}/common/ ${VOSM_LIB_DIR}/smbuilding/ 
                      ${VOSM_LIB_DIR}/featureextraction/ ${VOSM_LIB_DIR}/integraltransform/ ${VOSM_LIB_DIR}/cvcommon/ ${VOSM_LIB_DIR}/comalgs/ ${VOSM_LIB_DIR}/ensembletraining/ ${VOSM_LIB_DIR}/smfitting/ )
 
+    # Add rpath for installed exe to relink installed library of VOSM
+    SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+    SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+    IF(IS_ABSOLUTE ${CMAKE_INSTALL_PREFIX})
+        LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+        IF("${isSystemDir}" STREQUAL "-1")
+            SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+        ENDIF("${isSystemDir}" STREQUAL "-1")
+    ELSE(IS_ABSOLUTE ${CMAKE_INSTALL_PREFIX})
+        LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+            "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+        IF("${isSystemDir}" STREQUAL "-1")
+            SET(CMAKE_INSTALL_RPATH "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX}/lib")
+        ENDIF("${isSystemDir}" STREQUAL "-1")
+    ENDIF(IS_ABSOLUTE ${CMAKE_INSTALL_PREFIX})
+
     # ---------------------------------------------
     #      Define executable targets
     # ---------------------------------------------

@@ -13,5 +13,5 @@ message(STATUS "Shared library outname:" ${OUTPUT_NAME})
 file(GLOB INSTALL_HEADERS
     "include/*.h"
 )
-install(TARGETS cvcommon_shared DESTINATION lib/vosm)
+install(TARGETS cvcommon_shared DESTINATION lib)
 install(FILES ${INSTALL_HEADERS} DESTINATION include/vosm)
