@@ -63,7 +63,6 @@
 #define __VO_BOOSTINGSINGLEENSEMBLECLASSIFIER_H_
 
 
-#include "opencv/ml.h"
 #include "VO_WeakClassifier.h"
 
 
@@ -72,7 +71,7 @@
  * @brief		Boosting random forest classifier.
  * @note		FIXME
  */
-class VO_BoostingSingleEnsembleClassifier : public CvBoost
+class VO_BoostingSingleEnsembleClassifier : public cv::ml::Boost
 {
 protected:
 	/** true positive requirement when training */
@@ -114,10 +113,8 @@ public:
     /** mark used features in map */
     void markUsedFeaturesInMap( cv::Mat& featureMap );
 protected:
-    /** set parameters */
-    virtual bool set_params( const CvBoostParams& _params );
     /** update weights */
-    virtual void update_weights( CvBoostTree* tree );
+    virtual void update_weights( cv::ml::Boost* tree );
     /** Did we achieve the desired error? */
     virtual bool isErrDesired();
 };

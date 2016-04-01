@@ -294,7 +294,7 @@ double CTrackingAlgs::CamshiftTracking( const cv::Mat& img,
 			
 	cv::calcBackProject( &hue, 1, CTrackingAlgs::channels, hist, backproject, CTrackingAlgs::ranges);
 	cv::bitwise_and( backproject, mask, backproject );
-    cv::RotatedRect trackbox = CamShift( backproject, trackwindow, cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 10, 1) );
+    cv::RotatedRect trackbox = cv::CamShift( backproject, trackwindow, cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 10, 1) );
 	obj = trackwindow;
 
 //		cv::ellipse(img, trackbox, CV_RGB(255,0,0), 3, CV_AA);

@@ -64,9 +64,10 @@
 #define __VO_CVCOMMON_H__
 
 
-#include "opencv/cxcore.h"
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/imgproc/imgproc.hpp>
 #include "VO_Common.h"
 #include "VO_BoostCommon.h"
 
@@ -1115,7 +1116,7 @@ static void SaveSequentialImagesInFolder(   const std::vector<cv::Mat>& imgs,
             filename = fdname + "/0" + stri + ".jpg";
         else if(stri.length() == 2)
             filename = fdname + "/" + stri + ".jpg";
-        imwrite(filename.c_str(), imgs[i] );
+        cv::imwrite(filename.c_str(), imgs[i] );
         ssi.clear();
     }
 }

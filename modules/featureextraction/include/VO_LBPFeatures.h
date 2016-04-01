@@ -68,7 +68,7 @@
 #define CC_LBP  "LBP"
 //#define CC_RECT "rect"
 
-#define LBPF_NAME "lbpFeatureParams"
+//#define LBPF_NAME "lbpFeatureParams"
 
 
 /** 

@@ -63,9 +63,7 @@
 #ifndef __VO_SYMLETS_H__
 #define __VO_SYMLETS_H__
 
-#include <iostream>
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+
 #include "VO_DiscreteWavelet.h"
 
 

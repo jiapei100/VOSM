@@ -64,8 +64,6 @@
 #define __VO_COHENDAUBECHIESFEAUVEAU_H__
 
 #include <iostream>
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
 #include "VO_DiscreteWavelet.h"
 
 

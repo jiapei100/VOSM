@@ -63,14 +63,16 @@
 #define __VO_WEAKCLASSIFIER_H_
 
 
-#include "opencv/ml.h"
-
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/ml/ml.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 /** 
  * @author		JIA Pei
  * @brief		For boosting, a weak classifier is just a decision tree.
  */
-class VO_WeakClassifier : public CvBoostTree
+class VO_WeakClassifier : public cv::ml::Boost
 {
 protected:
 	/** For every weak classifier, every single feature has a single threshold to do binary classification */
@@ -84,7 +86,7 @@ public:
 	explicit VO_WeakClassifier() 	{ this->m_fThreshold = 0.0; }
 	
 	/** Destructor */
-	~VO_WeakClassifier() 	{}
+	virtual ~VO_WeakClassifier() 	{}
 	
 	/** Split */
 //	void					split_node_data( CvDTreeNode* node );

@@ -64,9 +64,10 @@
 
 #include <cstring>
 #include <set>
-#include "opencv/cv.h"
+#include "opencv2/core/core.hpp"
 #include "opencv/cvaux.h"
-#include "opencv/highgui.h"
+#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/imgproc/imgproc.hpp>
 #include "VO_CVCommon.h"
 #include "VO_AdditiveStrongerClassifier.h"
 
@@ -87,19 +88,19 @@ protected:
 	unsigned int 				m_iNbOfCategories;
 
 	/** Decision tree */
-    CvDTree 					m_CVDtree;
+    cv::ml::DTrees*					m_CVDtree;
 
 	/** boosting */
-    CvBoost 					m_CVBoost;
+    cv::ml::Boost*					m_CVBoost;
 
 	/** random tree */
-    CvRTrees 					m_CVRTrees;
+    cv::ml::RTrees*					m_CVRTrees;
 
 	/** extreme random tree */
-    CvERTrees 					m_CVERTrees;
+    //cv::ml::RTrees 					m_CVERTrees;
 
 	/** SVM */
-	CvSVM						m_CVSVM;
+	cv::ml::SVM*				m_CVSVM;
 
 	/** Initialization */
 	void						init(unsigned int mtd);

@@ -63,10 +63,9 @@
 #ifndef _VO_FEATURES_H_
 #define _VO_FEATURES_H_
 
-#include "opencv/cxcore.h"
-#include "opencv/cv.h"
-#include "opencv/ml.h"
-
+#include "opencv2/core/core.hpp"
+#include "opencv2/ml/ml.hpp"
+#include <opencv2/imgproc/imgproc.hpp>
 
 
 

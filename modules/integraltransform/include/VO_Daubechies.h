@@ -64,9 +64,6 @@
 #define __VO_DAUBECHIES_H__
 
 #include <vector>
-#include <iostream>
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
 #include "VO_DiscreteWavelet.h"
 
 

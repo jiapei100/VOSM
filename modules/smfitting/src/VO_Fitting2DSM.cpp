@@ -63,6 +63,7 @@
 #include <fstream>
 
 
+#include <opencv2/video/tracking.hpp>
 #include "VO_CVCommon.h"
 #include "VO_AXM.h"
 #include "VO_Fitting2DSM.h"

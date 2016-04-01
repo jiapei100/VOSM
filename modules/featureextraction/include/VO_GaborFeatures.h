@@ -77,7 +77,7 @@
 #define NBOFGAMMA       3
 
 
-#define HFP_NAME "gaborFeatureParams"
+//#define HFP_NAME "gaborFeatureParams"
 
 
 /** 

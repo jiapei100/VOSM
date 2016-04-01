@@ -63,7 +63,6 @@
 #include "VO_Daubechies.h"
 #include <vector>
 
-using namespace std;
 
 /// Daubechies transform parameters, only till D20
 float VO_Daubechies::daub[10][20] = {
@@ -103,12 +102,12 @@ void VO_Daubechies::VO_PrepareKernel(unsigned int daubN)
 {
     if( ! (daubN % 2) )
     {
-        cerr << "VO_Daubechies daubN should be an even number" << endl;
+        std::cerr << "VO_Daubechies daubN should be an even number" << std::endl;
         exit(1);
     }
     if( daubN < 2 || daubN > 20 )
     {
-        cerr << "VO_Daubechies daubN should be between 2 and 20" << endl;
+        std::cerr << "VO_Daubechies daubN should be between 2 and 20" << std::endl;
         exit(1);
     }
 

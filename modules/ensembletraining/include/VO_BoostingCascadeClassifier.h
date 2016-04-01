@@ -62,15 +62,9 @@
 #ifndef __VO_BOOSTINGCASCADECLASSIFIER_H__
 #define __VO_BOOSTINGCASCADECLASSIFIER_H__
 
-#include <string>
-#include <iostream>
-
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
 
 #include "VO_Features.h"
 #include "VO_AdditiveStrongerClassifier.h"
-
 #include "VO_BoostingSingleEnsembleClassifier.h"
 
 

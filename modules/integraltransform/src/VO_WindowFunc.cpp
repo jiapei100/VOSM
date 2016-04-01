@@ -228,7 +228,7 @@ void VO_WindowFunc::VO_DisplayWindowFuncKernel(const std::string& fn)
             }
         }
     }
-    imwrite(fn, img);
+    cv::imwrite(fn, img);
 }
 
 

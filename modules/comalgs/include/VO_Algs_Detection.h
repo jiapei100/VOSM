@@ -63,12 +63,27 @@
 #define __DETECTIONALGS_H__
 
 #include <cstring>
-#include "opencv/cv.h"
-#include "opencv/cvaux.h"
-#include "opencv/highgui.h"
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/ml/ml.hpp>
+#include <opencv2/objdetect/objdetect.hpp>
 #include "VO_CVCommon.h"
 #include "VO_AdditiveStrongerClassifier.h"
 
+
+template<typename T>
+static cv::Ptr<T> load_classifier(const std::string& filename_to_load)
+{
+    // load classifier from the specified file
+    cv::Ptr<T> model = cv::ml::StatModel::load<T>( filename_to_load );
+    if( model.empty() )
+        std::cout << "Could not read the classifier " << filename_to_load << std::endl;
+    else
+        std::cout << "The classifier " << filename_to_load << " is loaded.\n";
+
+    return model;
+}
 
 
 /** 
@@ -89,10 +104,10 @@ protected:
     std::string					m_sFile2BLoad;
 
 	/** bagging random forest classifier */
-    cv::RTreeClassifier			m_rtreeClassifier;
+    cv::ml::RTrees*			m_rtreeClassifier;
 	
 	/** boosting cascade classifier */
-    cv::CascadeClassifier		m_cascadeClassifier;
+    cv::CascadeClassifier*		m_cascadeClassifier;
 
 	/** Whether .... is detected */
     bool                        m_bObjectDetected;
@@ -130,13 +145,13 @@ public:
     void						SetBaggingRTree(const std::string& str)
 	{
 								this->m_sFile2BLoad			= str;
-								this->m_rtreeClassifier.read( this->m_sFile2BLoad.c_str() );
+                                this->m_rtreeClassifier = load_classifier<cv::ml::RTrees>(this->m_sFile2BLoad);
 	}
     /** Set boosting */
     void						SetBoostingCascade(const std::string& str)
 	{
 								this->m_sFile2BLoad			= str;
-								this->m_cascadeClassifier.load( this->m_sFile2BLoad );
+								this->m_cascadeClassifier->load( this->m_sFile2BLoad );
 	}
 
     /** Do Detection */
@@ -147,7 +162,7 @@ public:
                                             cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE) );
 
     /** Start Bagging Detection */
-    static double				BaggingDetection( 	const cv::RTreeClassifier& rtree,
+    static double				BaggingDetection( 	const cv::ml::RTrees* rtree,
                                                     const cv::Mat& img,
                                                     const cv::Rect* confinedArea,
                                                     std::vector<cv::Rect>& objs,
@@ -156,7 +171,7 @@ public:
                                                     cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE));
 
     /** Start Boosting Detection */
-    static double				BoostingDetection( 	const cv::CascadeClassifier& cascade,
+    static double				BoostingDetection( 	const cv::CascadeClassifier* cascade,
                                                     const cv::Mat& img,
                                                     const cv::Rect* confinedArea,
                                                     std::vector<cv::Rect>& objs,

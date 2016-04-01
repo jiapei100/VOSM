@@ -62,11 +62,6 @@
 #ifndef __VO_STRONGERCLASSIFIER_H__
 #define __VO_STRONGERCLASSIFIER_H__
 
-#include <string>
-#include <iostream>
-
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
 
 #include "VO_WeakClassifier.h"
 
@@ -79,7 +74,7 @@ class VO_AdditiveStrongerClassifier
 {
 protected:
     /** A weak classifier */
-	VO_WeakClassifier			m_VOWeakClassifier;
+	VO_WeakClassifier*			m_pVOWeakClassifier;
 	
 	/** Number of samples */
 	unsigned int				m_iNbOfSamples;
@@ -98,7 +93,7 @@ public:
 	explicit VO_AdditiveStrongerClassifier();
 
 	/** Destructor */
-	~VO_AdditiveStrongerClassifier();
+	virtual ~VO_AdditiveStrongerClassifier();
 
 };
 

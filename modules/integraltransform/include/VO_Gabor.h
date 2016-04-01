@@ -62,9 +62,6 @@
 #ifndef __VO_GABOR_H__
 #define __VO_GABOR_H__
 
-#include <iostream>
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
 #include "VO_STFT.h"
 
 

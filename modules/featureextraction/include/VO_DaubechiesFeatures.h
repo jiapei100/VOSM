@@ -69,7 +69,7 @@
 #define CC_RECTS        "rects"
 #define CC_TILTED       "tilted"
 
-#define HFP_NAME        "daubechiesFeatureParams"
+//#define HFP_NAME        "daubechiesFeatureParams"
 
 
 /** 

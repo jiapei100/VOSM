@@ -62,11 +62,6 @@
 #ifndef __VO_BAGGINGRANDOMFORESTCLASSIFIER_H__
 #define __VO_BAGGINGRANDOMFORESTCLASSIFIER_H__
 
-#include <string>
-#include <iostream>
-
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
 
 #include "VO_AdditiveStrongerClassifier.h"
 

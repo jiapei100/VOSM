@@ -61,8 +61,9 @@
 
 #include <iostream>
 #include <cstdio>
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include "VO_Algs_Detection.h"
 
 
@@ -161,7 +162,7 @@ double CDetectionAlgs::Detection(const cv::Mat& iImg,
  * @param		bigSize			Input - detected object should be smaller than bigSize
  * @return		detection time cost
 */
-double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier& cascade,
+double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier* cascade,
                                         const cv::Mat& img,
                                         const cv::Rect* confinedArea,
                                         std::vector<cv::Rect>& objs,
@@ -188,7 +189,7 @@ double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier& cascade,
 
 	/////////////////detection/////////////////////////////////////////
 	//t = (double)cvGetTickCount();
-    const_cast<cv::CascadeClassifier&>(cascade).detectMultiScale( smallImg, objs,
+    const_cast<cv::CascadeClassifier*>(cascade)->detectMultiScale( smallImg, objs,
 															1.1, 2, 0
 															//|CascadeClassifier::DO_CANNY_PRUNING
 															//|CascadeClassifier::FIND_BIGGEST_OBJECT
@@ -262,7 +263,7 @@ double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier& cascade,
  * @param		bigSize			Input - detected object should be smaller than bigSize
  * @return		detection time cost
 */
-double CDetectionAlgs::BaggingDetection( const cv::RTreeClassifier& rtree,
+double CDetectionAlgs::BaggingDetection( const cv::ml::RTrees* rtree,
                                         const cv::Mat& img,
                                         const cv::Rect* confinedArea,
                                         std::vector<cv::Rect>& objs,

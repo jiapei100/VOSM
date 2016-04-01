@@ -23,10 +23,11 @@ find_library(BOOST_REGEX_LIB boost_regex $ENV{BOOST_REGEX_LIB})
 find_library(BOOST_SYSTEM_LIB boost_system $ENV{BOOST_SYSTEM_LIB})
 find_library(OPENCV_CORE_LIB opencv_core $ENV{OPENCV_CORE_LIB})
 find_library(OPENCV_IMGPROC_LIB opencv_imgproc $ENV{OPENCV_IMGPROC_LIB})
+find_library(OPENCV_IMGPROC_LIB opencv_imgproc $ENV{OPENCV_IMGCODECS_LIB})
 find_library(OPENCV_HIGHGUI_LIB opencv_highgui $ENV{OPENCV_HIGHGUI_LIB})
 find_library(OPENCV_FEATURES2D_LIB opencv_features2d $ENV{OPENCV_FEATURES2D_LIB})
 find_library(OPENCV_OBJDETECT_LIB opencv_objdetect $ENV{OPENCV_OBJDETECT_LIB})
-find_library(OPENCV_LEGACY_LIB opencv_legacy $ENV{OPENCV_LEGACY_LIB})
+find_library(OPENCV_IMGPROC_LIB opencv_imgproc $ENV{OPENCV_ML_LIB})
 
 
 add_subdirectory(modules)

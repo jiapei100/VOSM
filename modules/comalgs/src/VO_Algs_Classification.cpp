@@ -75,6 +75,10 @@
 */
 void CClassificationAlgs::init(unsigned int mtd)
 {
+    this->m_CVDtree = NULL;
+    this->m_CVBoost = NULL;
+    this->m_CVRTrees = NULL;
+    this->m_CVSVM = NULL;
 	this->m_iClassificationMethod = mtd;
 }
 
@@ -122,8 +126,8 @@ void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<i
 	switch(this->m_iClassificationMethod)
 	{
 		case CClassificationAlgs::DecisionTree:
-			this->m_CVDtree.train( 	data,
-									CV_ROW_SAMPLE,
+			this->m_CVDtree->train( data,
+									cv::CV_ROW_SAMPLE,
 									categories,
                                     cv::Mat(),
                                     cv::Mat(),
@@ -132,8 +136,8 @@ void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<i
 									CvDTreeParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, false, false, 0 ) );
 		break;
 		case CClassificationAlgs::Boost:
-		    this->m_CVBoost.train( 	data,
-									CV_ROW_SAMPLE,
+		    this->m_CVBoost->train( data,
+									cv::CV_ROW_SAMPLE,
 									categories,
                                     cv::Mat(),
                                     cv::Mat(),
@@ -143,8 +147,8 @@ void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<i
 									false );
 		break;
 		case CClassificationAlgs::RandomForest:
-			this->m_CVRTrees.train( data, 
-									CV_ROW_SAMPLE,
+			this->m_CVRTrees->train( data, 
+									cv::CV_ROW_SAMPLE,
 									categories,
                                     cv::Mat(),
                                     cv::Mat(),
@@ -152,18 +156,18 @@ void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<i
                                     cv::Mat(),
 									CvRTParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, true, 0, 100, 0, CV_TERMCRIT_ITER ) );
 		break;
-		case CClassificationAlgs::ExtremeRandomForest:
-			this->m_CVERTrees.train(data,
-									CV_ROW_SAMPLE,
-									categories,
-                                    cv::Mat(),
-                                    cv::Mat(),
-                                    cv::Mat(),
-                                    cv::Mat(),
-									CvRTParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, true, 0, 100, 0, CV_TERMCRIT_ITER ) );
-		break;
+//		case CClassificationAlgs::ExtremeRandomForest:
+//			this->m_CVERTrees->train(data,
+//									CV_ROW_SAMPLE,
+//									categories,
+//                                    cv::Mat(),
+//                                    cv::Mat(),
+//                                    cv::Mat(),
+//                                    cv::Mat(),
+//									CvRTParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, true, 0, 100, 0, CV_TERMCRIT_ITER ) );
+//		break;
 		case CClassificationAlgs::SVM:
-			this->m_CVSVM.train(	data,
+			this->m_CVSVM->train(	data,
 									categories,
                                     cv::Mat(),
                                     cv::Mat(),

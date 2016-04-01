@@ -68,6 +68,7 @@
  */
 VO_AdditiveStrongerClassifier::VO_AdditiveStrongerClassifier()
 {
+    this->m_pVOWeakClassifier           = NULL;
 	this->m_iNbOfSamples				= 0;
 	this->m_iNbOfPositiveSamples		= 0;
 	this->m_iNbOfNegativeSamples		= 0;

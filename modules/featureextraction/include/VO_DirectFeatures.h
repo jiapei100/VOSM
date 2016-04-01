@@ -63,7 +63,6 @@
 #define _VO_DIRECTFEATURES_H_
 
 #include "VO_Features.h"
-#include "VO_Gabor.h"
 
 #define CC_RECTS       "rects"
 #define CC_TILTED      "tilted"
@@ -76,7 +75,7 @@
 #define NBOFGAMMA       3
 
 
-#define HFP_NAME "gaborFeatureParams"
+//#define HFP_NAME "gaborFeatureParams"
 
 
 /** 

@@ -75,7 +75,7 @@
 #define CV_HAAR_FEATURE_MAX         3
 
 
-#define HFP_NAME "haarFeatureParams"
+//#define HFP_NAME "haarFeatureParams"
 
 
 /** 
