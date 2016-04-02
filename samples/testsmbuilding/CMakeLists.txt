@@ -53,7 +53,7 @@ if (BUILD_EXAMPLES)
             vosm_common vosm_smbuilding vosm_featureextraction vosm_integraltransform vosm_cvcommon 
 			boost_regex boost_filesystem boost_system
 			opencv_core opencv_flann opencv_imgproc opencv_highgui opencv_ml opencv_video opencv_objdetect
-    	    opencv_features2d opencv_calib3d opencv_legacy opencv_contrib)
+    	    opencv_features2d opencv_calib3d)
 
         if(WIN32)
             install(TARGETS ${the_target}

@@ -56,7 +56,7 @@ if (BUILD_EXAMPLES)
             #${VOSM_COMMON_LIBRARY} ${VOSM_SMB_LIBRARY} ${VOSM_FEATURE_LIBRARY} #${VOSM_INTERGRAL_LIBRARY} ${VOSM_CVCOMMON_LIBRARY} ${VOSM_COMALGS_LIBRARY} #${VOSM_ENSEMBLE_LIBRARY} ${VOSM_SMFITTING_LIBRARY}
 			boost_regex boost_filesystem boost_system
 			opencv_core opencv_flann opencv_imgproc opencv_highgui opencv_ml opencv_video opencv_objdetect
-    	    opencv_features2d opencv_calib3d opencv_legacy opencv_contrib)
+    	    opencv_features2d opencv_calib3d )
 
         if(WIN32)
             install(TARGETS ${the_target}
