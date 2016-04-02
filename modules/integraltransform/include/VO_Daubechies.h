@@ -63,7 +63,6 @@
 #ifndef __VO_DAUBECHIES_H__
 #define __VO_DAUBECHIES_H__
 
-#include <vector>
 #include "VO_DiscreteWavelet.h"
 
 

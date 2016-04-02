@@ -61,8 +61,6 @@
 
 #include <iostream>
 #include <cstdio>
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
 #include "VO_FacePart.h"
 #include "VO_FaceKeyPoint.h"
 #include "VO_Algs_FaceDetection.h"
@@ -128,32 +126,38 @@ void CFaceDetectionAlgs::SetConfiguration(	const std::string& strfrontalface,
 			if(strfrontalface!="")
 			{
 				this->m_sFile2BLoadFrontalFace	= strfrontalface;
-				this->m_rtreeClassifierProfileFace.read( this->m_sFile2BLoadFrontalFace.c_str() );
+                cv::FileStorage file(this->m_sFile2BLoadFrontalFace, cv::FileStorage::READ);
+				this->m_rtreeClassifierProfileFace->read(file.root());
 			}
 			if(strprofileface!="")
 			{
 				this->m_sFile2BLoadProfileFace	= strprofileface;
-				this->m_rtreeClassifierProfileFace.read( this->m_sFile2BLoadProfileFace.c_str() );
+                cv::FileStorage file(this->m_sFile2BLoadProfileFace, cv::FileStorage::READ);
+				this->m_rtreeClassifierProfileFace->read( file.root() );
 			}
 			if(strlefteye!="")
 			{
 				this->m_sFile2BLoadLeftEye	= strlefteye;
-				this->m_rtreeClassifierLeftEye.read( this->m_sFile2BLoadLeftEye.c_str() );
+                cv::FileStorage file(this->m_sFile2BLoadLeftEye, cv::FileStorage::READ);
+				this->m_rtreeClassifierLeftEye->read( file.root() );
 			}
 			if(strrighteye!="")
 			{
 				this->m_sFile2BLoadRightEye	= strrighteye;
-				this->m_rtreeClassifierRightEye.read( this->m_sFile2BLoadRightEye.c_str() );
+                cv::FileStorage file(this->m_sFile2BLoadRightEye, cv::FileStorage::READ);
+				this->m_rtreeClassifierRightEye->read( file.root() );
 			}
 			if(strnose!="")
 			{
 				this->m_sFile2BLoadNose	= strnose;
-				this->m_rtreeClassifierNose.read( this->m_sFile2BLoadNose.c_str() );
+                cv::FileStorage file(this->m_sFile2BLoadNose, cv::FileStorage::READ);
+				this->m_rtreeClassifierNose->read( file.root() );
 			}
 			if(strmouth!="")
 			{
 				this->m_sFile2BLoadMouth	= strmouth;
-				this->m_rtreeClassifierMouth.read( this->m_sFile2BLoadMouth.c_str() );
+                cv::FileStorage file(this->m_sFile2BLoadMouth, cv::FileStorage::READ);
+				this->m_rtreeClassifierMouth->read( file.root() );
 			}
 		}
 		break;
@@ -227,7 +231,7 @@ double CFaceDetectionAlgs::FaceDetection(const cv::Mat& iImg,
 											bigSize);
 		break;
 		case VO_AdditiveStrongerClassifier::BOOSTING:
-			CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierFrontalFace,
+			CDetectionAlgs::BoostingDetection( &this->m_cascadeClassifierFrontalFace,
 											iImg,
 											confinedArea,
 											this->m_vDetectedFaceRects,
@@ -349,7 +353,7 @@ double CFaceDetectionAlgs::VO_FaceComponentsDetection(const cv::Mat& iImg,
 		this->m_bLeftEyeDetected = this->VO_FacePartDetection ( iImg, this->m_CVLeftEyePossibleWindow, this->m_VOFaceComponents0.m_rectLeftEye, VO_FacePart::LEFTEYE);
 
 		if ( this->m_bLeftEyeDetected )
-		{			
+		{
 			this->m_VOFaceComponents.m_rectLeftEye.x = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.x + this->m_CVLeftEyePossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
 			this->m_VOFaceComponents.m_rectLeftEye.y = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.y + this->m_CVLeftEyePossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
 			this->m_VOFaceComponents.m_rectLeftEye.width = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.width );
@@ -526,7 +530,7 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
 //														cv::Size(54, 36) );
 				break;
 				case VO_AdditiveStrongerClassifier::BOOSTING:
-					CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierLeftEye,
+					CDetectionAlgs::BoostingDetection( &this->m_cascadeClassifierLeftEye,
 														smallImgROI,
 														0,
 														detectedfp,
@@ -555,7 +559,7 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
 //														cv::Size(54, 36) );
 				break;
 				case VO_AdditiveStrongerClassifier::BOOSTING:
-					CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierRightEye,
+					CDetectionAlgs::BoostingDetection( &this->m_cascadeClassifierRightEye,
 														smallImgROI,
 														0,
 														detectedfp,
@@ -584,7 +588,7 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
 //														cv::Size(54, 45) );
 				break;
 				case VO_AdditiveStrongerClassifier::BOOSTING:
-					CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierNose,
+					CDetectionAlgs::BoostingDetection( &this->m_cascadeClassifierNose,
 														smallImgROI,
 														0,
 														detectedfp,
@@ -613,7 +617,7 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
 //														cv::Size(75, 45) );
 				break;
 				case VO_AdditiveStrongerClassifier::BOOSTING:
-					CDetectionAlgs::BoostingDetection( this->m_cascadeClassifierMouth,
+					CDetectionAlgs::BoostingDetection( &this->m_cascadeClassifierMouth,
 														smallImgROI,
 														0,
 														detectedfp,
@@ -639,7 +643,7 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
         oWindow = iWindow;
         result = false;
     }
-	
+
     return result;
 }
 
@@ -686,7 +690,7 @@ int CFaceDetectionAlgs::VO_DetectFaceDirection( const VO_FaceCompPos& facecompon
     cv::Point2f possiblenoseCenter;
 	possiblenoseCenter.x = possiblenose.x + possiblenose.width/2.0f;
     possiblenoseCenter.y = possiblenose.y + possiblenose.height/2.0f;
-	
+
 	// centers[3] is the nose center
 	if(centers[3].x < nosecentralarea.x && centers[3].x < middleX)
 		leftright = -1;	// from the user to the laptop screen, left; but actually right
@@ -777,7 +781,7 @@ void CFaceDetectionAlgs::VO_DrawDetection ( cv::Mat& ioImg,
         pt2.x = this->m_VOFaceComponents.m_rectNose.x + this->m_VOFaceComponents.m_rectNose.width;
         pt2.y = this->m_VOFaceComponents.m_rectNose.y + this->m_VOFaceComponents.m_rectNose.height;
         cv::rectangle ( ioImg, pt1, pt2, colors[3], 1, 8, 0 );
-		
+
 //		pt1.x = this->m_CVDetectedFaceWindow2SM.x + this->m_CVNosePossibleWindow.x;
 //        pt1.y = this->m_CVDetectedFaceWindow2SM.y + this->m_CVNosePossibleWindow.y;
 //        pt2.x = this->m_CVDetectedFaceWindow2SM.x + this->m_CVNosePossibleWindow.x + this->m_CVNosePossibleWindow.width;
@@ -796,7 +800,7 @@ void CFaceDetectionAlgs::VO_DrawDetection ( cv::Mat& ioImg,
     }
 }
 
-											
+
 /**
  * @brief Calculate Face Keypoints
  */

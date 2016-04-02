@@ -63,9 +63,6 @@
 #define __FACEDETECTIONALGS_H__
 
 #include <cstring>
-#include "opencv2/core/core.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
 #include "VO_CVCommon.h"
 #include "VO_FaceCompPos.h"
 #include "VO_Algs_Detection.h"
@@ -141,14 +138,14 @@ private:
     cv::CascadeClassifier    	m_cascadeClassifierNose;
     cv::CascadeClassifier    	m_cascadeClassifierMouth;
     cv::CascadeClassifier    	m_cascadeClassifierMouthBeard;
-    cv::RTreeClassifier			m_rtreeClassifierFrontalFace;
-    cv::RTreeClassifier			m_rtreeClassifierProfileFace;
-    cv::RTreeClassifier			m_rtreeClassifierEyes;
-    cv::RTreeClassifier			m_rtreeClassifierLeftEye;
-    cv::RTreeClassifier			m_rtreeClassifierRightEye;
-    cv::RTreeClassifier			m_rtreeClassifierNose;
-    cv::RTreeClassifier			m_rtreeClassifierMouth;
-    cv::RTreeClassifier			m_rtreeClassifierMouthBeard;
+    cv::ml::RTrees*			m_rtreeClassifierFrontalFace;
+    cv::ml::RTrees*			m_rtreeClassifierProfileFace;
+    cv::ml::RTrees*			m_rtreeClassifierEyes;
+    cv::ml::RTrees*			m_rtreeClassifierLeftEye;
+    cv::ml::RTrees*			m_rtreeClassifierRightEye;
+    cv::ml::RTrees*			m_rtreeClassifierNose;
+    cv::ml::RTrees*			m_rtreeClassifierMouth;
+    cv::ml::RTrees*	    	m_rtreeClassifierMouthBeard;
 
 	/** Initialization */
     void                        init(const std::string& str, unsigned int mtd);

@@ -61,7 +61,6 @@
 
 
 #include "VO_FaceKeyPoint.h"
-#include "VO_Common.h"
 
 /**
 * @brief    Calculate some key lines on the face

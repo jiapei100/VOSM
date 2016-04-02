@@ -64,9 +64,9 @@
 #define __VO_COMMON_H__
 
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "float.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <float.h>
 #include <climits>
 #include <vector>
 #include <algorithm>
@@ -181,7 +181,7 @@
 
 /// video show type
 #define ORIGINAL                                    0
-#define DETECTED                                    1
+#define DETECTED_TEST                               1
 #define FITTED                                      2
 
 /// normalization methods

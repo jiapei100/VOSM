@@ -64,12 +64,6 @@
 #define __VO_AFM_H__
 
 
-#include <vector>
-
-#include "opencv2/core/core.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
-
 #include "VO_DiscreteWavelet.h"
 #include "VO_AXM.h"
 

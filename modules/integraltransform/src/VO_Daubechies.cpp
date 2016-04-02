@@ -61,7 +61,6 @@
 
 
 #include "VO_Daubechies.h"
-#include <vector>
 
 
 /// Daubechies transform parameters, only till D20

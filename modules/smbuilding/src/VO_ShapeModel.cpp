@@ -65,7 +65,6 @@
 #include <set>
 #include <algorithm>
 
-#include "opencv/cvaux.h"
 #include <boost/filesystem.hpp>
 #include "VO_Triangle2DStructure.h"
 #include "VO_ShapeModel.h"

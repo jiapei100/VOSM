@@ -63,9 +63,6 @@
 #ifndef __VO_FittingAAMForwardIA__
 #define __VO_FittingAAMForwardIA__
 
-#include <vector>
-#include "opencv2/core/core.hpp"
-#include "opencv2/highgui/highgui.hpp"
 
 #include "VO_CVCommon.h"
 #include "VO_AAMForwardIA.h"

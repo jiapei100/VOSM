@@ -63,10 +63,6 @@
 #ifndef __VO_FittingAAMBasic__
 #define __VO_FittingAAMBasic__
 
-#include <vector>
-#include "opencv2/core/core.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include <opencv2/imgproc/imgproc.hpp>
 
 #include "VO_CVCommon.h"
 #include "VO_AAMBasic.h"

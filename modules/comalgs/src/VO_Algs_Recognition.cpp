@@ -61,8 +61,7 @@
 
 #include <iostream>
 #include <cstdio>
-#include "opencv/cv.h"
-#include "opencv/highgui.h"
+#include <opencv2/calib3d/calib3d.hpp>
 #include "VO_FaceKeyPoint.h"
 #include "VO_Algs_Recognition.h"
 
@@ -257,7 +256,7 @@ bool CRecognitionAlgs::CalcFittingEffect4StaticImage(	const cv::Mat_<float>& avg
     }
     else
     {
-        if( ( fabs( sDist - ShapeDistMean.val[0] ) < 1.5f * ShapeDistStddev.val[0] ) && 
+        if( ( fabs( sDist - ShapeDistMean.val[0] ) < 1.5f * ShapeDistStddev.val[0] ) &&
               ( fabs( tDist - TextureDistMean.val[0] ) < 3.0f*TextureDistStddev.val[0] ) )
             return true;
         else
@@ -468,8 +467,10 @@ std::vector<float> CRecognitionAlgs::CalcAbsoluteOrientations(	const VO_Shape& i
 	CvPOSITObject *positObject = cvCreatePOSITObject( &modelPoints[0], NbOfPoints );
 
 	//Estimate the pose
-	CvMatr32f rotation_matrix = new float[9];
-	CvVect32f translation_vector = new float[3];
+	//CvMatr32f rotation_matrix = new float[9];
+	float* rotation_matrix = new float[9];
+	//CvVect32f translation_vector = new float[3];
+	float* translation_vector = new float[3];
 	CvTermCriteria criteria = cvTermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 100, 1.0e-4f);
 	cvPOSIT( positObject, &srcImagePoints[0], FOCAL_LENGTH, criteria, rotation_matrix, translation_vector );
 
@@ -501,6 +502,8 @@ std::vector<float> CRecognitionAlgs::CalcAbsoluteOrientations(	const VO_Shape& i
 		}
 		oShape2D.SetA2DPoint(pt2d, i);
 	}
+    delete(rotation_matrix);
+    delete(translation_vector);
 
 	//return Euler angles
     std::vector<float> pos(3);
@@ -681,7 +684,7 @@ float CRecognitionAlgs::CalcFacePitch(const VO_Shape& iShape, const VO_FaceParts
             EQ = sqrt(ENQ*ENQ + NNQ*NNQ);
             NO = sqrt(2.0f)/2.0f*EQ;
 	}
-	
+
 	if( fabs(NNQ/NO) < 1.0f)
 		pitch = asin ( NNQ / NO ) * 180.0f / CV_PI;
 	else if (NNQ * NO < 0.0f)

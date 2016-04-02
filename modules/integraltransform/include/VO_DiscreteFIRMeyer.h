@@ -67,6 +67,8 @@
  * @author   JIA Pei
  * @brief    FIR Meyer discrete wavelet transform.
  */
- 
+
+#include "VO_DiscreteWavelet.h"
+
 #endif  // __VO_DISCRETEFIRMEYER_H__
  
