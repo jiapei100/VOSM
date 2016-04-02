@@ -8,13 +8,13 @@ if (BUILD_EXAMPLES)
     
 	include_directories(
 		"${CMAKE_SOURCE_DIR}/modules/smbuilding/include"
-        "${CMAKE_SOURCE_DIR}/modules/common/include"
+                "${CMAKE_SOURCE_DIR}/modules/common/include"
 		"${CMAKE_SOURCE_DIR}/modules/cvcommon/include"
 		"${CMAKE_SOURCE_DIR}/modules/featureextraction/include"
 		"${CMAKE_SOURCE_DIR}/modules/integraltransform/include"
-        "${CMAKE_SOURCE_DIR}/modules/comalgs/include"
-        "${CMAKE_SOURCE_DIR}/modules/ensembletraining/include"
-        "${CMAKE_SOURCE_DIR}/modules/smfitting/include"
+                "${CMAKE_SOURCE_DIR}/modules/comalgs/include"
+                "${CMAKE_SOURCE_DIR}/modules/ensembletraining/include"
+                "${CMAKE_SOURCE_DIR}/modules/smfitting/include"
 	)
 
     find_package(Boost COMPONENTS filesystem system regex REQUIRED)
@@ -55,7 +55,7 @@ if (BUILD_EXAMPLES)
     	target_link_libraries(${the_target} vosm_common vosm_smbuilding vosm_featureextraction vosm_integraltransform vosm_cvcommon vosm_comalgs vosm_ensembletraining vosm_smfitting
             #${VOSM_COMMON_LIBRARY} ${VOSM_SMB_LIBRARY} ${VOSM_FEATURE_LIBRARY} #${VOSM_INTERGRAL_LIBRARY} ${VOSM_CVCOMMON_LIBRARY} ${VOSM_COMALGS_LIBRARY} #${VOSM_ENSEMBLE_LIBRARY} ${VOSM_SMFITTING_LIBRARY}
 			boost_regex boost_filesystem boost_system
-			opencv_core opencv_flann opencv_imgproc opencv_highgui opencv_ml opencv_video opencv_objdetect
+			opencv_core opencv_highgui opencv_imgproc opencv_imgcodecs opencv_ml opencv_video opencv_objdetect
     	    opencv_features2d opencv_calib3d )
 
         if(WIN32)
