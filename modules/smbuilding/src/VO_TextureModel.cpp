@@ -128,7 +128,7 @@ unsigned int VO_TextureModel::VO_CalcPointWarpingInfo(const std::vector <VO_Tria
 {
     unsigned int NbOfPixels     = 0;
 
-    cv::Rect rect                   = VO_TextureModel::VO_CalcBoundingRectFromTriangles(templateTriangles);
+    cv::Rect rect               = VO_TextureModel::VO_CalcBoundingRectFromTriangles(templateTriangles);
 
     for (unsigned int i = 0; i < rect.height; i++)
     {
@@ -1591,31 +1591,32 @@ void VO_TextureModel::VO_BuildTextureModel( const std::vector<std::string>& allL
     
     VO_TextureModel::VO_BuildTextureModel(  this->m_vTextures,
                                             this->m_vNormalizedTextures,
-                                            this->m_VOAlignedMeanShape,
-                                            this->m_VOReferenceShape, 
-                                            this->m_VOPDM,
                                             this->m_VONormalizedMeanTexture,
                                             this->m_VOReferenceTexture,
                                             this->m_PCANormalizedTexture,
-                                            this->m_vTemplatePointWarpInfo,
-                                            this->m_vNormalizedPointWarpInfo,
-                                            this->m_vTemplateTriangle2D,
-                                            this->m_vNormalizedTriangle2D,
-                                            this->m_vEdge,
-                                            this->m_iNbOfTriangles,
-                                            this->m_iNbOfPixels,
-                                            this->m_fAverageShapeSize,
                                             this->m_fAverageTextureStandardDeviation,
-                                            this->m_ImageTemplateFace,
-                                            this->m_ImageEdges,
-                                            this->m_ImageEllipses,
                                             this->m_iNbOfTextureEigens, 
                                             this->m_iNbOfSamples,
                                             this->m_iNbOfTextureRepresentations,
                                             this->m_iNbOfTextures,
-                                            this->m_fTruncatedPercent_Shape);
+                                            this->m_fTruncatedPercent_Texture);
+                                            
+    VO_TextureModel::VO_CalcPointWarpingInfoNTemplateImages(this->m_VOReferenceTexture,
+                                                            this->m_VOPDM,
+                                                            this->m_VOAlignedMeanShape,
+                                                            this->m_VOReferenceShape, 
+                                                            this->m_vTemplateTriangle2D,
+                                                            this->m_vNormalizedTriangle2D,
+                                                            this->m_vEdge,
+                                                            this->m_vTemplatePointWarpInfo,
+                                                            this->m_vNormalizedPointWarpInfo,
+                                                            this->m_ImageTemplateFace,
+                                                            this->m_ImageEdges,
+                                                            this->m_ImageEllipses,
+                                                            this->m_fAverageShapeSize,
+                                                            this->m_iNbOfTriangles,
+                                                            this->m_iNbOfPixels);
 }
-
 
 
 /**
@@ -1628,32 +1629,17 @@ void VO_TextureModel::VO_BuildTextureModel( const std::vector<std::string>& allL
 */
 void VO_TextureModel::VO_BuildTextureModel( const std::vector<VO_Texture>& allTextures,
                                             std::vector<VO_Texture>& allNormalizedTextures,
-                                            const VO_Shape& alignedMeanShape,
-                                            const VO_Shape& referenceShape, 
-                                            const VO_Point2DDistributionModel& pdm,
                                             VO_Texture& normalizedMeanTexture,
                                             VO_Texture& referenceTexture,
                                             cv::PCA& pca,
-                                            std::vector<VO_WarpingPoint>& templatePointWarpInfo,
-                                            std::vector<VO_WarpingPoint>& normalizedPointWarpInfo,
-                                            const std::vector<VO_Triangle2DStructure>& templateTriangle2D,
-                                            const std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
-                                            const std::vector<VO_Edge>& edges,
-                                            unsigned int nbOfTrianges,
-                                            unsigned int nbOfPixels,
-                                            float avgShapeSize,
                                             float& avgTextureStandardDeviation,
-                                            cv::Mat& imgTemplateFace,
-                                            cv::Mat& imgEdges,
-                                            cv::Mat& imgEllipses,
                                             unsigned int& nbOfTextureEigens,
                                             unsigned int nbOfSamples,
                                             unsigned int nbOfTextureRepresentations,
                                             unsigned int nbOfTextures,
                                             float TPTexture )
 {
-        
-    cv::Mat_<float> matNormalizedTextures       = cv::Mat_<float>::zeros(nbOfSamples, nbOfTextures);
+    cv::Mat_<float> matNormalizedTextures   = cv::Mat_<float>::zeros(nbOfSamples, nbOfTextures);
 
     // Normalize all textures
     avgTextureStandardDeviation     = VO_TextureModel::VO_NormalizeAllTextures(allTextures, allNormalizedTextures);
@@ -1684,7 +1670,31 @@ void VO_TextureModel::VO_BuildTextureModel( const std::vector<VO_Texture>& allTe
 //            std::cout << this->m_PCANormalizedTexture.mean.at<float>(i, j) << std::endl;
 //    }
     //////////////////////////////////////////////////////////////////////////
+}
 
+
+/**
+ * @author      JIA Pei
+ * @version     2016-08-29
+ * @brief       calculate shape mesh and triangle info
+ * @return      void
+*/
+void VO_TextureModel::VO_CalcPointWarpingInfoNTemplateImages(const VO_Texture& referenceTexture,
+                                                            const VO_Point2DDistributionModel& pdm,
+                                                            const VO_Shape& alignedMeanShape,
+                                                            const VO_Shape& referenceShape, 
+                                                            const std::vector<VO_Triangle2DStructure>& templateTriangle2D,
+                                                            const std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
+                                                            const std::vector<VO_Edge>& edges,
+                                                            std::vector<VO_WarpingPoint>& templatePointWarpInfo,
+                                                            std::vector<VO_WarpingPoint>& normalizedPointWarpInfo,
+                                                            cv::Mat& imgTemplateFace,
+                                                            cv::Mat& imgEdges,
+                                                            cv::Mat& imgEllipses,
+                                                            float avgShapeSize,
+                                                            unsigned int nbOfTrianges,
+                                                            unsigned int nbOfPixels)
+{
     //////////////////////////////////////////////////////////////////////////
     // Calculate m_vNormalizedPointWarpInfo
     //////////////////////////////////////////////////////////////////////////
@@ -1714,7 +1724,7 @@ void VO_TextureModel::VO_BuildTextureModel( const std::vector<VO_Texture>& allTe
     unsigned int triangleIndex;
     cv::Point2f pt, pt0;
     cv::Mat_<float> warpsrc     = cv::Mat_<float>::ones(3, 1);
-    cv::Mat_<float> warpeddst     = cv::Mat_<float>::zeros(2, 1);
+    cv::Mat_<float> warpeddst   = cv::Mat_<float>::zeros(2, 1);
     for (unsigned int i = 0; i < nbOfPixels; i++)
     {
         // JIA Pei. 2006-11-25. You will see the following (int) is very important

@@ -253,30 +253,32 @@ public:
                                                             bool useKnownTriangles = false);
                                                             
     static void                     VO_BuildTextureModel(   const std::vector<VO_Texture>& allTextures,
-                                                            std::vector<VO_Texture>& allNormalizedTextures,
-                                                            const VO_Shape& alignedMeanShape,
-                                                            const VO_Shape& referenceShape, 
-                                                            const VO_Point2DDistributionModel& pdm,
+                                                            std::vector<VO_Texture>& allNormalizedTextures, 
                                                             VO_Texture& normalizedMeanTexture,
                                                             VO_Texture& referenceTexture,
                                                             cv::PCA& pca,
-                                                            std::vector<VO_WarpingPoint>& templatePointWarpInfo,
-                                                            std::vector<VO_WarpingPoint>& normalizedPointWarpInfo,
-                                                            const std::vector<VO_Triangle2DStructure>& templateTriangle2D,
-                                                            const std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
-                                                            const std::vector<VO_Edge>& edges,
-                                                            unsigned int nbOfTrianges,
-                                                            unsigned int nbOfPixels,
-                                                            float avgShapeSize,
                                                             float& avgTextureStandardDeviation,
-                                                            cv::Mat& imgTemplateFace,
-                                                            cv::Mat& imgEdges,
-                                                            cv::Mat& imgEllipses,
                                                             unsigned int& nbOfTextureEigens,
                                                             unsigned int nbOfSamples,
                                                             unsigned int nbOfTextureRepresentations,
                                                             unsigned int nbOfTextures,
                                                             float TPTexture = 0.95 );
+
+    static void                     VO_CalcPointWarpingInfoNTemplateImages( const VO_Texture& referenceTexture,
+                                                                            const VO_Point2DDistributionModel& pdm,
+                                                                            const VO_Shape& alignedMeanShape,
+                                                                            const VO_Shape& referenceShape, 
+                                                                            const std::vector<VO_Triangle2DStructure>& templateTriangle2D,
+                                                                            const std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
+                                                                            const std::vector<VO_Edge>& edges,
+                                                                            std::vector<VO_WarpingPoint>& templatePointWarpInfo,
+                                                                            std::vector<VO_WarpingPoint>& normalizedPointWarpInfo,
+                                                                            cv::Mat& imgTemplateFace,
+                                                                            cv::Mat& imgEdges,
+                                                                            cv::Mat& imgEllipses,
+                                                                            float avgShapeSize,
+                                                                            unsigned int nbOfTrianges,
+                                                                            unsigned int nbOfPixels);
 
     /** Save Texture Model, to a specified folder */
     void                            VO_Save(const std::string& fd);

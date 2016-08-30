@@ -230,26 +230,29 @@ public:
                                                             unsigned int database,
                                                             float TPShape = 0.95,
                                                             bool useKnownTriangles = false);
-                                                            
+
     static void                         VO_BuildShapeModel( const std::vector<VO_Shape>& allShapes,
-                                                            const VO_FaceParts& iFaceParts,
                                                             std::vector<VO_Shape>& allAlignedShapes,
                                                             VO_Shape& alignedMeanShape,
                                                             VO_Shape& referenceShape, 
                                                             VO_Point2DDistributionModel& pdm,
                                                             cv::PCA& pca,
-                                                            std::vector<VO_Edge>& edges,
-                                                            unsigned int& nbOfEdges,
-                                                            std::vector<VO_Triangle2DStructure>& templateTriangle2D,
-                                                            std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
-                                                            unsigned int& nbOfTrianges,
                                                             float& avgShapeSize,
                                                             unsigned int& nbOfShapeEigens,
                                                             unsigned int nbOfSamples,
                                                             unsigned int nbOfShapeDim,
                                                             unsigned int nbOfShapes,
-                                                            float TPShape = 0.95,
-                                                            bool useKnownTriangles = false);
+                                                            float TPShape = 0.95);
+
+    static void                         VO_CalcShapeMeshNTriangleInfo(  const VO_FaceParts& iFaceParts,
+                                                                        const VO_Shape& alignedMeanShape,
+                                                                        const VO_Shape& referenceShape,
+                                                                        std::vector<VO_Edge>& edges,
+                                                                        unsigned int& nbOfEdges,
+                                                                        std::vector<VO_Triangle2DStructure>& templateTriangle2D,
+                                                                        std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
+                                                                        unsigned int& nbOfTrianges,
+                                                                        bool useKnownTriangles = false);
 
     /** Save Shape Model, to a specified folder */
     void                                VO_Save(const std::string& fd);

@@ -128,7 +128,7 @@ float VO_ShapeModel::VO_AlignAllShapes(const std::vector<VO_Shape>& vShapes, std
     unsigned int NbOfSamples        = vShapes.size();
     unsigned int NbOfAnglesDim      = (vShapes[0].GetNbOfDim() == 2) ? 1:3;        // 3 or 2, if 2, change to 1
     float averageShapeSize          = 0.0f;
-    alignedShapes                     = vShapes;
+    alignedShapes                   = vShapes;
 
     //////////////////////////////////////////////////////////////////////////////////////
     // First estimation is mean of all VO_Shape
@@ -881,24 +881,27 @@ void VO_ShapeModel::VO_BuildShapeModel( const std::vector<std::string>& allLandm
     this->m_fTruncatedPercent_Shape     = TPShape;
     
     VO_ShapeModel::VO_BuildShapeModel(  this->m_vShapes,
-                                        this->m_FaceParts,
                                         this->m_vAlignedShapes,
                                         this->m_VOAlignedMeanShape,
                                         this->m_VOReferenceShape, 
                                         this->m_VOPDM,
                                         this->m_PCAAlignedShape,
-                                        this->m_vEdge,
-                                        this->m_iNbOfEdges,
-                                        this->m_vTemplateTriangle2D,
-                                        this->m_vNormalizedTriangle2D,
-                                        this->m_iNbOfTriangles,
                                         this->m_fAverageShapeSize,
                                         this->m_iNbOfShapeEigens,
                                         this->m_iNbOfSamples,
                                         this->m_iNbOfShapeDim,
                                         this->m_iNbOfShapes,
-                                        this->m_fTruncatedPercent_Shape,
-                                        useKnownTriangles);
+                                        this->m_fTruncatedPercent_Shape);
+    
+    VO_ShapeModel::VO_CalcShapeMeshNTriangleInfo(   this->m_FaceParts,
+                                                    this->m_VOAlignedMeanShape,
+                                                    this->m_VOReferenceShape,
+                                                    this->m_vEdge,
+                                                    this->m_iNbOfEdges,
+                                                    this->m_vTemplateTriangle2D,
+                                                    this->m_vNormalizedTriangle2D,
+                                                    this->m_iNbOfTriangles,
+                                                    useKnownTriangles);
 }
 
 
@@ -912,24 +915,17 @@ void VO_ShapeModel::VO_BuildShapeModel( const std::vector<std::string>& allLandm
  * @return      void
 */
 void VO_ShapeModel::VO_BuildShapeModel( const std::vector<VO_Shape>& allShapes,
-                                        const VO_FaceParts& iFaceParts,
                                         std::vector<VO_Shape>& allAlignedShapes,
                                         VO_Shape& alignedMeanShape,
                                         VO_Shape& referenceShape, 
                                         VO_Point2DDistributionModel& pdm,
                                         cv::PCA& pca,
-                                        std::vector<VO_Edge>& edges,
-                                        unsigned int& nbOfEdges,
-                                        std::vector<VO_Triangle2DStructure>& templateTriangle2D,
-                                        std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
-                                        unsigned int& nbOfTrianges,
                                         float& avgShapeSize,
                                         unsigned int& nbOfShapeEigens,
                                         unsigned int nbOfSamples,
                                         unsigned int nbOfShapeDim,
                                         unsigned int nbOfShapes,
-                                        float TPShape,
-                                        bool useKnownTriangles)
+                                        float TPShape)
 {
     cv::Mat_<float> matAlignedShapes    = cv::Mat_<float>::zeros(nbOfSamples, nbOfShapes);
 
@@ -959,7 +955,6 @@ void VO_ShapeModel::VO_BuildShapeModel( const std::vector<VO_Shape>& allShapes,
         }
     }
     //////////////////////////////////////////////////////////////////////////
-
     //////////////////////////////////////////////////////////////////////////
     /// Calculate PCA ////////////////////////////////////////////////////////
     pca = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)TPShape );
@@ -971,7 +966,28 @@ void VO_ShapeModel::VO_BuildShapeModel( const std::vector<VO_Shape>& allShapes,
 //            std::cout << pca.mean.at<float>(i, j) << std::endl;
 //    }
     //////////////////////////////////////////////////////////////////////////
+}
 
+
+/**
+ * @author      JIA Pei
+ * @version     2016-08-29
+ * @brief       calculate shape mesh and triangle info
+ * @param       allShapes           Input - all original loaded shapes
+ * @param       iFaceParts          Input - face parts
+ * @param       allAlignedShapes    Output - all aligned shapes
+ * @return      void
+*/
+void VO_ShapeModel::VO_CalcShapeMeshNTriangleInfo(  const VO_FaceParts& iFaceParts,
+                                                    const VO_Shape& alignedMeanShape,
+                                                    const VO_Shape& referenceShape,
+                                                    std::vector<VO_Edge>& edges,
+                                                    unsigned int& nbOfEdges,
+                                                    std::vector<VO_Triangle2DStructure>& templateTriangle2D,
+                                                    std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
+                                                    unsigned int& nbOfTrianges,
+                                                    bool useKnownTriangles)
+{
     //////////////////////////////////////////////////////////////////////////
     /// Calculate template shape mesh ////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
