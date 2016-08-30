@@ -68,21 +68,21 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Bagging random forest classifier.
- * @note		FIXME
+ * @author      JIA Pei
+ * @brief       Bagging random forest classifier.
+ * @note        FIXME
  */
 class VO_BaggingRandomForestClassifier : public VO_AdditiveStrongerClassifier
 {
 public:
-	/** Bagging Type, RANDOMFOREST, etc. */
-	enum {RANDOMFOREST = 0};
-	
-	/** Constructor */
-	explicit VO_BaggingRandomForestClassifier();
+    /** Bagging Type, RANDOMFOREST, etc. */
+    enum {RANDOMFOREST = 0};
+    
+    /** Constructor */
+    explicit VO_BaggingRandomForestClassifier();
 
-	/** Destructor */
-	~VO_BaggingRandomForestClassifier();
+    /** Destructor */
+    ~VO_BaggingRandomForestClassifier();
 };
 
-#endif	// __VO_BAGGINGRANDOMFORESTCLASSIFIER_H__
+#endif  // __VO_BAGGINGRANDOMFORESTCLASSIFIER_H__

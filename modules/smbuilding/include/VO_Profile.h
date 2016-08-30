@@ -75,8 +75,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Profile used to build ND profile model or for ND profile model fitting
+ * @author      JIA Pei
+ * @brief       Profile used to build ND profile model or for ND profile model fitting
  */
 class VO_Profile
 {
@@ -85,10 +85,10 @@ friend class VO_FittingASMNDProfiles;
 friend std::ostream& operator<<(std::ostream& os, const VO_Profile& profile);
 friend std::istream& operator>>(std::istream& is, VO_Profile& profile);
 private:
-	/** the profile features, every single profile std::vector is a column. Multiple columns means multi-dim profiles */
-    cv::Mat_<float>           		m_MatProf;
+    /** the profile features, every single profile std::vector is a column. Multiple columns means multi-dim profiles */
+    cv::Mat_<float>                 m_MatProf;
 
-    void                    		CopyData(const VO_Profile& iProfile) {iProfile.m_MatProf.copyTo(this->m_MatProf);}
+    void                            CopyData(const VO_Profile& iProfile) {iProfile.m_MatProf.copyTo(this->m_MatProf);}
 public:
     /** Constructors and Destructor */
     VO_Profile()  { this->m_MatProf.release(); }
@@ -99,63 +99,63 @@ public:
     const float operator()(unsigned int i) const { return this->m_MatProf(i, 0); }
 
     /** operators */
-    VO_Profile&                		operator=(const VO_Profile& iProfile);
-    VO_Profile&                		operator=(const cv::Mat_<float>& iProfile);
-    VO_Profile&                		operator=(float value);
-    VO_Profile                 		operator+(float value);
-    VO_Profile&                		operator+=(float value);
-    VO_Profile                 		operator+(const VO_Profile& iProfile);
-    VO_Profile&                		operator+=(const VO_Profile& iProfile);
-    VO_Profile                 		operator-(float value);
-    VO_Profile&                		operator-=(float value);
-    VO_Profile                 		operator-(const VO_Profile& iProfile);
-    VO_Profile&                		operator-=(const VO_Profile& iProfile);
-    VO_Profile                 		operator*(float value);
-    VO_Profile&                		operator*=(float value);
-    VO_Profile                  	operator*(const VO_Profile& iProfile);
-	VO_Profile&                 	operator*=(const VO_Profile& iProfile);
-    VO_Profile                 		operator/(float value);
-    VO_Profile&                		operator/=(float value);
-	VO_Profile                  	operator/(const VO_Profile& iProfile);
-	VO_Profile&                 	operator/=(const VO_Profile& iProfile);
-	float        					operator[](unsigned int idx) { return this->m_MatProf(idx, 0); }
-	float& 							operator() (unsigned row, unsigned col);
-	float  							operator() (unsigned row, unsigned col) const;
-	float							dot(const VO_Profile& iProfile);
+    VO_Profile&                     operator=(const VO_Profile& iProfile);
+    VO_Profile&                     operator=(const cv::Mat_<float>& iProfile);
+    VO_Profile&                     operator=(float value);
+    VO_Profile                      operator+(float value);
+    VO_Profile&                     operator+=(float value);
+    VO_Profile                      operator+(const VO_Profile& iProfile);
+    VO_Profile&                     operator+=(const VO_Profile& iProfile);
+    VO_Profile                      operator-(float value);
+    VO_Profile&                     operator-=(float value);
+    VO_Profile                      operator-(const VO_Profile& iProfile);
+    VO_Profile&                     operator-=(const VO_Profile& iProfile);
+    VO_Profile                      operator*(float value);
+    VO_Profile&                     operator*=(float value);
+    VO_Profile                      operator*(const VO_Profile& iProfile);
+    VO_Profile&                     operator*=(const VO_Profile& iProfile);
+    VO_Profile                      operator/(float value);
+    VO_Profile&                     operator/=(float value);
+    VO_Profile                      operator/(const VO_Profile& iProfile);
+    VO_Profile&                     operator/=(const VO_Profile& iProfile);
+    float                           operator[](unsigned int idx) { return this->m_MatProf(idx, 0); }
+    float&                          operator() (unsigned row, unsigned col);
+    float                           operator() (unsigned row, unsigned col) const;
+    float                           dot(const VO_Profile& iProfile);
 
     /** resize */
-	void							Resize(unsigned int rows, unsigned int cols);
+    void                            Resize(unsigned int rows, unsigned int cols);
 
-	/** Key function to extract ND profile std::vector around one landmark */
-    static void             		VO_Get1DProfileInMat4OneLandmark (	const cv::Mat& iImg,
+    /** Key function to extract ND profile std::vector around one landmark */
+    static void                     VO_Get1DProfileInMat4OneLandmark (  const cv::Mat& iImg,
                                                                         const cv::Point2f& ThisPoint,
-																		VO_Profile& oProf, 
-																		float normX, 
-																		float normY,
-																		unsigned int NbOfProfilesPerPixel = 17);
-	/** Key function to extract ND profile std::vector around one landmark */
-    static void             		VO_GetNDProfiles4OneLandmark (	const cv::Mat& iImg,
-																	const VO_Shape& iShape,
-																	const std::vector<VO_Shape2DInfo>& iShapeInfo,
-																	unsigned int ptIdx,
-																	VO_Profile& oProf,
-																	unsigned int dim = 1,
-																	unsigned int NbOfProfilesPerPixel = 17,
-																	float* pDeltaX = NULL,
-																	float* pDeltaY = NULL);
+                                                                        VO_Profile& oProf, 
+                                                                        float normX, 
+                                                                        float normY,
+                                                                        unsigned int NbOfProfilesPerPixel = 17);
+    /** Key function to extract ND profile std::vector around one landmark */
+    static void                     VO_GetNDProfiles4OneLandmark (  const cv::Mat& iImg,
+                                                                    const VO_Shape& iShape,
+                                                                    const std::vector<VO_Shape2DInfo>& iShapeInfo,
+                                                                    unsigned int ptIdx,
+                                                                    VO_Profile& oProf,
+                                                                    unsigned int dim = 1,
+                                                                    unsigned int NbOfProfilesPerPixel = 17,
+                                                                    float* pDeltaX = NULL,
+                                                                    float* pDeltaY = NULL);
     /** Normalization for every dim */
-    void                    		Normalize();
+    void                            Normalize();
 
     /** Gets and Sets */
-    unsigned int            		GetProfileLength() const { return this->m_MatProf.rows; }
-	unsigned int            		GetProfileDim() const { return this->m_MatProf.cols; }
-    cv::Mat_<float>           		GetTheProfile() const { return this->m_MatProf; }
+    unsigned int                    GetProfileLength() const { return this->m_MatProf.rows; }
+    unsigned int                    GetProfileDim() const { return this->m_MatProf.cols; }
+    cv::Mat_<float>                 GetTheProfile() const { return this->m_MatProf; }
     cv::Mat_<float>                 GetSubProfile(int start, unsigned int length, unsigned int dimIdx) const;
-    cv::Mat_<float>					Get1DimProfile(unsigned int dimIdx) const {return this->m_MatProf.col(dimIdx);}
-    void                    		SetProfile(const VO_Profile& iProf ) { iProf.m_MatProf.copyTo(this->m_MatProf); }
-    void                    		SetProfile(const cv::Mat_<float>& iProf ) { iProf.copyTo(this->m_MatProf); }
-    void							Set1DimProfile(const cv::Mat_<float>& iOneDimProf, unsigned int dimIdx );
-	void							Set1DimProfile(const VO_Profile& iOneDimProf, unsigned int dimIdx );
+    cv::Mat_<float>                 Get1DimProfile(unsigned int dimIdx) const {return this->m_MatProf.col(dimIdx);}
+    void                            SetProfile(const VO_Profile& iProf ) { iProf.m_MatProf.copyTo(this->m_MatProf); }
+    void                            SetProfile(const cv::Mat_<float>& iProf ) { iProf.copyTo(this->m_MatProf); }
+    void                            Set1DimProfile(const cv::Mat_<float>& iOneDimProf, unsigned int dimIdx );
+    void                            Set1DimProfile(const VO_Profile& iOneDimProf, unsigned int dimIdx );
 };
 
 #endif  // __VO_PROFILE_H__

@@ -59,42 +59,42 @@
 * Modify Date:      2014-04-17                                                                      *
 ****************************************************************************************************/
 
-#ifndef __VO_STRONGERCLASSIFIER_H__
-#define __VO_STRONGERCLASSIFIER_H__
+#ifndef __VO_ADDITIVESTRONGERCLASSIFIER_H__
+#define __VO_ADDITIVESTRONGERCLASSIFIER_H__
 
 
 #include "VO_WeakClassifier.h"
 
 
 /** 
- * @author		JIA Pei
- * @brief		Additive model based stronger classifier.
+ * @author      JIA Pei
+ * @brief       Additive model based stronger classifier.
  */
 class VO_AdditiveStrongerClassifier
 {
 protected:
     /** A weak classifier */
-	VO_WeakClassifier*			m_pVOWeakClassifier;
-	
-	/** Number of samples */
-	unsigned int				m_iNbOfSamples;
-	
-	/** Number of positive samples */
-	unsigned int				m_iNbOfPositiveSamples;
-	
-	/** Number of negative samples */
-	unsigned int				m_iNbOfNegativeSamples;
+    VO_WeakClassifier*          m_pVOWeakClassifier;
+    
+    /** Number of samples */
+    unsigned int                m_iNbOfSamples;
+    
+    /** Number of positive samples */
+    unsigned int                m_iNbOfPositiveSamples;
+    
+    /** Number of negative samples */
+    unsigned int                m_iNbOfNegativeSamples;
 
 public:
-	/** model type, such as additive model -- including boosting, bagging, etc. */
-	enum {UNDEFINED = 0, BOOSTING = 1, BAGGING = 2};
-	
-	/** Constructor */
-	explicit VO_AdditiveStrongerClassifier();
+    /** model type, such as additive model -- including boosting, bagging, etc. */
+    enum {UNDEFINED = 0, BOOSTING = 1, BAGGING = 2};
+    
+    /** Constructor */
+    explicit VO_AdditiveStrongerClassifier();
 
-	/** Destructor */
-	virtual ~VO_AdditiveStrongerClassifier();
+    /** Destructor */
+    virtual ~VO_AdditiveStrongerClassifier();
 
 };
 
-#endif
+#endif  // __VO_ADDITIVESTRONGERCLASSIFIER_H__

@@ -59,8 +59,8 @@
 * Modify Date:      2014-04-17                                                                      *
 ****************************************************************************************************/
 
-#ifndef __CLASSIFICATIONALGS_H__
-#define __CLASSIFICATIONALGS_H__
+#ifndef __VO_ALGS_CLASSIFICATION_H__
+#define __VO_ALGS_CLASSIFICATION_H__
 
 #include <cstring>
 #include <set>
@@ -69,65 +69,63 @@
 #include "VO_AdditiveStrongerClassifier.h"
 
 
-
-
 /** 
- * @author		JIA Pei
- * @brief		Classification algorithms.
+ * @author      JIA Pei
+ * @brief       Classification algorithms.
  */
 class CClassificationAlgs
 {
 protected:
-	/** classification method */
-	unsigned int				m_iClassificationMethod;
+    /** classification method */
+    unsigned int            m_iClassificationMethod;
 
-	/** How many classes in total */
-	unsigned int 				m_iNbOfCategories;
+    /** How many classes in total */
+    unsigned int            m_iNbOfCategories;
 
-	/** Decision tree */
-    cv::ml::DTrees*					m_CVDtree;
+    /** Decision tree */
+    cv::ml::DTrees*         m_CVDtree;
 
-	/** boosting */
-    cv::ml::Boost*					m_CVBoost;
+    /** boosting */
+    cv::ml::Boost*          m_CVBoost;
 
-	/** random tree */
-    cv::ml::RTrees*					m_CVRTrees;
+    /** random tree */
+    cv::ml::RTrees*         m_CVRTrees;
 
-	/** extreme random tree */
-    //cv::ml::RTrees 					m_CVERTrees;
+    /** extreme random tree */
+   //cv::ml::RTrees         m_CVERTrees;
 
-	/** SVM */
-	cv::ml::SVM*				m_CVSVM;
+    /** SVM */
+    cv::ml::SVM*            m_CVSVM;
 
-	/** Initialization */
-	void						init(unsigned int mtd);
+    /** Initialization */
+    void                    init(unsigned int mtd);
 
 public:
-	enum{NONE = 0, SVM = 1, DecisionTree = 2, Boost = 3, RandomForest = 4, ExtremeRandomForest = 5 };
+    enum{NONE = 0, SVM = 1, DecisionTree = 2, Boost = 3, RandomForest = 4, ExtremeRandomForest = 5 };
 
-	/** Constructor */
-	CClassificationAlgs(unsigned int mtd=CClassificationAlgs::NONE);
+    /** Constructor */
+    CClassificationAlgs(unsigned int mtd=CClassificationAlgs::NONE);
 
-	/** Destructor */
-	~CClassificationAlgs();
+    /** Destructor */
+    virtual ~CClassificationAlgs();
 
     /** set configuration for classifier */
-    void						SetConfiguration(const std::string& trainedclassifier, unsigned int mtd);
+    void                    SetConfiguration(const std::string& trainedclassifier, unsigned int mtd);
 
     /** Classifier training */
-    void						Training(const cv::Mat_<float>& data, const cv::Mat_<int>& categories);
+    void                    Training(const cv::Mat_<float>& data, const cv::Mat_<int>& categories);
 
     /** Do classification */
-    int							Classification(	const cv::Mat_<float>& sample);
-	
+    int                     Classification(const cv::Mat_<float>& sample);
+        
     /** save configuration */
-    void						Save(const std::string& fn) const;
-	
+    void                    Save(const std::string& fn) const;
+        
     /** load configuration */
-    void						Load(const std::string& fn);
-	
-	/** Gets and sets */
-	unsigned int				GetClassificationMethod() const {return this->m_iClassificationMethod ;}
+    void                    Load(const std::string& fn);
+        
+    /** Gets and sets */
+    unsigned int            GetClassificationMethod() const {return this->m_iClassificationMethod ;}
 };
 
-#endif	// __CLASSIFICATIONALGS_H__
+#endif  // __VO_ALGS_CLASSIFICATION_H__

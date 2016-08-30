@@ -73,8 +73,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Shape information, refer to "ShapeInfo.txt".
+ * @author      JIA Pei
+ * @brief       Shape information, refer to "ShapeInfo.txt".
  */
 class VO_Shape2DInfo
 {
@@ -130,7 +130,7 @@ public:
     virtual ~VO_Shape2DInfo() {}
 
     /** operator= overloading, similar to copy constructor */
-    VO_Shape2DInfo&  	operator=(const VO_Shape2DInfo &iShapeInfo)
+    VO_Shape2DInfo&     operator=(const VO_Shape2DInfo &iShapeInfo)
     {
                         this->CopyData(iShapeInfo);
                         return *this;
@@ -167,7 +167,7 @@ public:
     void                SetTo(unsigned int iTo) { this->m_iTo = iTo;}
 
     /** read VO_Shape2DInfo */
-    static void    		ReadShape2DInfo(const std::string& filename, std::vector<VO_Shape2DInfo>& oShapeInfo, VO_FaceParts& faceparts );
+    static void         ReadShape2DInfo(const std::string& filename, std::vector<VO_Shape2DInfo>& oShapeInfo, VO_FaceParts& faceparts );
 };
 
 #endif      // __VO_SHAPE2DINFO_H__

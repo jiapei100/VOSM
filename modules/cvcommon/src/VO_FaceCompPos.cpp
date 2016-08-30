@@ -94,13 +94,6 @@ VO_FaceCompPos::VO_FaceCompPos(
 }
 
 
-/** destructor */
-VO_FaceCompPos::~VO_FaceCompPos()
-{
-    
-}
-
-
 /**
  * @author      JIA Pei
  * @version     2010-02-07

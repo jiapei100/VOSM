@@ -76,8 +76,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Define every single warping point used in building statistical texture model
+ * @author      JIA Pei
+ * @brief       Define every single warping point used in building statistical texture model
  */
 class VO_WarpingPoint
 {
@@ -88,22 +88,22 @@ friend std::istream& operator>>(std::istream& is, VO_WarpingPoint& warpingpoint)
 private:
 
     /** Warping point coordinates */
-    cv::Point2f							m_CVPosition;
+    cv::Point2f                         m_CVPosition;
 
     /** Which triangle is this point in, in the AAM model triangle std::vector? */
-    unsigned int                		m_iTriangleIndex;
+    unsigned int                        m_iTriangleIndex;
 
     /** What's the position in the AAM model template face point std::vector? */
-    unsigned int                		m_iPointIndex;
+    unsigned int                        m_iPointIndex;
 
     /** The triangle that this warping point belong to */
-    VO_Triangle2DStructure      		m_VOTriangle2DStructure;
+    VO_Triangle2DStructure              m_VOTriangle2DStructure;
 
     /** Gradients in 3 channels (blue, green, red) for this warping point */
     std::vector< std::vector<float> >   m_Gradients;
 
     /** The Jacobian - 1st part , refer to http://www.visionopen.com/cv/aam.php */
-    std::vector<float>               	m_Jacobian_One;
+    std::vector<float>                  m_Jacobian_One;
 
     /** The Jacobian Matrix in terms of shape parameters 2*15 */
     std::vector<std::vector<float> >    m_JacobianMatrix4ShapeModel;
@@ -112,10 +112,10 @@ private:
     std::vector<std::vector<float> >    m_JacobianMatrix4GlobalShapeNorm;
 
     /** Steepest Descent Images 3 (blue, green, red) * 15 (p parameters). */
-    std::vector< std::vector<float> >	m_SteepestDescentImages4ShapeModel;
+    std::vector< std::vector<float> >   m_SteepestDescentImages4ShapeModel;
 
     /** Steepest Descent Images for Global Shape Transform 3 (blue, green, red) * 4. */
-    std::vector< std::vector<float> >	m_SteepestDescentImages4GlobalShapeNorm;
+    std::vector< std::vector<float> >   m_SteepestDescentImages4GlobalShapeNorm;
 
 public:
     /** Default constructor to create a VO_WarpingPoint object */
@@ -125,7 +125,7 @@ public:
         this->m_iTriangleIndex                          = 0;
         this->m_iPointIndex                             = 0;
         //this->m_VOTriangle2DStructure;
-		this->m_Gradients.clear();
+        this->m_Gradients.clear();
         this->m_Jacobian_One.clear();
         this->m_JacobianMatrix4ShapeModel.clear();
         this->m_JacobianMatrix4GlobalShapeNorm.clear();
@@ -141,10 +141,10 @@ public:
         this->m_iPointIndex                             = t.GetPointIndex();
         this->m_VOTriangle2DStructure                   = t.GetAAMTriangle2d();
         this->CalcJacobianOne ();
-        this->m_JacobianMatrix4ShapeModel            	= t.GetJacobianMatrix();
+        this->m_JacobianMatrix4ShapeModel               = t.GetJacobianMatrix();
         this->m_JacobianMatrix4GlobalShapeNorm          = t.GetJacobianMatrix4GlobalShapeNorm();
         this->m_Gradients                               = t.GetGradients();
-        this->m_SteepestDescentImages4ShapeModel     	= t.GetSteepestDescentImages4ShapeModel();
+        this->m_SteepestDescentImages4ShapeModel        = t.GetSteepestDescentImages4ShapeModel();
         this->m_SteepestDescentImages4GlobalShapeNorm   = t.GetSteepestDescentImages4GlobalShapeNorm();
     }
 
@@ -166,7 +166,7 @@ public:
     /** Calculate Steepest Descent Image Calculation for global shape normalization */
     void                                CalcSteepestDescentImages4GlobalShapeNorm(unsigned int inChannels);
 
-	/** A static function for general point warping */
+    /** A static function for general point warping */
     static void                         WarpOnePoint(const cv::Point2f& iPt,
                                                      const VO_Triangle2DStructure& its,
                                                      cv::Point2f& oPt,
@@ -196,30 +196,30 @@ public:
     std::vector<std::vector<float> >    GetJacobianMatrix4GlobalShapeNorm() const { return this->m_JacobianMatrix4GlobalShapeNorm;}
 
     /** Get gradients for this warping point */
-    std::vector< std::vector<float> >	GetGradients() const {return this->m_Gradients;}
+    std::vector< std::vector<float> >   GetGradients() const {return this->m_Gradients;}
 
     /** Get steepest descent image for this warping point */
-    std::vector< std::vector<float> >	GetSteepestDescentImages4ShapeModel() const {return this->m_SteepestDescentImages4ShapeModel;}
+    std::vector< std::vector<float> >   GetSteepestDescentImages4ShapeModel() const {return this->m_SteepestDescentImages4ShapeModel;}
 
     /** Get steepest descent image for global shape normalization for this warping point */
-    std::vector< std::vector<float> >	GetSteepestDescentImages4GlobalShapeNorm() const { return this->m_SteepestDescentImages4GlobalShapeNorm;}
+    std::vector< std::vector<float> >   GetSteepestDescentImages4GlobalShapeNorm() const { return this->m_SteepestDescentImages4GlobalShapeNorm;}
 
 
     /** Set this warping point coordinates */
-    void    		            	SetPosition(cv::Point2f iPoint) {this->m_CVPosition = iPoint;}
-	void    		            	SetPosition(float x, float y) {this->m_CVPosition = cv::Point2f(x, y);}
+    void                            SetPosition(cv::Point2f iPoint) {this->m_CVPosition = iPoint;}
+    void                            SetPosition(float x, float y) {this->m_CVPosition = cv::Point2f(x, y);}
 
     /** Set this warping point triangle index in AAM model triangle std::vector */
-    void    		            	SetTriangleIndex(unsigned int iTriangleIndex) {this->m_iTriangleIndex = iTriangleIndex;}
+    void                            SetTriangleIndex(unsigned int iTriangleIndex) {this->m_iTriangleIndex = iTriangleIndex;}
 
     /** Set this warping point index in AAM model point std::vector */
-    void    		            	SetPointIndex(unsigned int iPointIndex) {this->m_iPointIndex = iPointIndex;}
+    void                            SetPointIndex(unsigned int iPointIndex) {this->m_iPointIndex = iPointIndex;}
 
     /** Set 3 vertexes of the triangle that this point belong to, with input in format of a std::vector of points */
-    void                        	SetTriangle2DStructure(const std::vector<cv::Point2f>& inVertexes, const std::vector<unsigned int>& iIndexes)
+    void                            SetTriangle2DStructure(const std::vector<cv::Point2f>& inVertexes, const std::vector<unsigned int>& iIndexes)
     {
-									assert(inVertexes.size() == 3);
-									this->m_VOTriangle2DStructure = VO_Triangle2DStructure(inVertexes, iIndexes);
+                                    assert(inVertexes.size() == 3);
+                                    this->m_VOTriangle2DStructure = VO_Triangle2DStructure(inVertexes, iIndexes);
     }
 
     /** Set the triangle that this point belong to */
@@ -232,21 +232,21 @@ public:
     void                            SetJacobianOne(const std::vector<float>& iJO) { this->m_Jacobian_One = iJO;}
 
     /** Set Jacobian matrix for this warping point */
-    void	                    	SetJacobianMatrix(const std::vector<std::vector<float> > & iJM) { this->m_JacobianMatrix4ShapeModel = iJM;}
+    void                            SetJacobianMatrix(const std::vector<std::vector<float> > & iJM) { this->m_JacobianMatrix4ShapeModel = iJM;}
 
     /** Set Jacobian matrix for global shape normalization for this warping point */
-    void	                    	SetJacobianMatrix4GlobalShapeNorm(const std::vector< std::vector<float> >& iJM4GlobalShapeNorm) { this->m_JacobianMatrix4GlobalShapeNorm = iJM4GlobalShapeNorm;}
+    void                            SetJacobianMatrix4GlobalShapeNorm(const std::vector< std::vector<float> >& iJM4GlobalShapeNorm) { this->m_JacobianMatrix4GlobalShapeNorm = iJM4GlobalShapeNorm;}
 
     /** Set gradients for this warping point */
-    void                        	SetGradients(const std::vector< std::vector<float> >& iGradients) { this->m_Gradients = iGradients;}
+    void                            SetGradients(const std::vector< std::vector<float> >& iGradients) { this->m_Gradients = iGradients;}
 
     /** Set steepest descent image for this warping point */
-    void	                    	SetSteepestDescentImages(const std::vector< std::vector<float> >& iSDI) { this->m_SteepestDescentImages4ShapeModel = iSDI;}
+    void                            SetSteepestDescentImages(const std::vector< std::vector<float> >& iSDI) { this->m_SteepestDescentImages4ShapeModel = iSDI;}
 
     /** Set steepest descent image for global shape normalization for this warping point */
-    void	                    	SetSteepestDescentImages4GlobalShapeNorm(const std::vector< std::vector<float> >& iSDI4GlobalShapeNorm) { this->m_SteepestDescentImages4GlobalShapeNorm = iSDI4GlobalShapeNorm;}
+    void                            SetSteepestDescentImages4GlobalShapeNorm(const std::vector< std::vector<float> >& iSDI4GlobalShapeNorm) { this->m_SteepestDescentImages4GlobalShapeNorm = iSDI4GlobalShapeNorm;}
 
 };
 
-#endif	// __VO_WARPINGPOINT_H__
+#endif    // __VO_WARPINGPOINT_H__
 

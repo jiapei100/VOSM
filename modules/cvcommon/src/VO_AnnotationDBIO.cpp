@@ -60,22 +60,22 @@
 ****************************************************************************************************/
 
 
+#include <fstream>
 #include "VO_AnnotationDBIO.h"
+
 
 
 /**
  * @author      JIA Pei
  * @version     2010-02-07
  * @brief       Read a file and obtain all annotation data in VO_Shape
- * @param       filename    input parameter, 
- *                          which .asf annotation file to read
- * @param       oAAMShape   output parameter, 
- *                          save annotation data to AAM shape data structure
+ * @param       filename    input parameter     -   which .asf annotation file to read
+ * @param       oShape      output parameter    -   save annotation data to AAM shape data structure
 */
 void CAnnotationDBIO::ReadASF(  const std::string &filename,
-                                VO_Shape& oAAMShape )
+                                VO_Shape& oShape )
 {
-    oAAMShape.SetAnnotationFileName(filename);
+    oShape.SetAnnotationFileName(filename);
 
     std::fstream fp;
     fp.open(filename.c_str (), std::ios::in);
@@ -87,15 +87,15 @@ void CAnnotationDBIO::ReadASF(  const std::string &filename,
     // Just for the specific .asf
     for(unsigned int i = 0; i < 10; i++)
         //fp >> temp;
-        getline(fp, temp);
+        std::getline(fp, temp);
 
     unsigned int NbOfPoints = atoi(temp.c_str ());
-    oAAMShape.Resize(2, NbOfPoints);
+    oShape.Resize(2, NbOfPoints);
 
     // Just for the specific .asf
     for(unsigned int i = 0; i < 6; i++)
         //fp >> temp;
-        getline(fp, temp);
+        std::getline(fp, temp);
 
     for (unsigned int i = 0; i < NbOfPoints; i++)
     {
@@ -104,24 +104,23 @@ void CAnnotationDBIO::ReadASF(  const std::string &filename,
         ss << temp;
         ss >> tempFloat;
         ss.clear();
-        oAAMShape(0, i) = tempFloat;
+        oShape(0, i) = tempFloat;
         fp >> temp;
         // In DTU IMM , y means cols from top to bottom
         ss << temp;
         ss >> tempFloat;
         ss.clear();
         //fp >> temp;
-        getline(fp, temp);
+        std::getline(fp, temp);
         // In sum, topleft is (0,0), right bottom is (640,480)
-        oAAMShape(1, i) = tempFloat;
+        oShape(1, i) = tempFloat;
     }
 
     // Just for the specific .asf
     for(unsigned int i = 0; i < 5; i++)
         fp >> temp;
 
-    fp.close ();
-
+    fp.close ();fp.clear();
 }
 
 
@@ -130,12 +129,12 @@ void CAnnotationDBIO::ReadASF(  const std::string &filename,
  * @version     2010-02-07
  * @brief       Read a file and obtain all annotation data in VO_Shape
  * @param       filename    input parameter, which .pts annotation file to read
- * @param       oAAMShape   output parameter, save annotation data to AAM shape data structure
+ * @param       oShape      output parameter, save annotation data to AAM shape data structure
 */
 void CAnnotationDBIO::ReadPTS(  const std::string &filename,
-                                VO_Shape& oAAMShape)
+                                VO_Shape& oShape)
 {
-    oAAMShape.SetAnnotationFileName(filename);
+    oShape.SetAnnotationFileName(filename);
 
     std::fstream fp;
     fp.open(filename.c_str (), std::ios::in);
@@ -149,13 +148,12 @@ void CAnnotationDBIO::ReadPTS(  const std::string &filename,
         fp >> temp;
     }while (temp!="n_points:");
 
-
     fp >> temp;
     ss << temp;
     unsigned int NbOfPoints;
     ss >> NbOfPoints;
     ss.clear();
-    oAAMShape.Resize(2, NbOfPoints);
+    oShape.Resize(2, NbOfPoints);
 
     fp >> temp;
 
@@ -166,116 +164,17 @@ void CAnnotationDBIO::ReadPTS(  const std::string &filename,
         ss << temp;
         ss >> tempFloat;
         ss.clear();
-        oAAMShape(0, i) = tempFloat;
+        oShape(0, i) = tempFloat;
         fp >> temp;
         // y refers to a col from top to bottom
         ss << temp;
         ss >> tempFloat;
         ss.clear();
         // In sum, topleft is (0,0), right bottom is (720,576)
-        oAAMShape(1, i) = tempFloat;
+        oShape(1, i) = tempFloat;
     }
 
     fp.close ();fp.clear();
-}
-
-
-/**
- * @author         JIA Pei
- * @version        2010-02-07
- * @brief          Read a file and obtain all annotation data in VO_Shape
- * @param          filename        input parameter, which .asf annotation file to read
- * @param          oAAMShape       output parameter, save annotation data to AAM shape data structure
-*/
-void CAnnotationDBIO::ReadOBJ(  const std::string &filename,
-                                VO_Shape& oAAMShape )
-{
-    oAAMShape.SetAnnotationFileName(filename);
-
-    std::fstream fp;
-    fp.open(filename.c_str (), std::ios::in);
-
-    std::stringstream ss;
-    std::string temp;
-    float tempFloat = 0.0f;
-
-    // Just for the specific .obj produced by Freiburg
-    for(unsigned int i = 0; i < 4; i++)
-        fp >> temp;
-
-    fp >> temp >> temp;
-    unsigned int NbOfPoints = atoi(temp.c_str ());
-    fp >> temp;
-
-    for (unsigned int i = 0; i < NbOfPoints; i++)
-    {
-        fp >> temp;     // v
-
-        for(unsigned int j = 0; j < 3; j++)
-        {
-            fp >> temp;
-            ss << temp;
-            ss >> tempFloat;
-            ss.clear();
-            //oAAMShape.InsertShape(tempFloat);
-        }
-    }
-
-    fp.close ();
-
-}
-
-
-/**
- * @author         JIA Pei
- * @version        2010-02-07
- * @brief          Read a file and obtain all annotation data in VO_Shape
- * @param          filename        input parameter, which .pts annotation file to read
- * @param          oAAMShape       output parameter, save annotation data to AAM shape data structure
-*/
-void CAnnotationDBIO::ReadWRL(  const std::string &filename,
-                                VO_Shape& oAAMShape)
-{
-    oAAMShape.SetAnnotationFileName(filename);
-
-    std::fstream fp;
-    fp.open(filename.c_str (), std::ios::in);
-
-    std::string temp;
-    std::stringstream ss;
-    cv::Mat_<float> translation(3, 1);
-    float tempFloat = 0.0f;
-
-    // Just for the specific .wrl produced by XM2VTS3D
-    // 2 children of the scene, find the 2nd translation
-    do
-    {
-        getline(fp, temp);
-    }while (temp.find("Transform") == std::string::npos);
-    do
-    {
-        getline(fp, temp);
-    }while (temp.find("Transform") == std::string::npos);
-    fp >> temp;
-    fp >> translation;
-
-    do
-    {
-        getline(fp, temp);
-    }while (temp.find("point    [ 0 0 0,") == std::string::npos);
-
-    do
-    {
-        for(unsigned int i = 0; i < 3; i++)
-        {
-            fp >> tempFloat;
-            //oAAMShape.InsertShape( tempFloat + translation[i]);
-            //oAAMShape.InsertShape( tempFloat);
-        }
-        fp >> temp;
-    }while (temp != "]");
-
-    fp.close ();
 }
 
 
@@ -326,41 +225,12 @@ void CAnnotationDBIO::WritePTS( const std::string &filename,
 }
 
 
-
-/**
- * @author         JIA Pei
- * @version        2010-02-07
- * @brief          Write all annotation data in VO_Shape to a file
- * @param          filename        output parameter, which .pts annotation file to write
- * @param          iAAMShape       input parameter, save annotation data from AAM shape data structure
-*/
-void CAnnotationDBIO::WriteOBJ( const std::string &filename,
-                                const VO_Shape& iAAMShape)
-{
-
-}
-
-
-/**
- * @author         JIA Pei
- * @version        2010-02-07
- * @brief          Write all annotation data in VO_Shape to a file
- * @param          filename        output parameter, which .pts annotation file to write
- * @param          iAAMShape       input parameter, save annotation data from AAM shape data structure
-*/
-void CAnnotationDBIO::WriteWRL( const std::string &filename,
-                                const VO_Shape& iAAMShape)
-{
-
-}
-
-
 /**
  * @author      JIA Pei
  * @version     2010-02-07
  * @brief       Load Training data for shape model
- * @param       allLandmarkFiles4Training        Input - all landmark files
-  * @param      database                        Input - which database is it?
+ * @param       allLandmarkFiles4Training       Input - all landmark files
+  * @param      database        Input - which database is it?
  * @param       oShapes         Output - the loaded shape
  * @return      void
 */
@@ -374,10 +244,10 @@ void CAnnotationDBIO::VO_LoadShapeTrainingData(
     // Load the annotated information
     switch ( database )
     {
-        case BFM3D:
-        case USF3D:
-        break;
-        case XM2VTS3D:
+        case PUT:
+        {
+            
+        }
         break;
         case AGING:
         case BIOID:

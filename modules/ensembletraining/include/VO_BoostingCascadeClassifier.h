@@ -68,52 +68,50 @@
 #include "VO_BoostingSingleEnsembleClassifier.h"
 
 
-
-
 /** 
- * @author		JIA Pei
- * @brief		Boosting cascade classifier.
- * @note		FIXME
+ * @author      JIA Pei
+ * @brief       Boosting cascade classifier.
+ * @note        FIXME
  */
 class VO_BoostingCascadeClassifier : public VO_AdditiveStrongerClassifier
 {
 private:
-	/** Number of stages */
-	unsigned int				m_iNbOfStages;
-	
-	/** min true positive */
-	float 						m_fMinTruePositive;
-	
-	/** max wrong classification */
-	float 						m_fMaxWrongClassification;
-	
-	/** Used Features */
-	/** Explained by JIA Pei. Abstract class can't be instantiated, so, use pointer */
-	/** In addition, Dimashova, Maria's precious suggestion is "do not load all features once for all" 
-	 * http://opencv.willowgarage.com/wiki/Contributors */
-	VO_Features*				m_VOFeatures;
-	
+    /** Number of stages */
+    unsigned int                m_iNbOfStages;
+    
+    /** min true positive */
+    float                         m_fMinTruePositive;
+    
+    /** max wrong classification */
+    float                         m_fMaxWrongClassification;
+    
+    /** Used Features */
+    /** Explained by JIA Pei. Abstract class can't be instantiated, so, use pointer */
+    /** In addition, Dimashova, Maria's precious suggestion is "do not load all features once for all" 
+     * http://opencv.willowgarage.com/wiki/Contributors */
+    VO_Features*                m_VOFeatures;
+    
 public:
     /** Boosting cascade structure */
-	enum {UNDEFINED = 0, SINGLECASCADE = 1, PARALLELCASCADE = 2, CASCADEDECISIONTREE = 3, BFSCASCADE = 4};
+    enum {UNDEFINED = 0, SINGLECASCADE = 1, PARALLELCASCADE = 2, CASCADEDECISIONTREE = 3, BFSCASCADE = 4};
 
-	/** Constructor */
-	explicit VO_BoostingCascadeClassifier();
+    /** Constructor */
+    explicit VO_BoostingCascadeClassifier();
 
-	/** Destructor */
-	~VO_BoostingCascadeClassifier();
+    /** Destructor */
+    ~VO_BoostingCascadeClassifier();
 
-	/** training the boosting cascade classifier */
+    /** training the boosting cascade classifier */
     bool train( const std::string& _cascadeDirName,
                 const std::vector<std::string> _posFilenames,
                 const std::vector<std::string> _negFilenames,
                 int _precalcValBufSize,
-				int _precalcIdxBufSize,
+                int _precalcIdxBufSize,
                 int _numStages,
-				float _minTruePositive,
-				float _maxWrongClassification,
+                float _minTruePositive,
+                float _maxWrongClassification,
                 const VO_Features* _featureParams);
 };
 
-#endif
+#endif  // __VO_BOOSTINGCASCADECLASSIFIER_H__
 

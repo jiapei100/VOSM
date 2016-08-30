@@ -187,11 +187,11 @@ void parse_option(  int argc,
             else if(strcmp(argv[optindex], "AM") == 0)
                 type        = APPEARANCEMODEL;
             else if(strcmp(argv[optindex], "IA") == 0)
-                type        = INVERSEIMAGEALIGNMENT;
+                type        = IMAGEALIGNMENT;
             else if(strcmp(argv[optindex], "FM") == 0)
                 type        = AFM ;
             else if(strcmp(argv[optindex], "SMLTC") == 0)
-                type        = ASMLTC;
+                type        = SMLTC;
             else if(strcmp(argv[optindex], "SMNDPROFILE") == 0)
                 type        = ASMNDPROFILE;
         }
@@ -234,15 +234,15 @@ void parse_option(  int argc,
 
 int main(int argc, char **argv)
 {
-    std::string              outputDir = "./";
-    std::vector<std::string>      AllImgFiles4Training;
-    std::vector<std::string>      AllLandmarkFiles4Training;
-    std::string              shapeinfoFileName;
-    unsigned int        database = CAnnotationDBIO::EMOUNT;
-    unsigned int        channels = 3;
-    unsigned int        type = ASMNDPROFILE;
-    unsigned int        levels = 4;
-    double              percentage = 0.95;
+    std::string                 outputDir = "./";
+    std::vector<std::string>    AllImgFiles4Training;
+    std::vector<std::string>    AllLandmarkFiles4Training;
+    std::string                 shapeinfoFileName;
+    unsigned int                database = CAnnotationDBIO::EMOUNT;
+    unsigned int                channels = 3;
+    unsigned int                type = ASMNDPROFILE;
+    unsigned int                levels = 4;
+    double                      percentage = 0.95;
     
     parse_option(   argc,
                     argv,
@@ -301,7 +301,7 @@ int main(int argc, char **argv)
             aamBasicModel.VO_Save(outputDir);
         }
         break;
-        case INVERSEIMAGEALIGNMENT:
+        case IMAGEALIGNMENT:
         {
             VO_AAMInverseIA aamInverseIAModel;
             aamInverseIAModel.VO_BuildAAMICIA(  AllLandmarkFiles4Training,
@@ -334,7 +334,7 @@ int main(int argc, char **argv)
             featureModel.VO_Save(outputDir);
         }
         break;
-        case ASMLTC:
+        case SMLTC:
         {
             VO_ASMLTCs asmLTCModel;
             asmLTCModel.VO_BuildASMLTCs(AllLandmarkFiles4Training,

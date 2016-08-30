@@ -75,7 +75,7 @@ class VO_IntegralTransform
 {
 protected:
     /** The integral transform kernel, must be a M*N rectangle matrix */
-    cv::Mat_<float>         m_MatKernel;
+    cv::Mat_<float>     m_MatKernel;
 
 public:
     /** constructor */

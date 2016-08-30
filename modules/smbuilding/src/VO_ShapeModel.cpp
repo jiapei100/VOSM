@@ -82,16 +82,16 @@ VO_ShapeModel::VO_ShapeModel()
 /** Initialization */
 void VO_ShapeModel::init()
 {
-    this->m_iNbOfSamples                                    = 0;
-	this->m_iNbOfShapeDim                                   = 0;
-    this->m_iNbOfPoints                                     = 0;
-    this->m_iNbOfShapes                                     = 0;
-    this->m_iNbOfShapeEigens                            	= 0;
-    this->m_iNbOfEigenShapesAtMost                          = 0;
-	this->m_iNbOfEdges										= 0;
-	this->m_iNbOfTriangles									= 0;
-    this->m_fAverageShapeSize                               = 0.0f;
-    this->m_fTruncatedPercent_Shape                         = 0.95f;
+    this->m_iNbOfSamples            = 0;
+    this->m_iNbOfShapeDim           = 0;
+    this->m_iNbOfPoints             = 0;
+    this->m_iNbOfShapes             = 0;
+    this->m_iNbOfShapeEigens        = 0;
+    this->m_iNbOfEigenShapesAtMost  = 0;
+    this->m_iNbOfEdges              = 0;
+    this->m_iNbOfTriangles          = 0;
+    this->m_fAverageShapeSize       = 0.0f;
+    this->m_fTruncatedPercent_Shape = 0.95f;
     this->m_vShapes.clear();
     this->m_vAlignedShapes.clear();
     this->m_vShape2DInfo.clear();
@@ -115,36 +115,36 @@ VO_ShapeModel::~VO_ShapeModel()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Align all shapes before PCA
- * @param	    vShapes         Input - all shapes before alignment
- * @param	    alignedShapes   Output - all shapes after alignment
- * @return     	float           return average shape size of all shapes
- * @note       	make sure all alignedShapes, meanshape as well, are of size "1" !!!
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Align all shapes before PCA
+ * @param       vShapes         Input - all shapes before alignment
+ * @param       alignedShapes   Output - all shapes after alignment
+ * @return      float           return average shape size of all shapes
+ * @note        make sure all alignedShapes, meanshape as well, are of size "1" !!!
 */
 float VO_ShapeModel::VO_AlignAllShapes(const std::vector<VO_Shape>& vShapes, std::vector<VO_Shape>& alignedShapes)
 {
-    unsigned int NbOfSamples    	= vShapes.size();
-    unsigned int NbOfAnglesDim  	= (vShapes[0].GetNbOfDim() == 2) ? 1:3;		// 3 or 2, if 2, change to 1
-    float averageShapeSize      	= 0.0f;
-    alignedShapes 					= vShapes;
+    unsigned int NbOfSamples        = vShapes.size();
+    unsigned int NbOfAnglesDim      = (vShapes[0].GetNbOfDim() == 2) ? 1:3;        // 3 or 2, if 2, change to 1
+    float averageShapeSize          = 0.0f;
+    alignedShapes                     = vShapes;
 
-	//////////////////////////////////////////////////////////////////////////////////////
-	// First estimation is mean of all VO_Shape
+    //////////////////////////////////////////////////////////////////////////////////////
+    // First estimation is mean of all VO_Shape
     VO_Shape meanAlignedShape;
     for(unsigned int i = 0; i < NbOfSamples; ++i)
     {
-		averageShapeSize += alignedShapes[i].GetCentralizedShapeSize();
+        averageShapeSize += alignedShapes[i].GetCentralizedShapeSize();
         alignedShapes[i].Normalize();
     }
-    averageShapeSize /= (float)NbOfSamples;    	// Why this is the average shape size without minor errors?
-												// Because later do-while loop doesn't change the normalized shape size
+    averageShapeSize /= (float)NbOfSamples;        // Why this is the average shape size without minor errors?
+                                                // Because later do-while loop doesn't change the normalized shape size
     VO_ShapeModel::VO_CalcMeanShape( alignedShapes, meanAlignedShape );
-	//////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////
 
-	//////////////////////////////////////////////////////////////////////////////////////
-	// iterative Procrustes Analysis
+    //////////////////////////////////////////////////////////////////////////////////////
+    // iterative Procrustes Analysis
     // do a number of alignment iterations until the mean shape estimate is stable
     float diff, diff_max = FLT_EPSILON;
     int max_iter = 10, iter = 1;
@@ -163,7 +163,7 @@ float VO_ShapeModel::VO_AlignAllShapes(const std::vector<VO_Shape>& vShapes, std
             alignedShapes[i].AlignTo( meanAlignedShape, NULL, &theta, NULL );
             for(unsigned int j = 0; j < NbOfAnglesDim; ++j)
                 rots(j,i)  = theta[j];  // record the rotation
-			
+            
             // re-scale to unit size to avoid the so-called 'shrinking effect'
             // i.e. the alignment error goes towards zero, when the shapes are downscaled
             alignedShapes[i].Scale( 1.0f/alignedShapes[i].GetShapeNorm () );
@@ -184,12 +184,12 @@ float VO_ShapeModel::VO_AlignAllShapes(const std::vector<VO_Shape>& vShapes, std
         }
 
         diff = (tempMeanShape-meanAlignedShape).GetShapeNorm();
-	
+    
         ++iter;
 
-    }while( fabs(diff)/meanAlignedShape.GetShapeNorm() > diff_max && iter < max_iter );	
-	
-	//////////////////////////////////////////////////////////////////////////////////////
+    }while( fabs(diff)/meanAlignedShape.GetShapeNorm() > diff_max && iter < max_iter );    
+    
+    //////////////////////////////////////////////////////////////////////////////////////
     return averageShapeSize;
 }
 
@@ -215,12 +215,12 @@ void VO_ShapeModel::VO_RescaleAllAlignedShapes(const VO_Shape& meanAlignedShape,
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Rescale the alignedShape to the already trained meanAligneShape
- * @param      	meanAlignedShape    Input - meanalignedshape that all alignedshapes should rescale to
- * @param      	alignedShape        Input and Output - aligned shape and aligned rescaled shape
- * @return		void
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Rescale the alignedShape to the already trained meanAligneShape
+ * @param          meanAlignedShape    Input - meanalignedshape that all alignedshapes should rescale to
+ * @param          alignedShape        Input and Output - aligned shape and aligned rescaled shape
+ * @return         void
 */
 void VO_ShapeModel::VO_RescaleOneAlignedShape(const VO_Shape& meanAlignedShape, VO_Shape& alignedShape)
 {
@@ -230,12 +230,12 @@ void VO_ShapeModel::VO_RescaleOneAlignedShape(const VO_Shape& meanAlignedShape, 
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Calculate mean shape
- * @param      	vShapes     		Input - all shapes
- * @param      	meanShape   		Output - mean shape
- * @return 		void
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Calculate mean shape
+ * @param          vShapes             Input - all shapes
+ * @param          meanShape           Output - mean shape
+ * @return         void
 */
 void VO_ShapeModel::VO_CalcMeanShape(const std::vector<VO_Shape>& vShapes, VO_Shape& meanShape)
 {
@@ -252,13 +252,13 @@ void VO_ShapeModel::VO_CalcMeanShape(const std::vector<VO_Shape>& vShapes, VO_Sh
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Judge is point "pt" inside the convex hull "ch"
- * @param      	pt              	Input - the point
- * @param      	ch              	Input - convex hull
- * @param      	includingHull		Input flag - whether including the boundary
- * @return     	bool            	including or excluding
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Judge is point "pt" inside the convex hull "ch"
+ * @param          pt                  Input - the point
+ * @param          ch                  Input - convex hull
+ * @param          includingHull        Input flag - whether including the boundary
+ * @return         bool                including or excluding
 */
 bool VO_ShapeModel::VO_IsPointInConvexHull(const cv::Point2f pt, const cv::Mat_<float>& ch, bool includingHull)
 {
@@ -278,13 +278,13 @@ bool VO_ShapeModel::VO_IsPointInConvexHull(const cv::Point2f pt, const cv::Mat_<
 
 
 /**
- * @author		JIA Pei
- * @version    	2010-02-07
- * @brief      	Judge whether edge indexed by (ind1+ind2) is already in the std::vector of "edges"
- * @param      	edges           	edge collection
- * @param      	ind1            	first index of the edge to be judged
- * @param      	ind2	        	second index of the edge to be judged
- * @return     	bool            	counted or not
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Judge whether edge indexed by (ind1+ind2) is already in the std::vector of "edges"
+ * @param          edges               edge collection
+ * @param          ind1                first index of the edge to be judged
+ * @param          ind2                second index of the edge to be judged
+ * @return         bool                counted or not
 */
 bool VO_ShapeModel::VO_EdgeHasBeenCounted(const std::vector<VO_Edge>& edges, unsigned int ind1, unsigned int ind2)
 {
@@ -303,12 +303,12 @@ bool VO_ShapeModel::VO_EdgeHasBeenCounted(const std::vector<VO_Edge>& edges, uns
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Judge whether triangle t is already in the std::vector of "triangles".
- * @param      	triangles       triangle collection
- * @param      	t               the triangle to be judged
- * @return		bool			whether the triangle "t" has been counted or not
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Judge whether triangle t is already in the std::vector of "triangles".
+ * @param          triangles       triangle collection
+ * @param          t               the triangle to be judged
+ * @return         bool            whether the triangle "t" has been counted or not
 */
 bool VO_ShapeModel::VO_TriangleHasBeenCounted(const std::vector<VO_Triangle2DStructure>& triangles, const std::vector<unsigned int>& t)
 {
@@ -328,22 +328,22 @@ bool VO_ShapeModel::VO_TriangleHasBeenCounted(const std::vector<VO_Triangle2DStr
         }
         if (tTriangle == sTriangle)
         {
-            return true;	// has been counted already
+            return true;    // has been counted already
         }
     }
 
-    return false;			// not counted yet
+    return false;           // not counted yet
 }
 
 
 /**
- * @author    	JIA Pei
- * @version    	2010-02-07
- * @brief      	Build Edges
- * @param      	iShape              Input - all vertexes/points composing the shape
- * @param      	Subdiv              Input - sub division which is already computed beforehand
- * @param      	outEdges	        Output - edges
- * @return     	unsigned int        Number of edges
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Build Edges
+ * @param          iShape              Input - all vertexes/points composing the shape
+ * @param          Subdiv              Input - sub division which is already computed beforehand
+ * @param          outEdges            Output - edges
+ * @return         unsigned int        Number of edges
 */
 //unsigned int VO_ShapeModel::VO_BuildEdges(const VO_Shape& iShape, const CvSubdiv2D* subdiv, std::vector<VO_Edge>& outEdges)
 //{
@@ -443,22 +443,22 @@ unsigned int VO_ShapeModel::VO_BuildEdges(const VO_Shape& iShape, const cv::Subd
 }
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Build AAM Triangles
- * @param      	iShape               	Input 	- the input shape
- * @param      	edges               	Input 	- to built edges
- * @param		outTriangles			Output	- the output triangles
- * @return     	unsigned int          	Number of triangles
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Build AAM Triangles
+ * @param       iShape              Input     - the input shape
+ * @param       edges               Input     - to built edges
+ * @param       outTriangles        Output    - the output triangles
+ * @return      unsigned int        Number of triangles
 */
 unsigned int VO_ShapeModel::VO_BuildTriangles(  const VO_Shape& iShape,
                                                 const std::vector<VO_Edge>& edges,
                                                 std::vector<VO_Triangle2DStructure>& outTriangles)
 {
     outTriangles.clear();
-    unsigned int NbOfEdges 	= edges.size ();
+    unsigned int NbOfEdges  = edges.size ();
     unsigned int NbOfPoints = iShape.GetNbOfPoints();
-	
+    
     for (unsigned int i = 0; i < NbOfEdges; i++)
     {
         unsigned int ind1 = edges[i].GetIndex1();
@@ -474,13 +474,13 @@ unsigned int VO_ShapeModel::VO_BuildTriangles(  const VO_Shape& iShape,
                 iVertexes[0] = ind1;
                 iVertexes[1] = ind2;
                 iVertexes[2] = j;
-				// If the triangle has not been counted yet
+                // If the triangle has not been counted yet
                 if (!VO_ShapeModel::VO_TriangleHasBeenCounted(outTriangles, iVertexes) )
                 {
                     cv::Mat_<float> vVertexes = iShape.GetSubShape(iVertexes).GetTheShape();
-					// Note: Explained by JIA Pei, 2009-08-09, triangle vertex sequence should be adjusted here
-					VO_Triangle2DStructure temp(vVertexes, iVertexes);
-					temp.AdjustVertexSequence();
+                    // Note: Explained by JIA Pei, 2009-08-09, triangle vertex sequence should be adjusted here
+                    VO_Triangle2DStructure temp(vVertexes, iVertexes);
+                    temp.AdjustVertexSequence();
                     outTriangles.push_back (temp);
                 }
             }
@@ -492,16 +492,16 @@ unsigned int VO_ShapeModel::VO_BuildTriangles(  const VO_Shape& iShape,
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Calculation triangulation mesh
-				For IMM 58 points dataset, 19 edges on the convex hull, 133 inner edges.
-				Totally, 133+19=152 edges
-				(133*2+19)/3=95 triangles
- * @param		iShape			Input	- the input shape
- * @param		edges			Input	- the constructed edges
- * @param		triangles		Input	- the constructed triangles
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Calculation triangulation mesh
+                For IMM 58 points dataset, 19 edges on the convex hull, 133 inner edges.
+                Totally, 133+19=152 edges
+                (133*2+19)/3=95 triangles
+ * @param       iShape           Input    - the input shape
+ * @param       edges            Input    - the constructed edges
+ * @param       triangles        Input    - the constructed triangles
+ * @return      void
 */
 //void VO_ShapeModel::VO_BuildTemplateMesh(const VO_Shape& iShape,
 //                                        std::vector<VO_Edge>& edges,
@@ -562,33 +562,33 @@ void VO_ShapeModel::VO_BuildTemplateMesh(const VO_Shape& iShape,
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Calculation triangulation mesh
-				For IMM 58 points dataset, 19 edges on the convex hull, 133 inner edges.
-				Totally, 133+19=152 edges
-				(133*2+19)/3=95 triangles
- * @param		iShape			Input	- the input shape
- * @param		iFaceParts		Input	- face parts
- * @param		edges			Input	- the constructed edges
- * @param		triangles		Input	- the constructed triangles
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Calculation triangulation mesh
+                For IMM 58 points dataset, 19 edges on the convex hull, 133 inner edges.
+                Totally, 133+19=152 edges
+                (133*2+19)/3=95 triangles
+ * @param       iShape          Input    - the input shape
+ * @param       iFaceParts      Input    - face parts
+ * @param       edges           Input    - the constructed edges
+ * @param       triangles       Input    - the constructed triangles
 */
 void VO_ShapeModel::VO_BuildTemplateMesh(const VO_Shape& iShape, 
-										const VO_FaceParts& iFaceParts, 
+                                        const VO_FaceParts& iFaceParts, 
                                         std::vector<VO_Edge>& edges,
                                         std::vector<VO_Triangle2DStructure>& triangles )
 {
     cv::Mat_<float> vVertexes;
-    unsigned int NbOfPoints 				= iShape.GetNbOfPoints();
+    unsigned int NbOfPoints                 = iShape.GetNbOfPoints();
 
-    std::vector< std::vector < unsigned int > > ti 	= iFaceParts.GetTriangleIndexes();
-    unsigned int NbOfTriangles 				= ti.size();
+    std::vector< std::vector < unsigned int > > ti  = iFaceParts.GetTriangleIndexes();
+    unsigned int NbOfTriangles                 = ti.size();
 
     triangles.resize(NbOfTriangles);
     for(unsigned int i = 0; i < NbOfTriangles; ++i)
     {
-        vVertexes 		= iShape.GetSubShape(ti[i]).GetTheShape();
-        triangles[i] 	= VO_Triangle2DStructure(vVertexes, ti[i]);
+        vVertexes       = iShape.GetSubShape(ti[i]).GetTheShape();
+        triangles[i]    = VO_Triangle2DStructure(vVertexes, ti[i]);
 
         if( !VO_ShapeModel::VO_EdgeHasBeenCounted(edges, ti[i][0], ti[i][1]) )
             edges.push_back( VO_Edge(ti[i][0], ti[i][1]) );
@@ -603,12 +603,12 @@ void VO_ShapeModel::VO_BuildTemplateMesh(const VO_Shape& iShape,
 
 
 /**
- * @author     	JIA Pei
- * @version   	2010-02-07
- * @brief     	Is iShape inside img
- * @param		iShape			Input	- the input shape
- * @param		img				Input	- the image
- * @return    	bool
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Is iShape inside img
+ * @param       iShape      Input    - the input shape
+ * @param       img         Input    - the image
+ * @return      bool
 */
 bool VO_ShapeModel::VO_IsShapeInsideImage(const VO_Shape& iShape, const cv::Mat& img)
 {
@@ -624,52 +624,52 @@ bool VO_ShapeModel::VO_IsShapeInsideImage(const VO_Shape& iShape, const cv::Mat&
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Reference scale texture back to aligned one
- * @param      	inShape         Input 	- reference shape
- * @param      	shapeSD         Input 	- shape standard deviation
- * @param      	outShape        Output 	- output aligned shape
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Reference scale texture back to aligned one
+ * @param       inShape     Input     - reference shape
+ * @param       shapeSD     Input     - shape standard deviation
+ * @param       outShape    Output    - output aligned shape
+ * @return      void
 */
 void VO_ShapeModel::VO_ReferenceShapeBack2Aligned(const VO_Shape& inShape, float shapeSD, VO_Shape& outShape)
 {
-    outShape 			= inShape;
-    cv::Mat_<float> center 	= outShape.CenterOfGravity( );		// centralize first
+    outShape             = inShape;
+    cv::Mat_<float> center     = outShape.CenterOfGravity( );        // centralize first
     outShape.Translate( -center );
-	outShape.Scale(1.0f/shapeSD );							// scale second
-	// note: no rotation!!!
+    outShape.Scale(1.0f/shapeSD );                            // scale second
+    // note: no rotation!!!
 }
 
 
 /**
- * @author		JIA Pei
- * @version		2010-02-09
- * @brief		calculate the boundary rectangle of a list of triangles
- * @param		triangles	    	Input - A list of triangles
- * @return		cv::Rect				the boundary rectangle.
+ * @author      JIA Pei
+ * @version     2010-02-09
+ * @brief       calculate the boundary rectangle of a list of triangles
+ * @param       triangles       Input - A list of triangles
+ * @return      cv::Rect        the boundary rectangle.
 */
 cv::Rect VO_ShapeModel::VO_CalcBoundingRectFromTriangles(const std::vector <VO_Triangle2DStructure>& triangles)
 {
-	VO_Shape shape = VO_Triangle2DStructure::Triangle2D2Shape(triangles);
+    VO_Shape shape = VO_Triangle2DStructure::Triangle2D2Shape(triangles);
 
     return shape.GetShapeBoundRect();
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	shape parameters constrain
- * @param      	ioP				Input and Output - shape parameters
- * @param      	nSigma          Input - number of sigmas
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       shape parameters constrain
+ * @param       ioP         Input and Output - shape parameters
+ * @param       nSigma      Input - number of sigmas
+ * @return      void
 */
 void VO_ShapeModel::VO_ShapeParameterConstraint(cv::Mat_<float>& ioP, float nSigma)
 {
     for (unsigned int i = 0; i < ioP.cols; ++i)
     {
-		float ct = nSigma * sqrt(this->m_PCAAlignedShape.eigenvalues.at<float>(i,0) );
+        float ct = nSigma * sqrt(this->m_PCAAlignedShape.eigenvalues.at<float>(i,0) );
         if ( ioP(0, i) > ct )
         {
             ioP(0, i) = ct;
@@ -683,40 +683,40 @@ void VO_ShapeModel::VO_ShapeParameterConstraint(cv::Mat_<float>& ioP, float nSig
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	aligned shape project to shape parameters
- * @param      	inP             Input 	- input shape
- * @param      	oShape          Output 	- the projected shape parameters
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       aligned shape project to shape parameters
+ * @param       inP         Input    - input shape
+ * @param       oShape      Output   - the projected shape parameters
+ * @return      void
 */
 void VO_ShapeModel::VO_AlignedShapeProjectToSParam(const VO_Shape& iShape, cv::Mat_<float>& outP) const
 {
-	this->m_PCAAlignedShape.project(iShape.GetTheShapeInARow(), outP);
+    this->m_PCAAlignedShape.project(iShape.GetTheShapeInARow(), outP);
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	shape parameters back project to aligned shape
- * @param      	inP             Input 	- input shape parameters
- * @param      	oShape          Output 	- the back projected shape
- * @param		dim				dim		- input
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       shape parameters back project to aligned shape
+ * @param       inP         Input    - input shape parameters
+ * @param       oShape      Output   - the back projected shape
+ * @param       dim         dim      - input
+ * @return      void
 */
 void VO_ShapeModel::VO_SParamBackProjectToAlignedShape(const cv::Mat_<float>& inP, VO_Shape& oShape, int dim) const
 {
-	oShape.SetTheShape(this->m_PCAAlignedShape.backProject(inP), dim);
+    oShape.SetTheShape(this->m_PCAAlignedShape.backProject(inP), dim);
 }
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	shape parameters back project to aligned shape
- * @param      	inP             Input 	- input shape parameters
- * @param      	oShapeMat       Output 	- the back projected shape in a row matrix
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       shape parameters back project to aligned shape
+ * @param       inP         Input   - input shape parameters
+ * @param       oShapeMat   Output  - the back projected shape in a row matrix
+ * @return      void
 */
 void VO_ShapeModel::VO_SParamBackProjectToAlignedShape(const cv::Mat_<float>& inP, cv::Mat_<float>& oShapeMat) const
 {
@@ -724,184 +724,236 @@ void VO_ShapeModel::VO_SParamBackProjectToAlignedShape(const cv::Mat_<float>& in
 }
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Calculate all parameters for an arbitrary shape
- * @param      	iShape			Input 	- 	the reference shape
- * @param		oShape			Output	-	output shape
- * @param      	outP            Output 	- 	shape parameters
- * @param      	norm            Output 	- 	2-norm, scaling
- * @param      	angle		    Output 	- 	rotation in 2D
- * @param      	translation     Output 	- 	translation
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Calculate all parameters for an arbitrary shape
+ * @param       iShape       Input   -     the reference shape
+ * @param       oShape       Output  -     output shape
+ * @param       outP         Output  -     shape parameters
+ * @param       norm         Output  -     2-norm, scaling
+ * @param       angle        Output  -     rotation in 2D
+ * @param       translation  Output  -     translation
+ * @return      void
 */
-void VO_ShapeModel::VO_CalcAllParams4AnyShapeWithConstrain(	const cv::Mat_<float>& iShape,
+void VO_ShapeModel::VO_CalcAllParams4AnyShapeWithConstrain( const cv::Mat_<float>& iShape,
                                                             cv::Mat_<float>& oShape,
                                                             cv::Mat_<float>& outP,
-															float& norm,
+                                                            float& norm,
                                                             std::vector<float>& angles,
                                                             cv::Mat_<float>& translation )
 {
-	VO_Shape oS(iShape, this->m_iNbOfShapeDim);
-	oS.ProcrustesAnalysis( this->m_VOAlignedMeanShape, norm, angles, translation );
-	this->VO_AlignedShapeProjectToSParam(oS, outP);
-	this->VO_ShapeParameterConstraint(outP);
+    VO_Shape oS(iShape, this->m_iNbOfShapeDim);
+    oS.ProcrustesAnalysis( this->m_VOAlignedMeanShape, norm, angles, translation );
+    this->VO_AlignedShapeProjectToSParam(oS, outP);
+    this->VO_ShapeParameterConstraint(outP);
     this->VO_SParamBackProjectToAlignedShape(outP, oS, this->m_iNbOfShapeDim);
-	oS.InverseProcrustesAnalysis( norm, angles, translation );
-	oShape = oS.GetTheShapeInARow();
+    oS.InverseProcrustesAnalysis( norm, angles, translation );
+    oShape = oS.GetTheShapeInARow();
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Calculate all parameters for an arbitrary shape
- * @param      	iShape        	Input 	- 	the input shape
- * @param		oShape			Output	-	output shape
- * @param      	outP            Output 	- 	shape parameters, a 1*m_iNbOfShapeDim row std::vector
- * @param      	outQ            Output 	- 	similarity transform parameters, a 1*4 row std::vector
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Calculate all parameters for an arbitrary shape
+ * @param       iShape      Input   -   the input shape
+ * @param       oShape      Output  -   output shape
+ * @param       outP        Output  -   shape parameters, a 1*m_iNbOfShapeDim row std::vector
+ * @param       outQ        Output  -   similarity transform parameters, a 1*4 row std::vector
+ * @return      void
 */
-//void VO_ShapeModel::VO_CalcAllParams4AnyShapeWithConstrain(	const cv::Mat_<float>& iShape,
-//															cv::Mat_<float>& oShape,
-//															cv::Mat_<float>& outP,
-//															cv::Mat_<float>& outQ )
+//void VO_ShapeModel::VO_CalcAllParams4AnyShapeWithConstrain( const cv::Mat_<float>& iShape,
+//                                                            cv::Mat_<float>& oShape,
+//                                                            cv::Mat_<float>& outP,
+//                                                            cv::Mat_<float>& outQ )
 //{
-//	float norm;
-//	std::vector<float> angles;
-//	cv::Mat_<float> translation;
+//    float norm;
+//    std::vector<float> angles;
+//    cv::Mat_<float> translation;
 //
-//	this->VO_CalcAllParams4AnyShapeWithConstrain(	iShape,
-//													oShape,
-//													outP,
-//													norm,
-//													angles,
-//													translation );
-//	VO_Shape::SimilarityTrans2GlobalShapeNormalization(norm, -angles, translation, outQ);
+//    this->VO_CalcAllParams4AnyShapeWithConstrain(   iShape,
+//                                                    oShape,
+//                                                    outP,
+//                                                    norm,
+//                                                    angles,
+//                                                    translation );
+//    VO_Shape::SimilarityTrans2GlobalShapeNormalization(norm, -angles, translation, outQ);
 //}
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Calculate all parameters for an arbitrary shape
- * @param      	ioShape			Input and output 	- input/output shape
- * @param      	outP            Output 	- shape parameters
- * @param      	norm            Output 	- 2-norm, scaling
- * @param      	angles          Output 	- rotation
- * @param      	translation    	Output 	- translation
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       Calculate all parameters for an arbitrary shape
+ * @param       ioShape      Input and output     - input/output shape
+ * @param       outP         Output     - shape parameters
+ * @param       norm         Output     - 2-norm, scaling
+ * @param       angles       Output     - rotation
+ * @param       translation  Output     - translation
+ * @return      void
 */
 void VO_ShapeModel::VO_CalcAllParams4AnyShapeWithConstrain( VO_Shape& ioShape, 
                                                             cv::Mat_<float>& outP,
-															float& norm, 
+                                                            float& norm, 
                                                             std::vector<float>& angles,
                                                             cv::Mat_<float>& translation )
 {
     ioShape.ProcrustesAnalysis( this->m_VOAlignedMeanShape, norm, angles, translation );
-	this->VO_AlignedShapeProjectToSParam(ioShape, outP);
-	this->VO_ShapeParameterConstraint(outP);
+    this->VO_AlignedShapeProjectToSParam(ioShape, outP);
+    this->VO_ShapeParameterConstraint(outP);
     this->VO_SParamBackProjectToAlignedShape(outP, ioShape, ioShape.GetNbOfDim());
     ioShape.InverseProcrustesAnalysis( norm, angles, translation );
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Calculate all parameters for an arbitrary shape
- * @param      	ioShape			Input and output 	- input/output shape
- * @param      	outP            Output -- shape parameters
- * @param      	outQ			Output -- similarity transform parameters
- * @return		void
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Calculate all parameters for an arbitrary shape
+ * @param          ioShape            Input and output     - input/output shape
+ * @param          outP            Output -- shape parameters
+ * @param          outQ            Output -- similarity transform parameters
+ * @return         void
 */
 //void VO_ShapeModel::VO_CalcAllParams4AnyShapeWithConstrain(VO_Shape& ioShape, cv::Mat_<float>& outP, cv::Mat_<float>& outQ )
 //{
-//	float norm;
-//	std::vector<float> angles;
-//	cv::Mat_<float> translation;
+//    float norm;
+//    std::vector<float> angles;
+//    cv::Mat_<float> translation;
 //
-//	this->VO_CalcAllParams4AnyShapeWithConstrain(	ioShape,
-//													outP,
-//													norm,
-//													angles,
-//													translation );
-//	VO_Shape::SimilarityTrans2GlobalShapeNormalization(norm, -angles, translation, outQ);
+//    this->VO_CalcAllParams4AnyShapeWithConstrain(   ioShape,
+//                                                    outP,
+//                                                    norm,
+//                                                    angles,
+//                                                    translation );
+//    VO_Shape::SimilarityTrans2GlobalShapeNormalization(norm, -angles, translation, outQ);
 //}
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Build up a shape from all rigid and non-rigid parameters
- * @param      	inP            	Input -- shape parameters, for nonrigid
- * @param      	inQ				Input -- similarity transform parameters, for rigid
- * @param      	oShape			output -- output shape
- * @return		void
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Build up a shape from all rigid and non-rigid parameters
+ * @param          inP                Input -- shape parameters, for nonrigid
+ * @param          inQ                Input -- similarity transform parameters, for rigid
+ * @param          oShape            output -- output shape
+ * @return         void
 */
 //void VO_ShapeModel::VO_BuildUpShapeFromRigidNonRigidParams(const cv::Mat_<float>& inP, const cv::Mat_<float>& inQ, VO_Shape& oShape )
 //{
-//	float norm;
-//	std::vector<float> angles;
-//	cv::Mat_<float> translation;
-//	
-//	this->VO_SParamBackProjectToAlignedShape(inP, oShape, 2);
-////	VO_Shape::GlobalShapeNormalization2SimilarityTrans(inQ, norm, angles, translation);
-////	oShape.InverseProcrustesAnalysis( norm, angles, translation );
-//	oShape.GlobalShapeNormalization2D(inQ);
+//    float norm;
+//    std::vector<float> angles;
+//    cv::Mat_<float> translation;
+//    
+//    this->VO_SParamBackProjectToAlignedShape(inP, oShape, 2);
+////    VO_Shape::GlobalShapeNormalization2SimilarityTrans(inQ, norm, angles, translation);
+////    oShape.InverseProcrustesAnalysis( norm, angles, translation );
+//    oShape.GlobalShapeNormalization2D(inQ);
 //}
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	build shape model
- * @param      	allLandmarkFiles4Training		Input - all landmark files
- * @param      	shapeinfoFileName				Input - shape info file
- * @param		database						Input - which database is it?
- * @param      	TPShape     					Input - truncated percentage for shape model
- * @param      	useKnownTriangles  				Input - use known triangle structures??
- * @return		void
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          build shape model
+ * @param          allLandmarkFiles4Training    Input - all landmark files
+ * @param          shapeinfoFileName            Input - shape info file
+ * @param          database                     Input - which database is it?
+ * @param          TPShape                      Input - truncated percentage for shape model
+ * @param          useKnownTriangles            Input - use known triangle structures??
+ * @return         void
 */
-void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandmarkFiles4Training,
-										const std::string& shapeinfoFileName, 
-										unsigned int database,
-										float TPShape, 
-										bool useKnownTriangles)
+void VO_ShapeModel::VO_BuildShapeModel( const std::vector<std::string>& allLandmarkFiles4Training,
+                                        const std::string& shapeinfoFileName,
+                                        unsigned int database,
+                                        float TPShape,
+                                        bool useKnownTriangles)
 {
-	// load auxiliary shape information
-	VO_Shape2DInfo::ReadShape2DInfo(shapeinfoFileName, this->m_vShape2DInfo, this->m_FaceParts);
-	CAnnotationDBIO::VO_LoadShapeTrainingData( allLandmarkFiles4Training, database, this->m_vShapes);
+    // load auxiliary shape information
+    VO_Shape2DInfo::ReadShape2DInfo(shapeinfoFileName, this->m_vShape2DInfo, this->m_FaceParts);
+    CAnnotationDBIO::VO_LoadShapeTrainingData( allLandmarkFiles4Training, database, this->m_vShapes);
 
-    this->m_iNbOfSamples            			= this->m_vShapes.size();
-    this->m_iNbOfShapeDim           			= this->m_vShapes[0].GetNbOfDim();
-    this->m_iNbOfPoints             			= this->m_vShapes[0].GetNbOfPoints();
-    this->m_iNbOfShapes             			= this->m_iNbOfShapeDim * this->m_iNbOfPoints;
-	this->m_iNbOfEigenShapesAtMost 				= MIN(this->m_iNbOfSamples, this->m_iNbOfShapes);
-    this->m_fTruncatedPercent_Shape 			= TPShape;
-    cv::Mat_<float> matAlignedShapes			= cv::Mat_<float>::zeros(this->m_iNbOfSamples, this->m_iNbOfShapes);
+    this->m_iNbOfSamples                = this->m_vShapes.size();
+    this->m_iNbOfShapeDim               = this->m_vShapes[0].GetNbOfDim();
+    this->m_iNbOfPoints                 = this->m_vShapes[0].GetNbOfPoints();
+    this->m_iNbOfShapes                 = this->m_iNbOfShapeDim * this->m_iNbOfPoints;
+    this->m_iNbOfEigenShapesAtMost      = MIN(this->m_iNbOfSamples, this->m_iNbOfShapes);
+    this->m_fTruncatedPercent_Shape     = TPShape;
+    
+    VO_ShapeModel::VO_BuildShapeModel(  this->m_vShapes,
+                                        this->m_FaceParts,
+                                        this->m_vAlignedShapes,
+                                        this->m_VOAlignedMeanShape,
+                                        this->m_VOReferenceShape, 
+                                        this->m_VOPDM,
+                                        this->m_PCAAlignedShape,
+                                        this->m_vEdge,
+                                        this->m_iNbOfEdges,
+                                        this->m_vTemplateTriangle2D,
+                                        this->m_vNormalizedTriangle2D,
+                                        this->m_iNbOfTriangles,
+                                        this->m_fAverageShapeSize,
+                                        this->m_iNbOfShapeEigens,
+                                        this->m_iNbOfSamples,
+                                        this->m_iNbOfShapeDim,
+                                        this->m_iNbOfShapes,
+                                        this->m_fTruncatedPercent_Shape,
+                                        useKnownTriangles);
+}
+
+
+/**
+ * @author      JIA Pei
+ * @version     2016-08-29
+ * @brief       build shape model
+ * @param       allShapes           Input - all original loaded shapes
+ * @param       iFaceParts          Input - face parts
+ * @param       allAlignedShapes    Output - all aligned shapes
+ * @return      void
+*/
+void VO_ShapeModel::VO_BuildShapeModel( const std::vector<VO_Shape>& allShapes,
+                                        const VO_FaceParts& iFaceParts,
+                                        std::vector<VO_Shape>& allAlignedShapes,
+                                        VO_Shape& alignedMeanShape,
+                                        VO_Shape& referenceShape, 
+                                        VO_Point2DDistributionModel& pdm,
+                                        cv::PCA& pca,
+                                        std::vector<VO_Edge>& edges,
+                                        unsigned int& nbOfEdges,
+                                        std::vector<VO_Triangle2DStructure>& templateTriangle2D,
+                                        std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
+                                        unsigned int& nbOfTrianges,
+                                        float& avgShapeSize,
+                                        unsigned int& nbOfShapeEigens,
+                                        unsigned int nbOfSamples,
+                                        unsigned int nbOfShapeDim,
+                                        unsigned int nbOfShapes,
+                                        float TPShape,
+                                        bool useKnownTriangles)
+{
+    cv::Mat_<float> matAlignedShapes    = cv::Mat_<float>::zeros(nbOfSamples, nbOfShapes);
 
     // Align all shapes
-    this->m_fAverageShapeSize = VO_ShapeModel::VO_AlignAllShapes(this->m_vShapes, this->m_vAlignedShapes);
-    VO_ShapeModel::VO_CalcMeanShape(this->m_vAlignedShapes, this->m_VOAlignedMeanShape);
+    avgShapeSize = VO_ShapeModel::VO_AlignAllShapes(allShapes, allAlignedShapes);
+    VO_ShapeModel::VO_CalcMeanShape(allAlignedShapes, alignedMeanShape);
 
-	// Calculate reference shape
-	this->m_VOReferenceShape 					= this->m_VOAlignedMeanShape*this->m_fAverageShapeSize;
-    cv::Mat_<float> refMin 						= this->m_VOReferenceShape.Min();
-    this->m_VOReferenceShape.Translate( -refMin );
+    // Calculate reference shape
+    referenceShape          = alignedMeanShape*avgShapeSize;
+    cv::Mat_<float> refMin  = referenceShape.Min();
+    referenceShape.Translate( -refMin );
 
-	//////////////////////////////////////////////////////////////////////////
-    /// Build VO_Point2DDistributionModel ////////////////////////////////////
-    this->m_VOPDM.VO_BuildPointDistributionModel(this->m_vAlignedShapes);
-	//////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    ////// Build point distribution model ////////////////////////////////////
+    pdm.VO_BuildPointDistributionModel(allAlignedShapes);
+    //////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////
     /// Assign matAlignedShapes //////////////////////////////////////////////
-    for(unsigned int i = 0; i < this->m_iNbOfSamples; i++)
-	{
-        cv::Mat_<float> shapeInARow = this->m_vAlignedShapes[i].GetTheShapeInARow();
+    for(unsigned int i = 0; i < nbOfSamples; i++)
+    {
+        cv::Mat_<float> shapeInARow = allAlignedShapes[i].GetTheShapeInARow();
 
-        for(unsigned int j = 0; j < this->m_iNbOfShapes; j++)
+        for(unsigned int j = 0; j < nbOfShapes; j++)
         {
             matAlignedShapes.at<float>(i,j) = shapeInARow.at<float>(0,j);
         }
@@ -910,45 +962,45 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
 
     //////////////////////////////////////////////////////////////////////////
     /// Calculate PCA ////////////////////////////////////////////////////////
-    this->m_PCAAlignedShape = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)(this->m_fTruncatedPercent_Shape) );
-    this->m_iNbOfShapeEigens = this->m_PCAAlignedShape.eigenvalues.rows;
-    this->m_PCAAlignedShape.mean = this->m_VOAlignedMeanShape.GetTheShapeInARow();
-//    for(int i = 0; i < this->m_PCAAlignedShape.mean.rows; i++)
+    pca = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)TPShape );
+    nbOfShapeEigens = pca.eigenvalues.rows;
+    pca.mean = alignedMeanShape.GetTheShapeInARow();
+//    for(int i = 0; i < pca.mean.rows; i++)
 //    {
-//        for(int j = 0; j < this->m_PCAAlignedShape.mean.cols; j++)
-//            std::cout << this->m_PCAAlignedShape.mean.at<float>(i, j) << std::endl;
+//        for(int j = 0; j < pca.mean.cols; j++)
+//            std::cout << pca.mean.at<float>(i, j) << std::endl;
 //    }
     //////////////////////////////////////////////////////////////////////////
 
     //////////////////////////////////////////////////////////////////////////
     /// Calculate template shape mesh ////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
-    if (this->m_FaceParts.GetTriangleIndexes().size() != 0)
+    if (iFaceParts.GetTriangleIndexes().size() != 0)
         useKnownTriangles = true;
     else
         useKnownTriangles = false;
     if( !useKnownTriangles )
-        VO_ShapeModel::VO_BuildTemplateMesh(this->m_VOReferenceShape, this->m_vEdge, this->m_vTemplateTriangle2D );
+        VO_ShapeModel::VO_BuildTemplateMesh(referenceShape, edges, templateTriangle2D );
     else
-        VO_ShapeModel::VO_BuildTemplateMesh(this->m_VOReferenceShape, this->m_FaceParts, this->m_vEdge, this->m_vTemplateTriangle2D );
+        VO_ShapeModel::VO_BuildTemplateMesh(referenceShape, iFaceParts, edges, templateTriangle2D );
 
-	this->m_iNbOfEdges = this->m_vEdge.size();
-	this->m_iNbOfTriangles = this->m_vTemplateTriangle2D.size();
-	
+    nbOfEdges = edges.size();
+    nbOfTrianges = templateTriangle2D.size();
+    
     /// 2) Calculate m_vNormalizedTriangle2D - make sure the mesh has been built first, so that we have m_iNbOfTriangles
     std::vector<cv::Point2f> tempVertexes;
     std::vector<unsigned int> iVertexes;
     tempVertexes.resize(3);
     cv::Mat_<float> threePoints;
 
-    for (unsigned int i = 0; i < this->m_iNbOfTriangles; i++)
+    for (unsigned int i = 0; i < nbOfTrianges; i++)
     {
-        iVertexes = this->m_vTemplateTriangle2D[i].GetVertexIndexes();
-        threePoints = this->m_VOAlignedMeanShape.GetSubShape(iVertexes).GetTheShape();
-		for(unsigned int j = 0; j < 3; j++)
+        iVertexes = templateTriangle2D[i].GetVertexIndexes();
+        threePoints = alignedMeanShape.GetSubShape(iVertexes).GetTheShape();
+        for(unsigned int j = 0; j < 3; j++)
             tempVertexes[j] = cv::Point2f(threePoints.at<float>(0, j), threePoints.at<float>(1,j));
 
-        this->m_vNormalizedTriangle2D.push_back (VO_Triangle2DStructure(tempVertexes, iVertexes));
+        normalizedTriangle2D.push_back (VO_Triangle2DStructure(tempVertexes, iVertexes));
     }
 }
 
@@ -957,7 +1009,7 @@ void VO_ShapeModel::VO_BuildShapeModel(const std::vector<std::string>& allLandma
  * @author     JIA Pei
  * @version    2010-02-22
  * @brief      Save ASM to a specified folder
- * @param      fd         	Input - the folder that ASM to be saved to
+ * @param      fd             Input - the folder that ASM to be saved to
 */
 void VO_ShapeModel::VO_Save(const std::string& fd)
 {
@@ -972,16 +1024,16 @@ void VO_ShapeModel::VO_Save(const std::string& fd)
     // ShapeModel
     tempfn = fn + "/ShapeModel" + ".txt";
     fp.open(tempfn.c_str (), std::ios::out);
-    fp << "m_iNbOfSamples" << std::endl << this->m_iNbOfSamples << std::endl;							// m_iNbOfSamples
-    fp << "m_iNbOfShapeDim" << std::endl << this->m_iNbOfShapeDim << std::endl;						// m_iNbOfShapeDim
-    fp << "m_iNbOfPoints" << std::endl << this->m_iNbOfPoints << std::endl;							// m_iNbOfPoints
-    fp << "m_iNbOfShapes" << std::endl << this->m_iNbOfShapes << std::endl;							// m_iNbOfShapes
-    fp << "m_iNbOfEigenShapesAtMost" << std::endl << this->m_iNbOfEigenShapesAtMost << std::endl;		// m_iNbOfEigenShapesAtMost
-    fp << "m_iNbOfShapeEigens" << std::endl << this->m_iNbOfShapeEigens << std::endl;					// m_PCAAlignedShape
-    fp << "m_iNbOfEdges" << std::endl << this->m_iNbOfEdges << std::endl;								// m_iNbOfEdges
-    fp << "m_iNbOfTriangles" << std::endl << this->m_iNbOfTriangles << std::endl;						// m_iNbOfTriangles
-    fp << "m_fAverageShapeSize" << std::endl << this->m_fAverageShapeSize << std::endl;				// m_fAverageShapeSize
-    fp << "m_fTruncatedPercent_Shape" << std::endl << this->m_fTruncatedPercent_Shape << std::endl;	// m_fTruncatedPercent_Shape
+    fp << "m_iNbOfSamples" << std::endl << this->m_iNbOfSamples << std::endl;                            // m_iNbOfSamples
+    fp << "m_iNbOfShapeDim" << std::endl << this->m_iNbOfShapeDim << std::endl;                        // m_iNbOfShapeDim
+    fp << "m_iNbOfPoints" << std::endl << this->m_iNbOfPoints << std::endl;                            // m_iNbOfPoints
+    fp << "m_iNbOfShapes" << std::endl << this->m_iNbOfShapes << std::endl;                            // m_iNbOfShapes
+    fp << "m_iNbOfEigenShapesAtMost" << std::endl << this->m_iNbOfEigenShapesAtMost << std::endl;        // m_iNbOfEigenShapesAtMost
+    fp << "m_iNbOfShapeEigens" << std::endl << this->m_iNbOfShapeEigens << std::endl;                    // m_PCAAlignedShape
+    fp << "m_iNbOfEdges" << std::endl << this->m_iNbOfEdges << std::endl;                                // m_iNbOfEdges
+    fp << "m_iNbOfTriangles" << std::endl << this->m_iNbOfTriangles << std::endl;                        // m_iNbOfTriangles
+    fp << "m_fAverageShapeSize" << std::endl << this->m_fAverageShapeSize << std::endl;                // m_fAverageShapeSize
+    fp << "m_fTruncatedPercent_Shape" << std::endl << this->m_fTruncatedPercent_Shape << std::endl;    // m_fTruncatedPercent_Shape
     fp.close();fp.clear();
 
     // m_PCAAlignedShapeMean=m_cv::MatAlignedMeanShapes
@@ -1011,7 +1063,7 @@ void VO_ShapeModel::VO_Save(const std::string& fd)
     fp << "m_VOAlignedMeanShape" << std::endl;
     fp << this->m_VOAlignedMeanShape << std::endl;
     fp.close();fp.clear();
-	
+    
     // m_VOReferenceShape
     tempfn = fn + "/m_VOReferenceShape" + ".txt";
     fp.open(tempfn.c_str (), std::ios::out);
@@ -1042,7 +1094,7 @@ void VO_ShapeModel::VO_Save(const std::string& fd)
     fp << this->m_FaceParts << std::endl;
     fp.close();fp.clear();
 
-	// m_vEdge
+    // m_vEdge
     tempfn = fn + "/m_vEdge" + ".txt";
     fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_vEdge" << std::endl;
@@ -1063,22 +1115,22 @@ void VO_ShapeModel::VO_Save(const std::string& fd)
     fp << this->m_vNormalizedTriangle2D << std::endl;
     fp.close();fp.clear();
 
-	// m_VOPDM
-	this->m_VOPDM.VO_Save(fd);
+    // m_VOPDM
+    this->m_VOPDM.VO_Save(fd);
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-22
- * @brief      	Load all ASM data from a specified folder
- * @param      	fd         	Input - the folder that ASM to be loaded from
+ * @author         JIA Pei
+ * @version        2010-02-22
+ * @brief          Load all ASM data from a specified folder
+ * @param          fd             Input - the folder that ASM to be loaded from
 */
 void VO_ShapeModel::VO_Load(const std::string& fd)
 {
-	this->VO_LoadParameters4Fitting(fd);
-	
-	std::string fn = fd+"/ShapeModel";
+    this->VO_LoadParameters4Fitting(fd);
+    
+    std::string fn = fd+"/ShapeModel";
     if (!boost::filesystem::is_directory(fn) )
     {
         std::cout << "ShapeModel subfolder is not existing. " << std::endl;
@@ -1088,8 +1140,8 @@ void VO_ShapeModel::VO_Load(const std::string& fd)
     std::ifstream fp;
     std::string tempfn;
     std::string temp;
-	
-	// m_vShapes
+    
+    // m_vShapes
     tempfn = fn + "/m_vShapes" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
@@ -1107,10 +1159,10 @@ void VO_ShapeModel::VO_Load(const std::string& fd)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-22
- * @brief      	Load all ASM data from a specified folder for later fitting
- * @param      	fd         		Input - the folder that ASM to be loaded from
+ * @author         JIA Pei
+ * @version        2010-02-22
+ * @brief          Load all ASM data from a specified folder for later fitting
+ * @param          fd                 Input - the folder that ASM to be loaded from
 */
 void VO_ShapeModel::VO_LoadParameters4Fitting(const std::string& fd)
 {
@@ -1129,18 +1181,18 @@ void VO_ShapeModel::VO_LoadParameters4Fitting(const std::string& fd)
     tempfn = fn + "/ShapeModel" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp >> this->m_iNbOfSamples;
-	fp >> temp >> this->m_iNbOfShapeDim;
+    fp >> temp >> this->m_iNbOfShapeDim;
     fp >> temp >> this->m_iNbOfPoints;
     fp >> temp >> this->m_iNbOfShapes;
-	fp >> temp >> this->m_iNbOfEigenShapesAtMost;
-	fp >> temp >> this->m_iNbOfShapeEigens;
-	fp >> temp >> this->m_iNbOfEdges;
-	fp >> temp >> this->m_iNbOfTriangles;
+    fp >> temp >> this->m_iNbOfEigenShapesAtMost;
+    fp >> temp >> this->m_iNbOfShapeEigens;
+    fp >> temp >> this->m_iNbOfEdges;
+    fp >> temp >> this->m_iNbOfTriangles;
     fp >> temp >> this->m_fAverageShapeSize;
     fp >> temp >> this->m_fTruncatedPercent_Shape;
     fp.close();fp.clear();
-	
-	this->m_PCAAlignedShape = cv::PCA();
+    
+    this->m_PCAAlignedShape = cv::PCA();
 
     // m_PCAAlignedShapeMean
     this->m_PCAAlignedShape.mean = cv::Mat_<float>::zeros(1, this->m_iNbOfShapes);
@@ -1150,7 +1202,7 @@ void VO_ShapeModel::VO_LoadParameters4Fitting(const std::string& fd)
     fp >> this->m_PCAAlignedShape.mean;
     fp.close();fp.clear();
 
-	// m_PCAAlignedShapeEigenValues
+    // m_PCAAlignedShapeEigenValues
     this->m_PCAAlignedShape.eigenvalues = cv::Mat_<float>::zeros(this->m_iNbOfShapeEigens, 1);
     tempfn = fn + "/m_PCAAlignedShapeEigenValues" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
@@ -1158,7 +1210,7 @@ void VO_ShapeModel::VO_LoadParameters4Fitting(const std::string& fd)
     fp >> this->m_PCAAlignedShape.eigenvalues;
     fp.close();fp.clear();
 
-	// m_PCAAlignedShapeEigenVectors
+    // m_PCAAlignedShapeEigenVectors
     this->m_PCAAlignedShape.eigenvectors = cv::Mat_<float>::zeros(this->m_iNbOfShapeEigens, this->m_iNbOfShapes);
     tempfn = fn + "/m_PCAAlignedShapeEigenVectors" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
@@ -1166,7 +1218,7 @@ void VO_ShapeModel::VO_LoadParameters4Fitting(const std::string& fd)
     fp >> this->m_PCAAlignedShape.eigenvectors;
     fp.close();fp.clear();
 
-	// m_VOAlignedMeanShape
+    // m_VOAlignedMeanShape
     this->m_VOAlignedMeanShape.m_MatShape = cv::Mat_<float>::zeros(this->m_iNbOfShapeDim, this->m_iNbOfPoints);
     tempfn = fn + "/m_VOAlignedMeanShape" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
@@ -1186,14 +1238,14 @@ void VO_ShapeModel::VO_LoadParameters4Fitting(const std::string& fd)
     this->m_vShape2DInfo.resize(this->m_iNbOfPoints);
     tempfn = fn + "/m_vShape2DInfo" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;	// 58
-	fp >> temp;
+    fp >> temp;    // 58
+    fp >> temp;
     fp >> this->m_vShape2DInfo;
-	fp >> this->m_FaceParts;
+    fp >> this->m_FaceParts;
     fp.close();fp.clear();
 
     // m_vEdge
-	this->m_vEdge.resize(this->m_iNbOfEdges);
+    this->m_vEdge.resize(this->m_iNbOfEdges);
     tempfn = fn + "/m_vEdge" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
@@ -1201,7 +1253,7 @@ void VO_ShapeModel::VO_LoadParameters4Fitting(const std::string& fd)
     fp.close();fp.clear();
 
      // m_vTemplateTriangle2D
-	this->m_vTemplateTriangle2D.resize(this->m_iNbOfTriangles);
+    this->m_vTemplateTriangle2D.resize(this->m_iNbOfTriangles);
     tempfn = fn + "/m_vTemplateTriangle2D" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
@@ -1209,14 +1261,14 @@ void VO_ShapeModel::VO_LoadParameters4Fitting(const std::string& fd)
     fp.close();fp.clear();
 
     // m_vNormalizedTriangle2D
-	this->m_vNormalizedTriangle2D.resize(this->m_iNbOfTriangles);
+    this->m_vNormalizedTriangle2D.resize(this->m_iNbOfTriangles);
     tempfn = fn + "/m_vNormalizedTriangle2D" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp;
     this->m_vNormalizedTriangle2D.resize(this->m_iNbOfTriangles);
     fp >> this->m_vNormalizedTriangle2D;
     fp.close();fp.clear();
-	
-	this->m_VOPDM.VO_LoadParameters4Fitting(fd);
+    
+    this->m_VOPDM.VO_LoadParameters4Fitting(fd);
 }
 

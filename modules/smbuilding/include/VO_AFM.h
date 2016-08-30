@@ -70,8 +70,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Active feature model.
+ * @author      JIA Pei
+ * @brief       Active feature model.
  */
 class VO_AFM : public VO_AXM
 {
@@ -84,25 +84,25 @@ friend class VO_FittingASMNDProfiles;
 friend class VO_FittingAFM;
 protected:
     /** PCA transform for concatenated local features, including eigenvectors, eigenvalues, and mean */
-    cv::PCA							m_PCANormalizedFeatures;
+    cv::PCA                         m_PCANormalizedFeatures;
 
-	/** Local feature extraction method */
-	unsigned int					m_iLocalFeatureExtractionMethod;
+    /** Local feature extraction method */
+    unsigned int                    m_iLocalFeatureExtractionMethod;
 
     /** length of concatenated local features in format of f1f2f3f4f1f2f3f4...f1f2f3f4. * . For IMM,  */
-    unsigned int                	m_iNbOfFeatures;
+    unsigned int                    m_iNbOfFeatures;
 
     /** Most possible feature eigens before PCA. For IMM: min (, 240) = 240 */
-    unsigned int                	m_iNbOfEigenFeaturesAtMost;
+    unsigned int                    m_iNbOfEigenFeaturesAtMost;
 
     /** Number of AFM model eigens. For IMM: 127 */
-    unsigned int               	 	m_iNbOfFeaturesEigens;
+    unsigned int                    m_iNbOfFeaturesEigens;
 
-	/** The template LTC average standard deviation : 12364.1 */
-    float                       	m_fAverageFeatureStandardDeviation;
+    /** The template LTC average standard deviation : 12364.1 */
+    float                           m_fAverageFeatureStandardDeviation;
 
-	/** Truncate Percentage for LTC model PCA. Normally, 0.95 */
-    float                       	m_fTruncatedPercent_Feature;
+    /** Truncate Percentage for LTC model PCA. Normally, 0.95 */
+    float                           m_fTruncatedPercent_Feature;
 
     /** All loaded LTCs in a std::vector format. For IMM, 240*90396 */
     std::vector<VO_Texture>         m_vLTCs;
@@ -111,55 +111,55 @@ protected:
     std::vector<VO_Texture>         m_vNormalizedLTCs;
 
     /** image cv::Size for wavelet transform */
-    cv::Size 						m_localImageSize;
+    cv::Size                        m_localImageSize;
 
-	/** Initialization */
-	void 							init();
+    /** Initialization */
+    void                            init();
 
 public:
     /** Default constructor to create a VO_AFM object */
     VO_AFM();
-	
+    
     /** Destructor */
     virtual ~VO_AFM();
-	
-	/** Feature parameters constraints */
-    void							VO_FeatureParameterConstraint(cv::Mat_<float>& ioF, float nSigma = 3.0f);
+    
+    /** Feature parameters constraints */
+    void                            VO_FeatureParameterConstraint(cv::Mat_<float>& ioF, float nSigma = 3.0f);
 
     /** Build ASMLTCs model */
-    void                         	VO_BuildFeatureModel (  const std::vector<std::string>& allLandmarkFiles4Training,
-															const std::vector<std::string>& allImgFiles4Training,
-															const std::string& shapeinfoFileName, 
-															unsigned int database,
-															unsigned int channels = 1,
-															unsigned int levels = 3,
-															int trm = VO_Features::DIRECT, 
-															float TPShape = 0.95f,
-															bool useKnownTriangles = false,
-															unsigned int ltcMtd = VO_DiscreteWavelet::HAAR, 
+    void                            VO_BuildFeatureModel (  const std::vector<std::string>& allLandmarkFiles4Training,
+                                                            const std::vector<std::string>& allImgFiles4Training,
+                                                            const std::string& shapeinfoFileName, 
+                                                            unsigned int database,
+                                                            unsigned int channels = 1,
+                                                            unsigned int levels = 3,
+                                                            int trm = VO_Features::DIRECT, 
+                                                            float TPShape = 0.95f,
+                                                            bool useKnownTriangles = false,
+                                                            unsigned int ltcMtd = VO_DiscreteWavelet::HAAR, 
                                                             cv::Size imgSize = cv::Size(16, 16) );
 
-	/** wavelet localization */
+    /** wavelet localization */
     static cv::Rect                 VO_CalcImagePatchRect(const cv::Mat& iImg, const cv::Point2f& pt, cv::Size imgSize);
 
-	/** Load Training data for LTC model */
-	void							VO_LoadFeatureTrainingData(unsigned int mtd);
+    /** Load Training data for LTC model */
+    void                            VO_LoadFeatureTrainingData(unsigned int mtd);
 
-	/** load LTC around 1 single point for 1 single channel */
-    cv::Mat_<float>					VO_LoadLTC4OneAnnotatedPoint(const cv::Mat& iImg,
+    /** load LTC around 1 single point for 1 single channel */
+    cv::Mat_<float>                 VO_LoadLTC4OneAnnotatedPoint(const cv::Mat& iImg,
                                                                     const VO_Shape& theShape,
-																	unsigned int ptIdx,
+                                                                    unsigned int ptIdx,
                                                                     cv::Size imgSize,
-																	unsigned int mtd);
+                                                                    unsigned int mtd);
 
     /** Save ASM LTCs, to a specified folder */
-    void                         	VO_Save(const std::string& fd);
+    void                            VO_Save(const std::string& fd);
 
     /** Load all parameters */
-    void                         	VO_Load(const std::string& fd);
+    void                            VO_Load(const std::string& fd);
 
     /** Load parameters for fitting */
-    void                         	VO_LoadParameters4Fitting(const std::string& fd);
+    void                            VO_LoadParameters4Fitting(const std::string& fd);
 };
 
 #endif  // __VO_AFM_H__

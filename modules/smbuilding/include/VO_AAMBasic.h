@@ -60,8 +60,8 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_APPEARANCEMODEL_H__
-#define __VO_APPEARANCEMODEL_H__
+#ifndef __VO_AAMBASIC_H__
+#define __VO_AAMBASIC_H__
 
 
 #include "VO_AXM.h"
@@ -69,9 +69,9 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Concatenated appearance Model -- a direct combination of shape model and texture model.
- * @ref			http://www2.imm.dtu.dk/~aam/main/
+ * @author      JIA Pei
+ * @brief       Concatenated appearance Model -- a direct combination of shape model and texture model.
+ * @ref         http://www2.imm.dtu.dk/~aam/main/
  */
 class VO_AAMBasic : public VO_AXM
 {
@@ -83,29 +83,29 @@ friend class VO_FittingASMLTCs;
 friend class VO_FittingASMNDProfiles;
 friend class VO_FittingAFM;
 protected:
-	/** PCA transform for appearance, including eigenstd::vectors, eigenvalues, and mean */
-    cv::PCA							m_PCAAppearance;
+    /** PCA transform for appearance, including eigenstd::vectors, eigenvalues, and mean */
+    cv::PCA                         m_PCAAppearance;
 
     /** Shape weights, for scaling to texture scale. 15*15 */
     cv::Mat_<float>                 m_MatWeightsScaleShape2Texture;
 
-	/** Original appearance project to truncated space. For IMM, 60*12 */
+    /** Original appearance project to truncated space. For IMM, 60*12 */
     cv::Mat_<float>                 m_MatAppearanceProject2Truncated;
 
     /** The shape part of the appearance model eigenstd::vectors, 12*15, refer to equation (5.7)
-	 * Cootes "Statistical Model of Appearance for Computer Vision" */
+     * Cootes "Statistical Model of Appearance for Computer Vision" */
     cv::Mat_<float>                 m_MatPcs;
 
     /** The texture part of the appearance model eigenstd::vectors, 12*36, refer to equation (5.7)
-	 * Cootes "Statistical Model of Appearance for Computer Vision" */
+     * Cootes "Statistical Model of Appearance for Computer Vision" */
     cv::Mat_<float>                 m_MatPcg;
 
     /** For shape, 116*12, refer to equation (5.9)
-	 * Cootes "Statistical Model of Appearance for Computer Vision" */
+     * Cootes "Statistical Model of Appearance for Computer Vision" */
     cv::Mat_<float>                 m_MatQs;
 
     /** For texture, 80259*12, refer to equation (5.9)
-	 * Cootes "Statistical Model of Appearance for Computer Vision" */
+     * Cootes "Statistical Model of Appearance for Computer Vision" */
     cv::Mat_<float>                 m_MatQg;
 
     /** In face, m_MatRc and m_MatRt are just the Hessian Matrics!!! */
@@ -117,10 +117,10 @@ protected:
     cv::Mat_<float>                 m_MatRt;
 
     /** Totally, n=m(4(k+4))=60*(4*(12+4))=3840 displacements. 4*12 */
-    std::vector< cv::Mat_<float> > 	m_vvCDisps;
+    std::vector< cv::Mat_<float> >  m_vvCDisps;
 
     /** Totally, n=m(4(k+4))=60*(4*(12+4))=3840 displacements. 4*4, refer to AAM-API page 3 of 10 */
-    std::vector< cv::Mat_<float> > 	m_vvPoseDisps;
+    std::vector< cv::Mat_<float> >  m_vvPoseDisps;
 
     /** Stegmann: Gradient Matrix 80259*12 */
     cv::Mat_<float>                 m_MatCParamGradientMatrix;
@@ -131,8 +131,8 @@ protected:
     /** Number of Appearance m_iNbOfAppearance = m_iNbOfShapeEigens + m_iNbOfTextureEigens. For IMM: 15+36=51 */
     unsigned int                    m_iNbOfAppearance;
 
-	/** Most possible appearance model eigens before PCA. For IMM: min (51, 60) = 51 */
-    unsigned int                	m_iNbOfEigenAppearanceAtMost;
+    /** Most possible appearance model eigens before PCA. For IMM: min (51, 60) = 51 */
+    unsigned int                    m_iNbOfEigenAppearanceAtMost;
 
     /** Number of appearance model eigens. For IMM: 12 */
     unsigned int                    m_iNbOfAppearanceEigens;
@@ -150,9 +150,9 @@ public:
     /** Destructor */
     virtual ~VO_AAMBasic();
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////Regression//////////////////////////////////////////////
-	/** Unfinished yet.... */
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////Regression//////////////////////////////////////////////
+    /** Unfinished yet.... */
     /** Off-line build prediction matrix for fitting. */
     /** Please refer to http://www2.imm.dtu.dk/~aam/main/node16.html; revised from AAM-API */
     void                            VO_CalcRegressionMatrices();
@@ -165,10 +165,10 @@ public:
 
     /** Carry out multi variate linear regression experiments */
     void                            VO_DoRegression();
-	////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////////////////
-	//////Gradient -- This is what's happening in Stegmann's code///////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //////Gradient -- This is what's happening in Stegmann's code///////////////////////////////
     /** Build gradient matrices */
     void                            VO_CalcGradientMatrices();
 
@@ -177,23 +177,23 @@ public:
 
     /** Build gradient matrices in terms of pose */
     void                            VO_EstPoseGradientMatrix(cv::Mat_<float>& oPoseGM);
-	////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/** Appearance parameters constraints */
-    void							VO_AppearanceParameterConstraint(cv::Mat_<float>& ioC, float nSigma = 4.0f);
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    
+    /** Appearance parameters constraints */
+    void                            VO_AppearanceParameterConstraint(cv::Mat_<float>& ioC, float nSigma = 4.0f);
 
-	/** Shape and texture project to shape parameters and texture parameters, and then concatenated */
-    void							VO_ShapeTexture2Appearance( VO_Shape iShape, VO_Texture iTexture, cv::Mat_<float>& app ) const;
-	
-	/** Appearance projected to appearance parameters */
-    void   	                		VO_AppearanceProjectToCParam(const cv::Mat_<float>& app, cv::Mat_<float>& outC) const;
+    /** Shape and texture project to shape parameters and texture parameters, and then concatenated */
+    void                            VO_ShapeTexture2Appearance( VO_Shape iShape, VO_Texture iTexture, cv::Mat_<float>& app ) const;
+    
+    /** Appearance projected to appearance parameters */
+    void                            VO_AppearanceProjectToCParam(const cv::Mat_<float>& app, cv::Mat_<float>& outC) const;
 
     /** Shape parameters and texture parameters projected to concatenated parameters */
     void                            VO_SParamTParamProjectToCParam(const cv::Mat_<float>& inS, const cv::Mat_<float>& inT, cv::Mat_<float>& outC) const;
 
-	/** Appearance parameters back projected to appearance */
-    void   	                		VO_CParamBackProjectToAppearance(const cv::Mat_<float>& inC, cv::Mat_<float>& app) const;
-	
+    /** Appearance parameters back projected to appearance */
+    void                            VO_CParamBackProjectToAppearance(const cv::Mat_<float>& inC, cv::Mat_<float>& app) const;
+    
     /** Concatenated parameters back projected to shape parameters and texture parameters */
     void                            VO_CParamBackProjectToSParamTParam(const cv::Mat_<float>& inC, cv::Mat_<float>& outS, cv::Mat_<float>& outT) const;
 
@@ -203,7 +203,7 @@ public:
     /** Concatenated parameters back projected to normalized texture */
     void                            VO_CParamBackProjectToNormalizedTexture(const cv::Mat_<float>& inC, VO_Texture& oTexture, int tr = 3) const;
 
-	/** Build displacement sets */
+    /** Build displacement sets */
     void                            VO_CreateDisplacementSets();
 
     /** Build displacement sets for C parameters */
@@ -212,18 +212,18 @@ public:
     /** Build displacement sets for Pose parameters */
     static std::vector< cv::Mat_<float> >   VO_CalcPoseDisplacementVectors( const std::vector<float> &vScaleDisp, const std::vector<float>& vRotDisp, const std::vector<float>& vXDisp, const std::vector<float>& vYDisp);
 
-	/** Build Appearance model */
+    /** Build Appearance model */
     void                            VO_BuildAppearanceModel(const std::vector<std::string>& allLandmarkFiles4Training,
-															const std::vector<std::string>& allImgFiles4Training,
-															const std::string& shapeinfoFileName,
-															unsigned int database,
-															unsigned int channels = 3,
-															unsigned int levels = 1,
-															int trm = VO_Features::DIRECT,
-															float TPShape = 0.95f,
-															float TPTexture = 0.95f,
-															float TPConcatenated = 0.95f,
-															bool useKnownTriangles = false);
+                                                            const std::vector<std::string>& allImgFiles4Training,
+                                                            const std::string& shapeinfoFileName,
+                                                            unsigned int database,
+                                                            unsigned int channels = 3,
+                                                            unsigned int levels = 1,
+                                                            int trm = VO_Features::DIRECT,
+                                                            float TPShape = 0.95f,
+                                                            float TPTexture = 0.95f,
+                                                            float TPConcatenated = 0.95f,
+                                                            bool useKnownTriangles = false);
 
     /** Save Appearance Model, to a specified folder */
     void                            VO_Save(const std::string& fd);
@@ -239,7 +239,7 @@ public:
     cv::Mat_<float>                 GetAppearanceEigenValues() const {return this->m_PCAAppearance.eigenvalues;}
     cv::Mat_<float>                 GetAppearanceEigenVectors() const {return this->m_PCAAppearance.eigenvectors;}
     cv::Mat_<float>                 GetWeightsScaleShape2Texture() const {return this->m_MatWeightsScaleShape2Texture;}
-    cv::Mat_<float>					GetAppearanceProject2Truncated() const {return this->m_MatAppearanceProject2Truncated;}
+    cv::Mat_<float>                 GetAppearanceProject2Truncated() const {return this->m_MatAppearanceProject2Truncated;}
     cv::Mat_<float>                 GetPcs() const {return this->m_MatPcs;}
     cv::Mat_<float>                 GetPcg() const {return this->m_MatPcg;}
     cv::Mat_<float>                 GetQs() const {return this->m_MatQs;}
@@ -251,7 +251,7 @@ public:
     cv::Mat_<float>                 GetCParamGradientMatrix() const {return this->m_MatCParamGradientMatrix;}
     cv::Mat_<float>                 GetPoseGradientMatrix() const {return this->m_MatPoseGradientMatrix;}
     unsigned int                    GetNbOfAppearance() const {return this->m_iNbOfAppearance;}
-	unsigned int                    GetNbOfEigenAppearanceAtMost() const {return this->m_iNbOfEigenAppearanceAtMost;}
+    unsigned int                    GetNbOfEigenAppearanceAtMost() const {return this->m_iNbOfEigenAppearanceAtMost;}
     unsigned int                    GetNbOfAppearanceEigens() const {return this->m_iNbOfAppearanceEigens;}
     float                           GetTruncatedPercent_Concatenated() const {return this->m_fTruncatedPercent_Appearance;}
 
@@ -275,5 +275,5 @@ public:
  };
 
 
-#endif // __VO_APPEARANCEMODEL_H__
+#endif // __VO_AAMBASIC_H__
 

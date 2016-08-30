@@ -61,8 +61,8 @@
 
 
 
-#ifndef __VO_AAMFORWARDIA__
-#define __VO_AAMFORWARDIA__
+#ifndef __VO_AAMFORWARDIA_H__
+#define __VO_AAMFORWARDIA_H__
 
 
 #include "VO_AXM.h"
@@ -70,9 +70,9 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Forward image alignment Model.
- * @note		FIXME
+ * @author      JIA Pei
+ * @brief       Forward image alignment Model.
+ * @note        FIXME
  */
 class VO_AAMForwardIA : public VO_AXM
 {
@@ -96,18 +96,18 @@ public:
     virtual ~VO_AAMForwardIA();
 
     /** Build ICIA AAM model */
-    void						VO_BuildAAMFCIA(const std::vector<std::string>& allLandmarkFiles4Training,
-												const std::vector<std::string>& allImgFiles4Training,
-												const std::string& shapeinfoFileName, 
-												unsigned int database,
-												unsigned int levels = 3,
-												unsigned int channels = 1,
-												int trm = VO_Features::DIRECT, 
-												float TPShape = 0.95f, 
-												float TPTexture = 0.95f, 
-												bool useKnownTriangles = false);
-												
-	/** Save AAMICIA, to a specified folder */
+    void                        VO_BuildAAMFCIA(const std::vector<std::string>& allLandmarkFiles4Training,
+                                                const std::vector<std::string>& allImgFiles4Training,
+                                                const std::string& shapeinfoFileName, 
+                                                unsigned int database,
+                                                unsigned int levels = 3,
+                                                unsigned int channels = 1,
+                                                int trm = VO_Features::DIRECT, 
+                                                float TPShape = 0.95f, 
+                                                float TPTexture = 0.95f, 
+                                                bool useKnownTriangles = false);
+                                                
+    /** Save AAMICIA, to a specified folder */
     void                        VO_Save(const std::string& fd);
 
     /** Load all parameters */
@@ -119,5 +119,5 @@ public:
 };
 
 
-#endif // __VO_AAMFORWARDIA__
+#endif // __VO_AAMFORWARDIA_H__
 

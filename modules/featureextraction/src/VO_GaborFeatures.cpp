@@ -78,7 +78,7 @@ void VO_GaborFeatures::WriteFeatures( cv::FileStorage &fs, const cv::Mat_<float>
 
 void VO_GaborFeatures::ReadFeatures( const cv::FileStorage& fs, cv::Mat_<float>& featureMap )
 {
-    
+
 }
 
 

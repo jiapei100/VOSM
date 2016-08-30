@@ -8,7 +8,7 @@
 *                                   License Agreement                                               *
 *                           For Vision Open Statistical Models                                      *
 *                                                                                                   *
-* Copyright (C):    2006~2014 by JIA Pei, all rights reserved.                                      *
+* Copyright (C):    2006~2016 by JIA Pei, all rights reserved.                                      *
 *                                                                                                   *
 *                   VOSM is free software under the terms of the GNU Lesser General Public License  *
 *                   (GNU LGPL) as published by the Free Software Foundation; either version 3.0 of  *
@@ -56,7 +56,7 @@
 * Contact:          jp4work@gmail.com                                                               *
 * URL:              http://www.visionopen.com                                                       *
 * Create Date:      2010-11-04                                                                      *
-* Modify Date:      2014-04-15                                                                      *
+* Modify Date:      2016-08-16                                                                      *
 ****************************************************************************************************/
 
 #include "VO_Common.h"
@@ -77,8 +77,10 @@ enum {
     SHAPEMODEL = 0,
     TEXTUREMODEL = 1,
     APPEARANCEMODEL = 2,
-    INVERSEIMAGEALIGNMENT = 3,
+    IMAGEALIGNMENT = 3,
     AFM = 4,
-    ASMLTC = 5,
-    ASMNDPROFILE = 6
+    SMLTC = 5,
+    ASMNDPROFILE = 6,
+    MM3D = 7,
+    AAM3D = 8
 };

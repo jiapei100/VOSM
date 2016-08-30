@@ -72,14 +72,14 @@
 /** constructor */
 VO_ASMNDProfiles::VO_ASMNDProfiles()
 {
-	this->init();
+    this->init();
 }
 
 
 void VO_ASMNDProfiles::init()
 {
-	this->m_iMethod					= VO_AXM::ASM_PROFILEND;
-	this->m_iNbOfProfilesPerPixelAtLevels.clear();
+    this->m_iMethod = VO_AXM::ASM_PROFILEND;
+    this->m_iNbOfProfilesPerPixelAtLevels.clear();
     this->m_vvvNormalizedProfiles.clear();
     this->m_vvMeanNormalizedProfile.clear();
     this->m_vvvCVMInverseOfSg.clear();
@@ -89,7 +89,7 @@ void VO_ASMNDProfiles::init()
 /** desctructor */
 VO_ASMNDProfiles::~VO_ASMNDProfiles()
 {
-	this->m_iNbOfProfilesPerPixelAtLevels.clear();
+    this->m_iNbOfProfilesPerPixelAtLevels.clear();
     this->m_vvvNormalizedProfiles.clear();
     this->m_vvMeanNormalizedProfile.clear();
     this->m_vvvCVMInverseOfSg.clear();
@@ -97,101 +97,101 @@ VO_ASMNDProfiles::~VO_ASMNDProfiles()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-05
- * @brief      	Calculate how many profiles for each level
- * @param		nbOfProfilesPerPixelAtLevels	Output - number of profiles per pixel at different levels
- * @param      	NbOfLevels						Input - profile k pixels refer to Cootes "Statistical Models of Appearance for Computer Vision" page 38
- * @param      	NbOfProfileInLevel0   			Input - an odd natural number, number of samples for a single landmark
- * @param      	ProduceMethod   				Input - method
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-05
+ * @brief       Calculate how many profiles for each level
+ * @param       nbOfProfilesPerPixelAtLevels    Output - number of profiles per pixel at different levels
+ * @param       NbOfLevels                      Input - profile k pixels refer to Cootes "Statistical Models of Appearance for Computer Vision" page 38
+ * @param       NbOfProfileInLevel0             Input - an odd natural number, number of samples for a single landmark
+ * @param       ProduceMethod                   Input - method
+ * @return      void
 */
-void VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(	std::vector<unsigned int>& nbOfProfilesPerPixelAtLevels,
-														unsigned int NbOfLevels, 
-														unsigned int NbOfProfileInLevel0, 
-														unsigned int ProduceMethod)
+void VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(   std::vector<unsigned int>& nbOfProfilesPerPixelAtLevels,
+                                                        unsigned int NbOfLevels, 
+                                                        unsigned int NbOfProfileInLevel0, 
+                                                        unsigned int ProduceMethod)
 {
-	/////////////////////////////////////////////////////////////////////////////////
-	if(NbOfProfileInLevel0%2 == 0)
-	{
+    /////////////////////////////////////////////////////////////////////////////////
+    if(NbOfProfileInLevel0%2 == 0)
+    {
         std::cerr << "Number of Profiles in level 0 must be an odd " << std::endl;
-		exit(1);
-	}
-	/////////////////////////////////////////////////////////////////////////////////
+        exit(1);
+    }
+    /////////////////////////////////////////////////////////////////////////////////
 
     nbOfProfilesPerPixelAtLevels.resize(NbOfLevels);
-	nbOfProfilesPerPixelAtLevels[0] = NbOfProfileInLevel0;
+    nbOfProfilesPerPixelAtLevels[0] = NbOfProfileInLevel0;
     switch(ProduceMethod)
     {
-		case DESCENDING:
-		{
-			if( (NbOfProfileInLevel0 - (NbOfLevels-1)*2) <= 0 )
-			{
+        case DESCENDING:
+        {
+            if( (NbOfProfileInLevel0 - (NbOfLevels-1)*2) <= 0 )
+            {
                 std::cerr << "Too many multi scale levels. DESCENDING. VO_ASMNDProfiles. " << std::endl;
-				exit(1);
-			}
-			for(unsigned int i = 1; i < NbOfLevels; i++)
-			{
-				nbOfProfilesPerPixelAtLevels[i] = nbOfProfilesPerPixelAtLevels[0] - i*2;
-			}
-		}
-		break;
-		case PYRAMID:
-		{
-			if( ( (float)(NbOfProfileInLevel0 - 1) / ( pow( 2.0f, (float)(NbOfLevels) ) ) ) < 2.0 )
-			{
+                exit(1);
+            }
+            for(unsigned int i = 1; i < NbOfLevels; i++)
+            {
+                nbOfProfilesPerPixelAtLevels[i] = nbOfProfilesPerPixelAtLevels[0] - i*2;
+            }
+        }
+        break;
+        case PYRAMID:
+        {
+            if( ( (float)(NbOfProfileInLevel0 - 1) / ( pow( 2.0f, (float)(NbOfLevels) ) ) ) < 2.0 )
+            {
                 std::cerr << "Too many multi scale levels. PYRAMID. VO_ASMNDProfiles. " << std::endl;
-				exit(1);
-			}
-			if( ( (NbOfProfileInLevel0 - 1) / (unsigned int) ( pow( 2.0f, (float)(NbOfLevels) ) ) ) % 2 != 0 )
-			{
+                exit(1);
+            }
+            if( ( (NbOfProfileInLevel0 - 1) / (unsigned int) ( pow( 2.0f, (float)(NbOfLevels) ) ) ) % 2 != 0 )
+            {
                 std::cerr << "Multi scale levels are not suitable for PYRAMID. " << std::endl;
-				exit(1);
-			}
-			for(unsigned int i = 1; i < NbOfLevels; i++)
-			{
-				unsigned int PyrScale = (unsigned int) ( pow(2.0f, (float)(i) ) );
-				nbOfProfilesPerPixelAtLevels[i] = nbOfProfilesPerPixelAtLevels[0] / PyrScale + 1;
-			}
-		}
-		break;
-		case SAME:
-		default:
-		{
-			for(unsigned int i = 1; i < NbOfLevels; i++)
-			{
-				nbOfProfilesPerPixelAtLevels[i] = nbOfProfilesPerPixelAtLevels[0];
-			}
-		}
-		break;
+                exit(1);
+            }
+            for(unsigned int i = 1; i < NbOfLevels; i++)
+            {
+                unsigned int PyrScale = (unsigned int) ( pow(2.0f, (float)(i) ) );
+                nbOfProfilesPerPixelAtLevels[i] = nbOfProfilesPerPixelAtLevels[0] / PyrScale + 1;
+            }
+        }
+        break;
+        case SAME:
+        default:
+        {
+            for(unsigned int i = 1; i < NbOfLevels; i++)
+            {
+                nbOfProfilesPerPixelAtLevels[i] = nbOfProfilesPerPixelAtLevels[0];
+            }
+        }
+        break;
     }
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-05
- * @brief      	Calculate all profiles
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-05
+ * @brief       Calculate all profiles
+ * @return      void
 */
 void VO_ASMNDProfiles::VO_LoadProfileTrainingData ()
 {
-	cv::Mat img, resizedImg;
-	VO_Shape resizedShape;
-	VO_Profile tempProfile;
-	float PyrScale, scale, sampleScale;
-	float refScale = this->m_VOReferenceShape.GetCentralizedShapeSize();
+    cv::Mat img, resizedImg;
+    VO_Shape resizedShape;
+    VO_Profile tempProfile;
+    float PyrScale, scale, sampleScale;
+    float refScale = this->m_VOReferenceShape.GetCentralizedShapeSize();
 
     for( unsigned int i = 0; i < this->m_iNbOfSamples; ++i )
     {
         img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
 
-		sampleScale = this->m_vShapes[i].GetCentralizedShapeSize();
+        sampleScale = this->m_vShapes[i].GetCentralizedShapeSize();
 
         for( unsigned int j = 0; j < this->m_iNbOfPyramidLevels; ++j)
         {
-			PyrScale = pow(2.0f, (float)j);
-			scale = refScale/sampleScale/PyrScale;
+            PyrScale = pow(2.0f, (float)j);
+            scale = refScale/sampleScale/PyrScale;
 
             resizedShape = this->m_vShapes[i]*scale;
             cv::resize(img, resizedImg, cv::Size( (int)(img.cols*scale), (int)(img.rows*scale) ) );
@@ -203,18 +203,18 @@ void VO_ASMNDProfiles::VO_LoadProfileTrainingData ()
 // static std::string fn = ssi+".jpg";
 // cv::imwrite(fn.c_str(), resizedImg);
 
-			// Explained by JIA Pei -- wavelet feature extraction
+            // Explained by JIA Pei -- wavelet feature extraction
             for( unsigned int k = 0; k < this->m_iNbOfPoints; ++k )
             {
-				VO_Profile::VO_GetNDProfiles4OneLandmark ( 	resizedImg,
-															resizedShape,
-															this->m_vShape2DInfo,
-															k,
-															tempProfile,
-															this->m_iNbOfProfileDim,
-															this->m_iNbOfProfilesPerPixelAtLevels[j] );
-				this->m_vvvNormalizedProfiles[i][j][k].SetProfile(tempProfile );
-				this->m_vvvNormalizedProfiles[i][j][k].Normalize();
+                VO_Profile::VO_GetNDProfiles4OneLandmark (  resizedImg,
+                                                            resizedShape,
+                                                            this->m_vShape2DInfo,
+                                                            k,
+                                                            tempProfile,
+                                                            this->m_iNbOfProfileDim,
+                                                            this->m_iNbOfProfilesPerPixelAtLevels[j] );
+                this->m_vvvNormalizedProfiles[i][j][k].SetProfile(tempProfile );
+                this->m_vvvNormalizedProfiles[i][j][k].Normalize();
             }
         }
     }
@@ -222,40 +222,40 @@ void VO_ASMNDProfiles::VO_LoadProfileTrainingData ()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-05
- * @brief      	Calculate statistics for all profiles; Computer all landmarks' mean prof and covariance matrix
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-05
+ * @brief       Calculate statistics for all profiles; Computer all landmarks' mean prof and covariance matrix
+ * @return      void
 */
 void VO_ASMNDProfiles::VO_CalcStatistics4AllProfiles()
 {
     // Calcuate Inverse of Sg
     for(unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
     {
-		cv::Mat_<float> allProfiles = cv::Mat_<float>::zeros( this->m_iNbOfSamples, this->m_vvvNormalizedProfiles[0][i][0].GetProfileLength() );
+        cv::Mat_<float> allProfiles = cv::Mat_<float>::zeros( this->m_iNbOfSamples, this->m_vvvNormalizedProfiles[0][i][0].GetProfileLength() );
         cv::Mat_<float> Covar = cv::Mat_<float>::zeros(this->m_vvvNormalizedProfiles[0][i][0].GetProfileLength(), 
-												this->m_vvvNormalizedProfiles[0][i][0].GetProfileLength() );
-		cv::Mat_<float> Mean = cv::Mat_<float>::zeros(1, this->m_vvvNormalizedProfiles[0][i][0].GetProfileLength() );
+                                                this->m_vvvNormalizedProfiles[0][i][0].GetProfileLength() );
+        cv::Mat_<float> Mean = cv::Mat_<float>::zeros(1, this->m_vvvNormalizedProfiles[0][i][0].GetProfileLength() );
         for(unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
             for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
             {
-				for(unsigned int l = 0; l < this->m_iNbOfSamples; l++)
-				{
-					cv::Mat_<float> tmpRow = allProfiles.row(l);
-					cv::Mat_<float> tmp = this->m_vvvNormalizedProfiles[l][i][j].GetTheProfile().col(k).t();
-					tmp.copyTo(tmpRow);
-				}
+                for(unsigned int l = 0; l < this->m_iNbOfSamples; l++)
+                {
+                    cv::Mat_<float> tmpRow = allProfiles.row(l);
+                    cv::Mat_<float> tmp = this->m_vvvNormalizedProfiles[l][i][j].GetTheProfile().col(k).t();
+                    tmp.copyTo(tmpRow);
+                }
 
-				// OK! Now We Calculate the Covariance cv::Matrix of prof for Landmark icv::Point
+                // OK! Now We Calculate the Covariance cv::Matrix of prof for Landmark icv::Point
                 cv::calcCovarMatrix( allProfiles, Covar, Mean, CV_COVAR_NORMAL+CV_COVAR_ROWS+CV_COVAR_SCALE, CV_32F);
-//				cv::calcCovarMatrix( allProfiles, Covar, Mean, CV_COVAR_SCRAMBLED+CV_COVAR_ROWS, CV_32F);
-				this->m_vvMeanNormalizedProfile[i][j].Set1DimProfile(Mean.t(), k);
+//                cv::calcCovarMatrix( allProfiles, Covar, Mean, CV_COVAR_SCRAMBLED+CV_COVAR_ROWS, CV_32F);
+                this->m_vvMeanNormalizedProfile[i][j].Set1DimProfile(Mean.t(), k);
 
-				// Explained by YAO Wei, 2008-1-29.
-				// Actually Covariance cv::Matrix is semi-positive definite. But I am not sure
-				// whether it is invertible or not!!!
-				// In my opinion it is un-invert, since C = X.t() * X!!!
+                // Explained by YAO Wei, 2008-1-29.
+                // Actually Covariance cv::Matrix is semi-positive definite. But I am not sure
+                // whether it is invertible or not!!!
+                // In my opinion it is un-invert, since C = X.t() * X!!!
                 cv::invert(Covar, this->m_vvvCVMInverseOfSg[i][j][k], cv::DECOMP_SVD);
             }
         }
@@ -264,59 +264,59 @@ void VO_ASMNDProfiles::VO_CalcStatistics4AllProfiles()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-22
- * @brief		Build ND Profile ASM
- * @param      	allLandmarkFiles4Training		Input - all training landmark files
- * @param		allImgFiles4Training			Input - all training image files
- * @param      	shapeinfoFileName				Input - shape info file
- * @param		database						Input - which database is it?
- * @param		channels						Input - How many channels are to be used?
- * @param		levels							Input - multiscale levels
- * @param		profdim							Input - ND profile, how many dimensions?
- * @param		kk								Input - kk, refer to Cootes' paper "Statistical Model for Computer Vision"
- * @param		trm								Input - texture representation method
- * @param      	TPShape     					Input - truncated percentage for shape model
- * @param      	useKnownTriangles  				Input - use known triangle structures??
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-22
+ * @brief       Build ND Profile ASM
+ * @param       allLandmarkFiles4Training       Input - all training landmark files
+ * @param       allImgFiles4Training            Input - all training image files
+ * @param       shapeinfoFileName               Input - shape info file
+ * @param       database                        Input - which database is it?
+ * @param       channels                        Input - How many channels are to be used?
+ * @param       levels                          Input - multiscale levels
+ * @param       profdim                         Input - ND profile, how many dimensions?
+ * @param       kk                              Input - kk, refer to Cootes' paper "Statistical Model for Computer Vision"
+ * @param       trm                             Input - texture representation method
+ * @param       TPShape                         Input - truncated percentage for shape model
+ * @param       useKnownTriangles               Input - use known triangle structures??
+ * @return      void
   */
 void VO_ASMNDProfiles::VO_BuildASMNDProfiles ( const std::vector<std::string>& allLandmarkFiles4Training,
                                                 const std::vector<std::string>& allImgFiles4Training,
-												const std::string& shapeinfoFileName,
-												unsigned int database,
-												unsigned int channels,
-												unsigned int levels,
-												unsigned int profdim,
-												unsigned int kk,
-												int trm,
-												float TPShape,
-												bool useKnownTriangles )
+                                                const std::string& shapeinfoFileName,
+                                                unsigned int database,
+                                                unsigned int channels,
+                                                unsigned int levels,
+                                                unsigned int profdim,
+                                                unsigned int kk,
+                                                int trm,
+                                                float TPShape,
+                                                bool useKnownTriangles )
 {
-	if (allLandmarkFiles4Training.size() != allImgFiles4Training.size() )
+    if (allLandmarkFiles4Training.size() != allImgFiles4Training.size() )
         std::cerr << "allLandmarkFiles4Training should have the same number of allImgFiles4Training! " << std::endl;
-		
-	if(profdim != 1 && profdim != 2 && profdim != 4 )
+        
+    if(profdim != 1 && profdim != 2 && profdim != 4 )
         std::cerr << "m_iNbOfProfileDim should only be 1, 2, or 4! " << std::endl;
-		
-	this->VO_BuildShapeModel(allLandmarkFiles4Training, shapeinfoFileName, database, TPShape, useKnownTriangles);
-	this->m_iNbOfChannels						= channels;
-	this->m_iNbOfPyramidLevels      			= levels;
-	this->m_iNbOfProfileDim						= profdim;
-	this->m_iTextureRepresentationMethod    	= trm;
-	this->m_vStringTrainingImageNames 			= allImgFiles4Training;
+        
+    this->VO_BuildShapeModel(allLandmarkFiles4Training, shapeinfoFileName, database, TPShape, useKnownTriangles);
+    this->m_iNbOfChannels                        = channels;
+    this->m_iNbOfPyramidLevels                  = levels;
+    this->m_iNbOfProfileDim                        = profdim;
+    this->m_iTextureRepresentationMethod        = trm;
+    this->m_vStringTrainingImageNames             = allImgFiles4Training;
 
-	// Initialize all member variables
-	VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(this->m_iNbOfProfilesPerPixelAtLevels, this->m_iNbOfPyramidLevels, 2*kk+1);    // m_iNbOfProfilesPerPixelAtLevels
+    // Initialize all member variables
+    VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(this->m_iNbOfProfilesPerPixelAtLevels, this->m_iNbOfPyramidLevels, 2*kk+1);    // m_iNbOfProfilesPerPixelAtLevels
 
     this->m_vvvNormalizedProfiles.resize ( this->m_iNbOfSamples );
-	for(unsigned int i = 0; i < this->m_iNbOfSamples; i++)
-	{
-		this->m_vvvNormalizedProfiles[i].resize ( this->m_iNbOfPyramidLevels );
-		for(unsigned int j = 0; j< this->m_iNbOfPyramidLevels; j++)
-		{
+    for(unsigned int i = 0; i < this->m_iNbOfSamples; i++)
+    {
+        this->m_vvvNormalizedProfiles[i].resize ( this->m_iNbOfPyramidLevels );
+        for(unsigned int j = 0; j< this->m_iNbOfPyramidLevels; j++)
+        {
             this->m_vvvNormalizedProfiles[i][j].resize(this->m_iNbOfPoints);
-		}
-	}
+        }
+    }
 
     this->m_vvMeanNormalizedProfile.resize(this->m_iNbOfPyramidLevels);
     this->m_vvvCVMInverseOfSg.resize(this->m_iNbOfPyramidLevels);
@@ -328,12 +328,12 @@ void VO_ASMNDProfiles::VO_BuildASMNDProfiles ( const std::vector<std::string>& a
         this->m_vvvCVMInverseOfSg[i].resize(this->m_iNbOfPoints);
         for(unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			this->m_vvvCVMInverseOfSg[i][j].resize(this->m_iNbOfProfileDim);
-			this->m_vvMeanNormalizedProfile[i][j].Resize(this->m_iNbOfProfilesPerPixelAtLevels[i], this->m_iNbOfProfileDim);
-			for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
-			{
-				this->m_vvvCVMInverseOfSg[i][j][k] = cv::Mat_<float>::zeros(this->m_iNbOfProfilesPerPixelAtLevels[i], this->m_iNbOfProfilesPerPixelAtLevels[i]);
-			}
+            this->m_vvvCVMInverseOfSg[i][j].resize(this->m_iNbOfProfileDim);
+            this->m_vvMeanNormalizedProfile[i][j].Resize(this->m_iNbOfProfilesPerPixelAtLevels[i], this->m_iNbOfProfileDim);
+            for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
+            {
+                this->m_vvvCVMInverseOfSg[i][j][k] = cv::Mat_<float>::zeros(this->m_iNbOfProfilesPerPixelAtLevels[i], this->m_iNbOfProfilesPerPixelAtLevels[i]);
+            }
         }
     }
 
@@ -365,8 +365,8 @@ void VO_ASMNDProfiles::VO_Save ( const std::string& fd )
     tempfn = fn + "/m_vvMeanNormalizedProfile" + ".txt";
     fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_vvMeanNormalizedProfile" << std::endl;
-	// fp << this->m_vvMeanNormalizedProfile;
-	// You can output everything by the above line, but you won't have level and node description in the output file.
+    // fp << this->m_vvMeanNormalizedProfile;
+    // You can output everything by the above line, but you won't have level and node description in the output file.
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
     {
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
@@ -381,17 +381,17 @@ void VO_ASMNDProfiles::VO_Save ( const std::string& fd )
     tempfn = fn + "/m_vvvCVMInverseOfSg" + ".txt";
     fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_vvvCVMInverseOfSg" << std::endl;
-	//fp << this->m_vvvCVMInverseOfSg;
-	// You can output everything by the above line, but you won't have level and node description in the output file.
+    //fp << this->m_vvvCVMInverseOfSg;
+    // You can output everything by the above line, but you won't have level and node description in the output file.
     for (unsigned int i = 0; i < this->m_iNbOfPyramidLevels; i++)
     {
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
-			{
+            for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
+            {
                 fp << "level " << i << " node " << j << " dim " << k << std::endl;
                 fp << this->m_vvvCVMInverseOfSg[i][j][k] << std::endl;
-			}
+            }
         }
     }
     fp.close();fp.clear();
@@ -416,9 +416,9 @@ void VO_ASMNDProfiles::VO_Load ( const std::string& fd )
     // ASMNDProfiles
     tempfn = fn + "/ASMNDProfiles" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp >> this->m_iNbOfProfileDim;						// m_iNbOfProfileDim
-	this->m_iNbOfProfilesPerPixelAtLevels.resize(this->m_iNbOfPyramidLevels);
-    fp >> temp >> this->m_iNbOfProfilesPerPixelAtLevels[0];		// m_iNbOfProfilesPerPixelAtLevels[0]
+    fp >> temp >> this->m_iNbOfProfileDim;                        // m_iNbOfProfileDim
+    this->m_iNbOfProfilesPerPixelAtLevels.resize(this->m_iNbOfPyramidLevels);
+    fp >> temp >> this->m_iNbOfProfilesPerPixelAtLevels[0];        // m_iNbOfProfilesPerPixelAtLevels[0]
     VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(this->m_iNbOfProfilesPerPixelAtLevels, this->m_iNbOfPyramidLevels, this->m_iNbOfProfilesPerPixelAtLevels[0]);
     fp.close();fp.clear();
 
@@ -432,7 +432,7 @@ void VO_ASMNDProfiles::VO_Load ( const std::string& fd )
         this->m_vvMeanNormalizedProfile[i].resize(this->m_iNbOfPoints);
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			fp >> this->m_vvMeanNormalizedProfile[i][j];
+            fp >> this->m_vvMeanNormalizedProfile[i][j];
         }
     }
     fp.close();fp.clear();
@@ -447,11 +447,11 @@ void VO_ASMNDProfiles::VO_Load ( const std::string& fd )
         this->m_vvvCVMInverseOfSg[i].resize(this->m_iNbOfPoints);
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			this->m_vvvCVMInverseOfSg[i][j].resize(this->m_iNbOfProfileDim);
- 			for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
-			{
-				fp >> this->m_vvvCVMInverseOfSg[i][j][k];
-			}
+            this->m_vvvCVMInverseOfSg[i][j].resize(this->m_iNbOfProfileDim);
+             for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
+            {
+                fp >> this->m_vvvCVMInverseOfSg[i][j][k];
+            }
         }
     }
     fp.close();fp.clear();
@@ -476,9 +476,9 @@ void VO_ASMNDProfiles::VO_LoadParameters4Fitting ( const std::string& fd )
     // ASMNDProfiles
     tempfn = fn + "/ASMNDProfiles" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp >> this->m_iNbOfProfileDim;						// m_iNbOfProfileDim
-	this->m_iNbOfProfilesPerPixelAtLevels.resize(this->m_iNbOfPyramidLevels);
-    fp >> temp >> this->m_iNbOfProfilesPerPixelAtLevels[0];		// m_iNbOfProfilesPerPixelAtLevels[0]
+    fp >> temp >> this->m_iNbOfProfileDim;                        // m_iNbOfProfileDim
+    this->m_iNbOfProfilesPerPixelAtLevels.resize(this->m_iNbOfPyramidLevels);
+    fp >> temp >> this->m_iNbOfProfilesPerPixelAtLevels[0];        // m_iNbOfProfilesPerPixelAtLevels[0]
     VO_ASMNDProfiles::VO_ProduceLevelProfileNumbers(this->m_iNbOfProfilesPerPixelAtLevels, this->m_iNbOfPyramidLevels, this->m_iNbOfProfilesPerPixelAtLevels[0]);
     fp.close();fp.clear();
 
@@ -492,19 +492,19 @@ void VO_ASMNDProfiles::VO_LoadParameters4Fitting ( const std::string& fd )
         this->m_vvMeanNormalizedProfile[i].resize(this->m_iNbOfPoints);
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			fp >> temp;
-			while ( !fp.eof() && temp!="level")
-			{
-				fp >> temp;
-			}
-			getline(fp, temp);
-			this->m_vvMeanNormalizedProfile[i][j].Resize(this->m_iNbOfProfilesPerPixelAtLevels[i], this->m_iNbOfProfileDim);
-			fp >> this->m_vvMeanNormalizedProfile[i][j];
+            fp >> temp;
+            while ( !fp.eof() && temp!="level")
+            {
+                fp >> temp;
+            }
+            getline(fp, temp);
+            this->m_vvMeanNormalizedProfile[i][j].Resize(this->m_iNbOfProfilesPerPixelAtLevels[i], this->m_iNbOfProfileDim);
+            fp >> this->m_vvMeanNormalizedProfile[i][j];
         }
     }
 
     fp.close();fp.clear();
-	
+    
 
     // m_vvvCVMInverseOfSg
     tempfn = fn + "/m_vvvCVMInverseOfSg" + ".txt";
@@ -516,20 +516,20 @@ void VO_ASMNDProfiles::VO_LoadParameters4Fitting ( const std::string& fd )
         this->m_vvvCVMInverseOfSg[i].resize(this->m_iNbOfPoints);
         for (unsigned int j = 0; j < this->m_iNbOfPoints; j++)
         {
-			this->m_vvvCVMInverseOfSg[i][j].resize(this->m_iNbOfProfileDim);
- 			for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
-			{
-				fp >> temp;
-				while ( !fp.eof() && temp!= "level")
-				{
-					fp >> temp;
-				}
-				getline(fp, temp);
-				this->m_vvvCVMInverseOfSg[i][j][k] = 
-					cv::Mat_<float>::zeros(	this->m_iNbOfProfilesPerPixelAtLevels[i],
-										this->m_iNbOfProfilesPerPixelAtLevels[i]);
-				fp >> this->m_vvvCVMInverseOfSg[i][j][k];
-			}
+            this->m_vvvCVMInverseOfSg[i][j].resize(this->m_iNbOfProfileDim);
+             for(unsigned int k = 0; k < this->m_iNbOfProfileDim; k++)
+            {
+                fp >> temp;
+                while ( !fp.eof() && temp!= "level")
+                {
+                    fp >> temp;
+                }
+                getline(fp, temp);
+                this->m_vvvCVMInverseOfSg[i][j][k] = 
+                    cv::Mat_<float>::zeros(    this->m_iNbOfProfilesPerPixelAtLevels[i],
+                                        this->m_iNbOfProfilesPerPixelAtLevels[i]);
+                fp >> this->m_vvvCVMInverseOfSg[i][j][k];
+            }
         }
     }
     fp.close();fp.clear();

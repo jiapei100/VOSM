@@ -70,9 +70,9 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Local texture constrained ASM.
- * @note		Current VO_ASMLTCs only deal with 1 channel gray image
+ * @author      JIA Pei
+ * @brief       Local texture constrained ASM.
+ * @note        Current VO_ASMLTCs only deal with 1 channel gray image
  */
 class VO_ASMLTCs : public VO_AXM
 {
@@ -85,31 +85,31 @@ friend class VO_FittingASMNDProfiles;
 friend class VO_FittingAFM;
 protected:
     /** Local texture constrained ASM, local features */
-	VO_Features*					m_pVOfeatures;
+    VO_Features*                    m_pVOfeatures;
 
-	/** Local texture constrained methods */
-	unsigned int					m_iLTCMethod;
+    /** Local texture constrained methods */
+    unsigned int                    m_iLTCMethod;
 
     /** length of LTC std::vector in format of rr...rrgg...ggbb...bb . */
-    unsigned int                	m_iNbOfLTC4PerPoint;
+    unsigned int                    m_iNbOfLTC4PerPoint;
 
     /** All loaded LTCs in a std::vector format. m_iNbOfSamples*m_iNbOfPyramidLevels*(m_iNbOfcv::Points*m_iNbOfLTC4PerPoint) */
-    std::vector< std::vector< cv::Mat_<float> > >	m_vvLTCs;
+    std::vector< std::vector< cv::Mat_<float> > >    m_vvLTCs;
 
     /** All normalized LTCs in a std::vector format. m_iNbOfSamples*m_iNbOfPyramidLevels*(m_iNbOfcv::Points*m_iNbOfLTC4PerPoint) */
-    std::vector< std::vector< cv::Mat_<float> > >	m_vvNormalizedLTCs;
-	
+    std::vector< std::vector< cv::Mat_<float> > >    m_vvNormalizedLTCs;
+    
     /** mean LTC for all concerned points. m_iNbOfPyramidLevels*m_iNbOfcv::Points*(1*m_iNbOfLTC4PerPoint) */
-    std::vector< std::vector< cv::Mat_<float> > >	m_vvLTCMeans;
-	
+    std::vector< std::vector< cv::Mat_<float> > >    m_vvLTCMeans;
+    
     /** LTC covariance for all concerned points. m_iNbOfPyramidLevels*m_iNbOfcv::Points*(m_iNbOfLTC4PerPoint*m_iNbOfLTC4PerPoint) */
-    std::vector< std::vector< cv::Mat_<float> > >	m_vvCVMInverseOfLTCCov;
+    std::vector< std::vector< cv::Mat_<float> > >    m_vvCVMInverseOfLTCCov;
 
     /** image cv::Size for wavelet transform */
-    cv::Size 						m_localImageSize;
+    cv::Size                         m_localImageSize;
 
-	/** Initialization */
-	void 							init();
+    /** Initialization */
+    void                             init();
 
 public:
     /** Default constructor to create a VO_ASMLTCs object */
@@ -119,49 +119,49 @@ public:
     virtual ~VO_ASMLTCs();
 
     /** Build ASMLTCs model */
-    void                         	VO_BuildASMLTCs (	const std::vector<std::string>& allLandmarkFiles4Training,
-														const std::vector<std::string>& allImgFiles4Training,
-														const std::string& shapeinfoFileName,
-														unsigned int database,
-														unsigned int channels = 1,
-														unsigned int levels = 4,
-														int trm = VO_Features::DIRECT,
-														float TPShape = 0.95f,
-														bool useKnownTriangles = false,
-														unsigned int ltcMtd = VO_Features::DIRECT,
+    void                             VO_BuildASMLTCs (  const std::vector<std::string>& allLandmarkFiles4Training,
+                                                        const std::vector<std::string>& allImgFiles4Training,
+                                                        const std::string& shapeinfoFileName,
+                                                        unsigned int database,
+                                                        unsigned int channels = 1,
+                                                        unsigned int levels = 4,
+                                                        int trm = VO_Features::DIRECT,
+                                                        float TPShape = 0.95f,
+                                                        bool useKnownTriangles = false,
+                                                        unsigned int ltcMtd = VO_Features::DIRECT,
                                                         cv::Size imgSize = cv::Size(16, 16) );
 
-	/** wavelet localization */
+    /** wavelet localization */
     static cv::Rect                 VO_CalcImagePatchRect(const cv::Mat& iImg, const cv::Point2f& pt, cv::Size imgSize);
 
-	/** Load Training data for LTC model */
-	void							VO_LoadLTCTrainingData();
+    /** Load Training data for LTC model */
+    void                            VO_LoadLTCTrainingData();
 
-	/** load LTC around 1 single point for 1 single channel */
-    static void						VO_LoadLTC4OneAnnotatedPoint(const cv::Mat& iImg,
-																	const VO_Shape& theShape,
-																	unsigned int ptIdx,
+    /** load LTC around 1 single point for 1 single channel */
+    static void                     VO_LoadLTC4OneAnnotatedPoint(const cv::Mat& iImg,
+                                                                    const VO_Shape& theShape,
+                                                                    unsigned int ptIdx,
                                                                     cv::Size imgSize,
-																	VO_Features* vofeatures,
-																	int shiftX = 0,
-																	int shiftY = 0);
+                                                                    VO_Features* vofeatures,
+                                                                    int shiftX = 0,
+                                                                    int shiftY = 0);
 
-	/** calculate statistics */
+    /** calculate statistics */
     void                            VO_CalcStatistics4AllLTCs();
 
-	/** Output one wavelet transformed image, for the purpose of demonstration */
-	void							VO_HardSaveWaveletSingleChannelImage(	const std::string& fn, 
+    /** Output one wavelet transformed image, for the purpose of demonstration */
+    void                            VO_HardSaveWaveletSingleChannelImage(   const std::string& fn, 
                                                                             cv::Size imgSize,
-																			unsigned int displayMtd = STRETCH);
+                                                                            unsigned int displayMtd = STRETCH);
 
     /** Save ASM LTCs, to a specified folder */
-    void                         	VO_Save(const std::string& fd);
+    void                            VO_Save(const std::string& fd);
 
     /** Load all parameters */
-    void                         	VO_Load(const std::string& fd);
+    void                            VO_Load(const std::string& fd);
 
     /** Load parameters for fitting */
-    void                         	VO_LoadParameters4Fitting(const std::string& fd);
+    void                            VO_LoadParameters4Fitting(const std::string& fd);
 };
 
 #endif  // __VO_ASMLTCS_H__

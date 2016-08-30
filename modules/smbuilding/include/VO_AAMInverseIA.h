@@ -60,8 +60,8 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_AAMINVERSEIA__
-#define __VO_AAMINVERSEIA__
+#ifndef __VO_AAMINVERSEIA_H__
+#define __VO_AAMINVERSEIA_H__
 
 
 #include "VO_AXM.h"
@@ -69,8 +69,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Inverse image alignment Model.
+ * @author      JIA Pei
+ * @brief       Inverse image alignment Model.
  */
 class VO_AAMInverseIA : public VO_AXM
 {
@@ -82,27 +82,27 @@ friend class VO_FittingASMLTCs;
 friend class VO_FittingASMNDProfiles;
 friend class VO_FittingAFM;
 private:
-    cv::Mat                   	m_IplImageTempFaceX;
-    cv::Mat                   	m_IplImageTempFaceY;
-    cv::Mat                   	m_IplImageTempFace;
+    cv::Mat                     m_IplImageTempFaceX;
+    cv::Mat                     m_IplImageTempFaceY;
+    cv::Mat                     m_IplImageTempFace;
 protected:
     /** "Revisited" P26-27, 4*116 */
     cv::Mat_<float>             m_MatSimilarityTransform;
 
     /** Steepest Descent Images for each point, 90396*20 */
-    cv::Mat_<float>				m_MatSteepestDescentImages4ShapeModel;
+    cv::Mat_<float>             m_MatSteepestDescentImages4ShapeModel;
 
     /** Steepest Descent Images for global shape normalization, 90396*4 */
-    cv::Mat_<float>				m_MatSteepestDescentImages4GlobalShapeNormalization;
+    cv::Mat_<float>             m_MatSteepestDescentImages4GlobalShapeNormalization;
 
     /** Combined Steepest Descent Images, 90396*24 */
-    cv::Mat_<float>				m_MatSteepestDescentImages;
+    cv::Mat_<float>             m_MatSteepestDescentImages;
 
     /** Combined Modified Steepest Descent Images, 90396*24 */
-    cv::Mat_<float>				m_MatModifiedSteepestDescentImages;
+    cv::Mat_<float>             m_MatModifiedSteepestDescentImages;
 
     /** Hessian Matrix, actually, Hessian matrix is summed up from all the pixels in the image, 20*20, or 24*24 */
-    cv::Mat_<float>				m_MatHessianMatrixInverse;
+    cv::Mat_<float>             m_MatHessianMatrixInverse;
 
     /** Pre computed matrix 24*90396 */
     cv::Mat_<float>             m_MatICIAPreMatrix;
@@ -120,31 +120,31 @@ public:
     /** Pre-computation for Inverse Compositional Image Alignment AAM Fitting */
 
     /** Calculate gradients in both X and Y directions for template face */
-    void						VO_CalcTemplateFaceGradients();
+    void                        VO_CalcTemplateFaceGradients();
 
     /** Calculate steepest descent image for template face */
-    void						VO_CalcSDI();
+    void                        VO_CalcSDI();
 
     /** Calculate modified steepest descent image for template face */
-    void						VO_CalcModifiedSDI();
+    void                        VO_CalcModifiedSDI();
 
     /** Calculate inverse Hessian matrix for template face */
-    void						VO_CalcInverseHessian();
+    void                        VO_CalcInverseHessian();
 
     /** Calculate Hessian matrix * MSDI^T */
-    void						VO_CalcICIAPreMatrix();
+    void                        VO_CalcICIAPreMatrix();
 
     /** Build ICIA AAM model */
-    void						VO_BuildAAMICIA(const std::vector<std::string>& allLandmarkFiles4Training,
-												const std::vector<std::string>& allImgFiles4Training,
-												const std::string& shapeinfoFileName, 
-												unsigned int database,
-												unsigned int channels = 3,
-												unsigned int levels = 1,
-												int trm = VO_Features::DIRECT, 
-												float TPShape = 0.95f, 
-												float TPTexture = 0.95f, 
-												bool useKnownTriangles = false);
+    void                        VO_BuildAAMICIA(const std::vector<std::string>& allLandmarkFiles4Training,
+                                                const std::vector<std::string>& allImgFiles4Training,
+                                                const std::string& shapeinfoFileName, 
+                                                unsigned int database,
+                                                unsigned int channels = 3,
+                                                unsigned int levels = 1,
+                                                int trm = VO_Features::DIRECT, 
+                                                float TPShape = 0.95f, 
+                                                float TPTexture = 0.95f, 
+                                                bool useKnownTriangles = false);
 
     /** Save AAMICIA, to a specified folder */
     void                        VO_Save(const std::string& fd);
@@ -156,5 +156,5 @@ public:
     void                        VO_LoadParameters4Fitting(const std::string& fd);
 };
 
-#endif // __VO_AAMINVERSEIA__
+#endif // __VO_AAMINVERSEIA_H__
 

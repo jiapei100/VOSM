@@ -62,33 +62,33 @@
 #include "VO_Algs_Tracking.h"
 
 
-//int CTrackingAlgs::histSize[] = {hbins, sbins};				// histSize
-int CTrackingAlgs::histSize[] = {hbins};						// histSize
-float CTrackingAlgs::hranges[] = { 0, 180 };					// hue varies from 0 to 179, see cvtColor
-float CTrackingAlgs::sranges[] = { 0, 256 };					// saturation varies from 0 (black-gray-white) to 255 (pure spectrum color)
-//const float* CTrackingAlgs::ranges[] = { hranges, sranges };	// ranges
-const float* CTrackingAlgs::ranges[] = { hranges };				// ranges
+//int CTrackingAlgs::histSize[] = {hbins, sbins};               // histSize
+int CTrackingAlgs::histSize[] = {hbins};                        // histSize
+float CTrackingAlgs::hranges[] = { 0, 180 };                    // hue varies from 0 to 179, see cvtColor
+float CTrackingAlgs::sranges[] = { 0, 256 };                    // saturation varies from 0 (black-gray-white) to 255 (pure spectrum color)
+//const float* CTrackingAlgs::ranges[] = { hranges, sranges };  // ranges
+const float* CTrackingAlgs::ranges[] = { hranges };             // ranges
 int CTrackingAlgs::channels[] = {0};
 
 /** 
- * @author     	JIA Pei
- * @version    	2010-02-01
+ * @author      JIA Pei
+ * @version     2010-02-01
  * @brief       Initialization
- * @param		mtd			Input - detection method, here, for additive model, boosting or bagging
- * @return		void
+ * @param       mtd     Input - detection method, here, for additive model, boosting or bagging
+ * @return      void
 */
 void CTrackingAlgs::init(unsigned int trackingmtd, unsigned int trackermtd)
 {
-	this->SetConfiguration(trackingmtd, trackermtd);
-	this->m_bTrackerInitialized = false;
-	this->m_bObjectTracked		= false;
+    this->SetConfiguration(trackingmtd, trackermtd);
+    this->m_bTrackerInitialized = false;
+    this->m_bObjectTracked        = false;
 }
 
 
 /** CTrackingAlgs constructor */
 CTrackingAlgs::CTrackingAlgs(unsigned int trackingmtd, unsigned int trackermtd)
 {
-	this->init(trackingmtd, trackermtd);
+    this->init(trackingmtd, trackermtd);
 }
 
 
@@ -100,296 +100,296 @@ CTrackingAlgs::~CTrackingAlgs()
 
 
 /**
- * @brief Update the Tracker
- * @param img
- * @param obj
- * @return void
+ * @brief   Update the Tracker
+ * @param   img
+ * @param   obj
+ * @return  void
  */
 void CTrackingAlgs::UpdateTracker(const cv::Mat& img, const cv::Rect& obj)
 {
-	switch(this->m_iTrackingMethod)
-	{
-	case CAMSHIFT:
-		{
-			this->m_bTrackerInitialized = CTrackingAlgs::CamshiftUpdateTracker(img, obj, this->m_hist);
-		}
-		break;
-	case KALMANFILTER:
-		{
-		}
-		break;
-	case PARTICLEFILTER:
-		{
-		}
-		break;
-	case ASMAAM:
-		{
-		}
-		break;
-	case NONE:
-	default:
-		{
-			this->m_bTrackerInitialized =  false;
-		}
-		break;
-	}
+    switch(this->m_iTrackingMethod)
+    {
+    case CAMSHIFT:
+        {
+            this->m_bTrackerInitialized = CTrackingAlgs::CamshiftUpdateTracker(img, obj, this->m_hist);
+        }
+        break;
+    case KALMANFILTER:
+        {
+        }
+        break;
+    case PARTICLEFILTER:
+        {
+        }
+        break;
+    case ASMAAM:
+        {
+        }
+        break;
+    case NONE:
+    default:
+        {
+            this->m_bTrackerInitialized =  false;
+        }
+        break;
+    }
 }
 
 
 /**
- * @brief Is Camshift Tracker updated or not?
- * @param img
- * @param obj
- * @param hist
- * @return bool, whether Camshift tracker has been updated or not
+ * @brief   Is Camshift Tracker updated or not?
+ * @param   img
+ * @param   obj
+ * @param   hist
+ * @return  bool, whether Camshift tracker has been updated or not
  */
-bool CTrackingAlgs::CamshiftUpdateTracker(	const cv::Mat& img,
+bool CTrackingAlgs::CamshiftUpdateTracker(  const cv::Mat& img,
                                             const cv::Rect& obj,
                                             cv::MatND& hist)
 {
     cv::Mat hsv, hue, mask, backproject;
-	cv::cvtColor( img, hsv, CV_BGR2HSV );
-	
-	int _vmin = CTrackingAlgs::vmin, _vmax = CTrackingAlgs::vmax;
+    cv::cvtColor( img, hsv, CV_BGR2HSV );
+    
+    int _vmin = CTrackingAlgs::vmin, _vmax = CTrackingAlgs::vmax;
 
     cv::inRange( hsv, cv::Scalar(0,CTrackingAlgs::smin,MIN(_vmin,_vmax),0),
                 cv::Scalar(180,256,MAX(_vmin,_vmax),0), mask );
     std::vector<cv::Mat> vhsv(3);
-	cv::split( hsv, vhsv );
-	vhsv[0].copyTo(hue);
-	
-	double max_val = 0.f;
-    cv::Mat roi 	= hue(	cv::Range(obj.y, obj.y+obj.height),
+    cv::split( hsv, vhsv );
+    vhsv[0].copyTo(hue);
+    
+    double max_val = 0.f;
+    cv::Mat roi     = hue(  cv::Range(obj.y, obj.y+obj.height),
                             cv::Range(obj.x, obj.x+obj.width) );
-    cv::Mat roi_mask= mask(	cv::Range(obj.y, obj.y+obj.height),
+    cv::Mat roi_mask= mask( cv::Range(obj.y, obj.y+obj.height),
                             cv::Range(obj.x, obj.x+obj.width) );
-	cv::calcHist( 	&roi, 1, CTrackingAlgs::channels, roi_mask,
-					hist, 1, CTrackingAlgs::histSize, CTrackingAlgs::ranges,
-					true, // the histogram is uniform
-					false );
-	cv::minMaxLoc(hist, 0, &max_val, 0, 0);
-	hist.convertTo(hist, hist.type(), (max_val ? 255. / max_val : 0.), 0);
+    cv::calcHist(   &roi, 1, CTrackingAlgs::channels, roi_mask,
+                    hist, 1, CTrackingAlgs::histSize, CTrackingAlgs::ranges,
+                    true, // the histogram is uniform
+                    false );
+    cv::minMaxLoc(hist, 0, &max_val, 0, 0);
+    hist.convertTo(hist, hist.type(), (max_val ? 255. / max_val : 0.), 0);
 
-	return true;
+    return true;
 }
 
 
 /** 
- * @author     	JIA Pei
- * @version    	2009-10-04
- * @brief      	Object Tracking
- * @param      	img     		Input - image to be searched within
- * @param		objs			Input - object to be tracked
- * @param		smallSize		Input - smallSize
- * @param		bigSize			Input - bigSize
- * @return		detection time cost
+ * @author      JIA Pei
+ * @version     2009-10-04
+ * @brief       Object Tracking
+ * @param       img         Input - image to be searched within
+ * @param       objs        Input - object to be tracked
+ * @param       smallSize   Input - smallSize
+ * @param       bigSize     Input - bigSize
+ * @return      detection time cost
 */
 double CTrackingAlgs::Tracking(const cv::Mat& img,
                                cv::Rect& obj,
                                cv::Size smallSize,
                                cv::Size bigSize)
 {
-	double res = (double)cvGetTickCount();
+    double res = (double)cvGetTickCount();
 
-	if(this->m_bTrackerInitialized)
-	{
-		switch(this->m_iTrackingMethod)
-		{
-		case CAMSHIFT:
-			{
-				CTrackingAlgs::CamshiftTracking(img,
-												this->m_hist,
-												obj,
-												this->m_bObjectTracked,
-												smallSize,
-												bigSize);
-				this->m_CVTrackedObjectRect = obj;
-			}
-			break;
-		case KALMANFILTER:
-			{
-				CTrackingAlgs::KalmanTracking(	img,
-												obj,
-												this->m_bObjectTracked,
-												smallSize,
-												bigSize);
-				this->m_CVTrackedObjectRect = obj;
-			}
-			break;
-		case PARTICLEFILTER:
-			{
-				CTrackingAlgs::ParticleFilterTracking(	img,
-														obj,
-														this->m_bObjectTracked,
-														smallSize,
-														bigSize);
-				this->m_CVTrackedObjectRect = obj;
-			}
-			break;
-		case ASMAAM:
-			{
-				CTrackingAlgs::ASMAAMTracking(	img,
-												obj,
-												this->m_bObjectTracked,
-												smallSize,
-												bigSize);
-				this->m_CVTrackedObjectRect = obj;
-			}
-			break;
-		case NONE:
-		default:
-			{
-				this->m_bObjectTracked 		= false;
-				this->m_bTrackerInitialized	= false;
-			}
-			break;
-		}
-	}
-	else
-	{
-		this->UpdateTracker(img, obj);
-	}
+    if(this->m_bTrackerInitialized)
+    {
+        switch(this->m_iTrackingMethod)
+        {
+        case CAMSHIFT:
+            {
+                CTrackingAlgs::CamshiftTracking(img,
+                                                this->m_hist,
+                                                obj,
+                                                this->m_bObjectTracked,
+                                                smallSize,
+                                                bigSize);
+                this->m_CVTrackedObjectRect = obj;
+            }
+            break;
+        case KALMANFILTER:
+            {
+                CTrackingAlgs::KalmanTracking(  img,
+                                                obj,
+                                                this->m_bObjectTracked,
+                                                smallSize,
+                                                bigSize);
+                this->m_CVTrackedObjectRect = obj;
+            }
+            break;
+        case PARTICLEFILTER:
+            {
+                CTrackingAlgs::ParticleFilterTracking(  img,
+                                                        obj,
+                                                        this->m_bObjectTracked,
+                                                        smallSize,
+                                                        bigSize);
+                this->m_CVTrackedObjectRect = obj;
+            }
+            break;
+        case ASMAAM:
+            {
+                CTrackingAlgs::ASMAAMTracking(  img,
+                                                obj,
+                                                this->m_bObjectTracked,
+                                                smallSize,
+                                                bigSize);
+                this->m_CVTrackedObjectRect = obj;
+            }
+            break;
+        case NONE:
+        default:
+            {
+                this->m_bObjectTracked         = false;
+                this->m_bTrackerInitialized    = false;
+            }
+            break;
+        }
+    }
+    else
+    {
+        this->UpdateTracker(img, obj);
+    }
 
-	res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
-	return res;
+    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    return res;
 }
 
 
 /** 
- * @author     	JIA Pei
- * @version    	2010-02-02
- * @brief      	Camshift Tracking
- * @param      	img     		Input - image to be searched within
- * @param		objs			Input - object to be tracked
- * @param		isTracked		output - is this objs tracked?
- * @param		smallSize		Input - the smallest possible object size
- * @param		bigSize			Input - the biggest possible object size
- * @return		detection time cost
+ * @author      JIA Pei
+ * @version     2010-02-02
+ * @brief       Camshift Tracking
+ * @param       img             Input - image to be searched within
+ * @param       objs            Input - object to be tracked
+ * @param       isTracked       output - is this objs tracked?
+ * @param       smallSize       Input - the smallest possible object size
+ * @param       bigSize         Input - the biggest possible object size
+ * @return      detection time cost
 */
 double CTrackingAlgs::CamshiftTracking( const cv::Mat& img,
                                         cv::MatND& hist,
                                         cv::Rect& obj,
-										bool& isTracked,
+                                        bool& isTracked,
                                         cv::Size smallSize,
                                         cv::Size bigSize)
 {
-	double res = (double)cvGetTickCount();
+    double res = (double)cvGetTickCount();
 
-	if(obj.x <= 0)	obj.x = 0;
-	if(obj.y <= 0)	obj.y = 0;
-	if(obj.x + obj.width > img.cols) obj.width = img.cols - obj.x;
-	if(obj.y + obj.height > img.rows) obj.height = img.rows - obj.y;
+    if(obj.x <= 0)    obj.x = 0;
+    if(obj.y <= 0)    obj.y = 0;
+    if(obj.x + obj.width > img.cols) obj.width = img.cols - obj.x;
+    if(obj.y + obj.height > img.rows) obj.height = img.rows - obj.y;
 
     cv::Rect trackwindow = obj;
     cv::Mat hsv, hue, mask, backproject;
-	cv::cvtColor( img, hsv, CV_BGR2HSV );
+    cv::cvtColor( img, hsv, CV_BGR2HSV );
 
-	int _vmin = CTrackingAlgs::vmin, _vmax = CTrackingAlgs::vmax;
+    int _vmin = CTrackingAlgs::vmin, _vmax = CTrackingAlgs::vmax;
 
     cv::inRange( hsv, cv::Scalar(0,CTrackingAlgs::smin,MIN(_vmin,_vmax),0),
                 cv::Scalar(180,256,MAX(_vmin,_vmax),0), mask );
     std::vector<cv::Mat> vhsv(3);
-	cv::split( hsv, vhsv );
-	vhsv[0].copyTo(hue);
-			
-	cv::calcBackProject( &hue, 1, CTrackingAlgs::channels, hist, backproject, CTrackingAlgs::ranges);
-	cv::bitwise_and( backproject, mask, backproject );
+    cv::split( hsv, vhsv );
+    vhsv[0].copyTo(hue);
+            
+    cv::calcBackProject( &hue, 1, CTrackingAlgs::channels, hist, backproject, CTrackingAlgs::ranges);
+    cv::bitwise_and( backproject, mask, backproject );
     cv::RotatedRect trackbox = cv::CamShift( backproject, trackwindow, cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 10, 1) );
-	obj = trackwindow;
+    obj = trackwindow;
 
-//		cv::ellipse(img, trackbox, CV_RGB(255,0,0), 3, CV_AA);
+//        cv::ellipse(img, trackbox, CV_RGB(255,0,0), 3, CV_AA);
 
     cv::Point pt1 = cv::Point( (int)(obj.x), (int)(obj.y) );
     cv::Point pt2 = cv::Point( (int)(obj.x + obj.width),
                                 (int)(obj.y + obj.height) );
 
-	// Judge whether it is losing the object or not...
-	if(obj.width >= bigSize.width || obj.height >= bigSize.height
-		|| obj.width <= smallSize.width || obj.height <= smallSize.height
-		|| pt1.x < FRAMEEDGE || pt1.y < FRAMEEDGE
-		|| (pt2.x > (img.cols - FRAMEEDGE)) || (pt2.y > (img.rows - FRAMEEDGE)))
-	{
-		isTracked = false;
-		obj.x = obj.y = obj.width = obj.height = -1;
-	}
-	else
-		isTracked = true;
+    // Judge whether it is losing the object or not...
+    if(obj.width >= bigSize.width || obj.height >= bigSize.height
+        || obj.width <= smallSize.width || obj.height <= smallSize.height
+        || pt1.x < FRAMEEDGE || pt1.y < FRAMEEDGE
+        || (pt2.x > (img.cols - FRAMEEDGE)) || (pt2.y > (img.rows - FRAMEEDGE)))
+    {
+        isTracked = false;
+        obj.x = obj.y = obj.width = obj.height = -1;
+    }
+    else
+        isTracked = true;
 
-	res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
-	return res;
+    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    return res;
 }
 
 
 /**
- * @brief Tracking by Kalman filter
- * @param img
- * @param obj
- * @param isTracked
- * @param smallSize
- * @param bigSize
- * @return tracking time
+ * @brief   Tracking by Kalman filter
+ * @param   img
+ * @param   obj
+ * @param   isTracked
+ * @param   smallSize
+ * @param   bigSize
+ * @return  tracking time
  */
 double CTrackingAlgs::KalmanTracking(const cv::Mat& img,
                                     cv::Rect& obj,
-									bool& isTracked,
+                                    bool& isTracked,
                                     cv::Size smallSize,
                                     cv::Size bigSize)
 {
-	double res = (double)cvGetTickCount();
-	
-	res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
-	return res;
+    double res = (double)cvGetTickCount();
+    
+    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    return res;
 }
 
 
 /**
- * @brief Tracking by particle filter
- * @param img
- * @param obj
- * @param isTracked
- * @param smallSize
- * @param bigSize
- * @return tracking time
+ * @brief   Tracking by particle filter
+ * @param   img
+ * @param   obj
+ * @param   isTracked
+ * @param   smallSize
+ * @param   bigSize
+ * @return  tracking time
  */
 double CTrackingAlgs::ParticleFilterTracking(const cv::Mat& img,
                                             cv::Rect& obj,
-											bool& isTracked,
+                                            bool& isTracked,
                                             cv::Size smallSize,
                                             cv::Size bigSize)
 {
-	double res = (double)cvGetTickCount();
-	
-	res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
-	return res;
+    double res = (double)cvGetTickCount();
+    
+    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    return res;
 }
 
 
 /**
- * @brief Tracking by ASM/AAM
- * @param img
- * @param obj
- * @param isTracked
- * @param smallSize
- * @param bigSize
- * @return tracking time
+ * @brief   Tracking by ASM/AAM
+ * @param   img
+ * @param   obj
+ * @param   isTracked
+ * @param   smallSize
+ * @param   bigSize
+ * @return  tracking time
  */
 double CTrackingAlgs::ASMAAMTracking(const cv::Mat& img,
                                     cv::Rect& obj,
-									bool& isTracked,
+                                    bool& isTracked,
                                     cv::Size smallSize,
                                     cv::Size bigSize)
 {
-	double res = (double)cvGetTickCount();
-	
-	res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
-	return res;
+    double res = (double)cvGetTickCount();
+    
+    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    return res;
 }
 
 
 /**
- * @brief Draw tracking results
- * @param ioImg -- input, output, the image to be drawn onto
- * @param color -- the color
+ * @brief   Draw tracking results
+ * @param   ioImg -- input, output, the image to be drawn onto
+ * @param   color -- the color
  */
 void CTrackingAlgs::VO_DrawTracking(cv::Mat& ioImg, cv::Scalar color)
 {
@@ -398,12 +398,12 @@ void CTrackingAlgs::VO_DrawTracking(cv::Mat& ioImg, cv::Scalar color)
 
     if ( this->m_bObjectTracked )
     {
-		curRect = this->m_CVTrackedObjectRect;
-		lefttop.x = cvRound(curRect.x);
-		lefttop.y = cvRound(curRect.y);
-		rightbottom.x = cvRound((curRect.x+curRect.width));
-		rightbottom.y = cvRound((curRect.y+curRect.height));
-		cv::rectangle(ioImg, lefttop, rightbottom,	color, 2, 8, 0);
+        curRect = this->m_CVTrackedObjectRect;
+        lefttop.x = cvRound(curRect.x);
+        lefttop.y = cvRound(curRect.y);
+        rightbottom.x = cvRound((curRect.x+curRect.width));
+        rightbottom.y = cvRound((curRect.y+curRect.height));
+        cv::rectangle(ioImg, lefttop, rightbottom, color, 2, 8, 0);
     }
 }
 

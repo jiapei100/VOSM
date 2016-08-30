@@ -59,8 +59,8 @@
 * Modify Date:      2014-04-17                                                                      *
 ****************************************************************************************************/
 
-#ifndef	__EVALUATION_H__
-#define __EVALUATION_H__
+#ifndef __VO_ALGS_EVALUATION_H__
+#define __VO_ALGS_EVALUATION_H__
 
 #include <vector>
 #include <iostream>
@@ -69,13 +69,21 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 /** 
- * @author		JIA Pei
- * @brief		Some concerned evaluation algorithms to evaluate 
- * 				the detection performance or the fitting performance.
+ * @author      JIA Pei
+ * @brief       Some concerned evaluation algorithms to evaluate 
+ *              the detection performance or the fitting performance.
  */
 class CEvaluationAlgs
 {
 public:
+    enum {CRISTINACCEDEYES = 1};
+    
+    /** Constructor */
+    CEvaluationAlgs(unsigned int mtd=CEvaluationAlgs::CRISTINACCEDEYES);
+
+    /** Destructor */
+    virtual ~CEvaluationAlgs();
+    
     /** Is a point in a rect? */
     static bool                 IsPointInRect(const cv::Point2d& pt, const cv::Rect& rect);
 
@@ -91,22 +99,22 @@ public:
                                                     cv::Point2d& rightEyeCenter);
 
     /** Cristinacce Distance to evaluate the eye detection accuracy. */
-    static std::vector<double>	CristinacceDEyes(const std::vector<cv::Rect>& detectedFaces,
+    static std::vector<double>  CristinacceDEyes(const std::vector<cv::Rect>& detectedFaces,
                                                  const std::vector<cv::Point2d>& leftEyeCenters,
                                                  const std::vector<cv::Point2d>& rightEyeCenters );
 
     /** DEyes - Refer to Cristinacce's paper  */
-    static std::vector<int>		DEyesEval(const std::vector<double>& dEyess,
+    static std::vector<int>     DEyesEval(const std::vector<double>& dEyess,
                                           unsigned int& dEyeWrong,
                                           double mindEyes = 0.0,
                                           double maxdEyes = 0.5,
                                           unsigned int nb = 100 );
 
     /** Cristinacce Distance to evaluate the eye detection accuracy. */
-    static std::vector<double>	MSEFaceComp(const std::vector<cv::Rect>& detectedFaceComp,
+    static std::vector<double>  MSEFaceComp(const std::vector<cv::Rect>& detectedFaceComp,
                                             const std::vector<cv::Point2d>& faceCompCenters );
-	
+    
 };
 
-#endif // __EVALUATION_H__
+#endif  // __VO_ALGS_EVALUATION_H__
 

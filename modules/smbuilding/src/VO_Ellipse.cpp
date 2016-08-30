@@ -65,13 +65,13 @@
 
 std::ostream& operator<<(std::ostream& os, const VO_Ellipse& ellipse)
 {
-    os 	<< ellipse.m_fPhimin << " "
-		<< ellipse.m_fPhimax << " " 		
-		<< ellipse.m_fAxisXHalfLen << " " 
-		<< ellipse.m_fAxisYHalfLen << " "
-		<< ellipse.m_fTheta << " " 
-		<< ellipse.m_Center.x << " "
-		<< ellipse.m_Center.y;
+    os  << ellipse.m_fPhimin << " "
+        << ellipse.m_fPhimax << " "
+        << ellipse.m_fAxisXHalfLen << " " 
+        << ellipse.m_fAxisYHalfLen << " "
+        << ellipse.m_fTheta << " " 
+        << ellipse.m_Center.x << " "
+        << ellipse.m_Center.y;
 
     return os;
 }
@@ -79,13 +79,13 @@ std::ostream& operator<<(std::ostream& os, const VO_Ellipse& ellipse)
 
 std::istream& operator>>(std::istream& is, VO_Ellipse& ellipse)
 {
-    is 	>> ellipse.m_fPhimin
-		>> ellipse.m_fPhimax		
-		>> ellipse.m_fAxisXHalfLen
-		>> ellipse.m_fAxisYHalfLen
-		>> ellipse.m_fTheta
-		>> ellipse.m_Center.x
-		>> ellipse.m_Center.y;	
+    is     >> ellipse.m_fPhimin
+        >> ellipse.m_fPhimax
+        >> ellipse.m_fAxisXHalfLen
+        >> ellipse.m_fAxisYHalfLen
+        >> ellipse.m_fTheta
+        >> ellipse.m_Center.x
+        >> ellipse.m_Center.y;    
 
     return is;
 }
@@ -93,16 +93,16 @@ std::istream& operator>>(std::istream& is, VO_Ellipse& ellipse)
 
 VO_Ellipse& VO_Ellipse::operator=(const VO_Ellipse& ellipse)
 {
-	this->CopyData(ellipse);
-	return (*this);
+    this->CopyData(ellipse);
+    return (*this);
 }
 
 
 VO_Ellipse VO_Ellipse::operator*(float value)
 {
-	VO_Ellipse res(*this);
+    VO_Ellipse res(*this);
     res.m_fAxisXHalfLen *= value;
-	res.m_fAxisYHalfLen *= value;
+    res.m_fAxisYHalfLen *= value;
 
     return res;
 }
@@ -111,7 +111,7 @@ VO_Ellipse VO_Ellipse::operator*(float value)
 VO_Ellipse& VO_Ellipse::operator*=(float value)
 {
     this->m_fAxisXHalfLen *= value;
-	this->m_fAxisYHalfLen *= value;
+    this->m_fAxisYHalfLen *= value;
 
     return *this;
 }
@@ -119,97 +119,97 @@ VO_Ellipse& VO_Ellipse::operator*=(float value)
 
 void VO_Ellipse::Translate( const cv::Mat_<float>& translation )
 {
-	this->m_Center.x += translation(0, 0);
-	this->m_Center.y += translation(1, 0);
+    this->m_Center.x += translation(0, 0);
+    this->m_Center.y += translation(1, 0);
 }
 
 
 void VO_Ellipse::ScaleCenter(float value)
 {
-	this->m_Center.x *= value;
-	this->m_Center.y *= value;
+    this->m_Center.x *= value;
+    this->m_Center.y *= value;
 }
 
 
 /** 
- * @brief	Find the nearest point on the boundary to the input point 
- * @note	to be done, tough. needs optimization */
-cv::Point2f	VO_Ellipse::FindNearestPointOnBoundary(const cv::Point2f& pt)
+ * @brief   Find the nearest point on the boundary to the input point 
+ * @note    to be done, tough. needs optimization */
+cv::Point2f    VO_Ellipse::FindNearestPointOnBoundary(const cv::Point2f& pt)
 {
-	cv::Point2f res;
+    cv::Point2f res;
 
-	return res;
+    return res;
 }
-	
+    
 /**
- * @brief	Find the intersect point on the boundary connecting from the COG and the input point  
- * @ref 	http://my.opera.com/Vorlath/blog/show.dml/476448 
- * 	x = a*b*xx/sqrt((b*xx)2 + (a*yy)2)
- * 	y = a*b*yy/sqrt((b*xx)2 + (a*yy)2)
+ * @brief   Find the intersect point on the boundary connecting from the COG and the input point  
+ * @ref     http://my.opera.com/Vorlath/blog/show.dml/476448 
+ *          x = a*b*xx/sqrt((b*xx)2 + (a*yy)2)
+ *          y = a*b*yy/sqrt((b*xx)2 + (a*yy)2)
 */
-cv::Point2f	VO_Ellipse::FindIntersectPointOnBoundary(const cv::Point2f& pt)
+cv::Point2f    VO_Ellipse::FindIntersectPointOnBoundary(const cv::Point2f& pt)
 {
-	if(pt == this->m_Center)
-	{
+    if(pt == this->m_Center)
+    {
         std::cerr << "The input point shouldn't be the same as Ellipse COG!" << std::endl;
-		exit(1);
-	}
-	cv::Point2f res;
-	float xx = pt.x*cos(this->m_fTheta) - pt.y*sin(this->m_fTheta) - this->m_Center.x;
-	float yy = pt.x*sin(this->m_fTheta) + pt.y*cos(this->m_fTheta) - this->m_Center.y;
-	float denominator = sqrt(	pow(this->m_fAxisYHalfLen*xx, 2.0f) +
-								pow(this->m_fAxisXHalfLen*yy, 2.0f) );
-	float x = this->m_fAxisXHalfLen*this->m_fAxisYHalfLen*xx/denominator + this->m_Center.x;
-	float y = this->m_fAxisXHalfLen*this->m_fAxisYHalfLen*yy/denominator + this->m_Center.y;
-	res.x 	= x*cos(this->m_fTheta) + y*sin(this->m_fTheta);
-	res.y	= -x*sin(this->m_fTheta) + y*cos(this->m_fTheta);
+        exit(1);
+    }
+    cv::Point2f res;
+    float xx = pt.x*cos(this->m_fTheta) - pt.y*sin(this->m_fTheta) - this->m_Center.x;
+    float yy = pt.x*sin(this->m_fTheta) + pt.y*cos(this->m_fTheta) - this->m_Center.y;
+    float denominator = sqrt(    pow(this->m_fAxisYHalfLen*xx, 2.0f) +
+                                pow(this->m_fAxisXHalfLen*yy, 2.0f) );
+    float x = this->m_fAxisXHalfLen*this->m_fAxisYHalfLen*xx/denominator + this->m_Center.x;
+    float y = this->m_fAxisXHalfLen*this->m_fAxisYHalfLen*yy/denominator + this->m_Center.y;
+    res.x     = x*cos(this->m_fTheta) + y*sin(this->m_fTheta);
+    res.y    = -x*sin(this->m_fTheta) + y*cos(this->m_fTheta);
 
-	return res;
+    return res;
 }
 
 
 /** 
- * @brief 	Obtain point list within the ellipse according to its range
- * @param	ellipse		- Input ellipse
+ * @brief   Obtain point list within the ellipse according to its range
+ * @param   ellipse        - Input ellipse
  */
 std::vector<cv::Point> VO_Ellipse::VO_PointsInEllipse( const VO_Ellipse& ellipse)
 {
     std::vector<cv::Point> res;
 
     cv::Rect brect = this->CalcBoundingRect();
-	int startx = cvFloor(brect.x);
-	int starty = cvFloor(brect.y);
-	int finishx = cvCeil(brect.x+brect.width); 
-	int finishy = cvCeil(brect.y+brect.height);
-	for(unsigned int i = startx; i++; i <= finishx )
-	{
-		for(unsigned int j = starty; j++; j <= finishy)
-		{
+    int startx = cvFloor(brect.x);
+    int starty = cvFloor(brect.y);
+    int finishx = cvCeil(brect.x+brect.width); 
+    int finishy = cvCeil(brect.y+brect.height);
+    for(unsigned int i = startx; i++; i <= finishx )
+    {
+        for(unsigned int j = starty; j++; j <= finishy)
+        {
             if( this->IsPointWithinEllipse( cv::Point2f(i, j) ) )
-				res.push_back( cv::Point(i,j) );
-		}
-	}
-	
-	return res;
+                res.push_back( cv::Point(i,j) );
+        }
+    }
+    
+    return res;
 }
 
 
 /** 
- * @brief 	Find bounding rectangle for multiple ellipses, this rectangle should cover all ellipses
- * @param	ellipses		- Input ellipses
- * @return	cv::Rect
+ * @brief   Find bounding rectangle for multiple ellipses, this rectangle should cover all ellipses
+ * @param   ellipses        - Input ellipses
+ * @return  cv::Rect
  */
 cv::Rect VO_Ellipse::VO_CalcBoundingRect4MultipleEllipses(const std::vector<VO_Ellipse>& ellipses)
 {
-	unsigned int NbOfEllipses = ellipses.size();
+    unsigned int NbOfEllipses = ellipses.size();
     std::vector<cv::Point> allVertexes;
-	
-	for(unsigned int i = 0; i < NbOfEllipses; i++)
-	{
+    
+    for(unsigned int i = 0; i < NbOfEllipses; i++)
+    {
         cv::Rect rect = ellipses[i].CalcBoundingRect();
-		allVertexes.push_back( cv::Point(rect.x, rect.y) );
-		allVertexes.push_back( cv::Point(rect.x+rect.width, rect.y+rect.height) );
-	}
+        allVertexes.push_back( cv::Point(rect.x, rect.y) );
+        allVertexes.push_back( cv::Point(rect.x+rect.width, rect.y+rect.height) );
+    }
     cv::Mat pointsMat(allVertexes);
     return cv::boundingRect( pointsMat );
 }

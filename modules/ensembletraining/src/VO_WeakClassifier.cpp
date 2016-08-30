@@ -64,7 +64,7 @@
 
 //void VO_WeakClassifier::split_node_data( CvDTreeNode* node )
 //{
-//	int vi, i, n = node->sample_count, nl, nr, scount = data->sample_count;
+//    int vi, i, n = node->sample_count, nl, nr, scount = data->sample_count;
 //    char* dir = (char*)data->direction->data.ptr;
 //    CvDTreeNode *left = 0, *right = 0;
 //    int* new_idx = data->split_buf->data.i;

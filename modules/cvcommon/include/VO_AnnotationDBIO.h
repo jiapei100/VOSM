@@ -65,7 +65,7 @@
 
 
 
-#include "VO_CVCommon.h"
+
 //#include "yaml.h"
 #include "VO_Shape.h"
 
@@ -80,23 +80,20 @@ class CAnnotationDBIO
 {
 public:
     /** databases for statistical shape models */
-    enum DB{ BFM3D = 0,
-            USF3D = 1,
-            XM2VTS3D = 2,
-            PUT = 3,
-            IMM = 4,
-            AGING = 5,
-            BIOID = 6,
-            XM2VTS = 7,
-            FRANCK = 8,
-            EMOUNT = 9,
-            JIAPEI = 10 };
+    enum DB{IMM = 0,
+            AGING = 1,
+            BIOID = 2,
+            XM2VTS = 3,
+            FRANCK = 4,
+            EMOUNT = 5,
+            JIAPEI = 6,
+            PUT = 7 };
     
     /** Constructor */
     CAnnotationDBIO() {}
 
     /** Destructor */
-    ~CAnnotationDBIO() {}
+    virtual ~CAnnotationDBIO() {}
 
     /** read all annotations for .asf files */
     static void         ReadASF(const std::string& filename,
@@ -104,14 +101,6 @@ public:
 
     /** read all annotations for .pts files */
     static void         ReadPTS(const std::string& filename,
-                                VO_Shape& oAAMShape);
-
-    /** read all annotations for .obj files */
-    static void         ReadOBJ(const std::string& filename,
-                                VO_Shape& oAAMShape);
-
-    /** read all annotations for .wrl files */
-    static void         ReadWRL(const std::string& filename,
                                 VO_Shape& oAAMShape);
 
     /** write all annotations for .asf files */
@@ -122,14 +111,6 @@ public:
     static void         WritePTS(   const std::string& filename,
                                     const VO_Shape& iAAMShape);
 
-    /** write all annotations for .obj files */
-    static void         WriteOBJ(   const std::string& filename,
-                                    const VO_Shape& iAAMShape);
-
-    /** write all annotations for .wrl files */
-    static void         WriteWRL(   const std::string& filename,
-                                    const VO_Shape& iAAMShape);
-    
     /** Load Training data for shape model */
     static void         VO_LoadShapeTrainingData(
                             const std::vector<std::string>& allLandmarkFiles4Training,
@@ -142,5 +123,5 @@ public:
                             std::vector<VO_Shape>& oShapes);
 };
 
-#endif    // __VO_ANNOTATIONDBIO_H__
+#endif  // __VO_ANNOTATIONDBIO_H__
 

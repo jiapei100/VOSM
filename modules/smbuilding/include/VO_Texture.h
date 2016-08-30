@@ -73,8 +73,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Generalized class for texture.
+ * @author      JIA Pei
+ * @brief       Generalized class for texture.
  */
 class VO_Texture
 {
@@ -90,16 +90,16 @@ friend class VO_AXM;
 friend std::ostream& operator<<(std::ostream& os, const VO_Texture& texture);
 friend std::istream& operator>>(std::istream& is, VO_Texture& texture);
 private:
-	/** Every VO_Texture is corresponding to an image file */
-    std::string						m_sImageFileName;
+    /** Every VO_Texture is corresponding to an image file */
+    std::string                     m_sImageFileName;
 
     /** Generalized texture representation, the texture model. NbOfTextureRepresentation * NbOfPixels */
-    cv::Mat_<float>        			m_MatTexture;
+    cv::Mat_<float>                 m_MatTexture;
 
     /** copy a texture */
-    void                        	CopyData( const VO_Texture& iTexture )
+    void                            CopyData( const VO_Texture& iTexture )
     {
-									iTexture.m_MatTexture.copyTo(this->m_MatTexture);
+                                    iTexture.m_MatTexture.copyTo(this->m_MatTexture);
     }
 
 public:
@@ -107,84 +107,87 @@ public:
     VO_Texture(unsigned int chan = 0, unsigned int pxs = 0) {this->m_MatTexture.zeros(chan, pxs);}
 
     /** Copy constructor */
-    VO_Texture( const VO_Texture& iTexture )	{this->CopyData(iTexture); }
+    VO_Texture(const VO_Texture& iTexture )    {this->CopyData(iTexture); }
 
     /** Constructor to create a VO_Texture object with a std::vector of float values */
-    VO_Texture( const cv::Mat_<float>& iTexture )	{iTexture.copyTo(this->m_MatTexture); }
+    VO_Texture(const cv::Mat_<float>& iTexture )    {iTexture.copyTo(this->m_MatTexture); }
+    VO_Texture(const cv::Mat_<float>& iTexture, unsigned int dim) {this->SetTheTexture(iTexture, dim);}
+    VO_Texture(const std::vector< float >& iTexture) {this->SetTheTexture(iTexture);}
+    VO_Texture(const std::vector< std::vector<float> >& iTexture) {this->SetTheTexture(iTexture);}
 
     /** Destructor */
-    virtual ~VO_Texture() 			{this->m_MatTexture.release(); }
+    virtual ~VO_Texture()           {this->m_MatTexture.release(); }
 
-	/** Clone */
-	void							clone(const VO_Texture& iTexture) {this->CopyData(iTexture);}
+    /** Clone */
+    void                            clone(const VO_Texture& iTexture) {this->CopyData(iTexture);}
 
     /** operators */
-    VO_Texture&            			operator=(const VO_Texture& iTexture);
-    VO_Texture&                		operator=(const cv::Mat_<float>& iTexture);
-    VO_Texture&            			operator=(float value);
-    VO_Texture             			operator+(float value);
-    VO_Texture&            			operator+=(float value);
-    VO_Texture             			operator+(const VO_Texture& iTexture);
-    VO_Texture&            			operator+=(const VO_Texture& iTexture);
-    VO_Texture             			operator-(float value);
-    VO_Texture&            			operator-=(float value);
-    VO_Texture             			operator-(const VO_Texture& iTexture);
-    VO_Texture&            			operator-=(const VO_Texture& iTexture);
-    VO_Texture             			operator*(float value);
-    VO_Texture&            			operator*=(float value);
-    VO_Texture                  	operator*(const VO_Texture& iTexture);
-	VO_Texture&                 	operator*=(const VO_Texture& iTexture);
-    VO_Texture             			operator/(float value);
-    VO_Texture&            			operator/=(float value);
-	VO_Texture                  	operator/(const VO_Texture& iShape);
-	VO_Texture&                 	operator/=(const VO_Texture& iShape);
-    cv::Mat_<float>        			operator[](unsigned int idx) { return this->m_MatTexture.col(idx); }
-	float& 							operator() (unsigned row, unsigned col);
-	float  							operator() (unsigned row, unsigned col) const;
-	float							dot(const VO_Texture& iTexture);
+    VO_Texture&                     operator=(const VO_Texture& iTexture);
+    VO_Texture&                     operator=(const cv::Mat_<float>& iTexture);
+    VO_Texture&                     operator=(float value);
+    VO_Texture                      operator+(float value);
+    VO_Texture&                     operator+=(float value);
+    VO_Texture                      operator+(const VO_Texture& iTexture);
+    VO_Texture&                     operator+=(const VO_Texture& iTexture);
+    VO_Texture                      operator-(float value);
+    VO_Texture&                     operator-=(float value);
+    VO_Texture                      operator-(const VO_Texture& iTexture);
+    VO_Texture&                     operator-=(const VO_Texture& iTexture);
+    VO_Texture                      operator*(float value);
+    VO_Texture&                     operator*=(float value);
+    VO_Texture                      operator*(const VO_Texture& iTexture);
+    VO_Texture&                     operator*=(const VO_Texture& iTexture);
+    VO_Texture                      operator/(float value);
+    VO_Texture&                     operator/=(float value);
+    VO_Texture                      operator/(const VO_Texture& iShape);
+    VO_Texture&                     operator/=(const VO_Texture& iShape);
+    cv::Mat_<float>                 operator[](unsigned int idx) { return this->m_MatTexture.col(idx); }
+    float&                          operator() (unsigned row, unsigned col);
+    float                           operator() (unsigned row, unsigned col) const;
+    float                           dot(const VO_Texture& iTexture);
 
     /** resize */
-	void							Resize(unsigned int rows, unsigned int cols);
+    void                            Resize(unsigned int rows, unsigned int cols);
     /** centralize a texture */
-	void                       		Centralize();
+    void                            Centralize();
     /** scale a texture */
-    void                        	Scale( float s);
+    void                            Scale( float s);
     /** shift a texture */
-	void                        	Shift( float s);
+    void                            Shift( float s);
     /** normalize a texture */
-	void                        	Normalize();
+    void                            Normalize();
     /** get the norm of a standardized texture */
-	float                       	GetStandardizedTextureNorm() const;
+    float                           GetStandardizedTextureNorm() const;
     /** get the norm of a texture */
-    float                       	GetTextureNorm() const;
+    float                           GetTextureNorm() const;
 
-	/** Clamp the texture, constrain between infimum and supremum */
-	void							Clamp(float inf, float sup);
+    /** Clamp the texture, constrain between infimum and supremum */
+    void                            Clamp(float inf, float sup);
 
-	/** Get texture size */
-    unsigned int                	GetNbOfTextureRepresentation() const { return this->m_MatTexture.rows; }
+    /** Get texture size */
+    unsigned int                    GetNbOfTextureRepresentation() const { return this->m_MatTexture.rows; }
 
-	/** Get Number of pixels */
-    unsigned int                	GetNbOfPixels() const { return this->m_MatTexture.cols; }
+    /** Get Number of pixels */
+    unsigned int                    GetNbOfPixels() const { return this->m_MatTexture.cols; }
 
     /** Get the texture cv::Mat_<float> */
-    cv::Mat_<float>               	GetTheTexture() const { return this->m_MatTexture;}
+    cv::Mat_<float>                 GetTheTexture() const { return this->m_MatTexture;}
 
-	/** Get a texture */
-	float							GetATexture(unsigned int idx) const 
-	{
-									unsigned int row = idx / this->m_MatTexture.cols;
-									unsigned int col = idx % this->m_MatTexture.cols;
-									return this->m_MatTexture(row, col);
-	}
-	float							GetATexture(unsigned int row, unsigned int col) const 
-	{
-									return this->m_MatTexture(row, col);
-	}
+    /** Get a texture */
+    float                           GetATexture(unsigned int idx) const 
+    {
+                                    unsigned int row = idx / this->m_MatTexture.cols;
+                                    unsigned int col = idx % this->m_MatTexture.cols;
+                                    return this->m_MatTexture(row, col);
+    }
+    float                           GetATexture(unsigned int row, unsigned int col) const 
+    {
+                                    return this->m_MatTexture(row, col);
+    }
 
     /** Get the texture cv::Mat_ in a row, b1b2b3...g1g2g3...r1r2r3... */
-    cv::Mat_<float>        			GetTheTextureInARow() const
-	{
+    cv::Mat_<float>                 GetTheTextureInARow() const
+    {
                                     //modified by Pei JIA. 2014-05-14. OpenCV reshape() is buggy, never use it.
                                     //return this->m_MatTexture.reshape(1);
                                     cv::Mat_<float> res(1, this->m_MatTexture.rows*this->m_MatTexture.cols);
@@ -196,22 +199,22 @@ public:
                                         }
                                     }
                                     return res;
-	}
+    }
 
     /** Get the texture value at texture std::vector position i */
-    cv::Mat_<float>                 GetACol(unsigned int idx) const	{ return this->m_MatTexture.col(idx); }
+    cv::Mat_<float>                 GetACol(unsigned int idx) const    { return this->m_MatTexture.col(idx); }
 
-	/** Get the texture value at texture std::vector position i */
-    cv::Mat_<float>                 GetAPixel(unsigned int idx) const	{ return this->m_MatTexture.col(idx); }
+    /** Get the texture value at texture std::vector position i */
+    cv::Mat_<float>                 GetAPixel(unsigned int idx) const    { return this->m_MatTexture.col(idx); }
 
     /** Set the texture. Not a hardcopy, but copy the header and data position */
-    void                        	SetTheTexture(const cv::Mat_<float>& iTexture) { this->m_MatTexture = iTexture;}
+    void                            SetTheTexture(const cv::Mat_<float>& iTexture) { this->m_MatTexture = iTexture;}
 
-	/** Set The texture in ND. iTexture is of size 1*cols. Not a hardcopy, but copy the header and data position */
-    void                        	SetTheTexture(const cv::Mat_<float>& iTexture, unsigned int textureRep)
-	{
+    /** Set The texture in ND. iTexture is of size 1*cols. Not a hardcopy, but copy the header and data position */
+    void                            SetTheTexture(const cv::Mat_<float>& iTexture, unsigned int textureRep)
+    {
                                     if(textureRep <= 0) std::cerr << "textureRep must be natural integer, namely, >= 1" << std::endl;
-									assert (iTexture.rows == 1 && iTexture.cols%textureRep == 0);
+                                    assert (iTexture.rows == 1 && iTexture.cols%textureRep == 0);
                                     //modified by Pei JIA. 2014-05-08. OpenCV reshape() is buggy, never use it.
                                     //this->m_MatTexture = iTexture.reshape(iTexture.cols/textureRep, textureRep);
                                     unsigned int cols = iTexture.cols/textureRep;
@@ -223,15 +226,43 @@ public:
                                             this->m_MatTexture.at<float>(i, j) = iTexture.at<float>(i*cols+j);
                                         }
                                     }
-	}
-	
+    }
+    
+    /** Set The texture from gray images. */
+    void                            SetTheTexture(const std::vector< float >& iTexture)
+    {
+                                    unsigned int NbOfPoints     = iTexture.size();
+                                    unsigned int textureRep     = 1;
+                                    this->m_MatTexture          = cv::Mat_<float>::zeros(textureRep, NbOfPoints);
+                                    for(unsigned int j = 0; j < NbOfPoints; ++j)
+                                    {
+                                        this->m_MatTexture(0,j) = iTexture[j];
+                                    }
+    }
+    
+    /** Set The texture from color images. */
+    void                            SetTheTexture(const std::vector< std::vector<float> >& iTexture)
+    {
+                                    unsigned int NbOfPoints     = iTexture.size();
+                                    unsigned int textureRep     = iTexture[0].size();
+                                    this->m_MatTexture          = cv::Mat_<float>::zeros(textureRep, NbOfPoints);
+                                    for(unsigned int j = 0; j < NbOfPoints; ++j)
+                                    {
+                                        for(unsigned int i = 0; i < textureRep; i++)
+                                            this->m_MatTexture(i,j) = iTexture[j][i];
+                                    }
+    }
+    
     /** Set single Pixel */
-    void 							SetAPixel(const cv::Mat_<float>& iCol, int idx)
-	{
-									assert (iCol.rows == this->m_MatTexture.rows && iCol.cols == 1);
+    void                            SetAPixel(const cv::Mat_<float>& iCol, int idx)
+    {
+                                    assert (iCol.rows == this->m_MatTexture.rows && iCol.cols == 1);
                                     cv::Mat tmpCol = this->m_MatTexture.col(idx);
-									iCol.copyTo(tmpCol);
-	}
+                                    iCol.copyTo(tmpCol);
+    }
+    
+    std::string                     GetImageFileName() const {return this->m_sImageFileName;}
+    void                            SetImageFileName(const std::string& fn) {this->m_sImageFileName = fn;}
 };
 
 #endif  // __VO_TEXTURE_H__

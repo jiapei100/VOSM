@@ -70,8 +70,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Ellipse - used to describe 2D Gaussian distribution.
+ * @author      JIA Pei
+ * @brief       Ellipse - used to describe 2D Gaussian distribution.
  */
 class VO_FacePart
 {
@@ -83,67 +83,67 @@ private:
     unsigned int                        m_iType;
 
     /** open or closed */
-    bool								m_bClosed;
+    bool                                m_bClosed;
 
     /** index std::vector */
-    std::vector<unsigned int>			m_vIndexes;
+    std::vector<unsigned int>           m_vIndexes;
 
     /** Initialization */
-    void								init()
+    void                                init()
     {
-                                        this->m_iType = 0;			// actually, type 0 is just a default value, which is not used at all
+                                        this->m_iType = 0;            // actually, type 0 is just a default value, which is not used at all
                                         this->m_bClosed = false;
                                         this->m_vIndexes.clear();
     }
 
     /** copy a facepart */
-    void                				CopyData(const VO_FacePart &iFacePart)
+    void                                CopyData(const VO_FacePart &iFacePart)
     {
-                                        this->m_iType 				= iFacePart.GetType();
-                                        this->m_bClosed 			= iFacePart.IsClosedOrNot();
+                                        this->m_iType                 = iFacePart.GetType();
+                                        this->m_bClosed             = iFacePart.IsClosedOrNot();
                                         this->m_vIndexes.resize( iFacePart.GetIndexes().size() );
-                                        this->m_vIndexes			= iFacePart.GetIndexes();
+                                        this->m_vIndexes            = iFacePart.GetIndexes();
     }
 
 public:
-	enum { WHOLEFACE = 0, CHIN = 1, LEFTEYEBROW = 2, RIGHTEYEBROW = 3,
-			LEFTEYE = 4, RIGHTEYE = 5, NOSE = 6, NOSTRIL = 7, NOSETIP = 8,
-			LIPOUTERLINE = 9, LIPINNERLINE = 10, LIPUPPEROUTERLINE = 11, LIPUPPERINNERLINE = 12,
-			LIPDOWNEROUTERLINE = 13, LIPDOWNERINNERLINE = 14, LEFTSIDEPOINTS = 15,
-			RIGHTSIDEPOINTS = 16, MIDLINEPOINTS = 17, EYECORNERPOINTS = 18,
-			MOUTHCORNERPOINTS = 19, PITCHAXISLINEPOINTS = 20, LEFTIRIS = 21, RIGHTIRIS = 22,
-			LEFTEAR = 23, RIGHTEAR = 24, WHOLEMOUTH = 25, NOSECENTRALAREA = 26};
+    enum { WHOLEFACE = 0, CHIN = 1, LEFTEYEBROW = 2, RIGHTEYEBROW = 3,
+            LEFTEYE = 4, RIGHTEYE = 5, NOSE = 6, NOSTRIL = 7, NOSETIP = 8,
+            LIPOUTERLINE = 9, LIPINNERLINE = 10, LIPUPPEROUTERLINE = 11, LIPUPPERINNERLINE = 12,
+            LIPDOWNEROUTERLINE = 13, LIPDOWNERINNERLINE = 14, LEFTSIDEPOINTS = 15,
+            RIGHTSIDEPOINTS = 16, MIDLINEPOINTS = 17, EYECORNERPOINTS = 18,
+            MOUTHCORNERPOINTS = 19, PITCHAXISLINEPOINTS = 20, LEFTIRIS = 21, RIGHTIRIS = 22,
+            LEFTEAR = 23, RIGHTEAR = 24, WHOLEMOUTH = 25, NOSECENTRALAREA = 26};
 
     /** Default constructor to create a VO_FaceParts object */
-    VO_FacePart() 						{ this->init(); }
+    VO_FacePart()                       { this->init(); }
 
     /** Copy constructor */
     VO_FacePart( const VO_FacePart &iFacePart )
     {
-										this->CopyData(iFacePart);
+                                        this->CopyData(iFacePart);
     }
 
     /** Destructor */
-    virtual ~VO_FacePart() 				{ this->m_vIndexes.clear(); }
+    virtual ~VO_FacePart()              { this->m_vIndexes.clear(); }
 
     /** operator= overloading, similar to copy constructor */
     VO_FacePart&  operator=(const VO_FacePart &iFacePart)
     {
-										this->CopyData(iFacePart);
-										return *this;
+                                        this->CopyData(iFacePart);
+                                        return *this;
     }
 
     /** clear */
-    void								clear() { this->init();}
+    void                                clear() { this->init();}
 
     /** Gets and Sets */
-    unsigned int						GetType() const {return this->m_iType;}
-    bool								IsClosedOrNot() const {return this->m_bClosed;}
-    std::vector<unsigned int>			GetIndexes() const {return this->m_vIndexes;}
+    unsigned int                        GetType() const {return this->m_iType;}
+    bool                                IsClosedOrNot() const {return this->m_bClosed;}
+    std::vector<unsigned int>           GetIndexes() const {return this->m_vIndexes;}
 
-    void								SetType(unsigned int type) {this->m_iType = type;}
-    void								SetClosedOrNot(bool close) {this->m_bClosed = close;}
-    void								SetIndexes(const std::vector<unsigned int>& indexes) {this->m_vIndexes = indexes;}
+    void                                SetType(unsigned int type) {this->m_iType = type;}
+    void                                SetClosedOrNot(bool close) {this->m_bClosed = close;}
+    void                                SetIndexes(const std::vector<unsigned int>& indexes) {this->m_vIndexes = indexes;}
 
 };
 

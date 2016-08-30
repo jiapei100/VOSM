@@ -79,8 +79,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Statistical texture model.
+ * @author      JIA Pei
+ * @brief       Statistical texture model.
  */
 class VO_TextureModel : public VO_ShapeModel
 {
@@ -92,40 +92,40 @@ friend class VO_FittingASMLTCs;
 friend class VO_FittingASMNDProfiles;
 protected:
     /** PCA transform for texture, including eigenvectors, eigenvalues, and mean */
-    cv::PCA							m_PCANormalizedTexture;
+    cv::PCA                         m_PCANormalizedTexture;
 
     /** Texture representation method - DIRECTTEXTURE, LAPLACETEXTURE, HARRISCORNERTEXTURE, HISTOGRAMEQUALIZED, GABOR, SEGMENTATION, etc. */
-    unsigned int                	m_iTextureRepresentationMethod;
+    unsigned int                    m_iTextureRepresentationMethod;
 
     /** Number of texture representations could be more or less than m_iNbOfChannels */
-    unsigned int                	m_iNbOfTextureRepresentations;
+    unsigned int                    m_iNbOfTextureRepresentations;
 
-	/** COLOR or Gray-level - 3 - COLOR; 1 - Gray-level */
-	unsigned int					m_iNbOfChannels;
+    /** COLOR or Gray-level - 3 - COLOR; 1 - Gray-level */
+    unsigned int                    m_iNbOfChannels;
 
     /** Number of pixels in template face convex hull or concave hull. For IMM, 30132 */
-    unsigned int                	m_iNbOfPixels;
+    unsigned int                    m_iNbOfPixels;
 
     /** length of texture std::vector in format of b1b2b3...g1g2g3...r1r2r3.... m_iNbOfTextureRepresentations*m_iNbOfPixels. For IMM, 30132*3=90396 */
-    unsigned int                	m_iNbOfTextures;
+    unsigned int                    m_iNbOfTextures;
 
     /** Most possible texture eigens before PCA. For IMM: min (90396, 240) = 240 */
-    unsigned int                	m_iNbOfEigenTexturesAtMost;
+    unsigned int                    m_iNbOfEigenTexturesAtMost;
 
     /** Number of texture model eigens. For IMM: 127 */
-    unsigned int               	 	m_iNbOfTextureEigens;
+    unsigned int                    m_iNbOfTextureEigens;
 
     /** Reference texture which is of size close to "1", but not guaranteed */
-    VO_Texture         				m_VONormalizedMeanTexture;
+    VO_Texture                      m_VONormalizedMeanTexture;
 
     /** Reference texture which is scaled back to the original gray/color intensities */
-    VO_Texture             			m_VOReferenceTexture;
+    VO_Texture                      m_VOReferenceTexture;
 
     /** The template texture average standard deviation : 12364.1 */
-    float                       	m_fAverageTextureStandardDeviation;
+    float                           m_fAverageTextureStandardDeviation;
 
     /** Truncate Percentage for texture model PCA. Normally, 0.95 */
-    float                       	m_fTruncatedPercent_Texture;
+    float                           m_fTruncatedPercent_Texture;
 
     /** All loaded textures in a std::vector format. For IMM, 240*90396 */
     std::vector<VO_Texture>         m_vTextures;
@@ -137,22 +137,22 @@ protected:
     cv::Mat                         m_ImageTemplateFace;
 
     /** Image of edges */
-    cv::Mat                      	m_ImageEdges;
+    cv::Mat                         m_ImageEdges;
 
-	/** Image of 2D normal distribution elllipses */
-    cv::Mat							m_ImageEllipses;
+    /** Image of 2D normal distribution elllipses */
+    cv::Mat                         m_ImageEllipses;
 
-	/** Unnormalized point warping information. For IMM, 30132 */
-    std::vector<VO_WarpingPoint>	m_vTemplatePointWarpInfo;
+    /** Unnormalized point warping information. For IMM, 30132 */
+    std::vector<VO_WarpingPoint>    m_vTemplatePointWarpInfo;
 
     /** Normalized point warping information. For IMM, 30132 */
-    std::vector<VO_WarpingPoint>  	m_vNormalizedPointWarpInfo;
+    std::vector<VO_WarpingPoint>    m_vNormalizedPointWarpInfo;
 
-	/** We need these image file names for later image loading */
-    std::vector<std::string>		m_vStringTrainingImageNames;
+    /** We need these image file names for later image loading */
+    std::vector<std::string>        m_vStringTrainingImageNames;
 
     /** Initialization */
-    void                        	init();
+    void                            init();
 
 public:
     /** Default constructor to create a VO_TextureModel object */
@@ -162,95 +162,121 @@ public:
     virtual ~VO_TextureModel();
 
     /** Calculate point warping information */
-    static unsigned int         	VO_CalcPointWarpingInfo(const std::vector<VO_Triangle2DStructure>& templateTriangles, std::vector<VO_WarpingPoint>& warpInfo);
+    static unsigned int             VO_CalcPointWarpingInfo(const std::vector<VO_Triangle2DStructure>& templateTriangles, std::vector<VO_WarpingPoint>& warpInfo);
 
     /** Load a texture std::vector from the image "img", in terms of "iShape", with a texture building method */
-    static bool                 	VO_LoadOneTextureFromShape(const VO_Shape& iShape, 
+    static bool                     VO_LoadOneTextureFromShape( const VO_Shape& iShape, 
                                                                 const cv::Mat& img,
-																const std::vector<VO_Triangle2DStructure>& templateTriangles, 
+                                                                const std::vector<VO_Triangle2DStructure>& templateTriangles, 
                                                                 const std::vector<VO_WarpingPoint>& warpInfo,
-																VO_Texture& oTexture, 
-																int trm = VO_Features::DIRECT);
+                                                                VO_Texture& oTexture, 
+                                                                int trm = VO_Features::DIRECT);
 
     /** Normalize all textures */
-    static float                	VO_NormalizeAllTextures(const std::vector<VO_Texture>& vTextures, std::vector<VO_Texture>& normalizedTextures);
+    static float                    VO_NormalizeAllTextures(const std::vector<VO_Texture>& vTextures, std::vector<VO_Texture>& normalizedTextures);
 
     /** Rescale all normalized textures */
-    static void                 	VO_RescaleAllNormalizedTextures(const VO_Texture& meanNormalizeTexture, std::vector<VO_Texture>& normalizedTextures);
+    static void                     VO_RescaleAllNormalizedTextures(const VO_Texture& meanNormalizeTexture, std::vector<VO_Texture>& normalizedTextures);
 
     /** Rescale one normalized texture */
-    static void                 	VO_RescaleOneNormalizedTexture(const VO_Texture& meanNormalizeTexture, VO_Texture& normalizedTexture);
+    static void                     VO_RescaleOneNormalizedTexture(const VO_Texture& meanNormalizeTexture, VO_Texture& normalizedTexture);
 
     /** Returns the mean texture of all textures */
-    static void                 	VO_CalcMeanTexture(const std::vector<VO_Texture>& vTextures, VO_Texture& meanTexture);
+    static void                     VO_CalcMeanTexture(const std::vector<VO_Texture>& vTextures, VO_Texture& meanTexture);
 
     /** Put one texture to the template face. Just for display! */
-    static void                 	VO_PutOneTextureToTemplateShape(const VO_Texture& texture, const std::vector<VO_Triangle2DStructure>& triangles, cv::Mat& oImg);
+    static void                     VO_PutOneTextureToTemplateShape(const VO_Texture& texture, const std::vector<VO_Triangle2DStructure>& triangles, cv::Mat& oImg);
 
     /** Warp form one shape to another */
     static unsigned int             VO_WarpFromOneShapeToAnother(const VO_Shape& iShape, const VO_Shape& oShape, const std::vector<VO_Triangle2DStructure>& triangles, const cv::Mat& iImg, cv::Mat& oImg);
 
     /** Morphing */
-    static void                 	VO_Morphing(const VO_Shape& iShape1, const VO_Shape& iShape2, std::vector<VO_Shape>& oShapes, const std::vector<VO_Triangle2DStructure>& triangles, const cv::Mat& iImg1, const cv::Mat& iImg2, std::vector<cv::Mat>& oImgs, float step = 0.2);
+    static void                     VO_Morphing(const VO_Shape& iShape1, const VO_Shape& iShape2, std::vector<VO_Shape>& oShapes, const std::vector<VO_Triangle2DStructure>& triangles, const cv::Mat& iImg1, const cv::Mat& iImg2, std::vector<cv::Mat>& oImgs, float step = 0.2);
 
     /** Put one texture to whatever shape, just for display */
-    static void                 	VO_PutOneTextureToOneShape(const VO_Texture& texture, const VO_Shape& oShape, const std::vector<VO_Triangle2DStructure>& triangles, cv::Mat& oImg);
+    static void                     VO_PutOneTextureToOneShape(const VO_Texture& texture, const VO_Shape& oShape, const std::vector<VO_Triangle2DStructure>& triangles, cv::Mat& oImg);
 
     /** Warp form one shape to another */
     static std::vector<float>       VO_CalcSubPixelTexture(float x, float y, const cv::Mat& image);
-    static void                 	VO_CalcSubPixelTexture(float x, float y, const cv::Mat& image, float* gray);
-    static void                 	VO_CalcSubPixelTexture(float x, float y, const cv::Mat& image, float* b, float* g, float* r);
+    static void                     VO_CalcSubPixelTexture(float x, float y, const cv::Mat& image, float* gray);
+    static void                     VO_CalcSubPixelTexture(float x, float y, const cv::Mat& image, float* b, float* g, float* r);
 
     /** Get an intensity std::vector of size 1 or 3 (rgb), at point (x,y) in image */
-    static void						VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float& B, float& G, float& R);
+    static void                     VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float& B, float& G, float& R);
 
     /** Change the normalized texture inTexture to the reference one outTexture */
-    static void                 	VO_NormalizedTexture2ReferenceScale(const VO_Texture& inTexture, float textureSD, VO_Texture& outTexture);
+    static void                     VO_NormalizedTexture2ReferenceScale(const VO_Texture& inTexture, float textureSD, VO_Texture& outTexture);
 
     /** Normalize inTexture to outTexture */
-    static void                 	VO_ReferenceTextureBack2Normalize(const VO_Texture& inTexture, float textureSD, VO_Texture& outTexture);
+    static void                     VO_ReferenceTextureBack2Normalize(const VO_Texture& inTexture, float textureSD, VO_Texture& outTexture);
 
     /** Put edges on template face */
-    static void                 	VO_PutEdgesOnTemplateFace(const std::vector<VO_Edge>& edges, const VO_Shape& templateShape, const cv::Mat& iImg, cv::Mat& oImg);
+    static void                     VO_PutEdgesOnTemplateFace(const std::vector<VO_Edge>& edges, const VO_Shape& templateShape, const cv::Mat& iImg, cv::Mat& oImg);
 
     /** Put every single triangle onto iImg and obtaining oImg */
-    static void                 	VO_PutTrianglesOnTemplateFace(const std::vector<VO_Triangle2DStructure>& triangles, const cv::Mat& iImg, std::vector<cv::Mat>& oImgs);
-	
-	/** Put every single ellipse onto iImg and obtaining oImg */
-    static void                 	VO_PutPDMEllipsesOnTemplateFace(const std::vector<VO_Ellipse>& ellipses, const cv::Mat& iImg, cv::Mat& oImg);
+    static void                     VO_PutTrianglesOnTemplateFace(const std::vector<VO_Triangle2DStructure>& triangles, const cv::Mat& iImg, std::vector<cv::Mat>& oImgs);
+    
+    /** Put every single ellipse onto iImg and obtaining oImg */
+    static void                     VO_PutPDMEllipsesOnTemplateFace(const std::vector<VO_Ellipse>& ellipses, const cv::Mat& iImg, cv::Mat& oImg);
 
     /** Put a shape onto iImg and obtaining oImg, without the edge information */
-    static void                 	VO_PutShapeOnTemplateFace(const VO_Shape& iShape, const cv::Mat& iImg, cv::Mat& oImg);
+    static void                     VO_PutShapeOnTemplateFace(const VO_Shape& iShape, const cv::Mat& iImg, cv::Mat& oImg);
 
-	/** Texture parameters constraints */
-    void							VO_TextureParameterConstraint(cv::Mat_<float>& ioT, float nSigma = 4.0f);
+    /** Texture parameters constraints */
+    void                            VO_TextureParameterConstraint(cv::Mat_<float>& ioT, float nSigma = 4.0f);
 
     /** Texture projected to texture parameters*/
-    void   	                		VO_NormalizedTextureProjectToTParam(const VO_Texture& iTexture, cv::Mat_<float>& outT) const;
+    void                            VO_NormalizedTextureProjectToTParam(const VO_Texture& iTexture, cv::Mat_<float>& outT) const;
 
     /** Texture parameters back projected to texture parameters */
-    void	                   		VO_TParamBackProjectToNormalizedTexture(const cv::Mat_<float>& inT, VO_Texture& oTexture, int tr = 3) const;
-    void	                   		VO_TParamBackProjectToNormalizedTexture(const cv::Mat_<float>& inT, cv::Mat_<float>& oTextureMat) const;
+    void                            VO_TParamBackProjectToNormalizedTexture(const cv::Mat_<float>& inT, VO_Texture& oTexture, int tr = 3) const;
+    void                            VO_TParamBackProjectToNormalizedTexture(const cv::Mat_<float>& inT, cv::Mat_<float>& oTextureMat) const;
 
     /** texture -> normalized -> project to texture parameters */
-    void   	                    	VO_CalcAllParams4AnyTexture(const cv::Mat_<float>& iTexture, cv::Mat_<float>& oTexture, cv::Mat_<float>& outT);
+    void                            VO_CalcAllParams4AnyTexture(const cv::Mat_<float>& iTexture, cv::Mat_<float>& oTexture, cv::Mat_<float>& outT);
     void                            VO_CalcAllParams4AnyTexture(VO_Texture& ioTexture, cv::Mat_<float>& outT);
 
-	/** Load Training data for texture model */
-	bool							VO_LoadTextureTrainingData( const std::vector<std::string>& allImgFiles4Training,
-																unsigned int channels,
-																int trm = VO_Features::DIRECT);
+    /** Load Training data for texture model */
+    bool                            VO_LoadTextureTrainingData( const std::vector<std::string>& allImgFiles4Training,
+                                                                unsigned int channels,
+                                                                int trm = VO_Features::DIRECT);
 
     /** Build Texture Model */
-    void                            VO_BuildTextureModel(	const std::vector<std::string>& allLandmarkFiles4Training,
-															const std::vector<std::string>& allImgFiles4Training,
-															const std::string& shapeinfoFileName, 
-															unsigned int database,
-															unsigned int channels = 3,
-															int trm = VO_Features::DIRECT, 
-															float TPShape = 0.95f, 
-															float TPTexture = 0.95f, 
-															bool useKnownTriangles = false);
+    void                            VO_BuildTextureModel(   const std::vector<std::string>& allLandmarkFiles4Training,
+                                                            const std::vector<std::string>& allImgFiles4Training,
+                                                            const std::string& shapeinfoFileName, 
+                                                            unsigned int database,
+                                                            unsigned int channels = 3,
+                                                            int trm = VO_Features::DIRECT, 
+                                                            float TPShape = 0.95f, 
+                                                            float TPTexture = 0.95f, 
+                                                            bool useKnownTriangles = false);
+                                                            
+    static void                     VO_BuildTextureModel(   const std::vector<VO_Texture>& allTextures,
+                                                            std::vector<VO_Texture>& allNormalizedTextures,
+                                                            const VO_Shape& alignedMeanShape,
+                                                            const VO_Shape& referenceShape, 
+                                                            const VO_Point2DDistributionModel& pdm,
+                                                            VO_Texture& normalizedMeanTexture,
+                                                            VO_Texture& referenceTexture,
+                                                            cv::PCA& pca,
+                                                            std::vector<VO_WarpingPoint>& templatePointWarpInfo,
+                                                            std::vector<VO_WarpingPoint>& normalizedPointWarpInfo,
+                                                            const std::vector<VO_Triangle2DStructure>& templateTriangle2D,
+                                                            const std::vector<VO_Triangle2DStructure>& normalizedTriangle2D,
+                                                            const std::vector<VO_Edge>& edges,
+                                                            unsigned int nbOfTrianges,
+                                                            unsigned int nbOfPixels,
+                                                            float avgShapeSize,
+                                                            float& avgTextureStandardDeviation,
+                                                            cv::Mat& imgTemplateFace,
+                                                            cv::Mat& imgEdges,
+                                                            cv::Mat& imgEllipses,
+                                                            unsigned int& nbOfTextureEigens,
+                                                            unsigned int nbOfSamples,
+                                                            unsigned int nbOfTextureRepresentations,
+                                                            unsigned int nbOfTextures,
+                                                            float TPTexture = 0.95 );
 
     /** Save Texture Model, to a specified folder */
     void                            VO_Save(const std::string& fd);
@@ -267,22 +293,22 @@ public:
     cv::Mat_<float>                 GetNormalizedTextureEigenVectors() const {return this->m_PCANormalizedTexture.eigenvectors;}
     unsigned int                    GetTextureExtractionMethod() const {return this->m_iTextureRepresentationMethod;}
     unsigned int                    GetNbOfTextureRepresentations() const {return this->m_iNbOfTextureRepresentations;}
-	unsigned int                    GetNbOfChannels() const {return this->m_iNbOfChannels;}
+    unsigned int                    GetNbOfChannels() const {return this->m_iNbOfChannels;}
     unsigned int                    GetNbOfPixels() const {return this->m_iNbOfPixels;}
     unsigned int                    GetNbOfTextures() const {return this->m_iNbOfTextures;}
     unsigned int                    GetNbOfEigenTexturesAtMost() const {return this->m_iNbOfEigenTexturesAtMost;}
-	unsigned int                    GetNbOfTextureEigens() const {return this->m_iNbOfTextureEigens;}
-	VO_Texture						GetNormalizedMeanTexture() const {return this->m_VONormalizedMeanTexture;}
-    VO_Texture                 		GetAAMReferenceTexture() const {return this->m_VOReferenceTexture;}
+    unsigned int                    GetNbOfTextureEigens() const {return this->m_iNbOfTextureEigens;}
+    VO_Texture                      GetNormalizedMeanTexture() const {return this->m_VONormalizedMeanTexture;}
+    VO_Texture                      GetAAMReferenceTexture() const {return this->m_VOReferenceTexture;}
     float                           GetAverageTextureStandardDeviation() const {return this->m_fAverageTextureStandardDeviation;}
     float                           GetTruncatedPercent_Texture() const {return this->m_fTruncatedPercent_Texture;}
     std::vector<VO_Texture>         GetTextures() const {return this->m_vTextures;}
     std::vector<VO_Texture>         GetNormalizedTextures() const {return this->m_vNormalizedTextures;}
-    cv::Mat                       	GetIplTemplateFace() const {return this->m_ImageTemplateFace;}
-    cv::Mat                       	GetIplEdges() const {return this->m_ImageEdges;}
+    cv::Mat                         GetIplTemplateFace() const {return this->m_ImageTemplateFace;}
+    cv::Mat                         GetIplEdges() const {return this->m_ImageEdges;}
     std::vector<VO_WarpingPoint>    GetTemplatePointWarpInfo() const {return this->m_vTemplatePointWarpInfo;}
     std::vector<VO_WarpingPoint>    GetNormalizedPointWarpInfo() const {return this->m_vNormalizedPointWarpInfo;}
-    std::vector<std::string>		GetStringTrainingImageNames() const {return this->m_vStringTrainingImageNames;}
+    std::vector<std::string>        GetStringTrainingImageNames() const {return this->m_vStringTrainingImageNames;}
 
 //    void                            SetTextureExtractionMethod(unsigned int tem) {this->m_iTextureRepresentationMethod = tem;}
 //    void                            SetNbOfNbOfChannels(unsigned int inNbOfChannels) {this->m_iNbOfTextureRepresentations = inNbOfChannels;}

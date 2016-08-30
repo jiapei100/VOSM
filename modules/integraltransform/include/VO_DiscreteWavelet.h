@@ -118,9 +118,9 @@ public:
     VO_DiscreteWavelet(cv::Size windowSize =  cv::Size(0, 0))
     {
         this->m_iWaveletType    = HAAR;
-        this->m_bInvertible        = true;
-        this->m_bOrthogonal        = true;
-        this->m_bBiorthogonal    = false;
+        this->m_bInvertible     = true;
+        this->m_bOrthogonal     = true;
+        this->m_bBiorthogonal   = false;
     }
 
     /** destructor */

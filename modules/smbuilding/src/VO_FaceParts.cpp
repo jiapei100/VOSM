@@ -108,13 +108,13 @@ std::istream& operator>>(std::istream& is, VO_FaceParts& faceparts)
     getline(is, line);
 
     bool isContainTriangleIndex = false;
-	
-	while ( getline(is, line) )
-	{
-		boost::trim(line);
-		if(line == "#FaceParts")
-			break;
-	}
+    
+    while ( getline(is, line) )
+    {
+        boost::trim(line);
+        if(line == "#FaceParts")
+            break;
+    }
     while ( getline(is, line) )
     {
         std::cout << line << std::endl;
@@ -145,11 +145,11 @@ std::istream& operator>>(std::istream& is, VO_FaceParts& faceparts)
  */
 VO_FacePart VO_FaceParts::VO_GetOneFacePart(unsigned int partIdx) const
 {
-	switch(partIdx )
+    switch(partIdx )
     {
-	case VO_FacePart::WHOLEFACE:
-		break;
-	case VO_FacePart::CHIN:
+    case VO_FacePart::WHOLEFACE:
+        break;
+    case VO_FacePart::CHIN:
         return this->m_vChin;
     case VO_FacePart::LEFTEYEBROW:
         return this->m_vLeftEyebrow;
@@ -197,11 +197,11 @@ VO_FacePart VO_FaceParts::VO_GetOneFacePart(unsigned int partIdx) const
         return this->m_vLeftEar;
     case VO_FacePart::RIGHTEAR:
         return this->m_vRightEar;
-	case VO_FacePart::WHOLEMOUTH:
-		break;
-	case VO_FacePart::NOSECENTRALAREA:
-		break;
-	}
+    case VO_FacePart::WHOLEMOUTH:
+        break;
+    case VO_FacePart::NOSECENTRALAREA:
+        break;
+    }
 }
 
 

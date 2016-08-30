@@ -64,9 +64,11 @@
 #define  __VO_FACECOMPPOS_H__
 
 #include <vector>
-#include <iostream>
 #include <string>
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include "VO_CVCommon.h"
 
 
@@ -81,22 +83,22 @@ friend class CDetectionDBIO;
 friend class CFaceDetectionAlgs;
 protected:
     /** Every VO_FaceCompPos is corresponding to one face image */
-    std::string         m_sCorrespondingImageFile;
+    std::string     m_sCorrespondingImageFile;
 
     /** The object's location, including face location */
-    cv::Rect            m_rectObject;
+    cv::Rect        m_rectObject;
 
     /** Left eye's location*/
-    cv::Rect            m_rectLeftEye;
+    cv::Rect        m_rectLeftEye;
 
     /** Right eye's location*/
-    cv::Rect            m_rectRightEye;
+    cv::Rect        m_rectRightEye;
     
     /** Nose's location*/
-    cv::Rect            m_rectNose;
+    cv::Rect        m_rectNose;
     
     /** Mouth's location*/
-    cv::Rect            m_rectMouth;
+    cv::Rect        m_rectMouth;
 
 public:
     /** Default constructor */
@@ -111,7 +113,7 @@ public:
                     const cv::Rect* rectMouth = NULL );
 
     /** Destructor */
-    ~VO_FaceCompPos();
+    virtual ~VO_FaceCompPos() {}
     
     void            Scale(double nWidth, double nHeight);
     

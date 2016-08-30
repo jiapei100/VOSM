@@ -79,8 +79,8 @@
 
 
 /** 
- * @author        JIA Pei
- * @brief        Haar wavelet features.
+ * @author      JIA Pei
+ * @brief       Haar wavelet features.
  */
 class VO_HaarFeatures : public VO_Features
 {

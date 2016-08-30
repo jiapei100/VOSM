@@ -86,11 +86,11 @@ std::istream& operator>>(std::istream &is, VO_Texture& texture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator= overloading, similar to copy constructor
- * @param      	iTexture		The input texture
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator= overloading, similar to copy constructor
+ * @param          iTexture        The input texture
+ * @return         VO_Texture&
  */
 VO_Texture& VO_Texture::operator=(const VO_Texture& iTexture)
 {
@@ -100,11 +100,11 @@ VO_Texture& VO_Texture::operator=(const VO_Texture& iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator= overloading, similar to copy constructor
- * @param      	iTexture		The input texture
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator= overloading, similar to copy constructor
+ * @param          iTexture        The input texture
+ * @return         VO_Texture&
  */
 VO_Texture& VO_Texture::operator=(const cv::Mat_<float>& iTexture)
 {
@@ -114,11 +114,11 @@ VO_Texture& VO_Texture::operator=(const cv::Mat_<float>& iTexture)
 
 
 /**
- * @author    	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator= overloading, similar to copy constructor
- * @param      	value	assign all values in VO_Texture to value
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator= overloading, similar to copy constructor
+ * @param          value    assign all values in VO_Texture to value
+ * @return         VO_Texture&
  */
 VO_Texture& VO_Texture::operator=(float value)
 {
@@ -128,11 +128,11 @@ VO_Texture& VO_Texture::operator=(float value)
 
 
 /**
- * @author     	JIA Pei
- * @version   	2010-02-07
- * @brief     	operator+ overloading, shift one AAM texture by value
- * @param     	value
- * @return    	VO_Texture
+ * @author        JIA Pei
+ * @version       2010-02-07
+ * @brief         operator+ overloading, shift one AAM texture by value
+ * @param         value
+ * @return        VO_Texture
  */
 VO_Texture VO_Texture::operator+(float value)
 {
@@ -144,11 +144,11 @@ VO_Texture VO_Texture::operator+(float value)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator+= overloading, add value to this AAM texture 
- * @param      	value
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator+= overloading, add value to this AAM texture 
+ * @param          value
+ * @return         VO_Texture&
 */
 VO_Texture& VO_Texture::operator+=(float value)
 {
@@ -159,11 +159,11 @@ VO_Texture& VO_Texture::operator+=(float value)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator+ overloading, add two AAM texture to one 
- * @param      	iTexture      		the added AAM texture
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator+ overloading, add two AAM texture to one 
+ * @param          iTexture              the added AAM texture
+ * @return         VO_Texture
 */
 VO_Texture VO_Texture::operator+(const VO_Texture &iTexture)
 {
@@ -175,11 +175,11 @@ VO_Texture VO_Texture::operator+(const VO_Texture &iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator+= overloading, add the input AAM texture to this AAM texture
- * @param      	iTexture      	the added AAM texture
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator+= overloading, add the input AAM texture to this AAM texture
+ * @param          iTexture          the added AAM texture
+ * @return         VO_Texture&
 */
 VO_Texture& VO_Texture::operator+=(const VO_Texture &iTexture)
 {
@@ -190,42 +190,42 @@ VO_Texture& VO_Texture::operator+=(const VO_Texture &iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator- overloading, shift one AAM texture by -value
- * @param      	value
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator- overloading, shift one AAM texture by -value
+ * @param          value
+ * @return         VO_Texture
 */
 VO_Texture VO_Texture::operator-(float value)
 {
     VO_Texture res(*this);
     res.m_MatTexture -= value;
-	
+    
     return res;
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator-= overloading, subtract value from this AAM texture 
- * @param      	value
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator-= overloading, subtract value from this AAM texture 
+ * @param          value
+ * @return         VO_Texture&
 */
 VO_Texture& VO_Texture::operator-=(float value)
 {
     this->m_MatTexture -= value;
 
-	return *this;
+    return *this;
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator- overloading, subtract one texture from another
- * @param      	iTexture      	the subtracted AAM texture
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator- overloading, subtract one texture from another
+ * @param          iTexture          the subtracted AAM texture
+ * @return         VO_Texture
 */
 VO_Texture VO_Texture::operator-(const VO_Texture &iTexture)
 {
@@ -237,11 +237,11 @@ VO_Texture VO_Texture::operator-(const VO_Texture &iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator-= overloading, subtract the input AAM texture from this AAM texture
- * @param      	iTexture      	the subtracted AAM texture
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator-= overloading, subtract the input AAM texture from this AAM texture
+ * @param          iTexture          the subtracted AAM texture
+ * @return         VO_Texture&
 */
 VO_Texture& VO_Texture::operator-=(const VO_Texture &iTexture)
 {
@@ -252,11 +252,11 @@ VO_Texture& VO_Texture::operator-=(const VO_Texture &iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator* overloading, scale one texture by value
- * @param      	value      		scale size
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator* overloading, scale one texture by value
+ * @param          value              scale size
+ * @return         VO_Texture
 */
 VO_Texture VO_Texture::operator*(float value)
 {
@@ -268,11 +268,11 @@ VO_Texture VO_Texture::operator*(float value)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator-= overloading, scale this AAM texture by value
- * @param      	value      		scale size
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator-= overloading, scale this AAM texture by value
+ * @param          value              scale size
+ * @return         VO_Texture&
 */
 VO_Texture& VO_Texture::operator*=(float value)
 {
@@ -283,15 +283,15 @@ VO_Texture& VO_Texture::operator*=(float value)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator* overloading, scale one texture by value
- * @param      	value      		scale size
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator* overloading, scale one texture by value
+ * @param          value              scale size
+ * @return         VO_Texture
 */
 VO_Texture VO_Texture::operator*(const VO_Texture& iTexture)
 {
-	VO_Texture res(*this);
+    VO_Texture res(*this);
     res.m_MatTexture = res.m_MatTexture.mul(iTexture.m_MatTexture);
 
     return res;
@@ -299,11 +299,11 @@ VO_Texture VO_Texture::operator*(const VO_Texture& iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator-= overloading, scale this AAM texture by value
- * @param      	value      		scale size
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator-= overloading, scale this AAM texture by value
+ * @param          value              scale size
+ * @return         VO_Texture&
 */
 VO_Texture& VO_Texture::operator*=(const VO_Texture& iTexture)
 {
@@ -314,11 +314,11 @@ VO_Texture& VO_Texture::operator*=(const VO_Texture& iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator/ overloading, scale a texture
- * @param      	value      		1.0/value = scale size
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator/ overloading, scale a texture
+ * @param          value              1.0/value = scale size
+ * @return         VO_Texture
 */
 VO_Texture VO_Texture::operator/(float value)
 {
@@ -336,11 +336,11 @@ VO_Texture VO_Texture::operator/(float value)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator/= overloading, scale this texture with input float value
- * @param      	value      		1.0/value = the scaled value
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator/= overloading, scale this texture with input float value
+ * @param          value              1.0/value = the scaled value
+ * @return         VO_Texture&
 */
 VO_Texture& VO_Texture::operator/=(float value)
 {
@@ -357,25 +357,25 @@ VO_Texture& VO_Texture::operator/=(float value)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-06
- * @brief      	operator/ overloading, scale a shape
- * @param      	iTexture      	for element-wise division
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-02-06
+ * @brief          operator/ overloading, scale a shape
+ * @param          iTexture          for element-wise division
+ * @return         VO_Texture
 */
 VO_Texture VO_Texture::operator/(const VO_Texture& iTexture)
 {
     for(unsigned int i = 0; i < iTexture.m_MatTexture.rows; i++)
-	{
+    {
         for(unsigned int j = 0; j < iTexture.m_MatTexture.cols; j++)
-		{
+        {
             if( fabs(iTexture.m_MatTexture(i,j)) <= FLT_MIN )
-			{
+            {
                 std::cerr << "Divided by zero!" << std::endl;
-				exit(EXIT_FAILURE);
-			}
-		}
-	}
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
 
     VO_Texture res(*this);
     res.m_MatTexture /= iTexture.m_MatTexture;
@@ -385,25 +385,25 @@ VO_Texture VO_Texture::operator/(const VO_Texture& iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-06
- * @brief      	operator/= overloading, scale this shape with input float value
- * @param      	iTexture      	for element-wise division
- * @return     	VO_Texture&
+ * @author         JIA Pei
+ * @version        2010-02-06
+ * @brief          operator/= overloading, scale this shape with input float value
+ * @param          iTexture          for element-wise division
+ * @return         VO_Texture&
 */
 VO_Texture& VO_Texture::operator/=(const VO_Texture& iTexture)
 {
     for(unsigned int i = 0; i < iTexture.m_MatTexture.rows; i++)
-	{
+    {
         for(unsigned int j = 0; j < iTexture.m_MatTexture.cols; j++)
-		{
+        {
             if( fabs(iTexture.m_MatTexture(i,j)) <= FLT_MIN )
-			{
+            {
                 std::cerr << "Divided by zero!" << std::endl;
-				exit(EXIT_FAILURE);
-			}
-		}
-	}
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
 
     this->m_MatTexture /= iTexture.m_MatTexture;
 
@@ -412,12 +412,12 @@ VO_Texture& VO_Texture::operator/=(const VO_Texture& iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator() overloading, obtain the texture value at row and col
- * @param      	row      	input	- row index
- * @param      	col      	input	- col index
- * @return     	float&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator() overloading, obtain the texture value at row and col
+ * @param          row          input    - row index
+ * @param          col          input    - col index
+ * @return         float&
 */
 float&  VO_Texture::operator() (unsigned row, unsigned col)
 {
@@ -428,12 +428,12 @@ float&  VO_Texture::operator() (unsigned row, unsigned col)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator() overloading, obtain the texture value at row and col
- * @param      	row      	input	- row index
- * @param      	col      	input	- col index
- * @return     	float&
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator() overloading, obtain the texture value at row and col
+ * @param          row          input    - row index
+ * @param          col          input    - col index
+ * @return         float&
 */
 float  VO_Texture::operator() (unsigned row, unsigned col) const
 {
@@ -441,14 +441,14 @@ float  VO_Texture::operator() (unsigned row, unsigned col) const
         std::cerr << "cv::Matrix subscript out of bounds" << std::endl;
     return this->m_MatTexture(row, col);
 }
-	
+    
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	operator* overloading, dot product of two AAM textures
- * @param      	iTexture     	AAM texture to be dot producted
- * @return     	float       	dot product
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          operator* overloading, dot product of two AAM textures
+ * @param          iTexture         AAM texture to be dot producted
+ * @return         float           dot product
 */
 float VO_Texture::dot(const VO_Texture& iTexture)
 {
@@ -457,12 +457,12 @@ float VO_Texture::dot(const VO_Texture& iTexture)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	resize the matrix
- * @param      	rows
- * @param      	cols
- * @return     	void
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          resize the matrix
+ * @param          rows
+ * @param          cols
+ * @return         void
 */
 void VO_Texture::Resize(unsigned int rows, unsigned int cols)
 {
@@ -472,11 +472,11 @@ void VO_Texture::Resize(unsigned int rows, unsigned int cols)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-20
- * @brief      	centralize the texture, average to 0
- * @param      	none
- * @return     	void
+ * @author         JIA Pei
+ * @version        2010-02-20
+ * @brief          centralize the texture, average to 0
+ * @param          none
+ * @return         void
 */
 void VO_Texture::Centralize()
 {
@@ -486,11 +486,11 @@ void VO_Texture::Centralize()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	scale 
- * @param      	s      scale this AAM texture by s
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          scale 
+ * @param          s      scale this AAM texture by s
+ * @return         VO_Texture
  */
 void VO_Texture::Scale( float s)
 {
@@ -499,11 +499,11 @@ void VO_Texture::Scale( float s)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-07
- * @brief      	shift 
- * @param      	s      shift this AAM texture by s
- * @return     	VO_Texture
+ * @author         JIA Pei
+ * @version        2010-04-07
+ * @brief          shift 
+ * @param          s      shift this AAM texture by s
+ * @return         VO_Texture
  */
 void VO_Texture::Shift( float s)
 {
@@ -512,15 +512,15 @@ void VO_Texture::Shift( float s)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Normalize this AAM texture
- * @return     	void
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Normalize this AAM texture
+ * @return         void
 */
 void VO_Texture::Normalize()
 {
-	this->Centralize();
-	
+    this->Centralize();
+    
     float norm = this->GetTextureNorm();
 
     this->Scale( 1.0f/norm );
@@ -528,25 +528,25 @@ void VO_Texture::Normalize()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	calculate 2-norm of AAM texture
- * @return     	2-norm of AAM texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          calculate 2-norm of AAM texture
+ * @return         2-norm of AAM texture
 */
 float VO_Texture::GetStandardizedTextureNorm() const
 {
-	VO_Texture tmp(*this);
+    VO_Texture tmp(*this);
     tmp.Centralize();
-	
-	return tmp.GetTextureNorm();
+    
+    return tmp.GetTextureNorm();
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	calculate 2-norm of AAM texture
- * @return     	2-norm of AAM texture
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          calculate 2-norm of AAM texture
+ * @return         2-norm of AAM texture
 */
 float VO_Texture::GetTextureNorm() const
 {
@@ -555,24 +555,24 @@ float VO_Texture::GetTextureNorm() const
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	Clamp the texture, constrain between infimum and supremum
- * @param 		inf			Input	-- infimum
- * @param		sup			Input	-- supremum
- * @return     	void
+ * @author         JIA Pei
+ * @version        2010-02-07
+ * @brief          Clamp the texture, constrain between infimum and supremum
+ * @param          inf            Input    -- infimum
+ * @param          sup            Input    -- supremum
+ * @return         void
 */
 void VO_Texture::Clamp(float inf, float sup)
 {
     for(unsigned int i = 0; i < m_MatTexture.rows; ++i)
-	{
+    {
         for(unsigned int j = 0; j < m_MatTexture.cols; ++j)
-		{
+        {
             if( m_MatTexture(i, j) < inf)
                 m_MatTexture(i, j) = inf;
             else if (m_MatTexture(i, j) > sup)
                 m_MatTexture(i, j) = sup;
-		}			
-	}
+        }            
+    }
 }
 

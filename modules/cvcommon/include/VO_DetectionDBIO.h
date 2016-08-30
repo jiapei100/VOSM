@@ -64,14 +64,15 @@
 #define __VO_DETECTIONDBIO_H__
 
 
-#include <iostream>
-#include <fstream>
+#include <vector>
+#include <string>
 
-#include "VO_CVCommon.h"
 //#include "yaml.h"
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 #include "VO_FaceCompPos.h"
-
-
 
 
 /// Specifically for PUT database, a rect
@@ -127,7 +128,7 @@ public:
     CDetectionDBIO() {}
 
     /** Destructor */
-    ~CDetectionDBIO() {}
+    virtual ~CDetectionDBIO() {}
 
     /** Read all files from PUT face database for MVFD training */
     static void        ReadAllFilesFromPUT4MVFD(
@@ -179,5 +180,5 @@ public:
                             std::vector<cv::Rect>& objRects);
 };
 
-#endif    // __VO_DETECTIONDBIO_H__
+#endif  // __VO_DETECTIONDBIO_H__
 

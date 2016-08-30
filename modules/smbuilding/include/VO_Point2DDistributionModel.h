@@ -61,8 +61,8 @@
 
 
 
-#ifndef __VO_POINTDISTRIBUTIONMODEL_H__
-#define __VO_POINTDISTRIBUTIONMODEL_H__
+#ifndef __VO_POINT2DDISTRIBUTIONMODEL_H__
+#define __VO_POINT2DDISTRIBUTIONMODEL_H__
 
 
 #include <vector>
@@ -75,8 +75,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		2D point distribution model
+ * @author      JIA Pei
+ * @brief       2D point distribution model
  */
 class VO_Point2DDistributionModel
 {
@@ -88,11 +88,11 @@ friend class VO_FittingAFM;
 friend class VO_FittingASMLTCs;
 friend class VO_FittingASMNDProfiles;
 protected:
-	/** 2D normal distribution can be represented by rotated ellipse */
-    std::vector<VO_Ellipse>			m_VONormalizedEllipses;
+    /** 2D normal distribution can be represented by rotated ellipse */
+    std::vector<VO_Ellipse>         m_VONormalizedEllipses;
 
     /** Initialization */
-    void                        	init();
+    void                            init();
 
 public:
     /** Default constructor to create a VO_Point2DDistributionModel object */
@@ -102,30 +102,30 @@ public:
     virtual ~VO_Point2DDistributionModel();
 
     /** Build cv::Point Model */
-    void							VO_BuildPointDistributionModel(	const std::vector<VO_Shape>& allAlignedShapes );
+    void                            VO_BuildPointDistributionModel(    const std::vector<VO_Shape>& allAlignedShapes );
 
-	/** Constrain respective single point according to its PDM */
-    static void						VO_ConstrainSinglePoint(cv::Point2f& pt, const VO_Ellipse& ellipse);
-	
-	/** Scale all ellipses in this PDM */
-	static void						VO_ScalePDMEllipses(const std::vector<VO_Ellipse>& iEllipses, float scale, std::vector<VO_Ellipse>& oEllipses);
+    /** Constrain respective single point according to its PDM */
+    static void                     VO_ConstrainSinglePoint(cv::Point2f& pt, const VO_Ellipse& ellipse);
+    
+    /** Scale all ellipses in this PDM */
+    static void                     VO_ScalePDMEllipses(const std::vector<VO_Ellipse>& iEllipses, float scale, std::vector<VO_Ellipse>& oEllipses);
 
-	/** Constrain a shape into cv::Point Distribution Models */
-    void							VO_ConstrainAllPoints(VO_Shape& ioShape);
+    /** Constrain a shape into cv::Point Distribution Models */
+    void                            VO_ConstrainAllPoints(VO_Shape& ioShape);
 
     /** Save cv::Point Model, to a specified folder */
-    void                        	VO_Save(const std::string& fd);
+    void                            VO_Save(const std::string& fd);
 
     /** Load all parameters */
-    void                        	VO_Load(const std::string& fd);
+    void                            VO_Load(const std::string& fd);
 
     /** Load parameters for fitting */
-    void                        	VO_LoadParameters4Fitting(const std::string& fd);
-	
+    void                            VO_LoadParameters4Fitting(const std::string& fd);
+    
     /** Gets and Sets */
-    std::vector<VO_Ellipse>			GetPDMEllipses() const { return this->m_VONormalizedEllipses; }
+    std::vector<VO_Ellipse>         GetPDMEllipses() const { return this->m_VONormalizedEllipses; }
 
 };
 
-#endif // __VO_POINTDISTRIBUTIONMODEL_H__
+#endif // __VO_POINT2DDISTRIBUTIONMODEL_H__
 

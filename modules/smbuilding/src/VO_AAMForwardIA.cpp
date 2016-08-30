@@ -79,7 +79,7 @@ VO_AAMForwardIA::VO_AAMForwardIA()
 /** Initialization */
 void VO_AAMForwardIA::init()
 {
-	this->m_iMethod				= VO_AXM::AAM_FAIA;
+    this->m_iMethod = VO_AXM::AAM_FAIA;
 }
 
 
@@ -90,51 +90,51 @@ VO_AAMForwardIA::~VO_AAMForwardIA()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-03
- * @brief		FCIA AAM
- * @param      	allLandmarkFiles4Training		Input - all training landmark files
- * @param		allImgFiles4Training			Input - all training image files
- * @param      	shapeinfoFileName				Input - shape info file
- * @param		database						Input - which database is it?
- * @param		levels							Input - multiscale levels
- * @param		channels						Input - How many channels are to be used?
- * @param		trm								Input - texture representation method
- * @param      	TPShape     					Input - truncated percentage for shape model
- * @param      	TPTexture     					Input - truncated percentage for texture model
- * @param      	useKnownTriangles  				Input - use known triangle structures??
- * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       FCIA AAM
+ * @param       allLandmarkFiles4Training   Input - all training landmark files
+ * @param       allImgFiles4Training        Input - all training image files
+ * @param       shapeinfoFileName           Input - shape info file
+ * @param       database                    Input - which database is it?
+ * @param       levels                      Input - multiscale levels
+ * @param       channels                    Input - How many channels are to be used?
+ * @param       trm                         Input - texture representation method
+ * @param       TPShape                     Input - truncated percentage for shape model
+ * @param       TPTexture                   Input - truncated percentage for texture model
+ * @param       useKnownTriangles           Input - use known triangle structures??
+ * @return      void
+ * @note        Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
 void VO_AAMForwardIA::VO_BuildAAMFCIA(const std::vector<std::string>& allLandmarkFiles4Training,
                                     const std::vector<std::string>& allImgFiles4Training,
-									const std::string& shapeinfoFileName, 
-									unsigned int database,
-									unsigned int levels,
-									unsigned int channels,
-									int trm, 
-									float TPShape, 
-									float TPTexture, 
-									bool useKnownTriangles)
+                                    const std::string& shapeinfoFileName, 
+                                    unsigned int database,
+                                    unsigned int levels,
+                                    unsigned int channels,
+                                    int trm, 
+                                    float TPShape, 
+                                    float TPTexture, 
+                                    bool useKnownTriangles)
 {
-    this->VO_BuildTextureModel(	allLandmarkFiles4Training,
-								allImgFiles4Training,
-								shapeinfoFileName, 
-								database,
-								channels,
-								trm, 
-								TPShape, 
-								TPTexture, 
-								useKnownTriangles);
+    this->VO_BuildTextureModel(    allLandmarkFiles4Training,
+                                allImgFiles4Training,
+                                shapeinfoFileName, 
+                                database,
+                                channels,
+                                trm, 
+                                TPShape, 
+                                TPTexture, 
+                                useKnownTriangles);
 
 }
 
 
 /**
- * @author		JIA Pei
- * @version    	2010-04-03
- * @brief      	Save AAMFCIA to a specified folder
- * @param      	fn         Input - the folder that AAMFCIA to be saved to
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       Save AAMFCIA to a specified folder
+ * @param       fn      Input - the folder that AAMFCIA to be saved to
 */
 void VO_AAMForwardIA::VO_Save(const std::string& fd)
 {

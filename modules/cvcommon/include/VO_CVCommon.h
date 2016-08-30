@@ -1081,6 +1081,94 @@ static cv::Rect operator* ( const cv::Rect& rect1, T value )
 
 
 /**
+ * @author      JIA Pei
+ * @version     2016-08-28
+ * @brief       bilinear interpolation for RGB image
+ * @param       img     Input   - gray image
+ * @param       pt      Input   - point in float
+ * @return      float   Output  - bilinear interpolation
+*/
+static float getGraySubpix(const cv::Mat& img, const cv::Point2f& pt)
+{
+    if(img.empty())
+    {
+        std::cout << "img is empty. " << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    
+    unsigned int channels = img.channels();
+    unsigned int depth = img.depth();
+    if (!(channels == 1))
+    {
+        std::cerr << "Gray image must be of channels==1." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    
+    int x = (int)pt.x;
+    int y = (int)pt.y;
+
+    int x0 = cv::borderInterpolate(x,   img.cols, cv::BORDER_REFLECT_101);
+    int x1 = cv::borderInterpolate(x+1, img.cols, cv::BORDER_REFLECT_101);
+    int y0 = cv::borderInterpolate(y,   img.rows, cv::BORDER_REFLECT_101);
+    int y1 = cv::borderInterpolate(y+1, img.rows, cv::BORDER_REFLECT_101);
+
+    float a = pt.x - (float)x;
+    float c = pt.y - (float)y;
+    
+    float gray = (float)((img.at<uchar>(y0, x0) * (1.f - a) + img.at<uchar>(y0, x1) * a) * (1.f - c)
+                       + (img.at<uchar>(y1, x0) * (1.f - a) + img.at<uchar>(y1, x1) * a) * c);
+    
+    return gray;
+}
+
+/**
+ * @author      JIA Pei
+ * @version     2016-08-28
+ * @brief       bilinear interpolation for RGB image
+ * @param       img                 Input   - color image
+ * @param       pt                  Input   - point in float
+ * @return      std::vector<float>  Output  - bilinear interpolation
+*/
+static std::vector<float> getColorSubpix(const cv::Mat& img, const cv::Point2f& pt)
+{
+    if(img.empty())
+    {
+        std::cout << "img is empty. " << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    
+    unsigned int channels = img.channels();
+    unsigned int depth = img.depth();
+    if (!(channels == 3))
+    {
+        std::cerr << "Color image must be of channels==3." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    
+    int x = (int)pt.x;
+    int y = (int)pt.y;
+
+    int x0 = cv::borderInterpolate(x,   img.cols, cv::BORDER_REFLECT_101);
+    int x1 = cv::borderInterpolate(x+1, img.cols, cv::BORDER_REFLECT_101);
+    int y0 = cv::borderInterpolate(y,   img.rows, cv::BORDER_REFLECT_101);
+    int y1 = cv::borderInterpolate(y+1, img.rows, cv::BORDER_REFLECT_101);
+
+    float a = pt.x - (float)x;
+    float c = pt.y - (float)y;
+    
+    std::vector<float> res(3);
+    res[0] = (float)((img.at<cv::Vec3b>(y0, x0)[0] * (1.f - a) + img.at<cv::Vec3b>(y0, x1)[0] * a) * (1.f - c)
+                   + (img.at<cv::Vec3b>(y1, x0)[0] * (1.f - a) + img.at<cv::Vec3b>(y1, x1)[0] * a) * c);
+    res[1] = (float)((img.at<cv::Vec3b>(y0, x0)[1] * (1.f - a) + img.at<cv::Vec3b>(y0, x1)[1] * a) * (1.f - c)
+                   + (img.at<cv::Vec3b>(y1, x0)[1] * (1.f - a) + img.at<cv::Vec3b>(y1, x1)[1] * a) * c);
+    res[2] = (float)((img.at<cv::Vec3b>(y0, x0)[2] * (1.f - a) + img.at<cv::Vec3b>(y0, x1)[2] * a) * (1.f - c)
+                   + (img.at<cv::Vec3b>(y1, x0)[2] * (1.f - a) + img.at<cv::Vec3b>(y1, x1)[2] * a) * c);
+
+    return res;
+}
+
+
+/**
  * @Ref    http://www.newton.dep.anl.gov/newton/askasci/1995/math/MATH061.HTM
  *        abs(Ar + Bs + C)/sqrt(A^2 + B^2)
 */
@@ -1163,5 +1251,5 @@ static void convolveDFT(const cv::Mat& A, const cv::Mat& B, cv::Mat& C)
     // all the temporary buffers will be deallocated automatically
 }
 
-#endif    // __VO_CVCOMMON_H__
+#endif  // __VO_CVCOMMON_H__
 

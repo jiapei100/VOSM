@@ -60,8 +60,8 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_FittingAAMForwardIA__
-#define __VO_FittingAAMForwardIA__
+#ifndef __VO_FITTINGAAMFORWARDIA_H__
+#define __VO_FITTINGAAMFORWARDIA_H__
 
 
 #include "VO_CVCommon.h"
@@ -99,5 +99,5 @@ public:
     float                       VO_FAIAAAMFitting(const cv::Mat& iImg, VO_Shape& ioShape, cv::Mat& oImg, unsigned int epoch = EPOCH);
 };
 
-#endif
+#endif  // __VO_FITTINGAAMFORWARDIA_H__
 

@@ -65,11 +65,11 @@
 
 
 /** 
- * @author     	JIA Pei
- * @version    	2010-02-01
+ * @author      JIA Pei
+ * @version     2010-02-01
  * @brief       Initialization
- * @param		mtd			Input - detection method, here, for additive model, boosting or bagging
- * @return		void
+ * @param       mtd         Input - detection method, here, for additive model, boosting or bagging
+ * @return      void
 */
 void CClassificationAlgs::init(unsigned int mtd)
 {
@@ -77,53 +77,53 @@ void CClassificationAlgs::init(unsigned int mtd)
     this->m_CVBoost = NULL;
     this->m_CVRTrees = NULL;
     this->m_CVSVM = NULL;
-	this->m_iClassificationMethod = mtd;
+    this->m_iClassificationMethod = mtd;
 }
 
 
 /** CClassificationAlgs constructor */
 CClassificationAlgs::CClassificationAlgs(unsigned int mtd)
 {
-	this->init(mtd);
+    this->init(mtd);
 }
 
 
 /** CClassificationAlgs destructor */
 CClassificationAlgs::~CClassificationAlgs()
 {
-	
+    
 }
 
 
 /** set configuration */
 void CClassificationAlgs::SetConfiguration(const std::string& trainedclassifier, unsigned int mtd)
 {
-	this->m_iClassificationMethod	= mtd;
-	this->Load(trainedclassifier);
+    this->m_iClassificationMethod    = mtd;
+    this->Load(trainedclassifier);
 }
 
 
 /** 
- * @author     	JIA Pei
- * @version    	2009-10-04
- * @brief      	Training
- * @param      	data     		Input - input data
- * @param		categories		Input - column vector
- * @return		classification time cost
+ * @author      JIA Pei
+ * @version     2009-10-04
+ * @brief       Training
+ * @param       data            Input - input data
+ * @param       categories      Input - column vector
+ * @return      classification time cost
 */
 void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<int>& categories)
 {
-	unsigned int NbOfSamples = data.rows;
+    unsigned int NbOfSamples = data.rows;
     std::set<int> ClassSet;
-	for(int i = 0; i < categories.rows; i++)
-	{
-		ClassSet.insert(categories(i, 0));
-	}
-	this->m_iNbOfCategories = ClassSet.size();
-	
-	switch(this->m_iClassificationMethod)
-	{
-		case CClassificationAlgs::DecisionTree:
+    for(int i = 0; i < categories.rows; i++)
+    {
+        ClassSet.insert(categories(i, 0));
+    }
+    this->m_iNbOfCategories = ClassSet.size();
+    
+    switch(this->m_iClassificationMethod)
+    {
+        case CClassificationAlgs::DecisionTree:
             this->m_CVDtree->setMaxDepth(INT_MAX);
             this->m_CVDtree->setMinSampleCount(2);
             this->m_CVDtree->setRegressionAccuracy(0);
@@ -136,8 +136,8 @@ void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<i
             this->m_CVDtree->train( cv::ml::TrainData::create(  data,
                                     cv::ml::ROW_SAMPLE,
                                     categories) );
-		break;
-		case CClassificationAlgs::Boost:
+        break;
+        case CClassificationAlgs::Boost:
             this->m_CVBoost->setBoostType(cv::ml::Boost::DISCRETE);
             this->m_CVBoost->setWeakCount(50);
             this->m_CVBoost->setWeightTrimRate(0.95);
@@ -147,8 +147,8 @@ void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<i
             this->m_CVBoost->train( cv::ml::TrainData::create(  data,
                         cv::ml::ROW_SAMPLE,
                         categories));
-		break;
-		case CClassificationAlgs::RandomForest:
+        break;
+        case CClassificationAlgs::RandomForest:
             this->m_CVRTrees->setMaxDepth(INT_MAX);
             this->m_CVRTrees->setMinSampleCount(2);
             this->m_CVRTrees->setRegressionAccuracy(0);
@@ -163,18 +163,18 @@ void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<i
             this->m_CVRTrees->train(cv::ml::TrainData::create(  data,
                                     cv::ml::ROW_SAMPLE,
                                     categories));
-		break;
-//		case CClassificationAlgs::ExtremeRandomForest:
-//			this->m_CVERTrees->train(data,
-//									CV_ROW_SAMPLE,
-//									categories,
+        break;
+//        case CClassificationAlgs::ExtremeRandomForest:
+//            this->m_CVERTrees->train(data,
+//                                    CV_ROW_SAMPLE,
+//                                    categories,
 //                                    cv::Mat(),
 //                                    cv::Mat(),
 //                                    cv::Mat(),
 //                                    cv::Mat(),
-//									CvRTParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, true, 0, 100, 0, CV_TERMCRIT_ITER ) );
-//		break;
-		case CClassificationAlgs::SVM:
+//                                    CvRTParams( INT_MAX, 2, 0, false, this->m_iNbOfCategories, 0, true, 0, 100, 0, CV_TERMCRIT_ITER ) );
+//        break;
+        case CClassificationAlgs::SVM:
             this->m_CVSVM->setType(cv::ml::SVM::C_SVC);
             this->m_CVSVM->setKernel(cv::ml::SVM::RBF);
             this->m_CVSVM->setDegree(0);
@@ -190,135 +190,135 @@ void CClassificationAlgs::Training(const cv::Mat_<float>& data, const cv::Mat_<i
             this->m_CVSVM->train(cv::ml::TrainData::create(  data,
                                     cv::ml::ROW_SAMPLE,
                                     categories));
-		break;
-	}
+        break;
+    }
 }
 
 
 /** 
- * @author     	JIA Pei
- * @version    	2009-10-04
- * @brief      	classification
- * @param      	data     		Input - input data
- * @return		classification time cost
+ * @author      JIA Pei
+ * @version     2009-10-04
+ * @brief       classification
+ * @param       data        Input - input data
+ * @return      classification time cost
 */
 int CClassificationAlgs::Classification(const cv::Mat_<float>& sample )
 {
-	int res = -1;
-	switch(this->m_iClassificationMethod)
-	{
-		case CClassificationAlgs::DecisionTree:
-		{
-			res = (int) this->m_CVDtree->predict( sample );
-		}
-		break;
-		case CClassificationAlgs::Boost:
-		{
-			res = (int) this->m_CVBoost->predict( sample );
-		}
-		break;
-		case CClassificationAlgs::RandomForest:
-		{
-			res = (int) this->m_CVRTrees->predict( sample );
-		}
-		break;
-//		case CClassificationAlgs::ExtremeRandomForest:
-//		{
-//			res = (int) this->m_CVERTrees->predict( sample );
-//		}
-//		break;
-		case CClassificationAlgs::SVM:
-		default:
-		{
-			res = (int) this->m_CVSVM->predict( sample );
-		}
-		break;
-	}
+    int res = -1;
+    switch(this->m_iClassificationMethod)
+    {
+        case CClassificationAlgs::DecisionTree:
+        {
+            res = (int) this->m_CVDtree->predict( sample );
+        }
+        break;
+        case CClassificationAlgs::Boost:
+        {
+            res = (int) this->m_CVBoost->predict( sample );
+        }
+        break;
+        case CClassificationAlgs::RandomForest:
+        {
+            res = (int) this->m_CVRTrees->predict( sample );
+        }
+        break;
+//        case CClassificationAlgs::ExtremeRandomForest:
+//        {
+//            res = (int) this->m_CVERTrees->predict( sample );
+//        }
+//        break;
+        case CClassificationAlgs::SVM:
+        default:
+        {
+            res = (int) this->m_CVSVM->predict( sample );
+        }
+        break;
+    }
 
-	return res;
+    return res;
 }
 
 
 /** 
- * @author     	JIA Pei
- * @version    	2009-10-04
- * @brief      	Save Classifier
- * @param      	fn     			Input - file to save
- * @return		void
+ * @author      JIA Pei
+ * @version     2009-10-04
+ * @brief       Save Classifier
+ * @param       fn      Input - file to save
+ * @return      void
 */
 void CClassificationAlgs::Save(const std::string& fn ) const
 {
-	switch(this->m_iClassificationMethod)
-	{
-		case CClassificationAlgs::DecisionTree:
-		{
-			this->m_CVDtree->save(fn.c_str());
-		}
-		break;
-		case CClassificationAlgs::Boost:
-		{
-			this->m_CVBoost->save(fn.c_str());
-		}
-		break;
-		case CClassificationAlgs::RandomForest:
-		{
-			this->m_CVRTrees->save(fn.c_str());
-		}
-		break;
-//		case CClassificationAlgs::ExtremeRandomForest:
-//		{
-//			this->m_CVERTrees.save(fn.c_str());
-//		}
-//		break;
-		case CClassificationAlgs::SVM:
-		default:
-		{
-			this->m_CVSVM->save(fn.c_str());
-		}
-		break;
-	}
+    switch(this->m_iClassificationMethod)
+    {
+        case CClassificationAlgs::DecisionTree:
+        {
+            this->m_CVDtree->save(fn.c_str());
+        }
+        break;
+        case CClassificationAlgs::Boost:
+        {
+            this->m_CVBoost->save(fn.c_str());
+        }
+        break;
+        case CClassificationAlgs::RandomForest:
+        {
+            this->m_CVRTrees->save(fn.c_str());
+        }
+        break;
+//        case CClassificationAlgs::ExtremeRandomForest:
+//        {
+//            this->m_CVERTrees.save(fn.c_str());
+//        }
+//        break;
+        case CClassificationAlgs::SVM:
+        default:
+        {
+            this->m_CVSVM->save(fn.c_str());
+        }
+        break;
+    }
 }
 
 
 /** 
- * @author     	JIA Pei
- * @version    	2009-10-04
- * @brief      	Load Classifier
- * @param      	fn     			Input - file to save
- * @return		void
- * @note		You have to specify m_iClassificationMethod first
+ * @author      JIA Pei
+ * @version     2009-10-04
+ * @brief       Load Classifier
+ * @param       fn      Input - file to save
+ * @return      void
+ * @note        You have to specify m_iClassificationMethod first
 */
 void CClassificationAlgs::Load(const std::string& fn)
 {
-	switch(this->m_iClassificationMethod)
-	{
-		case CClassificationAlgs::DecisionTree:
-		{
-			this->m_CVDtree = cv::ml::StatModel::load<cv::ml::DTrees>(fn.c_str());
-		}
-		break;
-		case CClassificationAlgs::Boost:
-		{
+    switch(this->m_iClassificationMethod)
+    {
+        case CClassificationAlgs::DecisionTree:
+        {
+            this->m_CVDtree = cv::ml::StatModel::load<cv::ml::DTrees>(fn.c_str());
+        }
+        break;
+        case CClassificationAlgs::Boost:
+        {
             this->m_CVBoost = cv::ml::StatModel::load<cv::ml::Boost>(fn.c_str());
-		}
-		break;
-		case CClassificationAlgs::RandomForest:
-		{
-			this->m_CVRTrees = cv::ml::StatModel::load<cv::ml::RTrees>(fn.c_str());
-		}
-		break;
-//		case CClassificationAlgs::ExtremeRandomForest:
-//		{
-//			this->m_CVERTrees->load(fn.c_str());
-//		}
-		break;
-		case CClassificationAlgs::SVM:
-		{
+        }
+        break;
+        case CClassificationAlgs::RandomForest:
+        {
+            this->m_CVRTrees = cv::ml::StatModel::load<cv::ml::RTrees>(fn.c_str());
+        }
+        break;
+//        case CClassificationAlgs::ExtremeRandomForest:
+//        {
+//            this->m_CVERTrees->load(fn.c_str());
+//        }
+        break;
+        case CClassificationAlgs::SVM:
+        {
                         this->m_CVSVM = cv::ml::StatModel::load<cv::ml::SVM>(fn.c_str());
-		}
-		case CClassificationAlgs::NONE:
-		default:
-		break;
-	}
+        }
+        case CClassificationAlgs::NONE:
+        default:
+        break;
+    }
 }
 

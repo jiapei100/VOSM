@@ -60,8 +60,8 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_FittingASMNDProfiles__
-#define __VO_FittingASMNDProfiles__
+#ifndef __VO_FITTINGASMNDPROFILES_H__
+#define __VO_FITTINGASMNDPROFILES_H__
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -107,14 +107,14 @@ public:
                                                             float& DeltaY);
 
     /** Update shape, in a single iteration */
-    static int              UpdateShape(    const VO_ASMNDProfiles* asmmodel,
-                                            const cv::Mat& iImg,
-                                            VO_Shape& ioShape,
-                                            const std::vector<VO_Shape2DInfo>& iShapeInfo,
-                                            const std::vector< VO_Profile >& iMean,
-                                            const std::vector< std::vector< cv::Mat_<float> > >& iCovInverse,
-                                            unsigned int offSetTolerance,
-                                            unsigned int profdim = 2);
+    static int              UpdateShape(const VO_ASMNDProfiles* asmmodel,
+                                        const cv::Mat& iImg,
+                                        VO_Shape& ioShape,
+                                        const std::vector<VO_Shape2DInfo>& iShapeInfo,
+                                        const std::vector< VO_Profile >& iMean,
+                                        const std::vector< std::vector< cv::Mat_<float> > >& iCovInverse,
+                                        unsigned int offSetTolerance,
+                                        unsigned int profdim = 2);
 
     /** Pyramid Fitting */
     void                    PyramidFit( VO_Shape& ioShape,
@@ -154,5 +154,5 @@ public:
                                                     unsigned int profdim = 2);
 };
 
-#endif  // __VO_FittingASMNDProfiles__
+#endif  // __VO_FITTINGASMNDPROFILES_H__
 

@@ -65,6 +65,8 @@
 
 
 #include <vector>
+#include <deque>
+#include <algorithm>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -74,8 +76,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Generalized class for various models.
+ * @author      JIA Pei
+ * @brief       Generalized class for various models.
  */
 class VO_AXM : public VO_TextureModel
 {
@@ -88,36 +90,50 @@ friend class VO_FittingASMNDProfiles;
 friend class VO_FittingAFM;
 protected:
     /** Number of Levels */
-    unsigned int               		m_iNbOfPyramidLevels;
-	
-	/** objective functions -- ASMNDProfile, ASMLTC, AAMBasic, AAMICIA, CLM, AFM, etc */
-	unsigned int					m_iMethod;
-	
-	/** Initialization */
-	void 							init(unsigned int dim = ASM_PROFILEND, unsigned int levels = 4);
+    unsigned int                    m_iNbOfPyramidLevels;
+    
+    /** objective functions -- ASMNDProfile, ASMLTC, AAMBasic, AAMICIA, CLM, AFM, etc */
+    unsigned int                    m_iMethod;
+    
+    /** Initialization */
+    void                            init(unsigned int method = ASM_PROFILEND, unsigned int levels = 4)
+    {
+        this->m_iMethod             = method;
+        this->m_iNbOfPyramidLevels  = levels;
+    }
 
 public:
-	/** The following classification is correct. CLM belongs to AFM */
-	enum { 	ASM_PROFILEND = 1,
-			ASM_LTC = 2,
-			CLM = 8, AFM = 9,
-			AAM_BASIC = 10, AAM_DIRECT=11, AAM_FAIA = 12, AAM_CMUICIA = 13, AAM_IAIA = 14,
-			MM3D = 20};
+    /** The following classification is correct. CLM belongs to AFM */
+    enum {  ASM_PROFILEND = 1,
+            ASM_LTC = 2,
+            CLM = 8, AFM = 9,
+            AAM_BASIC = 10, AAM_DIRECT=11, AAM_FAIA = 12, AAM_CMUICIA = 13, AAM_IAIA = 14,
+            MM3D = 20, AAM3D  =21 };
 
     /** Default constructor to create a VO_AXM object */
-    VO_AXM(unsigned int method = ASM_PROFILEND, unsigned int levels = 1);
+    VO_AXM(unsigned int method = ASM_PROFILEND, unsigned int levels = 1)
+    {
+        this->init(method, levels);
+    }
 
     /** Destructor */
-    ~VO_AXM();
-	
-	/** Save ASM, to a specified folder */
-    void                       		VO_Save(const std::string& fd);
+    virtual ~VO_AXM() {}
+    
+    void                            SplitShapeTextureParams(const std::pair<VO_Shape, VO_Texture>& iPairShapeTexture, 
+                                                            cv::Mat_<float>& oShapeParams, 
+                                                            cv::Mat_<float>& oTextureParams );
+    void                            CombineShapeTextureParams(  const cv::Mat_<float>& iShapeParams, 
+                                                                const cv::Mat_<float>& iTextureParams,
+                                                                std::pair<VO_Shape, VO_Texture>& oPairShapeTexture );
+    
+    /** Save ASM, to a specified folder */
+    void                            VO_Save(const std::string& fd);
 
     /** Load all parameters */
-    void                         	VO_Load(const std::string& fd);
+    void                            VO_Load(const std::string& fd);
 
     /** Load parameters for fitting */
-    void                     		VO_LoadParameters4Fitting(const std::string& fd);
+    void                            VO_LoadParameters4Fitting(const std::string& fd);
 };
 
 #endif  // __VO_AXM_H__

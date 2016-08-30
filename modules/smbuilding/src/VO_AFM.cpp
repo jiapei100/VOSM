@@ -71,36 +71,36 @@
 
 VO_AFM::VO_AFM()
 {
-	this->init();
+    this->init();
 }
 
 
 void VO_AFM::init()
 {
-	this->m_iMethod							= VO_AXM::AFM;		// CLM
-	this->m_iLocalFeatureExtractionMethod 	= VO_DiscreteWavelet::HAAR;
+    this->m_iMethod                         = VO_AXM::AFM;      // CLM
+    this->m_iLocalFeatureExtractionMethod   = VO_DiscreteWavelet::HAAR;
 }
 
 
 VO_AFM::~VO_AFM()
 {
-	
+    
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	feature parameters constrain
- * @param      	ioC				Input and Output - appearance parameters
- * @param      	nSigma          Input - number of sigmas
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       feature parameters constrain
+ * @param       ioC             Input and Output - appearance parameters
+ * @param       nSigma          Input - number of sigmas
+ * @return      void
 */
 void VO_AFM::VO_FeatureParameterConstraint(cv::Mat_<float>& ioF, float nSigma)
 {
-	for (unsigned int i = 0; i < ioF.cols; ++i)
+    for (unsigned int i = 0; i < ioF.cols; ++i)
     {
-		float ct = nSigma * sqrt(this->m_PCANormalizedFeatures.eigenvalues.at<float>(i,0) );
+        float ct = nSigma * sqrt(this->m_PCANormalizedFeatures.eigenvalues.at<float>(i,0) );
         if ( ioF(0, i) > ct )
         {
             ioF(0, i) = ct;
@@ -114,57 +114,57 @@ void VO_AFM::VO_FeatureParameterConstraint(cv::Mat_<float>& ioF, float nSigma)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-22
- * @brief		Build Active Feature Model - quite similar to Edwards method, but proposed by Cristinace and modified by me.
- * @param      	allLandmarkFiles4Training		Input - all training landmark files
- * @param		allImgFiles4Training			Input - all training image files
- * @param      	shapeinfoFileName				Input - shape info file
- * @param		database						Input - which database is it?
- * @param		channels						Input - How many channels are to be used?
- * @param		levels							Input - multiscale levels
- * @param		trm								Input - texture representation method
- * @param      	TPShape     					Input - truncated percentage for shape model
- * @param      	useKnownTriangles  				Input - use known triangle structures??
- * @param		ltcMtd							Input - local texture constrain methods
- * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
+ * @author      JIA Pei
+ * @version     2010-02-22
+ * @brief       Build Active Feature Model - quite similar to Edwards method, but proposed by Cristinace and modified by me.
+ * @param       allLandmarkFiles4Training   Input - all training landmark files
+ * @param       allImgFiles4Training        Input - all training image files
+ * @param       shapeinfoFileName           Input - shape info file
+ * @param       database                    Input - which database is it?
+ * @param       channels                    Input - How many channels are to be used?
+ * @param       levels                      Input - multiscale levels
+ * @param       trm                         Input - texture representation method
+ * @param       TPShape                     Input - truncated percentage for shape model
+ * @param       useKnownTriangles           Input - use known triangle structures??
+ * @param       ltcMtd                      Input - local texture constrain methods
+ * @return      void
+ * @note        Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
 void VO_AFM::VO_BuildFeatureModel ( const std::vector<std::string>& allLandmarkFiles4Training,
                             const std::vector<std::string>& allImgFiles4Training,
-							const std::string& shapeinfoFileName,
-							unsigned int database,
-							unsigned int channels,
-							unsigned int levels,
-							int trm,
-							float TPShape,
-							bool useKnownTriangles,
-							unsigned int ltcMtd,
+                            const std::string& shapeinfoFileName,
+                            unsigned int database,
+                            unsigned int channels,
+                            unsigned int levels,
+                            int trm,
+                            float TPShape,
+                            bool useKnownTriangles,
+                            unsigned int ltcMtd,
                             cv::Size imgSize)
 {
-	if (allLandmarkFiles4Training.size() != allImgFiles4Training.size() )
+    if (allLandmarkFiles4Training.size() != allImgFiles4Training.size() )
          std::cerr << "allLandmarkFiles4Training should have the same number of allImgFiles4Training! " << std::endl;
 
-	this->VO_BuildShapeModel(allLandmarkFiles4Training, shapeinfoFileName, database, TPShape, useKnownTriangles);
-    this->m_iNbOfPyramidLevels      			= levels;
-	this->m_iNbOfChannels						= channels;
-	this->m_iTextureRepresentationMethod		= trm;
-	this->m_iLocalFeatureExtractionMethod		= ltcMtd;
-	this->m_localImageSize						= imgSize;
-	this->m_vStringTrainingImageNames 			= allImgFiles4Training;
+    this->VO_BuildShapeModel(allLandmarkFiles4Training, shapeinfoFileName, database, TPShape, useKnownTriangles);
+    this->m_iNbOfPyramidLevels                  = levels;
+    this->m_iNbOfChannels                        = channels;
+    this->m_iTextureRepresentationMethod        = trm;
+    this->m_iLocalFeatureExtractionMethod        = ltcMtd;
+    this->m_localImageSize                        = imgSize;
+    this->m_vStringTrainingImageNames             = allImgFiles4Training;
 
-	this->VO_LoadFeatureTrainingData( this->m_iLocalFeatureExtractionMethod);
+    this->VO_LoadFeatureTrainingData( this->m_iLocalFeatureExtractionMethod);
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-22
- * @brief		Calculate Image Patch cv::Rectangle
- * @param		iImg					Input	-- the concerned image
- * @param		pt						Input	-- the point
- * @param		imgSize					Input	-- image size
- * @return		cv::Rect					of size imgSize*imgSize
+ * @author      JIA Pei
+ * @version     2010-02-22
+ * @brief       Calculate Image Patch cv::Rectangle
+ * @param       iImg        Input    -- the concerned image
+ * @param       pt          Input    -- the point
+ * @param       imgSize     Input    -- image size
+ * @return      cv::Rect    of size imgSize*imgSize
  */
 cv::Rect VO_AFM::VO_CalcImagePatchRect(const cv::Mat& iImg, const cv::Point2f& pt, cv::Size imgSize)
 {
@@ -196,92 +196,92 @@ cv::Rect VO_AFM::VO_CalcImagePatchRect(const cv::Mat& iImg, const cv::Point2f& p
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-05
- * @brief      	Load Training data for texture model
- * @param		mtd			Input	-- ltc method
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-05
+ * @brief       Load Training data for texture model
+ * @param       mtd     Input    -- ltc method
+ * @return      void
 */
 void VO_AFM::VO_LoadFeatureTrainingData(unsigned int mtd)
 {
-	this->m_vLTCs.resize(this->m_iNbOfSamples);
-	this->m_vNormalizedLTCs.resize(this->m_iNbOfSamples);
-	cv::Mat img;
-	cv::Mat_<float> oneLTC, tmpRow;
+    this->m_vLTCs.resize(this->m_iNbOfSamples);
+    this->m_vNormalizedLTCs.resize(this->m_iNbOfSamples);
+    cv::Mat img;
+    cv::Mat_<float> oneLTC, tmpRow;
 
-	for(unsigned int i = 0; i < this->m_iNbOfSamples; ++i)
-	{
-		unsigned int count = 0;
+    for(unsigned int i = 0; i < this->m_iNbOfSamples; ++i)
+    {
+        unsigned int count = 0;
         this->m_vLTCs[i].Resize(this->m_iNbOfPoints, this->m_localImageSize.width*this->m_localImageSize.height);
         img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
 
-		double start = (double)cvGetTickCount();
-		// Explained by JIA Pei -- wavelet feature extraction
+        double start = (double)cvGetTickCount();
+        // Explained by JIA Pei -- wavelet feature extraction
         for(unsigned int j = 0; j < this->m_iNbOfPoints; ++j)
-		{
+        {
             oneLTC = this->VO_LoadLTC4OneAnnotatedPoint(img,
-														this->m_vShapes[i],
-														j,
-														this->m_localImageSize,
-														mtd);
+                                                        this->m_vShapes[i],
+                                                        j,
+                                                        this->m_localImageSize,
+                                                        mtd);
             tmpRow = this->m_vLTCs[i].m_MatTexture.row(j);
-			oneLTC.copyTo(tmpRow);
-		}
+            oneLTC.copyTo(tmpRow);
+        }
 
-		double end = (double)cvGetTickCount();
-		double elapsed = (end - start) / (cvGetTickFrequency()*1000.0);
-	}
+        double end = (double)cvGetTickCount();
+        double elapsed = (end - start) / (cvGetTickFrequency()*1000.0);
+    }
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-22
- * @brief		Build wavelet for key points
- * @param		iImg 					Input	-- the concerned image
- * @param		theShape				Input	-- the concerned shape
- * @param		ptIdx					Input	-- which point?
- * @param		imgSize					Input	-- the image size
- * @param		mtd						Input	-- LTC method
- * @return		cv::Mat_<float>				Output	-- the extracted LTC
+ * @author      JIA Pei
+ * @version     2010-02-22
+ * @brief       Build wavelet for key points
+ * @param       iImg        Input    -- the concerned image
+ * @param       theShape    Input    -- the concerned shape
+ * @param       ptIdx       Input    -- which point?
+ * @param       imgSize     Input    -- the image size
+ * @param       mtd         Input    -- LTC method
+ * @return      cv::Mat_<float>     Output    -- the extracted LTC
  */
 cv::Mat_<float> VO_AFM::VO_LoadLTC4OneAnnotatedPoint(const cv::Mat& iImg,
-														const VO_Shape& theShape,
-														unsigned int ptIdx,
+                                                        const VO_Shape& theShape,
+                                                        unsigned int ptIdx,
                                                         cv::Size imgSize,
-														unsigned int mtd)
+                                                        unsigned int mtd)
 {
-	cv::Mat_<float> resLTC;
-    cv::Point2f pt 					= theShape.GetA2DPoint(ptIdx);
-    cv::Rect rect 					= this->VO_CalcImagePatchRect(iImg, pt, imgSize);
-	cv::Mat imgPatch 				= iImg(rect);
+    cv::Mat_<float> resLTC;
+    cv::Point2f pt                     = theShape.GetA2DPoint(ptIdx);
+    cv::Rect rect                     = this->VO_CalcImagePatchRect(iImg, pt, imgSize);
+    cv::Mat imgPatch                 = iImg(rect);
 
-	switch(mtd)
-	{
-		case VO_Features::LBP:
-		{
-			// initialize the image before wavelet transform 
-			for(unsigned int i = 0; i < rect.height; ++i)
-			{
-				for(unsigned int j = 0; j < rect.width; ++j)
-				{
-					
-				}
-			}
+    switch(mtd)
+    {
+        case VO_Features::LBP:
+        {
+            // initialize the image before wavelet transform 
+            for(unsigned int i = 0; i < rect.height; ++i)
+            {
+                for(unsigned int j = 0; j < rect.width; ++j)
+                {
+                    
+                }
+            }
 
-			bool showWaveletImage =  true;
-			if(showWaveletImage)
-			{
-				imwrite("originalImage.jpg", imgPatch);
-	//			this->VO_HardSaveWaveletSingleChannelImage("waveletImage.jpg", waveParamsGray, imgSize);
-	//			this->VO_HardSaveWaveletSingleChannelImage("inverseWaveletImage.jpg", waveParamsGray, imgSize);
-			}
-		}
-		default:
-		break;
-	}
-	
-	return resLTC;
+            bool showWaveletImage =  true;
+            if(showWaveletImage)
+            {
+                imwrite("originalImage.jpg", imgPatch);
+    //            this->VO_HardSaveWaveletSingleChannelImage("waveletImage.jpg", waveParamsGray, imgSize);
+    //            this->VO_HardSaveWaveletSingleChannelImage("inverseWaveletImage.jpg", waveParamsGray, imgSize);
+            }
+        }
+        default:
+        break;
+    }
+    
+    return resLTC;
 }
 
 
@@ -338,6 +338,6 @@ void VO_AFM::VO_Load ( const std::string& fd )
 
 void VO_AFM::VO_LoadParameters4Fitting ( const std::string& fd )
 {
-    VO_AXM::VO_LoadParameters4Fitting(fd); 	// Note, for ASMProfile fitting, no problem
+    VO_AXM::VO_LoadParameters4Fitting(fd);     // Note, for ASMProfile fitting, no problem
 }
 

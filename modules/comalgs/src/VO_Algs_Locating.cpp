@@ -66,16 +66,16 @@
 /** Initialization */
 void CLocatingAlgs::init(const std::string& str, unsigned int detectionMtd, unsigned int trackingMtd)
 {
-	this->m_detectionAlgs.SetConfiguration(str, detectionMtd);
-	this->m_trackingAlgs.SetConfiguration(trackingMtd);
-	this->m_bObjectLocalized 	= false;
+    this->m_detectionAlgs.SetConfiguration(str, detectionMtd);
+    this->m_trackingAlgs.SetConfiguration(trackingMtd);
+    this->m_bObjectLocalized     = false;
 }
-	
-	
+    
+    
 /** CLocatingAlgs constructor */
 CLocatingAlgs::CLocatingAlgs(const std::string& str, unsigned int detectionMtd, unsigned int trackingMtd)
 {
-	init(str, detectionMtd, trackingMtd);
+    init(str, detectionMtd, trackingMtd);
 }
 
 /** CLocatingAlgs destructor */
@@ -85,14 +85,14 @@ CLocatingAlgs::~CLocatingAlgs()
 }
 
 /** 
- * @author     	JIA Pei
- * @version    	2009-10-04
- * @brief      	Object Locating
- * @param      	img     		Input - image to be searched within
- * @param		objPos			Output - localized objects' positions
- * @return		localization time cost
+ * @author      JIA Pei
+ * @version     2009-10-04
+ * @brief       Object Locating
+ * @param       img         Input - image to be searched within
+ * @param       objPos      Output - localized objects' positions
+ * @return      localization time cost
 */
-double CLocatingAlgs::Locating(	const cv::Mat& img,
+double CLocatingAlgs::Locating( const cv::Mat& img,
                                 cv::Size smallSize,
                                 cv::Size bigSize)
 {
@@ -107,21 +107,21 @@ double CLocatingAlgs::Locating(	const cv::Mat& img,
 
 
 /** 
- * @author     	JIA Pei
- * @version    	2009-10-04
- * @brief      	Object Detection
- * @param      	img     		Input - image to be searched within
- * @param      	detectAlg		Input - detection algorithm
- * @param		trackAlg		Input - tracking algorithm
- * @param      	detectionMtd	Input - detection method
- * @param		trackingMtd		Input - tracking method
- * @param		isTracked		Output - is the object tracked?
- * @param		objPos			Output - objects' positions
- * @param		smallSize		Input - detected object should be bigger than smallsize
- * @param		bigSize			Input - detected object should be smaller than bigSize
- * @return		localization time cost
+ * @author      JIA Pei
+ * @version     2009-10-04
+ * @brief       Object Detection
+ * @param       img             Input - image to be searched within
+ * @param       detectAlg       Input - detection algorithm
+ * @param       trackAlg        Input - tracking algorithm
+ * @param       detectionMtd    Input - detection method
+ * @param       trackingMtd     Input - tracking method
+ * @param       isTracked       Output - is the object tracked?
+ * @param       objPos          Output - objects' positions
+ * @param       smallSize       Input - detected object should be bigger than smallsize
+ * @param       bigSize         Input - detected object should be smaller than bigSize
+ * @return      localization time cost
 */
-double CLocatingAlgs::Locating(	const cv::Mat& img,
+double CLocatingAlgs::Locating( const cv::Mat& img,
                                 CDetectionAlgs& detectAlg,
                                 CTrackingAlgs& trackAlg,
                                 bool& isLocalized,
@@ -129,54 +129,54 @@ double CLocatingAlgs::Locating(	const cv::Mat& img,
                                 const cv::Size& smallSize,
                                 const cv::Size& bigSize)
 {
-	double res = (double)cvGetTickCount();
-	double scale = 1.0;
+    double res = (double)cvGetTickCount();
+    double scale = 1.0;
 
-	// only detection is used
+    // only detection is used
     if ( trackAlg.GetTrackingMethod() == CTrackingAlgs::NONE )
-	{
-		detectAlg.Detection(img,
-							NULL,
-							scale,
-							smallSize,
-							bigSize);
-		if( detectAlg.IsObjectDetected() )
-		{
-			isLocalized = true;
-			objPos = detectAlg.GetDetectedObjectRects()[0];
-		}
-	}
-	// tracking is used
-	else
-	{
-		// not localized yet
-		if( !isLocalized || (objPos.x < 0 && objPos.y < 0 && objPos.width < 0 && objPos.height < 0) )
-		{
-			detectAlg.Detection(img,
-								NULL,
-								scale,
-								smallSize,
-								bigSize);
-			if( detectAlg.IsObjectDetected() )
-			{
-				isLocalized = true;
-				objPos = detectAlg.GetDetectedObjectRects()[0];
-				trackAlg.UpdateTracker(img, objPos);
-			}
-		}
-		// keep tracking now
-		else
-		{
-			trackAlg.Tracking( 	img,
-								objPos,
-								smallSize,
-								bigSize);
-			isLocalized = trackAlg.IsObjectTracked();
-		}
-	}
+    {
+        detectAlg.Detection(img,
+                            NULL,
+                            scale,
+                            smallSize,
+                            bigSize);
+        if( detectAlg.IsObjectDetected() )
+        {
+            isLocalized = true;
+            objPos = detectAlg.GetDetectedObjectRects()[0];
+        }
+    }
+    // tracking is used
+    else
+    {
+        // not localized yet
+        if( !isLocalized || (objPos.x < 0 && objPos.y < 0 && objPos.width < 0 && objPos.height < 0) )
+        {
+            detectAlg.Detection(img,
+                                NULL,
+                                scale,
+                                smallSize,
+                                bigSize);
+            if( detectAlg.IsObjectDetected() )
+            {
+                isLocalized = true;
+                objPos = detectAlg.GetDetectedObjectRects()[0];
+                trackAlg.UpdateTracker(img, objPos);
+            }
+        }
+        // keep tracking now
+        else
+        {
+            trackAlg.Tracking(  img,
+                                objPos,
+                                smallSize,
+                                bigSize);
+            isLocalized = trackAlg.IsObjectTracked();
+        }
+    }
 
-	res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
-	return res;
+    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    return res;
 }
 
 
@@ -192,12 +192,12 @@ void CLocatingAlgs::VO_DrawLocating(cv::Mat& ioImg, cv::Scalar color)
 
     if ( this->m_bObjectLocalized )
     {
-		curRect = this->m_CVLocalizedObjectRect;
-		lefttop.x = cvRound(curRect.x);
-		lefttop.y = cvRound(curRect.y);
-		rightbottom.x = cvRound((curRect.x+curRect.width));
-		rightbottom.y = cvRound((curRect.y+curRect.height));
-		cv::rectangle(ioImg, lefttop, rightbottom,	color, 2, 8, 0);
+        curRect = this->m_CVLocalizedObjectRect;
+        lefttop.x = cvRound(curRect.x);
+        lefttop.y = cvRound(curRect.y);
+        rightbottom.x = cvRound((curRect.x+curRect.width));
+        rightbottom.y = cvRound((curRect.y+curRect.height));
+        cv::rectangle(ioImg, lefttop, rightbottom,    color, 2, 8, 0);
     }
 }
 

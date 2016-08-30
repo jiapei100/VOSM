@@ -83,68 +83,70 @@
 
 
 /// Primary constants
+#define MAX_PATH                                    1024
+#define MAXFLDSIZE                                  1024
 #define STRING_MAXSIZE                              1024
-#define INF											DBL_MAX
+#define INF                                         DBL_MAX
 
 #define ROW                                         1
 #define COL                                         2
 
 
 /// Audio video integrated types
-#define AVNONE										0
-#define AVAUDIO										1
-#define AVVIDEO										2
-#define AVAUDIOVIDEO								3
+#define AVNONE                                      0
+#define AVAUDIO                                     1
+#define AVVIDEO                                     2
+#define AVAUDIOVIDEO                                3
 
 /// Audio only synchronization, evenly or using timestamp
-#define SYNCEVEN									1
-#define SYNCTIMESTAMP								2
+#define SYNCEVEN                                    1
+#define SYNCTIMESTAMP                               2
 
 /// Audio video synchronization, none, audio-based, video-based
-#define INTER_NONSYNC								1
-#define INTER_SYNCAUDIO								2
-#define INTER_SYNCVIDEO								3
+#define INTER_NONSYNC                               1
+#define INTER_SYNCAUDIO                             2
+#define INTER_SYNCVIDEO                             3
 #define INTER_SYNCAUDIOVIDEO                        4
 
 /// Audio processing
-#define	AUDIO_MFCC									1
-#define	AUDIO_RASTA									2
-#define	AUDIO_PLP									3
-#define	AUDIO_TECC									4       /// Teager Energy
+#define AUDIO_MFCC                                  1
+#define AUDIO_RASTA                                 2
+#define AUDIO_PLP                                   3
+#define AUDIO_TECC                                  4       /// Teager Energy
 
 
 /// MFCC types
 
-#define MFCC_FRAMEOVERLAPCUT 						1
-#define MFCC_FRAMEOVERLAPACCUMULATE					2
+#define MFCC_FRAMEOVERLAPCUT                        1
+#define MFCC_FRAMEOVERLAPACCUMULATE                 2
 
 /// VAD types
 #define VAD_FRAMEENERGYFREQUENCY                    1
-#define VAD_SPECTRALENTROPYWITHENERGY				2
-#define VAD_AUTOCORRELATION							3
-#define VAD_WAVELET									4
-#define	VAD_SPEEX									10
+#define VAD_SPECTRALENTROPYWITHENERGY               2
+#define VAD_AUTOCORRELATION                         3
+#define VAD_WAVELET                                 4
+#define VAD_SPEEX                                   10
 
 /// DTW types
-#define DTW_FULL									1
-#define DTW_GC_SakoeChibaBand						2
-#define DTW_GC_ItakuraParallelogram					3
+#define DTW_FULL                                    1
+#define DTW_GC_SakoeChibaBand                       2
+#define DTW_GC_ItakuraParallelogram                 3
 
-#define DTW_LB_KEOGH								4
-#define DTW_LB_YI									5
-#define DTW_LB_KIM									6
+#define DTW_LB_KEOGH                                4
+#define DTW_LB_YI                                   5
+#define DTW_LB_KIM                                  6
 
 
 ///
-#define CLAMP										1
-#define STRETCH										2
+#define CLAMP                                       1
+#define STRETCH                                     2
 
 /// constrains for detected face or tracking face
-#define FACESMALLESTSIZE                            80		/// for both detection and tracking
-#define FACEBIGGESTSIZE                             240		/// for both detection and tracking
+#define FACESMALLESTSIZE                            80      /// for both detection and tracking
+#define FACEBIGGESTSIZE                             240     /// for both detection and tracking
 #define FACEPARTSMALLESTSIZE                        16
 #define FACEPARTBIGGESTSIZE                         128
-#define FRAMEEDGE									5		/// if too close the image boundary, look on as lost
+#define FRAMEEDGE                                   5       /// if too close the image boundary, look on as lost
 
 /// detected face position shifting for AAM tracking
 #define AAMADABOOSTDOWNPERCENTAGE                   0.2
@@ -158,9 +160,9 @@
 #define APPEARANCE                                  3
 
 /// a) single image b) image sequence c) webcam d) video
-#define NOTHINGLOADED								0
-#define SINGLEIMAGE									1
-#define IMAGESEQUENCE								2
+#define NOTHINGLOADED                               0
+#define SINGLEIMAGE                                 1
+#define IMAGESEQUENCE                               2
 #define CAM                                         3
 #define AVI                                         4
 
@@ -172,7 +174,7 @@
 
 /// number of channels, for gray or rgb
 #define GRAYCHANNELS                                1
-#define COLORCHANNELS                               3   /// R G B 3 channels
+#define COLORCHANNELS                               3       /// R G B 3 channels
 
 /// map types
 #define DIRECTMAP                                   1
@@ -192,9 +194,9 @@
 /** left channel, right channel, or both channels */
 
 enum { 
-	Audio_LChannel,
-	Audio_RChannel,
-	Audio_BChannel
+    Audio_LChannel,
+    Audio_RChannel,
+    Audio_BChannel
 };
 
 
@@ -572,12 +574,10 @@ static bool IsContaining ( std::vector<T> v, std::vector<T> t )
 /** sign of a double value */
 static int sign(double in)
 {
-	if (fabs(in) <= DBL_MIN ) return 0;
-	else if (in > DBL_MIN ) return 1;
-	else return -1;
+    if (fabs(in) <= DBL_MIN ) return 0;
+    else if (in > DBL_MIN ) return 1;
+    else return -1;
 }
-
-
 
 
 /** save a double array to a file */
@@ -586,27 +586,27 @@ static void SaveData(const double * d,
                      const std::string& fn)
 {
     std::ofstream fp;
-	fp.open(fn.c_str ());
+    fp.open(fn.c_str ());
     fp << "# Coordinates" << std::endl;
-	for(unsigned int i = 0; i < datasize; ++i)
-	{
+    for(unsigned int i = 0; i < datasize; ++i)
+    {
         fp << i << "   " << d[i] << std::endl;
-	}
-	fp.close();
+    }
+    fp.close();
 }
 
 
 /** save a double array to a file */
 static void SaveData(const std::vector<double>& d, const std::string& fn)
 {
-	std::ofstream fp;
-	fp.open(fn.c_str ());
+    std::ofstream fp;
+    fp.open(fn.c_str ());
     fp << "# Coordinates" << std::endl;
-	for(unsigned int i = 0; i < d.size(); ++i)
-	{
+    for(unsigned int i = 0; i < d.size(); ++i)
+    {
         fp << i << "   " << d[i] << std::endl;
-	}
-	fp.close();
+    }
+    fp.close();
 }
 
 /** Judge a value is within which range, just make sure all ranges in ranges are exclusive */
@@ -630,7 +630,7 @@ static std::vector<std::string> decomposePageString(const std::string& istr)
     std::string line;
     while (std::getline(iss, line, '\n'))
     {
-        line.erase(std::remove(line.begin(), line.end(), 0x0D), line.end());	//	remove '\r'
+        line.erase(std::remove(line.begin(), line.end(), 0x0D), line.end());    //    remove '\r'
         res.push_back(line);
     }
 
@@ -661,13 +661,13 @@ static void replaceChar(std::string& str, const char ch1, const char ch2)
 /** Make a standard string by erase or replace some characters */
 static void makeStdString(std::string& str)
 {
-    str.erase(std::remove(str.begin(), str.end(), 0x2C), str.end());	//	remove ','
-    str.erase(std::remove(str.begin(), str.end(), 0x0A), str.end());	//	remove '\n'
-    str.erase(std::remove(str.begin(), str.end(), 0x0D), str.end());	//	remove '\r'
-    replaceChar(str, 0x3A, 0x5F);	//	':'	->	'_'
-    replaceChar(str, 0x20, 0x5F);	//	' '	->	'_'
-    replaceChar(str, 0x2F, 0x5F);	//	'/'	->	'_'
-    replaceChar(str, 0x5C, 0x5F);	//	'\'	->	'_'
+    str.erase(std::remove(str.begin(), str.end(), 0x2C), str.end());    //    remove ','
+    str.erase(std::remove(str.begin(), str.end(), 0x0A), str.end());    //    remove '\n'
+    str.erase(std::remove(str.begin(), str.end(), 0x0D), str.end());    //    remove '\r'
+    replaceChar(str, 0x3A, 0x5F);    //    ':'    ->    '_'
+    replaceChar(str, 0x20, 0x5F);    //    ' '    ->    '_'
+    replaceChar(str, 0x2F, 0x5F);    //    '/'    ->    '_'
+    replaceChar(str, 0x5C, 0x5F);    //    '\'    ->    '_'
 }
 
 
@@ -855,7 +855,7 @@ static std::string getSystemTimeInString(bool year = true,
     time ( &rawtime );
     timeinfo = localtime ( &rawtime );
 
-    if(year)		{ ss << (timeinfo->tm_year+1900); ss >> s_year; res += s_year; ss.clear();}
+    if(year)        { ss << (timeinfo->tm_year+1900); ss >> s_year; res += s_year; ss.clear();}
     if(mon)
     {
         ss << (timeinfo->tm_mon+1); ss >> s_mon;
@@ -874,9 +874,9 @@ static std::string getSystemTimeInString(bool year = true,
             res += s_mday;
         ss.clear();
     }
-    if(hour)		{ ss << timeinfo->tm_hour; ss >> s_hour; res += s_hour; ss.clear();}
-    if(min)			{ ss << timeinfo->tm_min; ss >> s_min; res += s_min; ss.clear();}
-    if(sec)			{ ss << timeinfo->tm_sec; ss >> s_sec; res += s_sec; ss.clear();}
+    if(hour)        { ss << timeinfo->tm_hour; ss >> s_hour; res += s_hour; ss.clear();}
+    if(min)            { ss << timeinfo->tm_min; ss >> s_min; res += s_min; ss.clear();}
+    if(sec)            { ss << timeinfo->tm_sec; ss >> s_sec; res += s_sec; ss.clear();}
 
     return res;
 }
@@ -996,14 +996,14 @@ static void write_text_to_log_file( const std::string &text, const std::string& 
 /** Standard .wav header */
 typedef struct
 {
-    char			szRIFF[4];
-    long			lRIFFSize;
-    char			szWave[4];
-    char			szFmt[4];
-    long			lFmtSize;
-    WAVEFORMATEX	wfex;
-    char			szData[4];
-    long			lDataSize;
+    char            szRIFF[4];
+    long            lRIFFSize;
+    char            szWave[4];
+    char            szFmt[4];
+    long            lFmtSize;
+    WAVEFORMATEX    wfex;
+    char            szData[4];
+    long            lDataSize;
 } WAVEHEADER;
 
 
@@ -1086,7 +1086,7 @@ static std::string GetDeviceFriendlyName(const IMoniker* pMoniker)
     return fullname;
 }
 
-#endif		// _WIN32
+#endif        // _WIN32
 
 
 #endif  // __VO_COMMON_H__

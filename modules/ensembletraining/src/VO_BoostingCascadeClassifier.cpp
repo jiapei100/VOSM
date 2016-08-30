@@ -68,8 +68,8 @@
  */
 VO_BoostingCascadeClassifier::VO_BoostingCascadeClassifier()
 {
-	this->m_iNbOfStages					= 0;
-	this->m_VOFeatures					= NULL;
+    this->m_iNbOfStages                 = 0;
+    this->m_VOFeatures                  = NULL;
 }
 
 
@@ -78,38 +78,38 @@ VO_BoostingCascadeClassifier::VO_BoostingCascadeClassifier()
  */
 VO_BoostingCascadeClassifier::~VO_BoostingCascadeClassifier()
 {
-	
+
 }
 
 
 /**
  * FIXME: to be finished
- * @brief	Train a boosting cascade classifier
- * @param	_cascadeDirName		-- Input	where to store the cascade (could be half trained)
- * @param 	_posFilenames		-- Input	all positive file names
- * @param 	_negFilenames		-- Input	all negative file names
- * @param 	_precalcValBufSize	-- Input	all positive file names
- * @param 	_precalcIdxBufSize	-- Input	all negative file names
- * @param 	_numStages			-- Input	number of stages
- * @param	_featureParams		-- Input	how to extract those features
+ * @brief   Train a boosting cascade classifier
+ * @param   _cascadeDirName     -- Input    where to store the cascade (could be half trained)
+ * @param   _posFilenames       -- Input    all positive file names
+ * @param   _negFilenames       -- Input    all negative file names
+ * @param   _precalcValBufSize  -- Input    all positive file names
+ * @param   _precalcIdxBufSize  -- Input    all negative file names
+ * @param   _numStages          -- Input    number of stages
+ * @param   _featureParams      -- Input    how to extract those features
  * 
  */
-bool VO_BoostingCascadeClassifier::train( const std::string& _cascadeDirName,
+bool VO_BoostingCascadeClassifier::train(   const std::string& _cascadeDirName,
                                             const std::vector<std::string> _posFilenames,
                                             const std::vector<std::string> _negFilenames,
-											int _precalcValBufSize,
-											int _precalcIdxBufSize,
-											int _numStages,
-											float _minTruePositive,
-											float _maxWrongClassification,
-											const VO_Features* _featureParams)
+                                            int _precalcValBufSize,
+                                            int _precalcIdxBufSize,
+                                            int _numStages,
+                                            float _minTruePositive,
+                                            float _maxWrongClassification,
+                                            const VO_Features* _featureParams)
 {
-	this->m_iNbOfPositiveSamples			= _posFilenames.size();
-	this->m_iNbOfNegativeSamples			= _negFilenames.size();
-	this->m_iNbOfSamples					= this->m_iNbOfPositiveSamples + this->m_iNbOfNegativeSamples;
-	this->m_iNbOfStages						= _numStages;
-	this->m_fMinTruePositive				= _minTruePositive;
-	this->m_fMaxWrongClassification			= _maxWrongClassification;
+    this->m_iNbOfPositiveSamples            = _posFilenames.size();
+    this->m_iNbOfNegativeSamples            = _negFilenames.size();
+    this->m_iNbOfSamples                    = this->m_iNbOfPositiveSamples + this->m_iNbOfNegativeSamples;
+    this->m_iNbOfStages                     = _numStages;
+    this->m_fMinTruePositive                = _minTruePositive;
+    this->m_fMaxWrongClassification         = _maxWrongClassification;
 
     std::string dirName;
     if ( _cascadeDirName.find('/') != std::string::npos )
@@ -117,8 +117,8 @@ bool VO_BoostingCascadeClassifier::train( const std::string& _cascadeDirName,
     else
         dirName = _cascadeDirName + '\\';
 
-	/** FIXME: to be finished */
-	/** OpenCV traincascade module */
-	
-	return true;
+    /** FIXME: to be finished */
+    /** OpenCV traincascade module */
+    
+    return true;
 }

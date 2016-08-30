@@ -76,11 +76,11 @@
 
 
 /**
- * @author     	JIA Pei
- * @version    	2012-10-01
- * @brief      	Get local date by using boost functions
- * @param      	None
- * @return     	std::string         the current local date
+ * @author      JIA Pei
+ * @version     2012-10-01
+ * @brief       Get local date by using boost functions
+ * @param       None
+ * @return      std::string         the current local date
 */
 static std::string boostGetLocalDate()
 {
@@ -93,11 +93,11 @@ static std::string boostGetLocalDate()
 }
 
 /**
- * @author     	JIA Pei
- * @version    	2012-10-01
- * @brief      	Get local time by using boost functions
- * @param      	None
- * @return     	std::string         the current local time
+ * @author      JIA Pei
+ * @version     2012-10-01
+ * @brief       Get local time by using boost functions
+ * @param       None
+ * @return      std::string         the current local time
 */
 static std::string boostGetLocalTime()
 {
@@ -110,11 +110,11 @@ static std::string boostGetLocalTime()
 }
 
 /**
- * @author     	JIA Pei
- * @version    	2012-10-01
- * @brief      	Get local date and time by using boost functions
- * @param      	None
- * @return     	std::string         the current local date and time
+ * @author      JIA Pei
+ * @version     2012-10-01
+ * @brief       Get local date and time by using boost functions
+ * @param       None
+ * @return      std::string         the current local date and time
 */
 static std::string boostGetLocalDateTime()
 {
@@ -126,16 +126,31 @@ static std::string boostGetLocalDateTime()
 }
 
 /**
- * @author     	JIA Pei
- * @version    	2012-10-01
- * @brief      	Get file path from an entire file name by using boost functions
- * @param      	const std::string	the entire file name
- * @return     	std::string         the obtained file path
+ * @author      JIA Pei
+ * @version     2012-10-01
+ * @brief       Get file name without extension by using boost functions
+ * @param       const std::string   the entire file name
+ * @return      std::string         the obtained file name without extention
 */
-static std::string boostGetPathFromName(const std::string fn)
+static std::string boostGetFileNameWithoutExt(const std::string fn)
 {
-	std::string filename_noext = boost::filesystem::path(fn).stem().string();
-	return filename_noext;
+    std::string filename_noext = boost::filesystem::path(fn).stem().string();
+    return filename_noext;
 }
 
-#endif		// __VO_BOOSTCOMMON_H__
+
+/**
+ * @author      JIA Pei
+ * @version     2016-08-28
+ * @brief       Get file name's path ONLY
+ * @param       const std::string   the entire file name
+ * @return      std::string         the obtained file path
+*/
+static std::string boostGetPathOnly(const std::string fn)
+{
+    std::string filename_path = boost::filesystem::path(fn).parent_path().string();
+    return filename_path;
+}
+
+
+#endif  // __VO_BOOSTCOMMON_H__

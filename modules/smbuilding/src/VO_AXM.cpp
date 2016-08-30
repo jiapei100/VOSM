@@ -69,52 +69,86 @@
 #include "VO_AXM.h"
 
 
-VO_AXM::VO_AXM(unsigned int method, unsigned int levels)
+/**
+ * @author      JIA Pei
+ * @version     2016-08-24
+ * @brief       a pair of shape and texture, respectively decomposed to a shape and a texture
+ * @param       iPairShapeTexture   Input - the pair of shape and texture
+ * @param       oShapeParams        Output - shape parameters
+ * @param       oTextureParams      Output - texture parameters
+ * @return      void
+*/
+void VO_AXM::SplitShapeTextureParams(const std::pair<VO_Shape, VO_Texture>& iPairShapeTexture, 
+                                    cv::Mat_<float>& oShapeParams, 
+                                    cv::Mat_<float>& oTextureParams )
 {
-	this->init(method, levels);
-}
+    VO_Shape iShape = iPairShapeTexture.first;
+    VO_Texture iTexture = iPairShapeTexture.second;
 
-
-void VO_AXM::init(unsigned int method, unsigned int levels)
-{
-	this->m_iMethod					=	method;
-    this->m_iNbOfPyramidLevels 		= 	levels;
-}
-
-
-VO_AXM::~VO_AXM()
-{
-	
+    unsigned int NbOfShapeDim = iShape.GetNbOfDim();
+    float tempNorm = 0.0f;
+    std::vector<float> tempTheta;
+    tempTheta.resize(NbOfShapeDim == 2? 1:3);
+    cv::Mat_<float> tempCOG = cv::Mat_<float>::zeros(1, NbOfShapeDim);
+    
+    this->VO_CalcAllParams4AnyShapeWithConstrain(iShape, oShapeParams, tempNorm, tempTheta, tempCOG);
+    this->VO_CalcAllParams4AnyTexture(iTexture, oTextureParams);
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-13
- * @brief      	Save ASM to a specified folder
- * @param      	fd         	Input - the folder that ASM to be saved to
- * @return		void
+ * @author      JIA Pei
+ * @version     2016-08-24
+ * @brief       shapeParam to shape, textureParam to texture, then, combine to a pair
+ * @param       iShapeParams        Input - shape parameters
+ * @param       iTextureParams      Input - texture parameters
+ * @param       oPairShapeTexture   Output - the pair of shape and texture    
+ * @return      void
+*/
+void VO_AXM::CombineShapeTextureParams( const cv::Mat_<float>& iShapeParams, 
+                                        const cv::Mat_<float>& iTextureParams,
+                                        std::pair<VO_Shape, VO_Texture>& oPairShapeTexture )
+{
+    unsigned int NbOfShapeDim = iShapeParams.rows;
+    unsigned int NbOfTextureRep = iTextureParams.rows;
+    
+    VO_Shape oShape;
+    VO_Texture oTexture;
+    this->VO_SParamBackProjectToAlignedShape(iShapeParams, oShape, NbOfShapeDim);
+    this->VO_TParamBackProjectToNormalizedTexture(iTextureParams, oTexture, NbOfTextureRep);
+    
+    oPairShapeTexture.first = oShape;
+    oPairShapeTexture.second = oTexture;
+}
+
+
+/**
+ * @author      JIA Pei
+ * @version     2010-02-13
+ * @brief       Save ASM to a specified folder
+ * @param       fd      Input - the folder that ASM to be saved to
+ * @return      void
 */
 void VO_AXM::VO_Save ( const std::string& fd )
 {
-	switch(this->m_iMethod)
-	{
-		case AAM_BASIC:
-		case AAM_DIRECT:
-		case AAM_FAIA:
-		case AAM_CMUICIA:
-		case AAM_IAIA:
-		VO_TextureModel::VO_Save(fd);
-		break;
-		case ASM_PROFILEND:
-		case ASM_LTC:
-		VO_ShapeModel::VO_Save(fd);
-		break;
-		case CLM:
-		case AFM:
-		break;
-	}
-	
+    switch(this->m_iMethod)
+    {
+        case AAM_BASIC:
+        case AAM_DIRECT:
+        case AAM_FAIA:
+        case AAM_CMUICIA:
+        case AAM_IAIA:
+        VO_TextureModel::VO_Save(fd);
+        break;
+        case ASM_PROFILEND:
+        case ASM_LTC:
+        VO_ShapeModel::VO_Save(fd);
+        break;
+        case CLM:
+        case AFM:
+        break;
+    }
+    
     // create AXM subfolder for just AXM model data
     std::string fn = fd+"/AXM";
     if (!boost::filesystem::is_directory(fn) )
@@ -132,33 +166,33 @@ void VO_AXM::VO_Save ( const std::string& fd )
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-13
- * @brief      	Load all trained data
- * @param      	fd         	Input - the folder that ASM to be saved to
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-13
+ * @brief       Load all trained data
+ * @param       fd      Input - the folder that ASM to be saved to
+ * @return      void
 */
 void VO_AXM::VO_Load ( const std::string& fd )
 {
-	switch(this->m_iMethod)
-	{
-		case AAM_BASIC:
-		case AAM_DIRECT:
-		case AAM_FAIA:
-		case AAM_CMUICIA:
-		case AAM_IAIA:
-		VO_TextureModel::VO_Load(fd);
-		break;
-		case ASM_PROFILEND:
-		case ASM_LTC:
-		VO_ShapeModel::VO_Load(fd);
-		break;
-		case CLM:
-		case AFM:
-		break;
-	}
-	
-	std::string fn = fd+"/AXM";
+    switch(this->m_iMethod)
+    {
+        case AAM_BASIC:
+        case AAM_DIRECT:
+        case AAM_FAIA:
+        case AAM_CMUICIA:
+        case AAM_IAIA:
+        VO_TextureModel::VO_Load(fd);
+        break;
+        case ASM_PROFILEND:
+        case ASM_LTC:
+        VO_ShapeModel::VO_Load(fd);
+        break;
+        case CLM:
+        case AFM:
+        break;
+    }
+    
+    std::string fn = fd+"/AXM";
     if (!boost::filesystem::is_directory(fn) )
     {
         std::cout << "AXM subfolder is not existing. " << std::endl;
@@ -172,39 +206,39 @@ void VO_AXM::VO_Load ( const std::string& fd )
     // AXM
     tempfn = fn + "/AXM" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp >> this->m_iNbOfPyramidLevels;					// m_iNbOfPyramidLevels
+    fp >> temp >> this->m_iNbOfPyramidLevels;           // m_iNbOfPyramidLevels
     fp.close();fp.clear();
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-13
- * @brief      	Load all trained data for fitting
- * @param      	fd         	Input - the folder that ASM to be saved to
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-13
+ * @brief       Load all trained data for fitting
+ * @param       fd      Input - the folder that ASM to be saved to
+ * @return      void
 */
 void VO_AXM::VO_LoadParameters4Fitting ( const std::string& fd )
 {
-	switch(this->m_iMethod)
-	{
-		case AAM_BASIC:
-		case AAM_DIRECT:
-		case AAM_FAIA:
-		case AAM_CMUICIA:
-		case AAM_IAIA:
-		VO_TextureModel::VO_LoadParameters4Fitting(fd);
-		break;
-		case ASM_PROFILEND:
-		case ASM_LTC:
-		VO_ShapeModel::VO_LoadParameters4Fitting(fd);
-		break;
-		case CLM:
-		case AFM:
-		break;
-	}
-	
-	std::string fn = fd+"/AXM";
+    switch(this->m_iMethod)
+    {
+        case AAM_BASIC:
+        case AAM_DIRECT:
+        case AAM_FAIA:
+        case AAM_CMUICIA:
+        case AAM_IAIA:
+        VO_TextureModel::VO_LoadParameters4Fitting(fd);
+        break;
+        case ASM_PROFILEND:
+        case ASM_LTC:
+        VO_ShapeModel::VO_LoadParameters4Fitting(fd);
+        break;
+        case CLM:
+        case AFM:
+        break;
+    }
+    
+    std::string fn = fd+"/AXM";
     if (!boost::filesystem::is_directory(fn) )
     {
         std::cout << "AXM subfolder is not existing. " << std::endl;
@@ -218,7 +252,7 @@ void VO_AXM::VO_LoadParameters4Fitting ( const std::string& fd )
     // AXM
     tempfn = fn + "/AXM" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp >> this->m_iNbOfPyramidLevels;					// m_iNbOfPyramidLevels
+    fp >> temp >> this->m_iNbOfPyramidLevels;                    // m_iNbOfPyramidLevels
     fp.close();fp.clear();
 }
 

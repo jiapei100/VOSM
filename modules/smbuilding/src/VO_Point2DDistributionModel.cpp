@@ -74,7 +74,7 @@
 /** Initialization */
 void VO_Point2DDistributionModel::init()
 {
-	this->m_VONormalizedEllipses.clear();
+    this->m_VONormalizedEllipses.clear();
 }
 
 
@@ -88,110 +88,110 @@ VO_Point2DDistributionModel::VO_Point2DDistributionModel()
 /** Destructor */
 VO_Point2DDistributionModel::~VO_Point2DDistributionModel()
 {
-	this->m_VONormalizedEllipses.clear();
+    this->m_VONormalizedEllipses.clear();
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-07
- * @brief      	build point model
- * @param      	allAlignedShapes			Input - input aligned points.
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-02-07
+ * @brief       build point model
+ * @param       allAlignedShapes        Input - input aligned points.
+ * @return      void
 */
 void VO_Point2DDistributionModel::VO_BuildPointDistributionModel( const std::vector<VO_Shape>& allAlignedShapes )
 {
-	unsigned int NbOfSamples 				= allAlignedShapes.size();
+    unsigned int NbOfSamples                 = allAlignedShapes.size();
     unsigned int NbOfPoints                 = allAlignedShapes[0].GetNbOfPoints();
     this->m_VONormalizedEllipses.resize(NbOfPoints);
     cv::Mat_<float> matAlignedPoints        = cv::Mat_<float>::zeros(NbOfSamples, 2);
     //cv::Mat_<float> matAlignedMeanPoint     = cv::Mat_<float>::zeros(1, 2);
-	
+    
     for(unsigned int i = 0; i < NbOfPoints; ++i)
-	{
-		for(unsigned int j = 0; j < NbOfSamples; ++j)
-		{
-            matAlignedPoints(j, 0)			= allAlignedShapes[j].GetA2DPoint(i).x;
-            matAlignedPoints(j, 1)			= allAlignedShapes[j].GetA2DPoint(i).y;
-		}
+    {
+        for(unsigned int j = 0; j < NbOfSamples; ++j)
+        {
+            matAlignedPoints(j, 0)            = allAlignedShapes[j].GetA2DPoint(i).x;
+            matAlignedPoints(j, 1)            = allAlignedShapes[j].GetA2DPoint(i).y;
+        }
         // 2014-05-08, asked by Pei JIA: why the following line is not correct??
         //cv::PCA pca = cv::PCA(matAlignedPoints, matAlignedMeanPoint, CV_PCA_DATA_AS_ROW, 2);
         cv::PCA pca = cv::PCA(matAlignedPoints, cv::Mat(), CV_PCA_DATA_AS_ROW, 2);
         float xx = pca.eigenvectors.at<float>(0,0);
         float yy = pca.eigenvectors.at<float>(0,1);
-		float theta = 0.0;
-		if( fabs(xx) < FLT_MIN )	theta = (float)(CV_PI/2.0);
-		else theta = atan(yy/xx)/CV_PI*180.0;
-		cv::Point2f pt = cv::Point2f(	pca.mean.at<float>(0,0), 
+        float theta = 0.0;
+        if( fabs(xx) < FLT_MIN )    theta = (float)(CV_PI/2.0);
+        else theta = atan(yy/xx)/CV_PI*180.0;
+        cv::Point2f pt = cv::Point2f(    pca.mean.at<float>(0,0), 
                                         pca.mean.at<float>(0,1));
-		this->m_VONormalizedEllipses[i] = VO_Ellipse(	pt,
-														3.0*sqrt(pca.eigenvalues.at<float>(0,0)),
-														3.0*sqrt(pca.eigenvalues.at<float>(1,0)),
-														0,
-														360,
-														theta );
-	}
+        this->m_VONormalizedEllipses[i] = VO_Ellipse(    pt,
+                                                        3.0*sqrt(pca.eigenvalues.at<float>(0,0)),
+                                                        3.0*sqrt(pca.eigenvalues.at<float>(1,0)),
+                                                        0,
+                                                        360,
+                                                        theta );
+    }
 }
 
 
 /**
- * @author     JIA Pei
- * @version    2010-06-07
- * @brief      Constrain single point
- * @param      pt     	Input and Output - the input and output point
+ * @author      JIA Pei
+ * @version     2010-06-07
+ * @brief       Constrain single point
+ * @param       pt      Input and Output - the input and output point
 */
 void VO_Point2DDistributionModel::VO_ConstrainSinglePoint(cv::Point2f& pt, const VO_Ellipse& ellipse)
 {
     if( ! const_cast<VO_Ellipse&>(ellipse).IsPointWithinEllipse(pt) )
-	{
+    {
         cv::Point2f boundpt = const_cast<VO_Ellipse&>(ellipse).FindIntersectPointOnBoundary(pt);
-		pt = boundpt;
-	}
+        pt = boundpt;
+    }
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-06-07
- * @brief      	Scale all input ellipses
- * @param      	iEllipses	- input
- * @param		oEllipses	- output
+ * @author      JIA Pei
+ * @version     2010-06-07
+ * @brief       Scale all input ellipses
+ * @param       iEllipses    - input
+ * @param       oEllipses    - output
 */
 void VO_Point2DDistributionModel::VO_ScalePDMEllipses(const std::vector<VO_Ellipse>& iEllipses, float scale, std::vector<VO_Ellipse>& oEllipses)
 {
-	unsigned int NbOfEllipses = iEllipses.size();
-	for(unsigned int i = 0; i < NbOfEllipses; i++)
-	{
+    unsigned int NbOfEllipses = iEllipses.size();
+    for(unsigned int i = 0; i < NbOfEllipses; i++)
+    {
         oEllipses[i] = const_cast< std::vector<VO_Ellipse>& >(iEllipses)[i]*scale;
-	}
+    }
 }
 
 
 /**
- * @author     JIA Pei
- * @version    2010-06-07
- * @brief      Constrain all points respetively
- * @param      ioShape     	Input and Output - the input and output shape
+ * @author      JIA Pei
+ * @version     2010-06-07
+ * @brief       Constrain all points respetively
+ * @param       ioShape     Input and Output - the input and output shape
 */
 void VO_Point2DDistributionModel::VO_ConstrainAllPoints(VO_Shape& ioShape)
 {
     unsigned int NbOfPoints = ioShape.GetNbOfPoints();
-	cv::Point2f pt;
+    cv::Point2f pt;
 
     for(unsigned int i = 0; i < NbOfPoints; i++)
-	{
+    {
         pt = ioShape.GetA2DPoint(i);
         VO_Point2DDistributionModel::VO_ConstrainSinglePoint( pt, this->m_VONormalizedEllipses[i] );
         ioShape.SetA2DPoint(pt, i);
-	}
+    }
 }
 
 
 /**
- * @author     JIA Pei
- * @version    2010-02-22
- * @brief      Save ASM to a specified folder
- * @param      fd         	Input - the folder that ASM to be saved to
+ * @author      JIA Pei
+ * @version     2010-02-22
+ * @brief       Save ASM to a specified folder
+ * @param       fd      Input - the folder that ASM to be saved to
 */
 void VO_Point2DDistributionModel::VO_Save(const std::string& fd)
 {
@@ -202,42 +202,42 @@ void VO_Point2DDistributionModel::VO_Save(const std::string& fd)
 
     std::fstream fp;
     std::string tempfn;
-	
+    
     // Point2DDistributionModel
     tempfn = fn + "/Point2DDistributionModel" + ".txt";
     fp.open(tempfn.c_str (), std::ios::out);
     fp << "NbOfPoints" << std::endl << this->m_VONormalizedEllipses.size() << std::endl;
     fp.close();fp.clear();
-	
-	// m_VONormalizedEllipses
+    
+    // m_VONormalizedEllipses
     tempfn = fn + "/m_VONormalizedEllipses" + ".txt";
     fp.open(tempfn.c_str (), std::ios::out);
     fp << "m_VONormalizedEllipses" << std::endl;
-	for(unsigned int i = 0; i < this->m_VONormalizedEllipses.size(); i++)
-	{
+    for(unsigned int i = 0; i < this->m_VONormalizedEllipses.size(); i++)
+    {
         fp << this->m_VONormalizedEllipses[i] << std::endl;
-	}
+    }
     fp.close();fp.clear();
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-22
- * @brief      	Load all ASM data from a specified folder
- * @param      	fd         	Input - the folder that ASM to be loaded from
+ * @author      JIA Pei
+ * @version     2010-02-22
+ * @brief       Load all ASM data from a specified folder
+ * @param       fd      Input - the folder that ASM to be loaded from
 */
 void VO_Point2DDistributionModel::VO_Load(const std::string& fd)
 {
-	this->VO_LoadParameters4Fitting(fd);
+    this->VO_LoadParameters4Fitting(fd);
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-22
- * @brief      	Load all ASM data from a specified folder for later fitting
- * @param      	fd         		Input - the folder that ASM to be loaded from
+ * @author      JIA Pei
+ * @version     2010-02-22
+ * @brief       Load all ASM data from a specified folder for later fitting
+ * @param       fd      Input - the folder that ASM to be loaded from
 */
 void VO_Point2DDistributionModel::VO_LoadParameters4Fitting(const std::string& fd)
 {
@@ -252,24 +252,24 @@ void VO_Point2DDistributionModel::VO_LoadParameters4Fitting(const std::string& f
     std::string tempfn;
     std::string temp;
     unsigned int NbOfPoints;
-	
+    
     // Point2DDistributionModel
     tempfn = fn + "/Point2DDistributionModel" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
     fp >> temp >> NbOfPoints;
     fp.close();fp.clear();
-	
+    
     this->m_VONormalizedEllipses.resize(NbOfPoints);
 
     // m_VONormalizedEllipses
     tempfn = fn + "/m_VONormalizedEllipses" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-	fp >> temp;
+    fp >> temp;
     this->m_VONormalizedEllipses.resize(NbOfPoints);
     for(unsigned int i = 0; i < NbOfPoints; i++)
-	{
-		fp >> this->m_VONormalizedEllipses[i];
-	}
+    {
+        fp >> this->m_VONormalizedEllipses[i];
+    }
     fp.close();fp.clear();
 }
 

@@ -70,34 +70,34 @@
 
 VO_FaceCompPos VO_ShapeFace::CalcFaceCompRects(const VO_FaceParts& faceparts)
 {
-	cv::Rect face, lefteye, righteye, nose, mouth;
-	VO_Shape leftEyeShape, rightEyeShape, noseShape, nostrilShape, nosetipShape, wholenoseShape, mouthShape;
+    cv::Rect face, lefteye, righteye, nose, mouth;
+    VO_Shape leftEyeShape, rightEyeShape, noseShape, nostrilShape, nosetipShape, wholenoseShape, mouthShape;
 
-	// face
-    face					= this->GetShapeBoundRect();
+    // face
+    face                    = this->GetShapeBoundRect();
 
-	// left eye
-	leftEyeShape			= this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::LEFTEYE).GetIndexes());
-    lefteye					= leftEyeShape.GetShapeBoundRect();
+    // left eye
+    leftEyeShape            = this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::LEFTEYE).GetIndexes());
+    lefteye                 = leftEyeShape.GetShapeBoundRect();
 
-	// right eye
-	rightEyeShape			= this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::RIGHTEYE).GetIndexes());
-    righteye				= rightEyeShape.GetShapeBoundRect();
+    // right eye
+    rightEyeShape           = this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::RIGHTEYE).GetIndexes());
+    righteye                = rightEyeShape.GetShapeBoundRect();
 
-	// nose
-	noseShape				= this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::NOSE).GetIndexes());
-	nostrilShape			= this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::NOSTRIL).GetIndexes());
-	nosetipShape			= this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::NOSETIP).GetIndexes());
-	wholenoseShape			= VO_Shape::Combine2Shapes(noseShape, nostrilShape);
-	wholenoseShape			= VO_Shape::Combine2Shapes(wholenoseShape, nosetipShape);
-    nose					= wholenoseShape.GetShapeBoundRect();
+    // nose
+    noseShape               = this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::NOSE).GetIndexes());
+    nostrilShape            = this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::NOSTRIL).GetIndexes());
+    nosetipShape            = this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::NOSETIP).GetIndexes());
+    wholenoseShape          = VO_Shape::Combine2Shapes(noseShape, nostrilShape);
+    wholenoseShape          = VO_Shape::Combine2Shapes(wholenoseShape, nosetipShape);
+    nose                    = wholenoseShape.GetShapeBoundRect();
 
-	// mouth
-	mouthShape				= this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::LIPOUTERLINE).GetIndexes());
-    mouth					= mouthShape.GetShapeBoundRect();
-	
-	m_VOFaceCompPos 		= VO_FaceCompPos("", &face, &lefteye, &righteye, &nose, &mouth);
-	
-	return 					m_VOFaceCompPos;
+    // mouth
+    mouthShape              = this->GetSubShape(faceparts.VO_GetOneFacePart(VO_FacePart::LIPOUTERLINE).GetIndexes());
+    mouth                   = mouthShape.GetShapeBoundRect();
+    
+    m_VOFaceCompPos         = VO_FaceCompPos("", &face, &lefteye, &righteye, &nose, &mouth);
+    
+    return                  m_VOFaceCompPos;
 }
 

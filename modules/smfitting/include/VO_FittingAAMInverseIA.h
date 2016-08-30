@@ -60,8 +60,8 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_FittingAAMInverseIA__
-#define __VO_FittingAAMInverseIA__
+#ifndef __VO_FITTINGAAMINVERSEIA_H__
+#define __VO_FITTINGAAMINVERSEIA_H__
 
 
 #include "VO_CVCommon.h"
@@ -144,5 +144,5 @@ public:
 
 };
 
-#endif
+#endif  // __VO_FITTINGAAMINVERSEIA_H__
 

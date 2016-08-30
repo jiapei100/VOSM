@@ -59,8 +59,8 @@
 * Modify Date:      2014-04-17                                                                      *
 ****************************************************************************************************/
 
-#ifndef __VO_WEAKCLASSIFIER_H_
-#define __VO_WEAKCLASSIFIER_H_
+#ifndef __VO_WEAKCLASSIFIER_H__
+#define __VO_WEAKCLASSIFIER_H__
 
 
 #include <opencv2/core/core.hpp>
@@ -69,31 +69,31 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 /** 
- * @author		JIA Pei
- * @brief		For boosting, a weak classifier is just a decision tree.
+ * @author      JIA Pei
+ * @brief       For boosting, a weak classifier is just a decision tree.
  */
 class VO_WeakClassifier : public cv::ml::Boost
 {
 protected:
-	/** For every weak classifier, every single feature has a single threshold to do binary classification */
-	float					m_fThreshold;
+    /** For every weak classifier, every single feature has a single threshold to do binary classification */
+    float                   m_fThreshold;
 
 public:
-	/** stump type, STUMP, SVMSTUMP, etc. */
-	enum {UNDEFINED = 0, STUMP = 1, SVMSTUMP = 2, SELFDEFINEDWEAKCLASSIFIER = 3};
-	
-	/** Constructor */
-	explicit VO_WeakClassifier() 	{ this->m_fThreshold = 0.0; }
-	
-	/** Destructor */
-	virtual ~VO_WeakClassifier() 	{}
-	
-	/** Split */
-//	void					split_node_data( CvDTreeNode* node );
-	
+    /** stump type, STUMP, SVMSTUMP, etc. */
+    enum {UNDEFINED = 0, STUMP = 1, SVMSTUMP = 2, SELFDEFINEDWEAKCLASSIFIER = 3};
+    
+    /** Constructor */
+    explicit VO_WeakClassifier()    { this->m_fThreshold = 0.0; }
+    
+    /** Destructor */
+    virtual ~VO_WeakClassifier()    {}
+    
+    /** Split */
+//    void                    split_node_data( CvDTreeNode* node );
+    
     /** Gets and Sets */
-	float					GetThreshold() const {return this->m_fThreshold;}
-	
+    float                    GetThreshold() const {return this->m_fThreshold;}
+    
 };
 
-#endif	// __VO_WEAKCLASSIFIER_H_
+#endif  // __VO_WEAKCLASSIFIER_H__

@@ -60,8 +60,8 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_FittingASMLTCs__
-#define __VO_FittingASMLTCs__
+#ifndef __VO_FITTINGASMLTCS_H__
+#define __VO_FITTINGASMLTCS_H__
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -154,5 +154,5 @@ public:
                                                 unsigned int pyramidlevel = 3);
 };
 
-#endif  // __VO_FittingASMLTCs__
+#endif  // __VO_FITTINGASMLTCS_H__
 

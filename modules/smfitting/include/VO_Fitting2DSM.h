@@ -60,10 +60,11 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_2DSMFitting__
-#define __VO_2DSMFitting__
+#ifndef __VO_FITTING2DSM_H__
+#define __VO_FITTING2DSM_H__
 
 
+#include "VO_Common.h"
 #include "VO_Shape.h"
 #include "VO_Texture.h"
 #include "VO_Shape2DInfo.h"
@@ -245,7 +246,7 @@ public:
     }
 
     /** N Points mapping from aligned shape to real size shape */
-    static cv::Mat_<float>          VO_FirstEstimationBySingleWarp(const VO_FaceParts& iFaceParts,
+    static cv::Mat_<float>          VO_FirstEstimationBySingleWarp( const VO_FaceParts& iFaceParts,
                                                                     const VO_Shape& iShape,
                                                                     const cv::Point2f& ptLeftEyeCenter,
                                                                     const cv::Point2f& ptRightEyeCenter,
@@ -257,5 +258,5 @@ public:
 
 };
 
-#endif  // __VO_2DSMFitting__
+#endif  // __VO_FITTING2DSM_H__
 

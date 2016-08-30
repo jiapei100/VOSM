@@ -136,7 +136,7 @@ void VO_Gabor::VO_PrepareGaborKernel( unsigned int nstds,
     this->m_fNStds        = nstds;
     this->m_fLamda        = lambda;
     this->m_fTheta        = theta;
-    this->m_fPSI        = psi;
+    this->m_fPSI          = psi;
     this->m_fSigma        = sigma;
     this->m_fGamma        = gamma;
 }

@@ -69,8 +69,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Edge - indicating two point indexes.
+ * @author      JIA Pei
+ * @brief       Edge - indicating two point indexes.
  */
 class VO_Edge
 {

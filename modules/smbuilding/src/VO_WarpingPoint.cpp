@@ -125,11 +125,11 @@ void VO_WarpingPoint::CalcJacobianOne()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-08
- * @brief      	Calculate the Jacobian matrix
- * @param		TruncatedAlignedShapesEigenVectors		Input	the input parameters
- * @return     	void
+ * @author         JIA Pei
+ * @version        2010-02-08
+ * @brief          Calculate the Jacobian matrix
+ * @param          TruncatedAlignedShapesEigenVectors        Input    the input parameters
+ * @return         void
 */
 void VO_WarpingPoint::CalcJacobianMatrix4ShapeModel(const cv::Mat_<float>& TruncatedAlignedShapesEigenVectors)
 {
@@ -144,9 +144,9 @@ void VO_WarpingPoint::CalcJacobianMatrix4ShapeModel(const cv::Mat_<float>& Trunc
     for (unsigned int np = 0; np < NbOfShapesParameters; np++)
     {
         this->m_JacobianMatrix4ShapeModel[0][np] =
-				this->m_Jacobian_One[0] * TruncatedAlignedShapesEigenVectors.at<float>( np, this->m_VOTriangle2DStructure.GetVertexIndex(0) )
-			  + this->m_Jacobian_One[1] * TruncatedAlignedShapesEigenVectors.at<float>( np, this->m_VOTriangle2DStructure.GetVertexIndex(1) )
-			  + this->m_Jacobian_One[2] * TruncatedAlignedShapesEigenVectors.at<float>( np, this->m_VOTriangle2DStructure.GetVertexIndex(2) );
+                this->m_Jacobian_One[0] * TruncatedAlignedShapesEigenVectors.at<float>( np, this->m_VOTriangle2DStructure.GetVertexIndex(0) )
+              + this->m_Jacobian_One[1] * TruncatedAlignedShapesEigenVectors.at<float>( np, this->m_VOTriangle2DStructure.GetVertexIndex(1) )
+              + this->m_Jacobian_One[2] * TruncatedAlignedShapesEigenVectors.at<float>( np, this->m_VOTriangle2DStructure.GetVertexIndex(2) );
 
         this->m_JacobianMatrix4ShapeModel[1][np] =
                 this->m_Jacobian_One[0] * TruncatedAlignedShapesEigenVectors.at<float>( np, this->m_VOTriangle2DStructure.GetVertexIndex(0)+NbOfShapePoints )
@@ -157,11 +157,11 @@ void VO_WarpingPoint::CalcJacobianMatrix4ShapeModel(const cv::Mat_<float>& Trunc
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-02-08
- * @brief      	Calculate the Jacobian matrix for global shape normalization
- * @param		SimilarityTransformMatrix		-
- * @return     	void
+ * @author         JIA Pei
+ * @version        2010-02-08
+ * @brief          Calculate the Jacobian matrix for global shape normalization
+ * @param          SimilarityTransformMatrix
+ * @return         void
 */
 void VO_WarpingPoint::CalcJacobianMatrix4GlobalShapeNorm(const cv::Mat_<float>& SimilarityTransformMatrix)
 {
@@ -258,13 +258,13 @@ void VO_WarpingPoint::WarpOnePoint(const cv::Point2f& iPt,
     cv::Point2f iv1 = its.GetA2DPoint(0);
     cv::Point2f iv2 = its.GetA2DPoint(1);
     cv::Point2f iv3 = its.GetA2DPoint(2);
-	double c = 1.0/its.GetdD();
+    double c = 1.0/its.GetdD();
 
     double alpha = (iPt.y*iv3.x-iv3.y*iPt.x+iPt.x*iv2.y-iv2.x*iPt.y+iv2.x*iv3.y-iv3.x*iv2.y)*c;
     double belta  = (-iPt.y*iv3.x+iv1.x*iPt.y+iv3.x*iv1.y+iv3.y*iPt.x-iv1.x*iv3.y-iPt.x*iv1.y)*c;
     double gamma = 1.0 - alpha - belta; 
 
-	oPt.x = alpha*ov1.x + belta*ov2.x + gamma*ov3.x;
-	oPt.y = alpha*ov1.y + belta*ov2.y + gamma*ov3.y;
+    oPt.x = alpha*ov1.x + belta*ov2.x + gamma*ov3.x;
+    oPt.y = alpha*ov1.y + belta*ov2.y + gamma*ov3.y;
 }
 

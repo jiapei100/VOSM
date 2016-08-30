@@ -73,157 +73,157 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Ellipse - used to describe 2D Gaussian distribution.
+ * @author      JIA Pei
+ * @brief       Ellipse - used to describe 2D Gaussian distribution.
  */
 class VO_Ellipse
 {
 friend std::ostream& operator<<(std::ostream& os, const VO_Ellipse& ellipse);
 friend std::istream& operator>>(std::istream& is, VO_Ellipse& ellipse);
 protected:
-    float						m_fPhimin;				///	Minimum angle (degrees)
-    float						m_fPhimax;				///	Maximum angle (degrees)
-    float						m_fAxisXHalfLen;		///	first radius
-    float						m_fAxisYHalfLen;		///	second radius
-    float						m_fTheta;				///	Rotation angle (degrees)
-    cv::Point2f					m_Center;				///	ellipse center
+    float                       m_fPhimin;              ///    Minimum angle (degrees)
+    float                       m_fPhimax;              ///    Maximum angle (degrees)
+    float                       m_fAxisXHalfLen;        ///    first radius
+    float                       m_fAxisYHalfLen;        ///    second radius
+    float                       m_fTheta;               ///    Rotation angle (degrees)
+    cv::Point2f                 m_Center;               ///    ellipse center
 
     /** Copy an ellipse */
-    void                    	CopyData(const VO_Ellipse& ellipse)
+    void                        CopyData(const VO_Ellipse& ellipse)
     {
-								this->m_fPhimax 			= ellipse.m_fPhimax;
-								this->m_fPhimin 			= ellipse.m_fPhimin;
-								this->m_fAxisXHalfLen 		= ellipse.m_fAxisXHalfLen;
-								this->m_fAxisYHalfLen 		= ellipse.m_fAxisYHalfLen;
-								this->m_fTheta 				= ellipse.m_fTheta;
-								this->m_Center.x 			= ellipse.m_Center.x;
-								this->m_Center.y 			= ellipse.m_Center.y;
+                                this->m_fPhimax         = ellipse.m_fPhimax;
+                                this->m_fPhimin         = ellipse.m_fPhimin;
+                                this->m_fAxisXHalfLen   = ellipse.m_fAxisXHalfLen;
+                                this->m_fAxisYHalfLen   = ellipse.m_fAxisYHalfLen;
+                                this->m_fTheta          = ellipse.m_fTheta;
+                                this->m_Center.x        = ellipse.m_Center.x;
+                                this->m_Center.y        = ellipse.m_Center.y;
     }
 
 public:
     /** Default constructor to create a VO_Ellipse object */
-	VO_Ellipse()
-	{
-		this->m_fPhimax 		= 0.0f;
-		this->m_fPhimin 		= 0.0f;
-		this->m_fAxisXHalfLen 	= 0.0f;
-		this->m_fAxisYHalfLen 	= 0.0f;
-		this->m_fTheta 			= 0.0f;
-		this->m_Center.x 		= 0.0f;
-		this->m_Center.y 		= 0.0f;
-	}
+    VO_Ellipse()
+    {
+        this->m_fPhimax         = 0.0f;
+        this->m_fPhimin         = 0.0f;
+        this->m_fAxisXHalfLen   = 0.0f;
+        this->m_fAxisYHalfLen   = 0.0f;
+        this->m_fTheta          = 0.0f;
+        this->m_Center.x        = 0.0f;
+        this->m_Center.y        = 0.0f;
+    }
 
-	/** copy constructor */
-	VO_Ellipse(const VO_Ellipse& ellipse)
-	{
-		this->CopyData(ellipse);
-	}
+    /** copy constructor */
+    VO_Ellipse(const VO_Ellipse& ellipse)
+    {
+        this->CopyData(ellipse);
+    }
 
     /** Constructor to create a VO_Ellipse object with three coordinate vertexes in std::vector format */
     VO_Ellipse(cv::Point2f cog, float l, float s, float phimin = 0, float phimax = 360, float theta = 0)
     {
-		this->m_fPhimin 		= phimin;
-		this->m_fPhimax 		= phimax;
-		this->m_fAxisXHalfLen 	= l;
-		this->m_fAxisYHalfLen 	= s;
-		this->m_fTheta 			= theta;
-		this->m_Center 			= cog;
-	}
+        this->m_fPhimin         = phimin;
+        this->m_fPhimax         = phimax;
+        this->m_fAxisXHalfLen   = l;
+        this->m_fAxisYHalfLen   = s;
+        this->m_fTheta          = theta;
+        this->m_Center          = cog;
+    }
 
     /** Destructor */
-	virtual ~VO_Ellipse()	{}
+    virtual ~VO_Ellipse()    {}
 
     /** operator= overloading, similar to copy constructor */
-    VO_Ellipse&      			operator=(const VO_Ellipse& ellipse);
-	VO_Ellipse                 	operator*(float value);
-    VO_Ellipse&                	operator*=(float value);
+    VO_Ellipse&                 operator=(const VO_Ellipse& ellipse);
+    VO_Ellipse                  operator*(float value);
+    VO_Ellipse&                 operator*=(float value);
 
-	/** Translation */
+    /** Translation */
     void                        Translate( const cv::Mat_<float>& translation );
-	
-	/** Scale the Position */
-	void						ScaleCenter(float value);
-	
-	/** Calculate area of ellipse */
-	float 						CalcArea( ) const {return CV_PI*this->m_fAxisXHalfLen*this->m_fAxisYHalfLen;}
+    
+    /** Scale the Position */
+    void                        ScaleCenter(float value);
+    
+    /** Calculate area of ellipse */
+    float                       CalcArea( ) const {return CV_PI*this->m_fAxisXHalfLen*this->m_fAxisYHalfLen;}
 
-	/** Calculate perimeter of ellipse: L=2πb+4(a-b) */
-	float 						CalcPerimeter( )
-	{
-								float longAxis 	=	this->GetLongAxis();
-								float shortAxis = 	this->GetShortAxis();
-								return 2.0*CV_PI*shortAxis + 4.0*(longAxis - shortAxis);
-	}
+    /** Calculate perimeter of ellipse: L=2πb+4(a-b) */
+    float                       CalcPerimeter( )
+    {
+                                float longAxis     =    this->GetLongAxis();
+                                float shortAxis =     this->GetShortAxis();
+                                return 2.0*CV_PI*shortAxis + 4.0*(longAxis - shortAxis);
+    }
 
-	/** Evaluate whether the point is within the ellipse */
-    bool 						IsPointWithinEllipse(const cv::Point2f& pt, bool includeBoundary = true)
-	{
-		if(includeBoundary)
-		{
-			if( pow( ( pt.x * cos(this->m_fTheta) - pt.y * sin(this->m_fTheta) - this->m_Center.x ) / this->m_fAxisXHalfLen, 2.0f) +
-				pow( ( pt.x * sin(this->m_fTheta) + pt.y * cos(this->m_fTheta) - this->m_Center.y ) / this->m_fAxisYHalfLen, 2.0f) <= 1.0 )
-				return true;
-			else
-				return false;
-		}
-		else
-		{
-			if( pow( ( pt.x * cos(this->m_fTheta) - pt.y * sin(this->m_fTheta) - this->m_Center.x ) / this->m_fAxisXHalfLen, 2.0f) +
-				pow( ( pt.x * sin(this->m_fTheta) + pt.y * cos(this->m_fTheta) - this->m_Center.y ) / this->m_fAxisYHalfLen, 2.0f) < 1.0 )
-				return true;
-			else
-				return false;
-		}
-	}
+    /** Evaluate whether the point is within the ellipse */
+    bool                        IsPointWithinEllipse(const cv::Point2f& pt, bool includeBoundary = true)
+    {
+        if(includeBoundary)
+        {
+            if( pow( ( pt.x * cos(this->m_fTheta) - pt.y * sin(this->m_fTheta) - this->m_Center.x ) / this->m_fAxisXHalfLen, 2.0f) +
+                pow( ( pt.x * sin(this->m_fTheta) + pt.y * cos(this->m_fTheta) - this->m_Center.y ) / this->m_fAxisYHalfLen, 2.0f) <= 1.0 )
+                return true;
+            else
+                return false;
+        }
+        else
+        {
+            if( pow( ( pt.x * cos(this->m_fTheta) - pt.y * sin(this->m_fTheta) - this->m_Center.x ) / this->m_fAxisXHalfLen, 2.0f) +
+                pow( ( pt.x * sin(this->m_fTheta) + pt.y * cos(this->m_fTheta) - this->m_Center.y ) / this->m_fAxisYHalfLen, 2.0f) < 1.0 )
+                return true;
+            else
+                return false;
+        }
+    }
 
-	/** Evaluate whether the point is on the boundary of the ellipse */
-    bool 						IsPointOnEllipseBoundary(const cv::Point2f& pt)
-	{
-		if( fabs( pow( ( pt.x * cos(this->m_fTheta) - pt.y * sin(this->m_fTheta) - this->m_Center.x ) / this->m_fAxisXHalfLen, 2.0f) +
-				pow( ( pt.x * sin(this->m_fTheta) + pt.y * cos(this->m_fTheta) - this->m_Center.y ) / this->m_fAxisYHalfLen, 2.0f) - 1.0 ) < FLT_EPSILON )
-			return true;
-		else
-			return false;
-	}
-	
-	/** Find the upright bounding rectangle for an ellipse */
-    cv::Rect					CalcBoundingRect() const
-	{
+    /** Evaluate whether the point is on the boundary of the ellipse */
+    bool                        IsPointOnEllipseBoundary(const cv::Point2f& pt)
+    {
+        if( fabs( pow( ( pt.x * cos(this->m_fTheta) - pt.y * sin(this->m_fTheta) - this->m_Center.x ) / this->m_fAxisXHalfLen, 2.0f) +
+                pow( ( pt.x * sin(this->m_fTheta) + pt.y * cos(this->m_fTheta) - this->m_Center.y ) / this->m_fAxisYHalfLen, 2.0f) - 1.0 ) < FLT_EPSILON )
+            return true;
+        else
+            return false;
+    }
+    
+    /** Find the upright bounding rectangle for an ellipse */
+    cv::Rect                    CalcBoundingRect() const
+    {
                                 cv::Size2f size = cv::Size2f(this->m_fAxisXHalfLen*2.0, this->m_fAxisYHalfLen*2.0);
                                 cv::RotatedRect rRect = cv::RotatedRect(this->m_Center, size, this->m_fTheta);
                                 return rRect.boundingRect();
-	}
+    }
 
-	/** Find the nearest point on the boundary to the input point 
-	 * leave here, tough. needs optimization */
-    cv::Point2f					FindNearestPointOnBoundary(const cv::Point2f& pt);
-	
-	/** Find the intersect point on the boundary connecting from the COG and the input point */
-    cv::Point2f					FindIntersectPointOnBoundary(const cv::Point2f& pt);
+    /** Find the nearest point on the boundary to the input point 
+     * leave here, tough. needs optimization */
+    cv::Point2f                 FindNearestPointOnBoundary(const cv::Point2f& pt);
+    
+    /** Find the intersect point on the boundary connecting from the COG and the input point */
+    cv::Point2f                 FindIntersectPointOnBoundary(const cv::Point2f& pt);
 
-	/** Obtain point list within the ellipse according to its range  */
-    std::vector<cv::Point> 		VO_PointsInEllipse( const VO_Ellipse& ellipse);
-	
-	/** Find bounding rectangle for multiple ellipses, this rectangle should cover all ellipses */
-    static cv::Rect				VO_CalcBoundingRect4MultipleEllipses(const std::vector<VO_Ellipse>& ellipses);
+    /** Obtain point list within the ellipse according to its range  */
+    std::vector<cv::Point>      VO_PointsInEllipse( const VO_Ellipse& ellipse);
+    
+    /** Find bounding rectangle for multiple ellipses, this rectangle should cover all ellipses */
+    static cv::Rect             VO_CalcBoundingRect4MultipleEllipses(const std::vector<VO_Ellipse>& ellipses);
 
     /** Gets and sets */
-	float						GetLongAxis() const
-	{
-		return 					this->m_fAxisXHalfLen >= this->m_fAxisYHalfLen ? 
-								this->m_fAxisXHalfLen : this->m_fAxisYHalfLen;
-	}
-	float						GetShortAxis() const
-	{
-		return 					this->m_fAxisXHalfLen <= this->m_fAxisYHalfLen ? 
-								this->m_fAxisXHalfLen : this->m_fAxisYHalfLen;
-	}
-    cv::Point2f					GetCOG() const {return this->m_Center;}
-	float						GetStartAngle() const {return this->m_fPhimin;}
-	float						GetEndAngle() const {return this->m_fPhimax;}
-	float						GetAxisXHalfLen() const {return this->m_fAxisXHalfLen;}
-	float						GetAxisYHalfLen() const {return this->m_fAxisYHalfLen;}
-	float						GetAngle() const {return this->m_fTheta;}
+    float                       GetLongAxis() const
+    {
+        return                  this->m_fAxisXHalfLen >= this->m_fAxisYHalfLen ? 
+                                this->m_fAxisXHalfLen : this->m_fAxisYHalfLen;
+    }
+    float                       GetShortAxis() const
+    {
+        return                  this->m_fAxisXHalfLen <= this->m_fAxisYHalfLen ? 
+                                this->m_fAxisXHalfLen : this->m_fAxisYHalfLen;
+    }
+    cv::Point2f                 GetCOG() const {return this->m_Center;}
+    float                       GetStartAngle() const {return this->m_fPhimin;}
+    float                       GetEndAngle() const {return this->m_fPhimax;}
+    float                       GetAxisXHalfLen() const {return this->m_fAxisXHalfLen;}
+    float                       GetAxisYHalfLen() const {return this->m_fAxisYHalfLen;}
+    float                       GetAngle() const {return this->m_fTheta;}
 };
 
 #endif  // __VO_ELLIPSE_H__

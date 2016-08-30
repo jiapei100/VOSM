@@ -60,8 +60,8 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_FittingAAMBasic__
-#define __VO_FittingAAMBasic__
+#ifndef __VO_FITTINGAAMBASIC_H__
+#define __VO_FITTINGAAMBASIC_H__
 
 
 #include "VO_CVCommon.h"
@@ -133,5 +133,5 @@ public:
     float                       VO_DirectAAMFitting(const cv::Mat& iImg, VO_Shape& ioShape, cv::Mat& oImg,  unsigned int epoch = EPOCH);
 };
 
-#endif
+#endif  // __VO_FITTINGAAMBASIC_H__
 

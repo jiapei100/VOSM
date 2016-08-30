@@ -59,51 +59,51 @@
 * Modify Date:      2014-04-17                                                                      *
 ****************************************************************************************************/
 
-#ifndef __VO_BOOSTINGSINGLEENSEMBLECLASSIFIER_H_
-#define __VO_BOOSTINGSINGLEENSEMBLECLASSIFIER_H_
+#ifndef __VO_BOOSTINGSINGLEENSEMBLECLASSIFIER_H__
+#define __VO_BOOSTINGSINGLEENSEMBLECLASSIFIER_H__
 
 
 #include "VO_WeakClassifier.h"
 
 
 /** 
- * @author		JIA Pei
- * @brief		Boosting random forest classifier.
- * @note		FIXME
+ * @author      JIA Pei
+ * @brief       Boosting random forest classifier.
+ * @note        FIXME
  */
 class VO_BoostingSingleEnsembleClassifier : public cv::ml::Boost
 {
 protected:
-	/** true positive requirement when training */
-    float 								m_fMinTruePositive;
+    /** true positive requirement when training */
+    float                               m_fMinTruePositive;
 
-	/** false when training */
-	float								m_fMaxWrongClassification;
+    /** false when training */
+    float                               m_fMaxWrongClassification;
 
 public:
     /** Classifier type: discrete or real */
-	enum {DISCRETE = 0, REAL = 1};
+    enum {DISCRETE = 0, REAL = 1};
     /** Boosting optimization method: steepest descent, conjugate gradient, Newton Raphson */
-	enum {STEEPESTDESCENT = 0, CONJUGATEGRADIENT = 1, NEWTONRAPHSON = 2};
-	/** Margin1 -- e^{−yhf(x)}   Margin2 -- ln(1 + e^{−yhf(x))} */
-	enum {MARGIN1 = 0, MARGIN2 =1};
+    enum {STEEPESTDESCENT = 0, CONJUGATEGRADIENT = 1, NEWTONRAPHSON = 2};
+    /** Margin1 -- e^{−yhf(x)}   Margin2 -- ln(1 + e^{−yhf(x))} */
+    enum {MARGIN1 = 0, MARGIN2 =1};
 
-	/** Constructor */
-	explicit VO_BoostingSingleEnsembleClassifier(float minTurePositive = 0.95f, float maxWrongClassification = 0.5f)
-	{
-		this->m_fMinTruePositive 		= minTurePositive;
-		this->m_fMaxWrongClassification = maxWrongClassification;
-	}
+    /** Constructor */
+    explicit VO_BoostingSingleEnsembleClassifier(float minTurePositive = 0.95f, float maxWrongClassification = 0.5f)
+    {
+        this->m_fMinTruePositive         = minTurePositive;
+        this->m_fMaxWrongClassification = maxWrongClassification;
+    }
 
-	/** Destructor */
-	virtual ~VO_BoostingSingleEnsembleClassifier() 	{}
+    /** Destructor */
+    virtual ~VO_BoostingSingleEnsembleClassifier()     {}
 
-	/** train */
+    /** train */
 //    virtual bool train( const CvFeatureEvaluator* _featureEvaluator,
 //                        int _numSamples, int _precalcValBufSize, int _precalcIdxBufSize,
 //                        const CvCascadeBoostParams& _params=CvCascadeBoostParams() );
 
-	/** predict */
+    /** predict */
     virtual float predict( int sampleIdx, bool returnSum = false ) const;
 
     /** write features */
@@ -119,4 +119,4 @@ protected:
     virtual bool isErrDesired();
 };
 
-#endif	// __VO_BOOSTINGSINGLEENSEMBLECLASSIFIER_H_
+#endif  // __VO_BOOSTINGSINGLEENSEMBLECLASSIFIER_H__

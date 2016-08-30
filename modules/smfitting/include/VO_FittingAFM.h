@@ -60,8 +60,8 @@
 ****************************************************************************************************/
 
 
-#ifndef __VO_FittingAFM__
-#define __VO_FittingAFM__
+#ifndef __VO_FITTINGAFM_H__
+#define __VO_FITTINGAFM_H__
 
 
 #include "VO_CVCommon.h"
@@ -102,5 +102,5 @@ public:
 
 };
 
-#endif
+#endif  // __VO_FITTINGAFM_H__
 

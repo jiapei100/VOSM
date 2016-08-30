@@ -72,27 +72,27 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Multiple profiles for a single face.
+ * @author      JIA Pei
+ * @brief       Multiple profiles for a single face.
  */
 class VO_Profiles
 {
 private:
-	/** the profile features, a col std::vector */
+    /** the profile features, a col std::vector */
     std::vector<VO_Profile>     m_vProfiles;
-	
+    
 public:
     /** Constructors and Destructor */
-    VO_Profiles()  				{ this->m_vProfiles.clear(); }
-    virtual ~VO_Profiles() 		{ this->m_vProfiles.clear(); }
+    VO_Profiles()               { this->m_vProfiles.clear(); }
+    virtual ~VO_Profiles()      { this->m_vProfiles.clear(); }
 
     /** operators */
-	VO_Profile        			operator[](unsigned int idx) { return this->m_vProfiles[idx]; }
+    VO_Profile                  operator[](unsigned int idx) { return this->m_vProfiles[idx]; }
 
 
     /** Gets and Sets */
-    unsigned int            	GetProfileDim() const { return this->m_vProfiles.size(); }
-    VO_Profile           		GetOneProfile(unsigned int idx) const { return this->m_vProfiles[idx];}
+    unsigned int                GetProfileDim() const { return this->m_vProfiles.size(); }
+    VO_Profile                  GetOneProfile(unsigned int idx) const { return this->m_vProfiles[idx];}
 
 };
 

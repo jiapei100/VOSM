@@ -116,7 +116,7 @@ void VO_STFT::VO_BackwardTransform(const cv::Mat_<float>& iImg, cv::Mat_<float>&
 *          Absolutely not a convolution !!!
 * @param   iImg    Input    -- the original signal (image)
 * @param   pt      Input    -- the concern point, at the center of the rectangle
-* @param   oImg    Output    -- the transformed signal
+* @param   oImg    Output   -- the transformed signal
  */
 void VO_STFT::VO_ForwardTransform(const cv::Mat_<float>& iImg, cv::Point pt, cv::Mat_<float>& oImg) const
 {

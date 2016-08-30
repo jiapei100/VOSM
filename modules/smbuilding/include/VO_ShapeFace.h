@@ -79,27 +79,27 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		A shape specifically to describe a face. 
+ * @author      JIA Pei
+ * @brief       A shape specifically to describe a face. 
  */
 class VO_ShapeFace : public VO_Shape
 {
 private:
-	VO_FaceCompPos			m_VOFaceCompPos;
+    VO_FaceCompPos            m_VOFaceCompPos;
 
 public:
-	/** Default constructor */
-	VO_ShapeFace(unsigned int dim = 0, unsigned int pts = 0):VO_Shape(dim, pts) {}
-	VO_ShapeFace(VO_Shape iShape):VO_Shape(iShape) {}
-	
-	/** desctructor */
-	virtual ~VO_ShapeFace() {}
-	
-	/** calculate all rectangles */
-    VO_FaceCompPos			CalcFaceCompRects(const VO_FaceParts& faceparts);
-	
-	/** Gets and Sets */
-	VO_FaceCompPos			GetFaceCompPos() const {return this->m_VOFaceCompPos;}
+    /** Default constructor */
+    VO_ShapeFace(unsigned int dim = 0, unsigned int pts = 0):VO_Shape(dim, pts) {}
+    VO_ShapeFace(VO_Shape iShape):VO_Shape(iShape) {}
+    
+    /** desctructor */
+    virtual ~VO_ShapeFace() {}
+    
+    /** calculate all rectangles */
+    VO_FaceCompPos            CalcFaceCompRects(const VO_FaceParts& faceparts);
+    
+    /** Gets and Sets */
+    VO_FaceCompPos            GetFaceCompPos() const {return this->m_VOFaceCompPos;}
 };
 
 #endif  // __VO_SHAPEFACE_H__

@@ -69,8 +69,8 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Statistical fature model
+ * @author      JIA Pei
+ * @brief       Statistical fature model
  */
 class VO_FeatureModel : public VO_AXM
 {
@@ -81,25 +81,25 @@ friend class VO_FittingAAMInverseIA;
 friend class VO_FittingASMLTCs;
 friend class VO_FittingASMNDProfiles;
 protected:
-	/** PCA transform for appearance, including eigenstd::vectors, eigenvalues, and mean */
-    cv::PCA							m_PCAFeatures;
+    /** PCA transform for appearance, including eigenstd::vectors, eigenvalues, and mean */
+    cv::PCA                         m_PCAFeatures;
 
-	/** Features matrix. m_iNbOfSamples*m_iNbOfTotalFeatures */
+    /** Features matrix. m_iNbOfSamples*m_iNbOfTotalFeatures */
     cv::Mat_<float>                 m_MatFeatures;
 
-	/** Number of features -- a) 2D shape, 2 features b) rgb textures, 3 features c) something more */
-	unsigned int					m_iNbOfTotalFeatures;
+    /** Number of features -- a) 2D shape, 2 features b) rgb textures, 3 features c) something more */
+    unsigned int                    m_iNbOfTotalFeatures;
 
-	/** Most possible feature eigens before PCA. For IMM: min (90396, 240) = 240 */
-    unsigned int                	m_iNbOfEigenFeatureAtMost;
+    /** Most possible feature eigens before PCA. For IMM: min (90396, 240) = 240 */
+    unsigned int                    m_iNbOfEigenFeatureAtMost;
 
-	/** Number of feature model eigens. For IMM: 127 */
-    unsigned int               	 	m_iNbOfFeatureEigens;
+    /** Number of feature model eigens. For IMM: 127 */
+    unsigned int                    m_iNbOfFeatureEigens;
 
-	/** Truncate Percentage for feature model PCA. Normally, 0.95 */
-    float                       	m_fTruncatedPercent_Feature;
+    /** Truncate Percentage for feature model PCA. Normally, 0.95 */
+    float                           m_fTruncatedPercent_Feature;
 
-	/** All loaded features in a std::vector format. For IMM, 240*m_iNbOfTotalFeatures */
+    /** All loaded features in a std::vector format. For IMM, 240*m_iNbOfTotalFeatures */
     std::vector< cv::Mat_<float> >  m_vFeatures;
 
     /** All normalized features in a std::vector format. For IMM, 240*m_iNbOfTotalFeatures */
@@ -115,31 +115,31 @@ public:
     /** Destructor */
     virtual ~VO_FeatureModel();
 
-	/** Load features for one face */
-	static bool						VO_LoadFeatures4OneFace(const VO_Shape& iShape, 
+    /** Load features for one face */
+    static bool                     VO_LoadFeatures4OneFace(const VO_Shape& iShape, 
                                                             const cv::Mat& img,
-															const std::vector<VO_Triangle2DStructure>& templateTriangles,
+                                                            const std::vector<VO_Triangle2DStructure>& templateTriangles,
                                                             const std::vector<VO_WarpingPoint>& warpInfo,
                                                             cv::Mat_<float>& oFeature,
-															int trm);
+                                                            int trm);
 
-	/** Load Training data for feature model */
-	bool							VO_LoadFeatureTrainingData( const std::vector<std::string>& allLandmarkFiles4Training,
-																const std::vector<std::string>& allImgFiles4Training,
-																const std::string& shapeinfoFileName, 
-																unsigned int database,
-																unsigned int channels);
+    /** Load Training data for feature model */
+    bool                            VO_LoadFeatureTrainingData( const std::vector<std::string>& allLandmarkFiles4Training,
+                                                                const std::vector<std::string>& allImgFiles4Training,
+                                                                const std::string& shapeinfoFileName, 
+                                                                unsigned int database,
+                                                                unsigned int channels);
 
     /** Build Feature Model */
-    void                            VO_BuildFeatureModel(	const std::vector<std::string>& allLandmarkFiles4Training,
-															const std::vector<std::string>& allImgFiles4Training,
-															const std::string& shapeinfoFileName, 
-															unsigned int database,
-															unsigned int channels = 3,
-															int trm = VO_Features::DIRECT, 
-															float TPShape = 0.95f, 
-															float TPTexture = 0.95f, 
-															bool useKnownTriangles = false);
+    void                            VO_BuildFeatureModel(    const std::vector<std::string>& allLandmarkFiles4Training,
+                                                            const std::vector<std::string>& allImgFiles4Training,
+                                                            const std::string& shapeinfoFileName, 
+                                                            unsigned int database,
+                                                            unsigned int channels = 3,
+                                                            int trm = VO_Features::DIRECT, 
+                                                            float TPShape = 0.95f, 
+                                                            float TPTexture = 0.95f, 
+                                                            bool useKnownTriangles = false);
 
     /** Save Feature Model, to a specified folder */
     void                            VO_Save(const std::string& fd);

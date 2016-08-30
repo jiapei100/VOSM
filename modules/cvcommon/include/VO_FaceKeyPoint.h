@@ -65,7 +65,6 @@
 
 
 #include <vector>
-#include "VO_CVCommon.h"
 #include "VO_Shape.h"
 #include "VO_FaceParts.h"
 
@@ -99,7 +98,7 @@ public:
     explicit VO_KeyPoint() {}
 
     /** Destructor */
-    ~VO_KeyPoint() {}
+    virtual ~VO_KeyPoint() {}
 
     /** Calculate some important lines on a face */
     static void CalcFaceKeyline(

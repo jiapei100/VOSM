@@ -74,22 +74,22 @@ class VO_Gabor : public VO_STFT
 {
 protected:
     /** how many (n) standard deviations? */
-    float                m_fNStds;
+    float               m_fNStds;
 
     /** the wavelength of the cosine factor */
-    float                m_fLamda;
+    float               m_fLamda;
 
     /** the orientation of the normal to the parallel stripes of a Gabor function */
-    float                m_fTheta;
+    float               m_fTheta;
 
     /** the phase offset */
-    float                m_fPSI;
+    float               m_fPSI;
 
     /** the sigma of the Gaussian envelope */
-    float                m_fSigma;
+    float               m_fSigma;
 
     /** the spatial aspect ratio, and specifies the ellipticity of the support of the Gabor function */
-    float                m_fGamma;
+    float               m_fGamma;
 
     /** Initialization */
     void                init();

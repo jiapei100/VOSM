@@ -79,7 +79,7 @@ VO_AAMInverseIA::VO_AAMInverseIA()
 /** Initialization */
 void VO_AAMInverseIA::init()
 {
-	this->m_iMethod				= VO_AXM::AAM_IAIA;		// AAM_CMUICIA
+    this->m_iMethod = VO_AXM::AAM_IAIA;        // AAM_CMUICIA
 }
 
 
@@ -90,10 +90,10 @@ VO_AAMInverseIA::~VO_AAMInverseIA()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-03
- * @brief      	Calculate Gradients for template face, both in X and Y directions
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       Calculate Gradients for template face, both in X and Y directions
+ * @return      void
 */
 void VO_AAMInverseIA::VO_CalcTemplateFaceGradients ()
 {
@@ -110,7 +110,7 @@ void VO_AAMInverseIA::VO_CalcTemplateFaceGradients ()
     }
 
 
-	float xPos, yPos;
+    float xPos, yPos;
     for (unsigned int i = 0; i < this->m_iNbOfPixels; i++)     // 30132
     {
         // x refer to column; while y refer to row.
@@ -160,15 +160,15 @@ void VO_AAMInverseIA::VO_CalcTemplateFaceGradients ()
         tempNormalizedGradients[m].resize(2);
     }
 
-	for (unsigned int i = 0; i < this->m_iNbOfPixels; i++)     // 30132
+    for (unsigned int i = 0; i < this->m_iNbOfPixels; i++)     // 30132
     {
-		for (unsigned int m = 0; m < this->m_iNbOfChannels; m++)
-		{
-			tempGradients[m][0] = 0.0f;
-			tempGradients[m][1] = 0.0f;
-			tempNormalizedGradients[m][0] = 0.0f;
-			tempNormalizedGradients[m][1] = 0.0f;
-		}
+        for (unsigned int m = 0; m < this->m_iNbOfChannels; m++)
+        {
+            tempGradients[m][0] = 0.0f;
+            tempGradients[m][1] = 0.0f;
+            tempNormalizedGradients[m][0] = 0.0f;
+            tempNormalizedGradients[m][1] = 0.0f;
+        }
         //////////////////////////////////////////////////////////////////////////
 
         // noted by JIA Pei, it is obvious that for the current point this->m_vNormalizedPointWarpInfo[i]
@@ -219,13 +219,13 @@ void VO_AAMInverseIA::VO_CalcTemplateFaceGradients ()
 
     for (unsigned int i = 0; i < this->m_iNbOfPixels; i++)     // 30132
     {
-		for (unsigned int m = 0; m < this->m_iNbOfChannels; m++)
-		{
-			tempGradients[m][0] = 0.0f;
-			tempGradients[m][1] = 0.0f;
-			tempNormalizedGradients[m][0] = 0.0f;
-			tempNormalizedGradients[m][1] = 0.0f;
-		}
+        for (unsigned int m = 0; m < this->m_iNbOfChannels; m++)
+        {
+            tempGradients[m][0] = 0.0f;
+            tempGradients[m][1] = 0.0f;
+            tempNormalizedGradients[m][0] = 0.0f;
+            tempNormalizedGradients[m][1] = 0.0f;
+        }
 
         // leftmost, not rightmost
         if (tblr[i][0] == -1 && tblr[i][1] != -1)
@@ -303,8 +303,8 @@ void VO_AAMInverseIA::VO_CalcTemplateFaceGradients ()
     }
 
 
-    cv::Mat_<float> templateGradientX 	= cv::Mat_<float>::zeros( this->m_iNbOfChannels, this->m_iNbOfPixels );
-	cv::Mat_<float> templateGradientY 	= cv::Mat_<float>::zeros( this->m_iNbOfChannels, this->m_iNbOfPixels );
+    cv::Mat_<float> templateGradientX     = cv::Mat_<float>::zeros( this->m_iNbOfChannels, this->m_iNbOfPixels );
+    cv::Mat_<float> templateGradientY     = cv::Mat_<float>::zeros( this->m_iNbOfChannels, this->m_iNbOfPixels );
     VO_Texture templateTextureInstanceX, templateTextureInstanceY, templateTextureInstance;
 
     for (unsigned int i = 0; i < this->m_iNbOfPixels; i++)
@@ -315,24 +315,24 @@ void VO_AAMInverseIA::VO_CalcTemplateFaceGradients ()
             templateGradientY(j, i) = this->m_vTemplatePointWarpInfo[i].GetGradients()[j][1] + AVERAGEFACETEXTURE;
         }
     }
-	templateTextureInstanceX.SetTheTexture(templateGradientX);
-	templateTextureInstanceY.SetTheTexture(templateGradientY);
-	templateTextureInstanceX.Clamp(0.0f, 255.0f);
-	templateTextureInstanceY.Clamp(0.0f, 255.0f);
-	templateTextureInstance = m_VOReferenceTexture;
+    templateTextureInstanceX.SetTheTexture(templateGradientX);
+    templateTextureInstanceY.SetTheTexture(templateGradientY);
+    templateTextureInstanceX.Clamp(0.0f, 255.0f);
+    templateTextureInstanceY.Clamp(0.0f, 255.0f);
+    templateTextureInstance = m_VOReferenceTexture;
 
     VO_TextureModel::VO_PutOneTextureToTemplateShape(templateTextureInstanceX, this->m_vTemplateTriangle2D, this->m_IplImageTempFaceX);
     VO_TextureModel::VO_PutOneTextureToTemplateShape(templateTextureInstanceY, this->m_vTemplateTriangle2D, this->m_IplImageTempFaceY);
     VO_TextureModel::VO_PutOneTextureToTemplateShape(templateTextureInstance, this->m_vTemplateTriangle2D, this->m_IplImageTempFace);
-	
+    
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-03
- * @brief      	Calculate steepest descent image for template face
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       Calculate steepest descent image for template face
+ * @return      void
 */
 void VO_AAMInverseIA::VO_CalcSDI()
 {
@@ -341,22 +341,22 @@ void VO_AAMInverseIA::VO_CalcSDI()
     this->m_MatSimilarityTransform = cv::Mat_<float>::zeros(4, this->m_iNbOfShapes);
     for (unsigned int i = 0; i < this->m_iNbOfPoints; i++)
     {
-        this->m_MatSimilarityTransform(0, i) 						= this->m_PCAAlignedShape.mean.at<float>(0, i);
-        this->m_MatSimilarityTransform(0, i+this->m_iNbOfPoints) 	= this->m_PCAAlignedShape.mean.at<float>(0, i+this->m_iNbOfPoints);
-        this->m_MatSimilarityTransform(1, i) 						= -this->m_PCAAlignedShape.mean.at<float>(0, i+this->m_iNbOfPoints);
-        this->m_MatSimilarityTransform(1, i+this->m_iNbOfPoints) 	= this->m_PCAAlignedShape.mean.at<float>(0, i);
-        this->m_MatSimilarityTransform(2, i) 						= 1.0f;
-        this->m_MatSimilarityTransform(2, i+this->m_iNbOfPoints) 	= 0.0f;
-        this->m_MatSimilarityTransform(3, i) 						= 0.0f;
-        this->m_MatSimilarityTransform(3, i+this->m_iNbOfPoints) 	= 1.0f;
-//		this->m_MatSimilarityTransform(2, i) = 1.0f/sqrt((float)this->m_iNbOfPoints);
-//		this->m_MatSimilarityTransform(3, i+this->m_iNbOfPoints) = 1.0f/sqrt((float)this->m_iNbOfPoints);
+        this->m_MatSimilarityTransform(0, i)                         = this->m_PCAAlignedShape.mean.at<float>(0, i);
+        this->m_MatSimilarityTransform(0, i+this->m_iNbOfPoints)     = this->m_PCAAlignedShape.mean.at<float>(0, i+this->m_iNbOfPoints);
+        this->m_MatSimilarityTransform(1, i)                         = -this->m_PCAAlignedShape.mean.at<float>(0, i+this->m_iNbOfPoints);
+        this->m_MatSimilarityTransform(1, i+this->m_iNbOfPoints)     = this->m_PCAAlignedShape.mean.at<float>(0, i);
+        this->m_MatSimilarityTransform(2, i)                         = 1.0f;
+        this->m_MatSimilarityTransform(2, i+this->m_iNbOfPoints)     = 0.0f;
+        this->m_MatSimilarityTransform(3, i)                         = 0.0f;
+        this->m_MatSimilarityTransform(3, i+this->m_iNbOfPoints)     = 1.0f;
+//        this->m_MatSimilarityTransform(2, i) = 1.0f/sqrt((float)this->m_iNbOfPoints);
+//        this->m_MatSimilarityTransform(3, i+this->m_iNbOfPoints) = 1.0f/sqrt((float)this->m_iNbOfPoints);
     }
 
-	// AAM Revisited, before (50)
-	// "evaluating the Jacobian at p = 0, q = 0."
-	// Explained by JIA Pei. The above citation means, when calculating the Jacobian 
-	// partial(N)/partial(q) and partial(W)/partial(q), p=q=0 requires 
+    // AAM Revisited, before (50)
+    // "evaluating the Jacobian at p = 0, q = 0."
+    // Explained by JIA Pei. The above citation means, when calculating the Jacobian 
+    // partial(N)/partial(q) and partial(W)/partial(q), p=q=0 requires 
     // m_vNormalizedPointWarpInfo, rather than m_vTemplatePointWarpInfo
     for (unsigned int i = 0; i < this->m_iNbOfPixels; i++)
     {
@@ -397,10 +397,10 @@ void VO_AAMInverseIA::VO_CalcSDI()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-03
- * @brief      	Calculate modified steepest descent image for template face - project out appearance variation
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       Calculate modified steepest descent image for template face - project out appearance variation
+ * @return      void
 */
 void VO_AAMInverseIA::VO_CalcModifiedSDI()
 {
@@ -422,9 +422,9 @@ void VO_AAMInverseIA::VO_CalcModifiedSDI()
         }
     }
 
-    cv::Mat_<float> oneCol 				= cv::Mat_<float>::zeros(this->m_iNbOfTextures, 1);
-    cv::Mat_<float> spanedsum 			= cv::Mat_<float>::zeros(this->m_iNbOfTextures, 1);
-    cv::Mat_<float> modifiedoneCol 		= cv::Mat_<float>::zeros(this->m_iNbOfTextures, 1);
+    cv::Mat_<float> oneCol                 = cv::Mat_<float>::zeros(this->m_iNbOfTextures, 1);
+    cv::Mat_<float> spanedsum             = cv::Mat_<float>::zeros(this->m_iNbOfTextures, 1);
+    cv::Mat_<float> modifiedoneCol         = cv::Mat_<float>::zeros(this->m_iNbOfTextures, 1);
     cv::Mat_<float> oneSpanRowTranspose = cv::Mat_<float>::zeros(this->m_iNbOfTextures, 1);
 
     for (unsigned int i = 0; i < this->m_MatSteepestDescentImages.cols; i++)
@@ -442,16 +442,16 @@ void VO_AAMInverseIA::VO_CalcModifiedSDI()
 
         cv::subtract(oneCol, spanedsum, modifiedoneCol);
         cv::Mat_<float> tmpCol = this->m_MatModifiedSteepestDescentImages.col(i);
-		modifiedoneCol.copyTo(tmpCol);
+        modifiedoneCol.copyTo(tmpCol);
     }
 }
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-03
- * @brief      	Calculate inverse Hessian matrix for template face
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       Calculate inverse Hessian matrix for template face
+ * @return      void
 */
 void VO_AAMInverseIA::VO_CalcInverseHessian()
 {
@@ -465,10 +465,10 @@ void VO_AAMInverseIA::VO_CalcInverseHessian()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-03
- * @brief      	Calculate Hessian matrix * MSDI^T
- * @return		void
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       Calculate Hessian matrix * MSDI^T
+ * @return      void
 */
 void VO_AAMInverseIA::VO_CalcICIAPreMatrix()
 {
@@ -477,43 +477,43 @@ void VO_AAMInverseIA::VO_CalcICIAPreMatrix()
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-03
- * @brief		ICIA AAM
- * @param      	allLandmarkFiles4Training		Input - all training landmark files
- * @param		allImgFiles4Training			Input - all training image files
- * @param      	shapeinfoFileName				Input - shape info file
- * @param		database						Input - which database is it?
- * @param		levels							Input - multiscale levels
- * @param		channels						Input - How many channels are to be used?
- * @param		trm								Input - texture representation method
- * @param      	TPShape     					Input - truncated percentage for shape model
- * @param      	TPTexture     					Input - truncated percentage for texture model
- * @param      	useKnownTriangles  				Input - use known triangle structures??
- * @return		void
- * @note		Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
+ * @author      IA Pei
+ * @version     2010-04-03
+ * @brief       ICIA AAM
+ * @param       allLandmarkFiles4Training   Input - all training landmark files
+ * @param       allImgFiles4Training        Input - all training image files
+ * @param       shapeinfoFileName           Input - shape info file
+ * @param       database                    Input - which database is it?
+ * @param       levels                      Input - multiscale levels
+ * @param       channels                    Input - How many channels are to be used?
+ * @param       trm                         Input - texture representation method
+ * @param       TPShape                     Input - truncated percentage for shape model
+ * @param       TPTexture                   Input - truncated percentage for texture model
+ * @param       useKnownTriangles           Input - use known triangle structures??
+ * @return      void
+ * @note        Using "float* oProf" is much much faster than using "VO_Profile& oProf" or "std::vector<float>"
  */
  void VO_AAMInverseIA::VO_BuildAAMICIA(const std::vector<std::string>& allLandmarkFiles4Training,
                                     const std::vector<std::string>& allImgFiles4Training,
-									const std::string& shapeinfoFileName,
-									unsigned int database,
-									unsigned int channels,
-									unsigned int levels,
-									int trm,
-									float TPShape,
-									float TPTexture,
-									bool useKnownTriangles)
+                                    const std::string& shapeinfoFileName,
+                                    unsigned int database,
+                                    unsigned int channels,
+                                    unsigned int levels,
+                                    int trm,
+                                    float TPShape,
+                                    float TPTexture,
+                                    bool useKnownTriangles)
 {
-    this->VO_BuildTextureModel(	allLandmarkFiles4Training,
-								allImgFiles4Training,
-								shapeinfoFileName,
-								database,
-								channels,
-								trm,
-								TPShape,
-								TPTexture,
-								useKnownTriangles);
-	this->m_iNbOfPyramidLevels      			= levels;
+    this->VO_BuildTextureModel( allLandmarkFiles4Training,
+                                allImgFiles4Training,
+                                shapeinfoFileName,
+                                database,
+                                channels,
+                                trm,
+                                TPShape,
+                                TPTexture,
+                                useKnownTriangles);
+    this->m_iNbOfPyramidLevels                  = levels;
     this->VO_CalcTemplateFaceGradients();
     this->VO_CalcSDI();
     this->VO_CalcModifiedSDI();
@@ -523,10 +523,10 @@ void VO_AAMInverseIA::VO_CalcICIAPreMatrix()
 
 
 /**
- * @author		JIA Pei
- * @version    	2010-04-03
- * @brief      	Save AAMICIA to a specified folder
- * @param      	fn         Input - the folder that AAMICIA to be saved to
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       Save AAMICIA to a specified folder
+ * @param       fn      Input - the folder that AAMICIA to be saved to
 */
 void VO_AAMInverseIA::VO_Save(const std::string& fd)
 {
@@ -632,49 +632,49 @@ void VO_AAMInverseIA ::VO_Load(const std::string& fd)
     // m_MatSimilarityTransform
     tempfn = fn + "/m_MatSimilarityTransform" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatSimilarityTransform
+    fp >> temp;            // m_MatSimilarityTransform
     fp >> this->m_MatSimilarityTransform;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages4ShapeModel
     tempfn = fn + "/m_MatSteepestDescentImages4ShapeModel" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatSteepestDescentImages4ShapeModel
+    fp >> temp;            // m_MatSteepestDescentImages4ShapeModel
     fp >> this->m_MatSteepestDescentImages4ShapeModel;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages4GlobalShapeNormalization
     tempfn = fn + "/m_MatSteepestDescentImages4GlobalShapeNormalization" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatSteepestDescentImages4GlobalShapeNormalization
+    fp >> temp;            // m_MatSteepestDescentImages4GlobalShapeNormalization
     fp >> this->m_MatSteepestDescentImages4GlobalShapeNormalization;
     fp.close();fp.clear();
 
     // m_MatSteepestDescentImages
     tempfn = fn + "/m_MatSteepestDescentImages" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatSteepestDescentImages
+    fp >> temp;            // m_MatSteepestDescentImages
     fp >> this->m_MatSteepestDescentImages;
     fp.close();fp.clear();
 
     // m_MatModifiedSteepestDescentImages
     tempfn = fn + "/m_MatModifiedSteepestDescentImages" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatModifiedSteepestDescentImages
+    fp >> temp;            // m_MatModifiedSteepestDescentImages
     fp >> this->m_MatModifiedSteepestDescentImages;
     fp.close();fp.clear();
 
     // m_MatHessianMatrixInverse
     tempfn = fn + "/m_MatHessianMatrixInverse" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatHessianMatrixInverse
+    fp >> temp;            // m_MatHessianMatrixInverse
     fp >> this->m_MatHessianMatrixInverse;
     fp.close();fp.clear();
 
     // m_MatICIAPreMatrix
     tempfn = fn + "/m_MatICIAPreMatrix" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatICIAPreMatrix
+    fp >> temp;            // m_MatICIAPreMatrix
     fp >> this->m_MatICIAPreMatrix;
     fp.close();fp.clear();
 
@@ -682,10 +682,10 @@ void VO_AAMInverseIA ::VO_Load(const std::string& fd)
 
 
 /**
- * @author     	JIA Pei
- * @version    	2010-04-03
- * @brief      	Load all AAMICIA data from a specified folder
- * @param      	fd         Input - the folder that AAMICIA to be loaded from
+ * @author      JIA Pei
+ * @version     2010-04-03
+ * @brief       Load all AAMICIA data from a specified folder
+ * @param       fd      Input - the folder that AAMICIA to be loaded from
 */
 void VO_AAMInverseIA ::VO_LoadParameters4Fitting(const std::string& fd)
 {
@@ -706,7 +706,7 @@ void VO_AAMInverseIA ::VO_LoadParameters4Fitting(const std::string& fd)
     this->m_MatICIAPreMatrix = cv::Mat_<float>::zeros(this->m_iNbOfShapeEigens+4, this->m_iNbOfTextures);
     tempfn = fn + "/m_MatICIAPreMatrix" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatICIAPreMatrix
+    fp >> temp;            // m_MatICIAPreMatrix
     fp >> this->m_MatICIAPreMatrix;
     fp.close();fp.clear();
 
@@ -714,7 +714,7 @@ void VO_AAMInverseIA ::VO_LoadParameters4Fitting(const std::string& fd)
     this->m_MatSimilarityTransform = cv::Mat_<float>::zeros(4, this->m_iNbOfShapes);
     tempfn = fn + "/m_MatSimilarityTransform" + ".txt";
     fp.open(tempfn.c_str (), std::ios::in);
-    fp >> temp;			// m_MatSimilarityTransform
+    fp >> temp;            // m_MatSimilarityTransform
     fp >> this->m_MatSimilarityTransform;
     fp.close();fp.clear();
 

@@ -59,8 +59,8 @@
 * Modify Date:      2014-04-17                                                                      *
 ****************************************************************************************************/
 
-#ifndef __LOCATING_H__
-#define __LOCATING_H__
+#ifndef __VO_ALGS_LOCATING_H__
+#define __VO_ALGS_LOCATING_H__
 
 #include <cstring>
 #include "opencv2/core/core.hpp"
@@ -73,70 +73,70 @@
 
 
 /** 
- * @author		JIA Pei
- * @brief		Object localization algorithms, currently, 
- * 				can deal with only 1 concerned object but not for multiple objects.
+ * @author      JIA Pei
+ * @brief       Object localization algorithms, currently, 
+ *              can deal with only 1 concerned object but not for multiple objects.
  */
 class CLocatingAlgs
 {
 protected:
-	/** Original localized face rectangle */
-    cv::Rect 					m_CVLocalizedObjectRect;
+    /** Original localized face rectangle */
+    cv::Rect                    m_CVLocalizedObjectRect;
 
-	/** Whether the objects is localized */
-    bool                		m_bObjectLocalized;
+    /** Whether the objects is localized */
+    bool                        m_bObjectLocalized;
 
-	/** The detection algorithm */
-	CDetectionAlgs				m_detectionAlgs;
+    /** The detection algorithm */
+    CDetectionAlgs              m_detectionAlgs;
 
-	/** The tracking algorithm */
-	CTrackingAlgs				m_trackingAlgs;
+    /** The tracking algorithm */
+    CTrackingAlgs               m_trackingAlgs;
 
-	/** Initialization */
-    void						init(const std::string& str,
+    /** Initialization */
+    void                        init(const std::string& str,
                                      unsigned int detectionMtd,
                                      unsigned int trackingMtd);
 
 public:
-	enum {DETECTIONONLY = 0, DETECTIONTRACKING = 1};
+    enum {DETECTIONONLY = 0, DETECTIONTRACKING = 1};
 
     /** Constructor */
-    CLocatingAlgs(	const std::string& str="",
+    CLocatingAlgs(  const std::string& str="",
                     unsigned int detectionMtd=VO_AdditiveStrongerClassifier::BOOSTING,
                     unsigned int trackingMtd=CTrackingAlgs::CAMSHIFT);
 
     /** Destructor */
-    ~CLocatingAlgs();
+    virtual ~CLocatingAlgs();
 
     /** Set configuration for both detection and tracking algorithms */
-    void						SetConfiguration(const std::string& str, unsigned int detectionMtd, unsigned int trackingMtd)
-	{
-								this->m_detectionAlgs.SetConfiguration(str, detectionMtd);
-								this->m_trackingAlgs.SetConfiguration(trackingMtd);
-	}
-	
+    void                        SetConfiguration(const std::string& str, unsigned int detectionMtd, unsigned int trackingMtd)
+    {
+                                this->m_detectionAlgs.SetConfiguration(str, detectionMtd);
+                                this->m_trackingAlgs.SetConfiguration(trackingMtd);
+    }
+    
     /** Do locating  */
-    double						Locating(	const cv::Mat& img,
-                                         	cv::Size smallSize = cv::Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
+    double                      Locating(   const cv::Mat& img,
+                                            cv::Size smallSize = cv::Size(FACESMALLESTSIZE, FACESMALLESTSIZE),
                                             cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE) );
 
     /** Do locating  */
-    static double				Locating(	const cv::Mat& img,
-											CDetectionAlgs& detectAlg,
-											CTrackingAlgs& trackAlg,
-											bool& isTracked,
+    static double               Locating(   const cv::Mat& img,
+                                            CDetectionAlgs& detectAlg,
+                                            CTrackingAlgs& trackAlg,
+                                            bool& isTracked,
                                             cv::Rect& objPos,
                                             const cv::Size& size1,
                                             const cv::Size& size2);
 
-	/** Draw all detected objects on the image */
+    /** Draw all detected objects on the image */
     void                        VO_DrawLocating(cv::Mat& ioImg, cv::Scalar color = colors[6]);
 
-	/** Is object detected? */
-	bool						IsObjectLocalized() const {return this->m_bObjectLocalized; }
-	
-	/** Return localized object */
-    cv::Rect 					GetLocalizedObjectRect () const { return this->m_CVLocalizedObjectRect; }
+    /** Is object detected? */
+    bool                        IsObjectLocalized() const {return this->m_bObjectLocalized; }
+    
+    /** Return localized object */
+    cv::Rect                    GetLocalizedObjectRect () const { return this->m_CVLocalizedObjectRect; }
 };
 
-#endif	// __LOCATING_H__
+#endif  // __VO_ALGS_LOCATING_H__
