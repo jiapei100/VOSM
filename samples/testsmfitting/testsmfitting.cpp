@@ -454,10 +454,10 @@ int main(int argc, char **argv)
                 deviations(0,i) = deviation;
                 for(unsigned int j = 0; j < nb; j++)
                     ptsErrorFreq(i, j) = ptErrorFreq[j];
-                CRecognitionAlgs::SaveShapeRecogResults(    "./",
-                                                            prefix,
-                                                            deviation,
-                                                            ptErrorFreq);
+                CRecognitionAlgs::SaveShapeRecogResults("./",
+                                                        prefix,
+                                                        deviation,
+                                                        ptErrorFreq);
             }
         }
         

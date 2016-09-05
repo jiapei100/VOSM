@@ -143,7 +143,7 @@ public:
                                                         const VO_Shape& fittedShape,
                                                         float& deviation,
                                                         std::vector<float>& ptErrorFreq,
-                                                        int nb = 20);
+                                                        unsigned int nb = 20);
 
     /** Save shape recognition results */
     static void                 SaveShapeRecogResults(  const std::string& fd,

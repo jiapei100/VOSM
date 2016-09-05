@@ -72,7 +72,19 @@
 #include "VO_BoostCommon.h"
 
 
-/// Common colors
+#define THUMBNAIL_SIZE_WIDTH    120
+#define THUMBNAIL_SIZE_HEIGHT   90
+
+//RGB-> YUV
+#define MY(a,b,c) (( a*  0.2989  + b*0.5866  + c*  0.1145))
+#define MU(a,b,c) (( a*(-0.1688) + b*(-0.3312) + c*  0.5000 + 128))
+#define MV(a,b,c) (( a* 0.5000 + b*(-0.4184) + c*(-0.0816) + 128))
+// decision 
+#define DY(a,b,c) (MY(a,b,c) > 255 ? 255 : (MY(a,b,c) < 0 ? 0 : MY(a,b,c)))
+#define DU(a,b,c) (MU(a,b,c) > 255 ? 255 : (MU(a,b,c) < 0 ? 0 : MU(a,b,c)))
+#define DV(a,b,c) (MV(a,b,c) > 255 ? 255 : (MV(a,b,c) < 0 ? 0 : MV(a,b,c)))
+
+
 static cv::Scalar colors[] =
 {
     cv::Scalar(0,0,255),        // red
@@ -87,6 +99,262 @@ static cv::Scalar colors[] =
     cv::Scalar(255,128,0),      //
     cv::Scalar(0,255,128)       //
 };
+
+
+static void RGB2YUV(unsigned char *RGB, 
+                    unsigned char *YUV[], 
+                    unsigned int WIDTH, 
+                    unsigned int HEIGHT)
+{
+    unsigned int i,x,y,j;
+    unsigned char *Y = NULL;
+    unsigned char *U = NULL;
+    unsigned char *V = NULL;
+    int uindex=0,vindex=0;
+    Y = YUV[0];
+    U = YUV[2];
+    V = YUV[1];
+    for(y=0; y < HEIGHT; y++)
+    {
+        for(x=0; x < WIDTH; x++)
+        {
+            //j is the image index
+            j = y*WIDTH + x;
+            //iis j's first address
+            i = j*3;
+            Y[j] = (unsigned char)(DY(RGB[i], RGB[i+1], RGB[i+2]));
+            if(y%2 == 0)
+            {
+                if (x%2==1)
+                {
+                    U[uindex++] = (unsigned char)(DU(RGB[i], RGB[i+1], RGB[i+2]));
+                }
+            }
+            else
+            {
+                if (x%2==1)
+                {
+                    V[vindex++] = (unsigned char)(DV(RGB[i], RGB[i+1], RGB[i+2]));
+                }
+            }
+        }
+    }
+}
+
+
+static void produceAllThumbnails(   const std::vector<cv::Mat>& mats, 
+                                    const std::vector<std::string>& fns, 
+                                    int width = 160, 
+                                    int height = 90)
+{
+    assert( mats.size() == fns.size() );
+    int nbOfMats = mats.size();
+    if(nbOfMats != 0)
+    {
+        int type = mats[0].type();
+        for (int i = 0; i < nbOfMats; i++)
+        {
+            cv::Mat mat = cv::Mat( height, width, type );
+            cv::resize( mats[i], mat, mat.size(), 0, 0, cv::INTER_LINEAR );
+            cv::cvtColor(mat, mat, CV_BGR2RGB);
+            cv::imwrite(fns[i], mat);
+        }
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+static const int MAG_THRESHOLD = 25;
+static const int MAG_AREA = 5;
+
+static int get_integral(const cv::Mat &_integral_image, const cv::Point &_pt1, const cv::Point &_pt2)
+{
+    CV_Assert(_pt1.x < _integral_image.cols && _pt1.x >= 0 && _pt1.y >= 0 && _pt1.y < _integral_image.rows);
+    CV_Assert(_pt2.x < _integral_image.cols && _pt2.x >= 0 && _pt2.y >= 0 && _pt2.y < _integral_image.rows);
+    CV_Assert(_integral_image.type() == CV_32S);
+    return _integral_image.at<int>(_pt1.y, _pt1.x) + 
+        _integral_image.at<int>(_pt2.y, _pt2.x) -
+        _integral_image.at<int>(_pt1.y, _pt2.x) -
+        _integral_image.at<int>(_pt2.y, _pt1.x);
+}
+
+static const cv::Rect crop_font_roi(const cv::Mat &_image,
+	const cv::Point &_left_point, const cv::Point &_right_point)
+{
+    CV_Assert(_left_point.x >= 0 && _left_point.x < _image.cols &&
+        _left_point.y >= 0 && _left_point.y < _image.rows);
+    CV_Assert(_right_point.x >= 0 && _right_point.x < _image.cols &&
+        _right_point.y >= 0 && _right_point.y < _image.rows);
+    cv::Point left_point = _left_point;
+    cv::Point right_point = _right_point;
+    if (left_point.x > right_point.x)
+    {
+        std::swap(left_point, right_point);
+    }
+    // fix line
+    cv::Point fix_l_point;
+    cv::Point fix_r_point;
+    //fix_l_point.y = std::max(_left_point.y, _right_point.y);
+    fix_l_point.y = left_point.y > right_point.y ? left_point.y : right_point.y;
+    fix_l_point.x = left_point.x;
+    fix_r_point.y = fix_l_point.y;
+    fix_r_point.x = right_point.x;
+
+    // processing image
+    cv::Mat gray_image;
+    if (_image.channels() == 3) cvtColor(_image, gray_image, CV_BGR2GRAY);
+    else gray_image = _image;
+
+    // blur image
+    cv::Mat blur_image;
+    cv::medianBlur(gray_image, blur_image, 5);
+    cv::Mat bi_mag_image = cv::Mat::zeros(blur_image.rows, blur_image.cols, CV_8UC1);
+
+    for (int r = 1; r < blur_image.rows - 1; r++) {
+        for (int c = 1; c < blur_image.cols - 1; c++) {
+            int ix = abs((int)blur_image.at<uchar>(r, c + 1) - (int)blur_image.at<uchar>(r, c - 1));
+            int iy = abs((int)blur_image.at<uchar>(r + 1, c) - (int)blur_image.at<uchar>(r - 1, c));
+            int mag = ix*ix + iy*iy;
+            bi_mag_image.at<uchar>(r, c) = mag > MAG_THRESHOLD ? 1 : 0;
+        } 
+    }
+
+    cv::Mat integral_image = cv::Mat(blur_image.rows+1, blur_image.cols+1, CV_32SC1);
+    cv::integral(bi_mag_image, integral_image);
+
+    int sum = get_integral(integral_image, cv::Point(fix_l_point.x, fix_l_point.y), 
+        cv::Point(fix_r_point.x, fix_r_point.y+1));
+
+    int bottom_y = -1;
+    int upper_y = -1;
+    if (sum >= MAG_AREA)
+    {
+        for (int r = fix_l_point.y; r < _image.rows - 2; r++)
+        {
+            int sum1 = get_integral(integral_image, cv::Point(fix_l_point.x, r), 
+                cv::Point(fix_r_point.x, r+1));
+            int sum2 = get_integral(integral_image, cv::Point(fix_l_point.x, r+1), 
+                cv::Point(fix_r_point.x, r+2));
+            if (sum1 < MAG_AREA && sum2 < MAG_AREA)
+            {
+                bottom_y = r + 1;
+                break;
+            }
+        }
+        for (int r = fix_l_point.y; r >= 2; r--)
+        {
+            int sum1 = get_integral(integral_image, cv::Point(fix_l_point.x, r-1), 
+                cv::Point(fix_r_point.x, r));
+            int sum2 = get_integral(integral_image, cv::Point(fix_l_point.x, r-2), 
+                cv::Point(fix_r_point.x, r-1));
+            if (sum1 < MAG_AREA && sum2 < MAG_AREA)
+            {
+                upper_y = r - 1;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for (int r = fix_l_point.y; r >= 2; r--)
+        {
+            int sum1 = get_integral(integral_image, cv::Point(fix_l_point.x, r-1), 
+                cv::Point(fix_r_point.x, r));
+            int sum2 = get_integral(integral_image, cv::Point(fix_l_point.x, r-2), 
+                cv::Point(fix_r_point.x, r-1));
+            if (sum1 >= MAG_AREA && sum2 >= MAG_AREA)
+            {
+                bottom_y = r + 1;
+                break;
+            }
+        }
+        for (int r = bottom_y - 2; r >= 2; r--)
+        {
+            int sum1 = get_integral(integral_image, cv::Point(fix_l_point.x, r-1), 
+                cv::Point(fix_r_point.x, r));
+            int sum2 = get_integral(integral_image, cv::Point(fix_l_point.x, r-2), 
+                cv::Point(fix_r_point.x, r-1));
+            if (sum1 < MAG_AREA && sum2 < MAG_AREA)
+            {
+                upper_y = r - 1;
+                break;
+            }
+        }
+    }
+
+    // up and button done
+    int left_x = -1;
+    int right_x = -1;
+
+    sum = get_integral(integral_image, cv::Point(fix_l_point.x, upper_y), 
+        cv::Point(fix_l_point.x+1, bottom_y));
+    if (sum >= MAG_AREA)
+    {
+        for (int c = fix_l_point.x; c >= 2; c--)
+        {
+            int sum1 = get_integral(integral_image, cv::Point(c-1, upper_y), 
+                cv::Point(c, bottom_y));
+            int sum2 = get_integral(integral_image, cv::Point(c-2, upper_y), 
+                cv::Point(c-1, bottom_y));
+            if (sum1 < MAG_AREA && sum2 < MAG_AREA)
+            {
+                left_x = c - 1;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for (int c = fix_l_point.x; c < fix_r_point.x - 2; c++)
+        {
+            int sum1 = get_integral(integral_image, cv::Point(c, upper_y), 
+                cv::Point(c+1, bottom_y));
+            int sum2 = get_integral(integral_image, cv::Point(c+1, upper_y), 
+                cv::Point(c+2, bottom_y));
+            if (sum1 >= MAG_AREA && sum2 >= MAG_AREA)
+            {
+                left_x = c;
+                break;
+            }
+        }
+    }
+
+    sum = get_integral(integral_image, cv::Point(fix_r_point.x, upper_y), 
+        cv::Point(fix_r_point.x+1, bottom_y));
+    if (sum >= MAG_AREA)
+    {
+        for (int c = fix_r_point.x; c < _image.cols - 2; c++)
+        {
+            int sum1 = get_integral(integral_image, cv::Point(c, upper_y), 
+                cv::Point(c+1, bottom_y));
+            int sum2 = get_integral(integral_image, cv::Point(c+1, upper_y), 
+                cv::Point(c+2, bottom_y));
+            if (sum1 < MAG_AREA && sum2 < MAG_AREA)
+            {
+                right_x = c + 2;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for (int c = fix_r_point.x; c >= fix_l_point.x; c--)
+        {
+            int sum1 = get_integral(integral_image, cv::Point(c-1, upper_y), 
+                cv::Point(c, bottom_y));
+            int sum2 = get_integral(integral_image, cv::Point(c-2, upper_y), 
+                cv::Point(c-1, bottom_y));
+            if (sum1 < MAG_AREA && sum2 < MAG_AREA)
+            {
+                right_x = c;
+                break;
+            }
+        }
+    }
+    return cv::Rect(left_x, upper_y, right_x-left_x+1, bottom_y-upper_y+1);
+}
+//////////////////////////////////////////////////////////////////////////
 
 
 /** output every element of a cv::Mat */
@@ -1250,6 +1518,103 @@ static void convolveDFT(const cv::Mat& A, const cv::Mat& B, cv::Mat& C)
     tempA(cv::Rect(B.cols/2, B.rows/2, A.cols, A.rows)).copyTo(C);
     // all the temporary buffers will be deallocated automatically
 }
+
+
+
+#ifdef _WIN32
+// Here, fs must have been opened for writing already.
+// Explained by Pei JIA
+static void writeSkeletonData(const NUI_SKELETON_FRAME& skeleton, std::fstream& fs)
+{
+    fs << skeleton.liTimeStamp.QuadPart << " "
+        << skeleton.dwFrameNumber << " "
+        << skeleton.dwFlags << " "
+        << skeleton.vFloorClipPlane.x << " "
+        << skeleton.vFloorClipPlane.y << " "
+        << skeleton.vFloorClipPlane.z << " "
+        << skeleton.vFloorClipPlane.w << " "
+        << skeleton.vNormalToGravity.x << " "
+        << skeleton.vNormalToGravity.y << " "
+        << skeleton.vNormalToGravity.z << " "
+        << skeleton.vNormalToGravity.w << std::endl;
+    for (int i = 0; i < NUI_SKELETON_COUNT; i++)
+    {
+        fs << skeleton.SkeletonData[i].eTrackingState << " "
+            << skeleton.SkeletonData[i].dwTrackingID << " "
+            << skeleton.SkeletonData[i].dwEnrollmentIndex << " "
+            << skeleton.SkeletonData[i].dwUserIndex << " "
+            << skeleton.SkeletonData[i].Position.x << " "
+            << skeleton.SkeletonData[i].Position.y << " "
+            << skeleton.SkeletonData[i].Position.z << " "
+            << skeleton.SkeletonData[i].Position.w << " " << std::endl;
+        
+        for(int j = 0; j < 20; j++)
+        {
+            fs << skeleton.SkeletonData[i].SkeletonPositions[j].x << " "
+                << skeleton.SkeletonData[i].SkeletonPositions[j].y << " "
+                << skeleton.SkeletonData[i].SkeletonPositions[j].z << " "
+                << skeleton.SkeletonData[i].SkeletonPositions[j].w << " ";
+        }
+
+        for(int j = 0; j < 20; j++)
+        {
+            fs << skeleton.SkeletonData[i].eSkeletonPositionTrackingState[j] << " ";
+        }
+
+        fs << skeleton.SkeletonData[i].dwQualityFlags << " ";
+    }
+
+    fs << std::endl;
+}
+
+// Here, fs must have been opened for reading already.
+// Explained by Pei JIA
+static void readSkeletonData(std::fstream& fs, NUI_SKELETON_FRAME& skeleton)
+{
+    fs >> skeleton.liTimeStamp.QuadPart
+        >> skeleton.dwFrameNumber
+        >> skeleton.dwFlags
+        >> skeleton.vFloorClipPlane.x
+        >> skeleton.vFloorClipPlane.y
+        >> skeleton.vFloorClipPlane.z
+        >> skeleton.vFloorClipPlane.w
+        >> skeleton.vNormalToGravity.x
+        >> skeleton.vNormalToGravity.y
+        >> skeleton.vNormalToGravity.z
+        >> skeleton.vNormalToGravity.w;
+    for (int i = 0; i < NUI_SKELETON_COUNT; i++)
+    {
+        int tmpTrackingState;
+        fs >> tmpTrackingState;
+        skeleton.SkeletonData[i].eTrackingState = (NUI_SKELETON_TRACKING_STATE)tmpTrackingState;
+        fs	>> skeleton.SkeletonData[i].dwTrackingID
+            >> skeleton.SkeletonData[i].dwEnrollmentIndex
+            >> skeleton.SkeletonData[i].dwUserIndex
+            >> skeleton.SkeletonData[i].Position.x
+            >> skeleton.SkeletonData[i].Position.y
+            >> skeleton.SkeletonData[i].Position.z
+            >> skeleton.SkeletonData[i].Position.w;
+
+        for(int j = 0; j < 20; j++)
+        {
+            fs >> skeleton.SkeletonData[i].SkeletonPositions[j].x
+                >> skeleton.SkeletonData[i].SkeletonPositions[j].y
+                >> skeleton.SkeletonData[i].SkeletonPositions[j].z
+                >> skeleton.SkeletonData[i].SkeletonPositions[j].w;
+        }
+
+        for(int j = 0; j < 20; j++)
+        {
+            int tmpSkeletonPositionTrackingState;
+            fs >> tmpSkeletonPositionTrackingState;
+            skeleton.SkeletonData[i].eSkeletonPositionTrackingState[j] = NUI_SKELETON_POSITION_TRACKING_STATE(tmpSkeletonPositionTrackingState);
+        }
+
+        fs >> skeleton.SkeletonData[i].dwQualityFlags;
+    }
+}
+#endif
+
 
 #endif  // __VO_CVCOMMON_H__
 

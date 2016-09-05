@@ -361,7 +361,7 @@ void CRecognitionAlgs::CalcShapeFittingEffect(  const VO_Shape& refShape,
                                                 const VO_Shape& fittedShape,
                                                 float& deviation,
                                                 std::vector<float>& ptErrorFreq,
-                                                int nb)
+                                                unsigned int nb)
 {
     assert(refShape.GetNbOfDim() == fittedShape.GetNbOfDim());
     assert(refShape.GetNbOfPoints() == fittedShape.GetNbOfPoints());
