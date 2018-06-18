@@ -106,7 +106,7 @@ bool CRecognitionAlgs::EvaluateFaceTrackedByProbabilityImage(CTrackingAlgs* trac
                                                             cv::Size smallSize,
                                                             cv::Size bigSize)
 {
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
     cv::Rect rect =    iShape.GetShapeBoundRect();
 
@@ -125,7 +125,7 @@ double t = (double)cvGetTickCount();
     else
         res = true;
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 std::cout << "Camshift Tracking time cost: " << t << "millisec" << std::endl;
 
     return res;
@@ -147,7 +147,7 @@ bool CRecognitionAlgs::EvaluateFaceTrackedByCascadeDetection(const CFaceDetectio
                                                             const std::vector<VO_Shape2DInfo>& iShapeInfo,
                                                             const VO_FaceParts& iFaceParts)
 {
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
     unsigned int ImgWidth               = iImg.cols;
     unsigned int ImgHeight              = iImg.rows;
@@ -192,7 +192,7 @@ double t = (double)cvGetTickCount();
     bool RightEyeDetected               = const_cast<CFaceDetectionAlgs*>(fd)->VO_FacePartDetection ( iImg, RightEyePossibleWindow, DetectedRightEyeWindow, VO_FacePart::RIGHTEYE );
     bool MouthDetected                  = const_cast<CFaceDetectionAlgs*>(fd)->VO_FacePartDetection ( iImg, MouthPossibleWindow, DetectedMouthWindow, VO_FacePart::LIPOUTERLINE );
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.0f);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.0f);
 std::cout << "Detection Confirmation time cost: " << t << "millisec" << std::endl;
 
     if(LeftEyeDetected && RightEyeDetected && MouthDetected)
