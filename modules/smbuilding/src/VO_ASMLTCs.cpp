@@ -330,7 +330,7 @@ void VO_ASMLTCs::VO_CalcStatistics4AllLTCs()
             cv::calcCovarMatrix(normalizedLTCs4SinglePoint,
                                 Covar,
                                 this->m_vvLTCMeans[i][j],
-                                CV_COVAR_NORMAL+CV_COVAR_ROWS+CV_COVAR_SCALE,
+                                cv::COVAR_NORMAL+cv::COVAR_ROWS+cv::COVAR_SCALE,
                                 CV_32F);
             this->m_vvCVMInverseOfLTCCov[i][j] = Covar.inv(cv::DECOMP_SVD);
         }
