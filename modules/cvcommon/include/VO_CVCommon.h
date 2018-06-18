@@ -156,7 +156,7 @@ static void produceAllThumbnails(   const std::vector<cv::Mat>& mats,
         {
             cv::Mat mat = cv::Mat( height, width, type );
             cv::resize( mats[i], mat, mat.size(), 0, 0, cv::INTER_LINEAR );
-            cv::cvtColor(mat, mat, CV_BGR2RGB);
+            cv::cvtColor(mat, mat, cv::COLOR_RGB2BGR);
             cv::imwrite(fns[i], mat);
         }
     }
@@ -203,7 +203,7 @@ static const cv::Rect crop_font_roi(const cv::Mat &_image,
 
     // processing image
     cv::Mat gray_image;
-    if (_image.channels() == 3) cvtColor(_image, gray_image, CV_BGR2GRAY);
+    if (_image.channels() == 3) cvtColor(_image, gray_image, cv::COLOR_BGR2GRAY);
     else gray_image = _image;
 
     // blur image
