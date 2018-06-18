@@ -217,7 +217,7 @@ double CFaceDetectionAlgs::FaceDetection(const cv::Mat& iImg,
                                         cv::Size smallSize,
                                         cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
     
     switch(this->m_iDetectionMethod)
     {
@@ -253,7 +253,7 @@ double CFaceDetectionAlgs::FaceDetection(const cv::Mat& iImg,
     else
         this->m_bFaceDetected = false;
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
@@ -284,7 +284,7 @@ double CFaceDetectionAlgs::FullFaceDetection (  const cv::Mat& iImg,
                                                 cv::Size smallSize,
                                                 cv::Size bigSize )
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
 
     // this is to detect the frontal face
     this->FaceDetection(iImg, confinedArea, scale, smallSize, bigSize);
@@ -320,7 +320,7 @@ double CFaceDetectionAlgs::FullFaceDetection (  const cv::Mat& iImg,
         this->m_bMouthDetected = false;
     }
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
@@ -343,7 +343,7 @@ double CFaceDetectionAlgs::VO_FaceComponentsDetection(const cv::Mat& iImg,
                                                      bool nose,
                                                      bool mouth)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
 
     // Emphasized by JIA Pei, make sure you update m_CVDetectedFaceWindow finally!
     // set the top left half to look for left eye
@@ -487,7 +487,7 @@ double CFaceDetectionAlgs::VO_FaceComponentsDetection(const cv::Mat& iImg,
             this->m_VOFaceComponents0.m_rectMouth.y += this->m_VOFaceComponents0.m_rectMouth.height;
     }
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
