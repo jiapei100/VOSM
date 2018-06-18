@@ -76,7 +76,7 @@ std::ostream& operator<<(std::ostream& os, const VO_WarpingPoint& warpingpoint)
 std::istream& operator>>(std::istream& is, VO_WarpingPoint& warpingpoint)
 {
     int tempint;
-    CvPoint2D32f tempPoint;
+    cv::Point2f tempPoint;
 
     is >> tempint;
     warpingpoint.SetPointIndex(tempint);
