@@ -218,11 +218,11 @@ public:
                                     }
                                     else if(iImg.channels() == GRAYCHANNELS && NbOfChannels == COLORCHANNELS )
                                     {
-                                        cv::cvtColor(iImg, this->m_ImageProcessing, CV_GRAY2BGR);
+                                        cv::cvtColor(iImg, this->m_ImageProcessing, cv::COLOR_GRAY2BGR);
                                     }
                                     else if(iImg.channels() == COLORCHANNELS && NbOfChannels == GRAYCHANNELS )
                                     {
-                                        cv::cvtColor(iImg, this->m_ImageProcessing, CV_BGR2GRAY);
+                                        cv::cvtColor(iImg, this->m_ImageProcessing, cv::COLOR_BGR2GRAY);
                                     }
                                     else
                                     {
