@@ -1232,7 +1232,7 @@ void VO_AAMBasic::VO_BuildAppearanceModel(  const std::vector<std::string>& allL
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this->m_PCAAppearance = cv::PCA(matConcatenated, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)(this->m_fTruncatedPercent_Appearance) );
+    this->m_PCAAppearance = cv::PCA(matConcatenated, cv::Mat(), cv::PCA::DATA_AS_ROW, (double)(this->m_fTruncatedPercent_Appearance) );
     this->m_iNbOfAppearanceEigens = this->m_PCAAppearance.eigenvalues.rows;
     this->m_PCANormalizedTexture.mean.setTo(0);
 
