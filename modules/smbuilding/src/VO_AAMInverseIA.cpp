@@ -460,7 +460,7 @@ void VO_AAMInverseIA::VO_CalcInverseHessian()
 
     cv::gemm(this->m_MatModifiedSteepestDescentImages, this->m_MatModifiedSteepestDescentImages, 1, cv::Mat(), 0, HessianMatrix, cv::GEMM_1_T);
 
-    cv::invert( HessianMatrix, this->m_MatHessianMatrixInverse, CV_SVD );
+    cv::invert( HessianMatrix, this->m_MatHessianMatrixInverse, cv::DECOMP_LU );
 }
 
 
