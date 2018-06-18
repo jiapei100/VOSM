@@ -137,7 +137,7 @@ void VO_DaubechiesFeatures::VO_GenerateAllFeatures(const cv::Mat& iImg, cv::Poin
 /** Default constructor */
 VO_DaubechiesFeatures::Feature::Feature()
 {
-    rect = cvRect(0, 0, 0, 0);
+    rect = cv::Rect(0, 0, 0, 0);
 }
 
 
