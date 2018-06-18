@@ -618,7 +618,7 @@ void VO_Profile::VO_Get1DProfileInMat4OneLandmark ( const cv::Mat& iImg,
     else if (channels == 3)
     {
         cv::Mat grayImg;
-        cv::cvtColor(iImg, grayImg, CV_BGR2GRAY);
+        cv::cvtColor(iImg, grayImg, cv::COLOR_BGR2GRAY);
         float gray_prev     = 0.0f;
         float gray_curr     = 0.0f;
 
