@@ -183,7 +183,7 @@ bool VO_TextureModel::VO_LoadOneTextureFromShape(const VO_Shape& iShape,
     std::ofstream fs;
     fs.open("loadTextureTime.txt", std::ios::app);
 
-double time0 = (double)cvGetTickCount();
+double time0 = (double)cv::getTickCount();
 
     // make sure all shape points are inside the image
     if ( !VO_ShapeModel::VO_IsShapeInsideImage(iShape, img) )
@@ -229,8 +229,8 @@ double time0 = (double)cvGetTickCount();
     // That means the width of the image is 2-0+1=3 (from the aspect of pixel)
     rect.width +=1; rect.height +=1;
 
-double time1 = (double)cvGetTickCount();
-double elapsed = (time1 -  time0 )/  (cvGetTickFrequency()*1000.);
+double time1 = (double)cv::getTickCount();
+double elapsed = (time1 -  time0 )/  (cv::getTickFrequency()*1000.);
 fs << "Before Mapping -- Step 1 of warping time: " << elapsed << "millisec."  << std::endl;
 
     cv::Mat Img2BExtracted;
@@ -339,8 +339,8 @@ fs << "Before Mapping -- Step 1 of warping time: " << elapsed << "millisec."  <<
         break;
     }
 
-double time2 = (double)cvGetTickCount();
-elapsed = (time2 - time1)/  (cvGetTickFrequency()*1000.);
+double time2 = (double)cv::getTickCount();
+elapsed = (time2 - time1)/  (cv::getTickFrequency()*1000.);
 fs << "Mapping -- Step 2 of warping time: " << elapsed << "millisec."  << std::endl;
 
     //cv::Mat Img4Display = cv::Mat::zeros(Img2BExtracted.size(), CV_8U);
@@ -518,8 +518,8 @@ fs << "Mapping -- Step 2 of warping time: " << elapsed << "millisec."  << std::e
             t * Img2BExtracted.at<uchar>(Y1, X1) ) * s;
         }
     }
-double time3 = (double)cvGetTickCount();
-elapsed = (time3 - time2)/  (cvGetTickFrequency()*1000.);
+double time3 = (double)cv::getTickCount();
+elapsed = (time3 - time2)/  (cv::getTickFrequency()*1000.);
 fs << "Mapping -- Step 3 of warping time: " << elapsed << "millisec."  << std::endl;
 
 //cv::Rect rect1                   = VO_TextureModel::VO_CalcBoundingRectFromTriangles(templateTriangles);
@@ -1087,7 +1087,7 @@ void VO_TextureModel::VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float&
 
     switch(image.depth())
     {
-    case IPL_DEPTH_8U:
+    case CV_8U:
         {
             if(channels == 1)
                 B = (float)image.at<uchar>(y, x );
@@ -1099,7 +1099,7 @@ void VO_TextureModel::VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float&
             }
         }
         break;
-    case IPL_DEPTH_8S:
+    case CV_8S:
         {
             if(channels == 1)
                 B = (float)image.at<char>(y, x );
@@ -1111,7 +1111,7 @@ void VO_TextureModel::VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float&
             }
         }
         break;
-    case IPL_DEPTH_16S:
+    case CV_16S:
         {
             if(channels == 1)
                 B = (float)image.at<short int>(y, x );
@@ -1123,7 +1123,7 @@ void VO_TextureModel::VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float&
             }
         }
         break;
-     case IPL_DEPTH_16U:
+     case CV_16U:
         {
             if(channels == 1)
                 B = (float)image.at<unsigned short int>(y, x );
@@ -1135,7 +1135,7 @@ void VO_TextureModel::VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float&
             }
         }
          break;
-    case IPL_DEPTH_32S:
+    case CV_32S:
         {
             if(channels == 1)
                 B = (float)image.at<int>(y, x );
@@ -1147,7 +1147,7 @@ void VO_TextureModel::VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float&
             }
         }
         break;
-    case IPL_DEPTH_32F:
+    case CV_32F:
         {
             if(channels == 1)
                 B = image.at<float>(y, x );
@@ -1159,7 +1159,7 @@ void VO_TextureModel::VO_CalcPixelRGB(int x, int y, const cv::Mat& image, float&
             }
         }
         break;
-    case IPL_DEPTH_64F:
+    case CV_64F:
         {
             if(channels == 1)
                 B = (float)image.at<double>(y, x );
@@ -1525,7 +1525,7 @@ bool VO_TextureModel::VO_LoadTextureTrainingData(const std::vector<std::string>&
         else
             std::cerr << "We can't deal with image channels not equal to 1 or 3!" << std::endl;
 
-        double start = (double)cvGetTickCount();
+        double start = (double)cv::getTickCount();
         // Explained by JIA Pei -- warping
         if ( !VO_TextureModel::VO_LoadOneTextureFromShape(  this->m_vShapes[i], 
                                                             img, 
@@ -1538,8 +1538,8 @@ bool VO_TextureModel::VO_LoadTextureTrainingData(const std::vector<std::string>&
             return false;
         }
 
-        double end = (double)cvGetTickCount();
-        double elapsed = (end - start) / (cvGetTickFrequency()*1000.0);
+        double end = (double)cv::getTickCount();
+        double elapsed = (end - start) / (cv::getTickFrequency()*1000.0);
     }
 
     return true;
@@ -1661,7 +1661,7 @@ void VO_TextureModel::VO_BuildTextureModel( const std::vector<VO_Texture>& allTe
 
     //////////////////////////////////////////////////////////////////////////
     /// Calculate PCA ////////////////////////////////////////////////////////
-    pca = cv::PCA(matNormalizedTextures, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)TPTexture );
+    pca = cv::PCA(matNormalizedTextures, cv::Mat(), cv::PCA::DATA_AS_ROW, (double)TPTexture );
     nbOfTextureEigens = pca.eigenvalues.rows;
     pca.mean = normalizedMeanTexture.GetTheTextureInARow();
 //    for(int i = 0; i < this->m_PCANormalizedTexture.mean.rows; i++)
@@ -1956,7 +1956,7 @@ void VO_TextureModel ::VO_Load(const std::string& fd)
     
     /** Image of edges */
     tempfn = fn + "/edges.jpg";
-    this->m_ImageEdges = cv::imread(tempfn.c_str(), CV_LOAD_IMAGE_ANYCOLOR );
+    this->m_ImageEdges = cv::imread(tempfn.c_str(), cv::IMREAD_ANYCOLOR );
 
 }
 
@@ -2065,6 +2065,6 @@ void VO_TextureModel::VO_LoadParameters4Fitting(const std::string& fd)
 
     /** Template face image */
     tempfn = fn + "/Reference.jpg";
-    this->m_ImageTemplateFace = cv::imread(tempfn.c_str(), CV_LOAD_IMAGE_ANYCOLOR );
+    this->m_ImageTemplateFace = cv::imread(tempfn.c_str(), cv::IMREAD_ANYCOLOR );
 }
 
