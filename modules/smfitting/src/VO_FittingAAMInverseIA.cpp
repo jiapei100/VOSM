@@ -198,7 +198,7 @@ float VO_FittingAAMInverseIA::VO_IAIAAAMFitting(const cv::Mat& iImg,
                                                 bool record)
 {
     this->m_VOEstimatedShape.clone(this->m_VOFittingShape);
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
     this->SetProcessingImage(iImg, this->m_VOAAMInverseIA);
 
@@ -324,7 +324,7 @@ if(record)
     // estimate the texture model parameters
     this->m_VOAAMInverseIA->VO_CalcAllParams4AnyTexture(this->m_VOFittingTexture, this->m_MatModelNormalizedTextureParam);
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 std::cout << "IAIA AAM fitting time cost: " << t << " millisec" << std::endl;
 
     return t;
@@ -347,7 +347,7 @@ float VO_FittingAAMInverseIA::VO_IAIAAAMFitting(const cv::Mat& iImg,
 {
     this->m_VOFittingShape.clone(ioShape);
     this->m_VOEstimatedShape.clone(this->m_VOFittingShape);
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
     this->SetProcessingImage(iImg, this->m_VOAAMInverseIA);
     this->m_iIteration = 0;
@@ -452,7 +452,7 @@ double t = (double)cvGetTickCount();
 
     ioShape.clone(this->m_VOFittingShape);
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 std::cout << "IAIA AAM fitting time cost: " << t << " millisec" << std::endl;
 this->m_fFittingTime = t;
 
@@ -474,7 +474,7 @@ float VO_FittingAAMInverseIA::VO_ICIAAAMFitting(const cv::Mat& iImg,
                                                 bool record)
 {
     this->m_VOEstimatedShape.clone(this->m_VOFittingShape);
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
     this->SetProcessingImage(iImg, this->m_VOAAMInverseIA);
     this->m_iIteration = 0;
@@ -597,7 +597,7 @@ if(record)
     // estimate the texture model parameters
     this->m_VOAAMInverseIA->VO_CalcAllParams4AnyTexture(this->m_VOFittingTexture, this->m_MatModelNormalizedTextureParam);
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 std::cout << "ICIA AAM fitting time cost: " << t << " millisec" << std::endl;
 
     return t;
@@ -620,7 +620,7 @@ float VO_FittingAAMInverseIA::VO_ICIAAAMFitting(const cv::Mat& iImg,
 {
     this->m_VOFittingShape.clone(ioShape);
     this->m_VOEstimatedShape.clone(this->m_VOFittingShape);
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
     this->SetProcessingImage(iImg, this->m_VOAAMInverseIA);
     this->m_iIteration = 0;
@@ -721,7 +721,7 @@ double t = (double)cvGetTickCount();
     this->m_VOAAMInverseIA->VO_CalcAllParams4AnyTexture(this->m_VOFittingTexture, this->m_MatModelNormalizedTextureParam);
     ioShape.clone(this->m_VOFittingShape);
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 std::cout << "ICIA AAM fitting time cost: " << t << " millisec" << std::endl;
 this->m_fFittingTime = t;
 
