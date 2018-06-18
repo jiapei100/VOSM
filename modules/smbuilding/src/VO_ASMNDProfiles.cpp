@@ -248,8 +248,8 @@ void VO_ASMNDProfiles::VO_CalcStatistics4AllProfiles()
                 }
 
                 // OK! Now We Calculate the Covariance cv::Matrix of prof for Landmark icv::Point
-                cv::calcCovarMatrix( allProfiles, Covar, Mean, CV_COVAR_NORMAL+CV_COVAR_ROWS+CV_COVAR_SCALE, CV_32F);
-//                cv::calcCovarMatrix( allProfiles, Covar, Mean, CV_COVAR_SCRAMBLED+CV_COVAR_ROWS, CV_32F);
+                cv::calcCovarMatrix( allProfiles, Covar, Mean, cv::COVAR_NORMAL+cv::COVAR_ROWS+cv::COVAR_SCALE, CV_32F);
+//                cv::calcCovarMatrix( allProfiles, Covar, Mean, cv::COVAR_SCRAMBLED+cv::COVAR_ROWS, CV_32F);
                 this->m_vvMeanNormalizedProfile[i][j].Set1DimProfile(Mean.t(), k);
 
                 // Explained by YAO Wei, 2008-1-29.
