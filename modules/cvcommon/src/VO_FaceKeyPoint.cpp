@@ -110,7 +110,7 @@ void VO_KeyPoint::CalcFaceKeyline(
     // Explained by JIA Pei, some times, there is no linePoints, which means the specified parts are not in one of the database
     if(linePoints.size() >= 2 )
     {
-        cv::fitLine( oSubshape.GetTheShape(), line, CV_DIST_L2, 0, 0.001, 0.001 );
+        cv::fitLine( oSubshape.GetTheShape(), line, cv::DIST_L2, 0, 0.001, 0.001 );
 
         // Ax+By+C = 0
         oLine[0] = -line[1];
