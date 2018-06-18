@@ -148,7 +148,7 @@ bool CTrackingAlgs::CamshiftUpdateTracker(  const cv::Mat& img,
                                             cv::MatND& hist)
 {
     cv::Mat hsv, hue, mask, backproject;
-    cv::cvtColor( img, hsv, CV_BGR2HSV );
+    cv::cvtColor( img, hsv, cv::COLOR_BGR2HSV );
     
     int _vmin = CTrackingAlgs::vmin, _vmax = CTrackingAlgs::vmax;
 
@@ -189,7 +189,7 @@ double CTrackingAlgs::Tracking(const cv::Mat& img,
                                cv::Size smallSize,
                                cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
 
     if(this->m_bTrackerInitialized)
     {
@@ -250,7 +250,7 @@ double CTrackingAlgs::Tracking(const cv::Mat& img,
         this->UpdateTracker(img, obj);
     }
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
@@ -273,7 +273,7 @@ double CTrackingAlgs::CamshiftTracking( const cv::Mat& img,
                                         cv::Size smallSize,
                                         cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
 
     if(obj.x <= 0)    obj.x = 0;
     if(obj.y <= 0)    obj.y = 0;
@@ -282,7 +282,7 @@ double CTrackingAlgs::CamshiftTracking( const cv::Mat& img,
 
     cv::Rect trackwindow = obj;
     cv::Mat hsv, hue, mask, backproject;
-    cv::cvtColor( img, hsv, CV_BGR2HSV );
+    cv::cvtColor( img, hsv, cv::COLOR_BGR2HSV );
 
     int _vmin = CTrackingAlgs::vmin, _vmax = CTrackingAlgs::vmax;
 
@@ -315,7 +315,7 @@ double CTrackingAlgs::CamshiftTracking( const cv::Mat& img,
     else
         isTracked = true;
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
@@ -335,9 +335,9 @@ double CTrackingAlgs::KalmanTracking(const cv::Mat& img,
                                     cv::Size smallSize,
                                     cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
     
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
@@ -357,9 +357,9 @@ double CTrackingAlgs::ParticleFilterTracking(const cv::Mat& img,
                                             cv::Size smallSize,
                                             cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
     
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
@@ -379,9 +379,9 @@ double CTrackingAlgs::ASMAAMTracking(const cv::Mat& img,
                                     cv::Size smallSize,
                                     cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
     
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
