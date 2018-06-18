@@ -154,7 +154,7 @@ bool VO_FeatureModel::VO_LoadFeatureTrainingData(     const std::vector<std::str
         else
             std::cerr << "We can't deal with image channels not equal to 1 or 3!" << std::endl;
 
-        double start = (double)cvGetTickCount();
+        double start = (double)cv::getTickCount();
         // Explained by JIA Pei -- Feature extraction over the whole image, so many methods.
         if ( !VO_FeatureModel::VO_LoadFeatures4OneFace(this->m_vShapes[i], 
                                                         img, 
@@ -168,8 +168,8 @@ bool VO_FeatureModel::VO_LoadFeatureTrainingData(     const std::vector<std::str
             return false;
         }
 
-        double end = (double)cvGetTickCount();
-        double elapsed = (end - start) / (cvGetTickFrequency()*1000.0);
+        double end = (double)cv::getTickCount();
+        double elapsed = (end - start) / (cv::getTickFrequency()*1000.0);
     }
 
     return true;
