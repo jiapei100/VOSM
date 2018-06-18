@@ -215,7 +215,7 @@ void VO_AFM::VO_LoadFeatureTrainingData(unsigned int mtd)
         this->m_vLTCs[i].Resize(this->m_iNbOfPoints, this->m_localImageSize.width*this->m_localImageSize.height);
         img = cv::imread ( this->m_vStringTrainingImageNames[i].c_str (), 0 );
 
-        double start = (double)cvGetTickCount();
+        double start = (double)cv::getTickCount();
         // Explained by JIA Pei -- wavelet feature extraction
         for(unsigned int j = 0; j < this->m_iNbOfPoints; ++j)
         {
@@ -228,8 +228,8 @@ void VO_AFM::VO_LoadFeatureTrainingData(unsigned int mtd)
             oneLTC.copyTo(tmpRow);
         }
 
-        double end = (double)cvGetTickCount();
-        double elapsed = (end - start) / (cvGetTickFrequency()*1000.0);
+        double end = (double)cv::getTickCount();
+        double elapsed = (end - start) / (cv::getTickFrequency()*1000.0);
     }
 }
 
