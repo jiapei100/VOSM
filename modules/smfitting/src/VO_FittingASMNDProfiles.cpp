@@ -129,7 +129,7 @@ float VO_FittingASMNDProfiles::VO_ASMNDProfileFitting(  const cv::Mat& iImg,
                                                         unsigned int dim,
                                                         bool record)
 {
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
     this->m_iNbOfPyramidLevels = pyramidlevel;
     this->SetProcessingImage(iImg, this->m_VOASMNDProfile);
@@ -209,7 +209,7 @@ if(record)
     // this->m_fScale2 back to original size
     this->m_VOFittingShape /= this->m_fScale2;
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 printf("MRASM fitting time cost: %.2f millisec\n", t);
 
     return t;
@@ -236,7 +236,7 @@ float VO_FittingASMNDProfiles::VO_ASMNDProfileFitting(  const cv::Mat& iImg,
                                                         unsigned int dim)
 {
     this->m_VOFittingShape.clone(ioShape);
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
     this->m_iNbOfPyramidLevels = pyramidlevel;
     this->SetProcessingImage(iImg, this->m_VOASMNDProfile);
@@ -295,7 +295,7 @@ double t = (double)cvGetTickCount();
     ioShape.clone(this->m_VOFittingShape);
     VO_Fitting2DSM::VO_DrawMesh(ioShape, this->m_VOASMNDProfile, oImg);
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 printf("MRASM fitting time cost: %.2f millisec\n", t);
 this->m_fFittingTime = t;
 
