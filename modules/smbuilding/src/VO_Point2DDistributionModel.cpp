@@ -116,7 +116,7 @@ void VO_Point2DDistributionModel::VO_BuildPointDistributionModel( const std::vec
         }
         // 2014-05-08, asked by Pei JIA: why the following line is not correct??
         //cv::PCA pca = cv::PCA(matAlignedPoints, matAlignedMeanPoint, CV_PCA_DATA_AS_ROW, 2);
-        cv::PCA pca = cv::PCA(matAlignedPoints, cv::Mat(), CV_PCA_DATA_AS_ROW, 2);
+        cv::PCA pca = cv::PCA(matAlignedPoints, cv::Mat(), cv::PCA::DATA_AS_ROW, 2);
         float xx = pca.eigenvectors.at<float>(0,0);
         float yy = pca.eigenvectors.at<float>(0,1);
         float theta = 0.0;
