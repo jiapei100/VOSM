@@ -115,7 +115,7 @@ double CDetectionAlgs::Detection(   const cv::Mat& iImg,
                                     cv::Size smallSize,
                                     cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
     
     switch(this->m_iDetectionMethod)
     {
@@ -144,7 +144,7 @@ double CDetectionAlgs::Detection(   const cv::Mat& iImg,
     else
         this->m_bObjectDetected    = false;
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
@@ -170,7 +170,7 @@ double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier* cascade,
                                         cv::Size smallSize,
                                         cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
     objs.clear();
     cv::Mat confinedImg;
     if(confinedArea)
@@ -181,7 +181,7 @@ double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier* cascade,
     cv::Mat gray, smallImg( cvRound (confinedImg.rows/scale), cvRound(confinedImg.cols/scale), CV_8UC1 );
 
     if(confinedImg.channels() == 3)
-        cv::cvtColor( confinedImg, gray, CV_BGR2GRAY );
+        cv::cvtColor( confinedImg, gray, cv::COLOR_BGR2GRAY );
     else
         gray = confinedImg;
     cv::resize( gray, smallImg, smallImg.size(), 0, 0, cv::INTER_LINEAR );
@@ -195,7 +195,7 @@ double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier* cascade,
                                                             //|CascadeClassifier::FIND_BIGGEST_OBJECT
                                                             //|CascadeClassifier::DO_ROUGH_SEARCH
                                                             //|CascadeClassifier::SCALE_IMAGE,
-                                                            |CV_HAAR_SCALE_IMAGE,
+                                                            |cv::CASCADE_SCALE_IMAGE,
                                                             smallSize);
                                                             //Size(40, 40) );
     ///////////////////////sort///////////////////////////////////////
@@ -245,7 +245,7 @@ double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier* cascade,
         objs.erase (objs.begin(), objs.begin() + qs);
     }
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
@@ -271,9 +271,9 @@ double CDetectionAlgs::BaggingDetection( const cv::ml::RTrees* rtree,
                                         cv::Size smallSize,
                                         cv::Size bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
