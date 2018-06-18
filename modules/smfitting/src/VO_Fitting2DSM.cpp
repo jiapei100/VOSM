@@ -353,8 +353,8 @@ void VO_Fitting2DSM::VO_DrawMesh(const VO_Shape& iShape, const VO_AXM* iModel, c
 
     for (unsigned int i = 0; i < NbOfEdges; i++)
     {
-        iorg = cvPointFrom32f( iShape.GetA2DPoint( edges[i].GetIndex1() ) );
-        idst = cvPointFrom32f( iShape.GetA2DPoint( edges[i].GetIndex2() ) );
+        iorg = cv::Point( iShape.GetA2DPoint( edges[i].GetIndex1() ) );
+        idst = cv::Point( iShape.GetA2DPoint( edges[i].GetIndex2() ) );
         // Edge
         cv::line( ioImg, iorg, idst, colors[8], 1, 0, 0 );
         // Key points
@@ -407,8 +407,8 @@ void VO_Fitting2DSM::VO_DrawAline(  const VO_Shape& iShape,
             }
             ptf1.x = -(C + B*ptf1.y)/A;
             ptf2.x = -(C + B*ptf2.y)/A;
-            cv::Point pt1 = cvPointFrom32f( ptf1 );
-            cv::Point pt2 = cvPointFrom32f( ptf2 );
+            cv::Point pt1 = cv::Point( ptf1 );
+            cv::Point pt2 = cv::Point( ptf2 );
             cv::line( oImg, pt1, pt2, colors[ci], 2, 0, 0);
         }
         break;
@@ -431,8 +431,8 @@ void VO_Fitting2DSM::VO_DrawAline(  const VO_Shape& iShape,
             }
             ptf1.y = -(C + A*ptf1.x)/B;
             ptf2.y = -(C + A*ptf2.x)/B;
-            cv::Point pt1 = cvPointFrom32f( ptf1 );
-            cv::Point pt2 = cvPointFrom32f( ptf2 );
+            cv::Point pt1 = cv::Point( ptf1 );
+            cv::Point pt2 = cv::Point( ptf2 );
             cv::line( oImg, pt1, pt2, colors[ci], 2, 0, 0);
         }
         break;
@@ -450,7 +450,7 @@ void VO_Fitting2DSM::VO_DrawAline(  const VO_Shape& iShape,
  */
 void VO_Fitting2DSM::VO_DrawAPoint(const cv::Point2f& pt, cv::Mat& ioImg)
 {
-    cv::Point tempPt = cvPointFrom32f(pt);
+    cv::Point tempPt = cv::Point(pt);
     cv::circle( ioImg, tempPt, 2, colors[5], -1, 8, 0 );
 }
 
