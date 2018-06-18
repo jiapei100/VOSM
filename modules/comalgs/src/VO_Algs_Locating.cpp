@@ -129,7 +129,7 @@ double CLocatingAlgs::Locating( const cv::Mat& img,
                                 const cv::Size& smallSize,
                                 const cv::Size& bigSize)
 {
-    double res = (double)cvGetTickCount();
+    double res = (double)cv::getTickCount();
     double scale = 1.0;
 
     // only detection is used
@@ -175,7 +175,7 @@ double CLocatingAlgs::Locating( const cv::Mat& img,
         }
     }
 
-    res = ((double)cvGetTickCount() - res) / ((double)cvGetTickFrequency()*1000.);
+    res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
     return res;
 }
 
