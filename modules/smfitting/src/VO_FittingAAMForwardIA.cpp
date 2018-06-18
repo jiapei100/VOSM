@@ -126,9 +126,9 @@ float VO_FittingAAMForwardIA::VO_FAIAAAMFitting(const cv::Mat& iImg,
                                                 unsigned int epoch,
                                                 bool record)
 {
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 std::cout << "FAIA time cost: " << t << " millisec" << std::endl;
 
     return t;
@@ -148,9 +148,9 @@ float VO_FittingAAMForwardIA::VO_FAIAAAMFitting(const cv::Mat& iImg,
                                                 cv::Mat& oImg,
                                                 unsigned int epoch)
 {
-double t = (double)cvGetTickCount();
+double t = (double)cv::getTickCount();
 
-t = ((double)cvGetTickCount() -  t )/  (cvGetTickFrequency()*1000.);
+t = ((double)cv::getTickCount() -  t )/  (cv::getTickFrequency()*1000.);
 std::cout << "FAIA fitting time cost: " << t << " millisec" << std::endl;
 this->m_fFittingTime = t;
 
