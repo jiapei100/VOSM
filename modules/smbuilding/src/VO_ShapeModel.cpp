@@ -957,7 +957,7 @@ void VO_ShapeModel::VO_BuildShapeModel( const std::vector<VO_Shape>& allShapes,
     //////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////
     /// Calculate PCA ////////////////////////////////////////////////////////
-    pca = cv::PCA(matAlignedShapes, cv::Mat(), CV_PCA_DATA_AS_ROW, (double)TPShape );
+    pca = cv::PCA(matAlignedShapes, cv::Mat(), cv::PCA::DATA_AS_ROW, (double)TPShape );
     nbOfShapeEigens = pca.eigenvalues.rows;
     pca.mean = alignedMeanShape.GetTheShapeInARow();
 //    for(int i = 0; i < pca.mean.rows; i++)
