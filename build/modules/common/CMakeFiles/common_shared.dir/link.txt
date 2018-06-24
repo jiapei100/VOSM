@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -fPIC --std=c++11 -O3 -DNDEBUG  -shared -Wl,-soname,libvosm_common.so -o libvosm_common.so CMakeFiles/common_shared.dir/src/VO_ScanFilesInDir.cpp.o  -L/usr/local/lib  -L/usr/local/cuda/lib64 
