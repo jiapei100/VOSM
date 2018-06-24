@@ -434,84 +434,84 @@ void CRecognitionAlgs::SaveShapeRecogResults(   const std::string& fd,
  * @param   oShape2D
  * @return  std::vector<float>
  */
-std::vector<float> CRecognitionAlgs::CalcAbsoluteOrientations(  const VO_Shape& iShape2D,
-                                                                const VO_Shape& iShape3D,
-                                                                VO_Shape& oShape2D)
-{
-    assert (iShape2D.GetNbOfPoints() == iShape3D.GetNbOfPoints() );
-    unsigned int NbOfPoints = iShape3D.GetNbOfPoints();
-    cv::Point3f pt3d;
-    cv::Point2f pt2d;
-    float height1 = iShape2D.GetHeight();
-    float height2 = iShape3D.GetHeight();
-    VO_Shape tempShape2D = iShape2D;
-    tempShape2D.Scale(height2/height1);
-
-    //Create the model points
-    std::vector<CvPoint3D32f> modelPoints;
-    for(unsigned int i = 0; i < NbOfPoints; ++i)
-    {
-        pt3d = iShape3D.GetA3DPoint(i);
-        modelPoints.push_back(cvPoint3D32f(pt3d.x, pt3d.y, pt3d.z));
-    }
-
-    //Create the image points
-    std::vector<CvPoint2D32f> srcImagePoints;
-    for(unsigned int i = 0; i < NbOfPoints; ++i)
-    {
-        pt2d = tempShape2D.GetA2DPoint(i);
-        srcImagePoints.push_back(cvPoint2D32f(pt2d.x, pt2d.y));
-    }
-
-    //Create the POSIT object with the model points
-    CvPOSITObject *positObject = cvCreatePOSITObject( &modelPoints[0], NbOfPoints );
-
-    //Estimate the pose
-    //CvMatr32f rotation_matrix = new float[9];
-    float* rotation_matrix = new float[9];
-    //CvVect32f translation_vector = new float[3];
-    float* translation_vector = new float[3];
-    CvTermCriteria criteria = cvTermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 100, 1.0e-4f);
-    cvPOSIT( positObject, &srcImagePoints[0], FOCAL_LENGTH, criteria, rotation_matrix, translation_vector );
-
-    //rotation_matrix to Euler angles, refer to VO_Shape::GetRotation
-    float sin_beta  = -rotation_matrix[0 * 3 + 2];
-    float tan_alpha = rotation_matrix[1 * 3 + 2] / rotation_matrix[2 * 3 + 2];
-    float tan_gamma = rotation_matrix[0 * 3 + 1] / rotation_matrix[0 * 3 + 0];
-
-    //Project the model points with the estimated pose
-    oShape2D = tempShape2D;
-    for ( unsigned int i=0; i < NbOfPoints; ++i )
-    {
-        pt3d.x = rotation_matrix[0] * modelPoints[i].x +
-            rotation_matrix[1] * modelPoints[i].y +
-            rotation_matrix[2] * modelPoints[i].z +
-            translation_vector[0];
-        pt3d.y = rotation_matrix[3] * modelPoints[i].x +
-            rotation_matrix[4] * modelPoints[i].y +
-            rotation_matrix[5] * modelPoints[i].z +
-            translation_vector[1];
-        pt3d.z = rotation_matrix[6] * modelPoints[i].x +
-            rotation_matrix[7] * modelPoints[i].y +
-            rotation_matrix[8] * modelPoints[i].z +
-            translation_vector[2];
-        if ( pt3d.z != 0 )
-        {
-            pt2d.x = FOCAL_LENGTH * pt3d.x / pt3d.z;
-            pt2d.y = FOCAL_LENGTH * pt3d.y / pt3d.z;
-        }
-        oShape2D.SetA2DPoint(pt2d, i);
-    }
-    delete(rotation_matrix);
-    delete(translation_vector);
-
-    //return Euler angles
-    std::vector<float> pos(3);
-    pos[0] = (float)atan(tan_alpha);    // yaw
-    pos[1] = (float)asin(sin_beta);        // pitch
-    pos[2] = (float)atan(tan_gamma);    // roll
-    return pos;
-}
+//std::vector<float> CRecognitionAlgs::CalcAbsoluteOrientations(  const VO_Shape& iShape2D,
+//                                                                const VO_Shape& iShape3D,
+//                                                                VO_Shape& oShape2D)
+//{
+//    assert (iShape2D.GetNbOfPoints() == iShape3D.GetNbOfPoints() );
+//    unsigned int NbOfPoints = iShape3D.GetNbOfPoints();
+//    cv::Point3f pt3d;
+//    cv::Point2f pt2d;
+//    float height1 = iShape2D.GetHeight();
+//    float height2 = iShape3D.GetHeight();
+//    VO_Shape tempShape2D = iShape2D;
+//    tempShape2D.Scale(height2/height1);
+//
+//    //Create the model points
+//    std::vector<CvPoint3D32f> modelPoints;
+//    for(unsigned int i = 0; i < NbOfPoints; ++i)
+//    {
+//        pt3d = iShape3D.GetA3DPoint(i);
+//        modelPoints.push_back(cvPoint3D32f(pt3d.x, pt3d.y, pt3d.z));
+//    }
+//
+//    //Create the image points
+//    std::vector<CvPoint2D32f> srcImagePoints;
+//    for(unsigned int i = 0; i < NbOfPoints; ++i)
+//    {
+//        pt2d = tempShape2D.GetA2DPoint(i);
+//        srcImagePoints.push_back(cvPoint2D32f(pt2d.x, pt2d.y));
+//    }
+//
+//    //Create the POSIT object with the model points
+//    CvPOSITObject *positObject = cvCreatePOSITObject( &modelPoints[0], NbOfPoints );
+//
+//    //Estimate the pose
+//    //CvMatr32f rotation_matrix = new float[9];
+//    float* rotation_matrix = new float[9];
+//    //CvVect32f translation_vector = new float[3];
+//    float* translation_vector = new float[3];
+//    CvTermCriteria criteria = cvTermCriteria(CV_TERMCRIT_EPS | CV_TERMCRIT_ITER, 100, 1.0e-4f);
+//    cvPOSIT( positObject, &srcImagePoints[0], FOCAL_LENGTH, criteria, rotation_matrix, translation_vector );
+//
+//    //rotation_matrix to Euler angles, refer to VO_Shape::GetRotation
+//    float sin_beta  = -rotation_matrix[0 * 3 + 2];
+//    float tan_alpha = rotation_matrix[1 * 3 + 2] / rotation_matrix[2 * 3 + 2];
+//    float tan_gamma = rotation_matrix[0 * 3 + 1] / rotation_matrix[0 * 3 + 0];
+//
+//    //Project the model points with the estimated pose
+//    oShape2D = tempShape2D;
+//    for ( unsigned int i=0; i < NbOfPoints; ++i )
+//    {
+//        pt3d.x = rotation_matrix[0] * modelPoints[i].x +
+//            rotation_matrix[1] * modelPoints[i].y +
+//            rotation_matrix[2] * modelPoints[i].z +
+//            translation_vector[0];
+//        pt3d.y = rotation_matrix[3] * modelPoints[i].x +
+//            rotation_matrix[4] * modelPoints[i].y +
+//            rotation_matrix[5] * modelPoints[i].z +
+//            translation_vector[1];
+//        pt3d.z = rotation_matrix[6] * modelPoints[i].x +
+//            rotation_matrix[7] * modelPoints[i].y +
+//            rotation_matrix[8] * modelPoints[i].z +
+//            translation_vector[2];
+//        if ( pt3d.z != 0 )
+//        {
+//            pt2d.x = FOCAL_LENGTH * pt3d.x / pt3d.z;
+//            pt2d.y = FOCAL_LENGTH * pt3d.y / pt3d.z;
+//        }
+//        oShape2D.SetA2DPoint(pt2d, i);
+//    }
+//    delete(rotation_matrix);
+//    delete(translation_vector);
+//
+//    //return Euler angles
+//    std::vector<float> pos(3);
+//    pos[0] = (float)atan(tan_alpha);    // yaw
+//    pos[1] = (float)asin(sin_beta);        // pitch
+//    pos[2] = (float)atan(tan_gamma);    // roll
+//    return pos;
+//}
 
 
 /**

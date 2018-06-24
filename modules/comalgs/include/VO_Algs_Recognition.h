@@ -152,9 +152,9 @@ public:
                                                         std::vector<float>& ptErrorFreq);
 
     /** Calculate face absolute orientations */
-    static std::vector<float>   CalcAbsoluteOrientations(   const VO_Shape& iShape2D,
-                                                            const VO_Shape& iShape3D,
-                                                            VO_Shape& oShape2D);
+//    static std::vector<float>   CalcAbsoluteOrientations(   const VO_Shape& iShape2D,
+//                                                            const VO_Shape& iShape3D,
+//                                                            VO_Shape& oShape2D);
 
     /** Recognize face roll angle */
     static float                CalcFaceRoll(const std::vector<float>& iLine);

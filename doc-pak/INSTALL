@@ -1,0 +1,105 @@
+INSTALL
+-------------------------------------------------------------------------------
+
+
+INTRODUCTION
+============
+
+This file describes how to install VOSM. The instructions in this file
+are for the most common use cases, and cover the command line tools. 
+
+The documentation of VOSM is available in HTML formats.
+It is not bundled with the software but can be viewed separately at
+<http://visionopen.com/cv/vosm/doc/html/>.
+
+For more information about VOSM, refer to the <http://www.visionopen.com/cv/sm.php>.
+
+
+PREREQUISITES
+=============
+
+To install VOSM, you need 'cmake' and several third-party libraries are pre-requisite. 
+
+   * CMake (>= 2.6.2), the build system used by VOSM
+     Required for building VOSM
+
+   * OpenCV (>= 2.2.0)
+
+   * Boost (>= 1.34.1)
+     Required for building VOSM and for applications using VOSM
+     Required compiled Boost library: Boost.Regex
+     Optional compiled Boost library: Boost.Filesystem
+     http://www.boost.org/
+
+CONFIGURATION
+=============
+
+To configure VOSM, type
+
+  cmake .
+
+in the directory that contains this INSTALL file. You can add several options
+to this command. The most important ones are
+
+  -DCMAKE_INSTALL_PREFIX=<dir>          installation directory [/usr/local]
+  -DCMAKE_BUILD_TYPE=<Debug|Release>    build type [Release]
+  -DBUILD_SHARED_LIBS=<TRUE|FALSE>      shared or static libraries [TRUE]
+  -DCMAKE_C_COMPILER=<program>          C compiler [gcc]
+  -DCMAKE_CXX_COMPILER=<program>        C++ compiler [g++]
+
+In case you want to add additional compiler and linker flags, you can use
+
+  -DCGAL_CXX_FLAGS                      additional compiler flags
+  -DCGAL_MODULE_LINKER_FLAGS            add. linker flags (static libraries)
+  -DCGAL_SHARED_LINKER_FLAGS            add. linker flags (shared libraries)
+  -DCGAL_EXE_LINKER_FLAGS               add. linker flags (executables)
+
+Variants with the additional suffix "_DEBUG" and "_RELEASE" allow to set
+separate values for debug and release builds. In case you do not want to add
+additional flags, but to override the default flags, replace "VOSM" by
+"CMAKE" in the variable names above.
+
+Note that CMake maintains a cache name "CMakeCache.txt". If you change options
+(or your environment changes), it is best to remove that file to avoid
+problems.
+
+
+BUILDING
+========
+
+To build the VOSM libraries, type
+
+  make                               (or nmake in a Windows command prompt)
+
+If you want, you can install the VOSM header and libraries. To do so, type
+
+  make install
+
+A list of all available make targets can be obtained by
+
+  make help
+
+
+OUT-OF-SOURCE BUILDS
+====================
+
+The above instructions build the VOSM library in the same directory tree as
+the VOSM sources. Sometimes it is advisable to place all the generated files
+somewhere else. For example, if you want to build the library in several
+configurations (debug and release, different compilers, and so on). Using
+different build directories keeps all the generated files separated for each
+configuration.
+
+In the following, $VOSM_SRC denotes the directory with the VOSM sources;
+$VOSM_BUILD is an arbitrary directory where the generated files will be
+placed. You can perform an out-of-source build as follows:
+
+  mkdir $VOSM_BUILD
+  cd $VOSM_BUILD
+  cmake [options] $VOSM_SRC
+  make
+  make install                       (if desired)
+
+Basically, the only difference is the last parameter of the "cmake" command:
+$VOSM_SRC instead of "." .
+
