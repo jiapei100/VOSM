@@ -127,11 +127,11 @@ Users are highly encouraged to use their own video file IO and webcam IO and use
 We can always run 3 similar commands to build **ALL** supported statistical models. Let's take **IMM** as an example.
 
 ```
-$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "IMM" -c 3 -t "SMNDPROFILE" -l 4 -p 0.95
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "IMM" -c 1 -t "SMNDPROFILE" -l 4 -p 0.95
 
-$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "SMNDPROFILE" -l 4 -p 0.95
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "AM" -l 4 -p 0.95
 
-$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "IA" -c 3 -t "SMNDPROFILE" -l 4 -p 0.95
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "IA" -c 3 -t "IA" -l 4 -p 0.95
 ```
 
 
