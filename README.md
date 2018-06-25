@@ -1,9 +1,6 @@
 # VOSM
 
-## Recent Version
-0.3.5
-
-## What's VOSM for?
+## What does VOSM stand for?
 
 Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contains variants of 2D Statistical Models, namely, variants of [ASMs](https://en.wikipedia.org/wiki/Active_shape_model) and [AAMs](https://en.wikipedia.org/wiki/Active_appearance_model). It's mainly composed of two parts:
 
@@ -17,6 +14,10 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
   - SMNDPROFILE. ```-t "SMNDPROFILE"```, including original [1D profile ASM](http://www.imm.dtu.dk/~aam/downloads/asmprops/node3.html) and [2D profile ASM](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf) proposed by me, please check [chapter 3 of my PhD thesis](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf).
 
 * Fitting: test the effects of fitting (**ONLY** 2D is suppprted in [VOSM](https://github.com/jiapei100/VOSM))
+
+
+## Current Version
+0.3.5
 
 
 ## Prerequisites
@@ -116,11 +117,17 @@ If dynamic image sequences are to be tested, current smfitting only provides Cam
 Please Refer to CTrackingAlgs() in main(), the default setting of function CTrackingAlgs() is Camshift algorithm
 
 
-[Vision Open](http://www.visionopen.com/) doesn't provide the video IO or webcam IO although I've done his own IO for all kinds. [FFmpeg](http://ffmpeg.org/) is so competent.
-Users are highly encouraged to use their own video file IO and webcam IO and use [VOSM](https://github.com/jiapei100/VOSM) in their own real-time applications.
+Vision Open doesn't provide the video IO or webcam IO although I've done his own IO for all kinds. FFmpeg is so competent.
+Users are highly encouraged to use their own video file IO and webcam IO and use VOSM in their own real-time applications.
 ```
 
 
+## Usage Examples
+
+### IMM
+```
+$ 
+```
 
 
 ## Key Relative Publications
