@@ -20,6 +20,15 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
 0.3.5
 
 
+## Annotated Datasets
+- [IMM](https://www2.imm.dtu.dk/~aam/datasets/datasets.html)
+- [AGING]()
+- [BIOID](https://www.bioid.com/facedb/)
+- [FRANCK]()
+- [XM2VTS](http://www.ee.surrey.ac.uk/CVSSP/xm2vtsdb/)
+- [EMOUNT]()
+
+
 ## Prerequisites
 
 - [OpenCV](https://github.com/opencv/opencv): >= [Version 3.4.1](https://github.com/opencv/opencv/releases/tag/3.4.1).
@@ -124,7 +133,7 @@ Users are highly encouraged to use their own video file IO and webcam IO and use
 
 ## Usage Examples
 
-We can always run 3 similar commands to build **ALL** supported statistical models. Let's take **IMM** as an example.
+We can **ALWAYS** run 3 similar commands to build **ALL** supported statistical models. Let's take [**IMM**](https://www2.imm.dtu.dk/~aam/datasets/datasets.html) as an example.
 
 ```
 $ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "IMM" -c 1 -t "SMNDPROFILE" -l 4 -p 0.95
