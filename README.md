@@ -1,5 +1,8 @@
 # VOSM
 
+## Recent Version
+0.3.5
+
 ## What's VOSM for?
 
 Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contains variants of 2D Statistical Models, namely, variants of [ASMs](https://en.wikipedia.org/wiki/Active_shape_model) and [AAMs](https://en.wikipedia.org/wiki/Active_appearance_model). It's mainly composed of two parts:
@@ -11,7 +14,7 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
   - Image Alignment appearance Model: ```-t IA```, inverse compositional image alignment, for [ICIA AAM](https://www.ri.cmu.edu/pub_files/pub4/matthews_iain_2004_2/matthews_iain_2004_2.pdf)
   - Feature Model: ```-t "FM"```, a generalized model based on **ANY** type of features adopted by the users
   - Shape model with Local Texture Constraints: ```-t "SMLTC"```, originated from [CLM](https://personalpages.manchester.ac.uk/staff/timothy.f.cootes/Models/clm.html)
-  - SMNDPROFILE. ```-t "SMNDPROFILE"```
+  - SMNDPROFILE. ```-t "SMNDPROFILE"```, including original [1D profile ASM](http://www.imm.dtu.dk/~aam/downloads/asmprops/node3.html) and [2D profile ASM](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf) proposed by me, please check [chapter 3 of my PhD thesis](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf).
 
 * Fitting: test the effects of fitting (**ONLY** 2D is suppprted in [VOSM](https://github.com/jiapei100/VOSM))
 
@@ -53,7 +56,7 @@ By default, 8 libraries will be built under: **/usr/local/lib**:
 
 Let's check the **help** info about both commands **testsmbuilding** amnd **testsmfitting**.
 
-** testsmbulding**
+**testsmbulding**
 
 ```
 $ testsmbuilding --help
@@ -72,7 +75,7 @@ Note: If you are building SMLTC or SMNDPROFILE, you must specify
  -c 1, namely, SMLTC and SMNDPROFILE can only deal with gray-level images.
  ```
 
-** testsmfitting**
+**testsmfitting**
 
 ```
 $ testsmfitting --help
@@ -108,13 +111,13 @@ You may manually change the Adaboost detectors according to your own cascade fil
 
 Face Tracking: current smfitting only deal with image sequences.
 If static images are to be tested, there is no point to carry out tracking because
-for every image, Adaboost detection will be carried out.
-If dynamic image sequences are to be tested, current smfitting only affords Camshift tracking strategy.
+for every image, Adaboost detection will be executed.
+If dynamic image sequences are to be tested, current smfitting only provides Camshift tracking strategy.
 Please Refer to CTrackingAlgs() in main(), the default setting of function CTrackingAlgs() is Camshift algorithm
 
 
-Vision Open doesn't afford the video IO or webcam IO although JIA Pei has done his own IO for all kinds.
-Users are highly encouraged to use their own video file IO and webcam IO and use VOSM in their own real-time applications.
+[Vision Open](http://www.visionopen.com/) doesn't provide the video IO or webcam IO although I've done his own IO for all kinds. [FFmpeg](http://ffmpeg.org/) is so competent.
+Users are highly encouraged to use their own video file IO and webcam IO and use [VOSM](https://github.com/jiapei100/VOSM) in their own real-time applications.
 ```
 
 
