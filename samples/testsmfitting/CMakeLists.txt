@@ -46,11 +46,11 @@ if (BUILD_EXAMPLES)
     #      Define executable targets
     # ---------------------------------------------
     MACRO(VO_DEFINE_EXAMPLE name srcs)
-        set(the_target "vo_${name}")
+        set(the_target "${name}")
     	add_executable(${the_target} ${srcs})
 		set_target_properties(${the_target} PROPERTIES
-		    OUTPUT_NAME "vo_${name}"
-		    PROJECT_LABEL "(EXAMPLE) vo_${name}")
+		    OUTPUT_NAME "${name}"
+		    PROJECT_LABEL "(EXAMPLE) ${name}")
 
     	target_link_libraries(${the_target} vosm_common vosm_smbuilding vosm_featureextraction vosm_integraltransform vosm_cvcommon vosm_comalgs vosm_ensembletraining vosm_smfitting
             #${VOSM_COMMON_LIBRARY} ${VOSM_SMB_LIBRARY} ${VOSM_FEATURE_LIBRARY} #${VOSM_INTERGRAL_LIBRARY} ${VOSM_CVCOMMON_LIBRARY} ${VOSM_COMALGS_LIBRARY} #${VOSM_ENSEMBLE_LIBRARY} ${VOSM_SMFITTING_LIBRARY}
