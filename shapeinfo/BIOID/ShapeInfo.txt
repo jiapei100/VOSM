@@ -1,0 +1,48 @@
+20
+# format: <path#> <type> <point#> <connects from> <connects to>
+1 4 0 10 9
+1 4 1 11 12
+1 4 2 17 18
+1 4 3 18 17
+1 4 4 5 8
+1 4 5 10 4
+1 4 6 11 7
+1 4 7 6 13
+1 4 8 4 19
+1 4 9 8 0
+1 4 10 0 5
+1 4 11 1 6
+1 4 12 13 11
+1 4 13 7 19
+1 4 14 16 15
+3 0 15 14 16
+3 0 16 15 14
+3 0 17 3 2
+3 0 18 2 3
+3 0 19 8 13
+
+#FaceParts
+m_vChin			open	19
+m_vLeftEyebrow		open	4 5
+m_vRightEyebrow		open	7 6
+m_vLeftEye 		open	10 9
+m_vRightEye 		open 	11 12
+m_vNose			open	
+m_vNostril		open	16 15
+m_vNoseTip		open	14
+m_vLipOuterLine 	closed	3 17 2 18 
+m_vLipInnerLine		open	
+m_vLipUpperOuterLine	open	17
+m_vLipUpperInnerLine	open	
+m_vLipDownerOuterLine	open	18
+m_vLipDownerInnerLine 	open	
+m_vLeftSidePoints	open	0 2 4 5 8 9 10 15
+m_vRightSidePoints	open	1 3 6 7 11 12 13 16
+m_vMidlinePoints	open	14 17 18 19
+m_vEyeCornerPoints	open	12 11 10 9
+m_vMouthCornerPoints	open	3 2
+m_vPitchAxisLinePoints	open	2 12 
+m_vLeftIris		closed	1
+m_vRightIris		closed	0
+m_vLeftEar 		closed
+m_vRightEar 		closed
