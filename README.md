@@ -22,8 +22,8 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
 
 ## Annotated Datasets
 | Datasets | No. Of Annotated Points |
-|----------|-------------------------|
-| [IMM](https://www2.imm.dtu.dk/~aam/datasets/datasets.html) | <center>58</center> |
+|----------|:-------------------------:|
+| [IMM](https://www2.imm.dtu.dk/~aam/datasets/datasets.html) | 58 |
 | [AGING](http://sting.cycollege.ac.cy/~alanitis/fgnetaging/index.htm) | <center>68</center> |
 | [BIOID](https://www.bioid.com/facedb/) | <center>68</center> |
 | [Talking Face](http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html) | <center>68</center> |
