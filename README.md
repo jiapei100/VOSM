@@ -103,19 +103,19 @@ options:
    -r   recording the fitting results or not (default value false)
 
 
-Note: current testsmfitting adopts 2D Profile ASM by fault.
-If you would like to try 1D Profile ASM, you have to manually change the code in function VO_Fitting2DSM::VO_StartFitting in file VO_Fitting2DSM.cpp, say, around line 318 of file VO_Fitting2DSM.cpp change the 5th parameter from '2' to '1' of function
+Note: current testsmfitting adopts 2D Profile ASM by default.
+If you would like to try 1D Profile ASM, you have to manually change the code in function VO_Fitting2DSM::VO_StartFitting in file VO_Fitting2DSM.cpp, say, around line 318 of file VO_Fitting2DSM.cpp: change the 5th parameter from '2' to '1' of function
 dynamic_cast<VO_FittingASMNDProfiles*>(this)->VO_ASMNDProfileFitting.
 
 
 Face Detection: current testsmfitting use Adaboost technology to detect face as well as face components for face location initialization. Refer to CFaceDetectionAlgs in main().
-Default Adaboost detectors installed with OpenCV installation are adopted in current testsmfitting. You may manually change the Adaboost detectors according to your own cascade file paths
+Default Adaboost detectors installed with OpenCV installation are adopted in current testsmfitting. You may manually change the Adaboost detectors according to your own cascade file paths.
 
 
 Face Tracking: current testsmfitting only deal with image sequences.
 - For static images, it's pointless to do tracking.
 - For dynamic image sequences, Camshift tracking strategy is adopted.
-Please Refer to CTrackingAlgs() in main(), the default setting of function CTrackingAlgs() is Camshift algorithm
+Please Refer to CTrackingAlgs() in main(), the default setting of function CTrackingAlgs() is Camshift algorithm.
 
 
 Vision Open doesn't provide the video IO or webcam IO although I've done my own IO for all kinds. FFmpeg is so competent. Users are highly encouraged to use their own video file IO and webcam IO and use VOSM in their own real-time applications.
