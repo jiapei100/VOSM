@@ -80,11 +80,11 @@ void usage_build()
 {
     std::cout << "Usage: smfitting [options] trained_data type testing_images testing_annotations database staticORdynamic recording" << std::endl
         << "options: " << std::endl
-        << "   -o   trained data DIRECTory (required) " << std::endl
+        << "   -o   trained data directory (required) " << std::endl
         << "   -t   fitting method to be used (ASM_PROFILEND, ASM_LTC, AAM_BASIC, AAM_CMUICIA, AAM_IAIA. default ASM_PROFILEND ) " << std::endl
-        << "   -i   testing image DIRECTory containing at least one image (required) " << std::endl
-        << "   -a   testing annotation DIRECTory (can be ignored) " << std::endl
-        << "   -d   testing database -- if annotation DIRECTory is specified, database should also be specified for further evaluation on fitting performance (can be ignored) " << std::endl
+        << "   -i   testing image directory containing at least one image (required) " << std::endl
+        << "   -a   testing annotation directory (can be ignored) " << std::endl
+        << "   -d   testing database -- if annotation directory is specified, database should also be specified for further evaluation on fitting performance (can be ignored) " << std::endl
         << "   -s   static image sequence or dynamic image sequence (default value true) " << std::endl
         << "   -r   recording the fitting results or not (default value false) " << std::endl
         << std::endl << std::endl;
