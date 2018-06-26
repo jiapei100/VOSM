@@ -65,7 +65,7 @@ By default, 8 libraries will be built under: **/usr/local/lib**:
 
 
 ## How to use VOSM?
-Please refer to our wiki [How to use VOSM?](./wiki/HowToUseVOSM.md).
+Please refer to our wiki [How to use VOSM?](https://github.com/jiapei100/VOSM/wiki/How-to-use-VOSM%3F).
 
 
 
