@@ -26,7 +26,7 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
 | [IMM](https://www2.imm.dtu.dk/~aam/datasets/datasets.html) | 58 |
 | [AGING](http://sting.cycollege.ac.cy/~alanitis/fgnetaging/index.htm) | 68 |
 | [BIOID](https://www.bioid.com/facedb/) | 68 |
-| [Talking Face](http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html) | 68 |
+| [FRANCK/Talking Face](http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html) | 68 |
 | [XM2VTS](http://www.ee.surrey.ac.uk/CVSSP/xm2vtsdb/) | 68 |
 | [UMDFaces](http://www.umdfaces.io/) | 21 |
 
@@ -72,7 +72,7 @@ Let's check the **help** info about both commands **testsmbuilding** amnd **test
 
 ```
 $ testsmbuilding --help
-Usage: test_smbuilding [options] save_directory annotation_directory image_directory shapeinfo_path database channels type levels percentage
+Usage: testsmbuilding [options] save_directory annotation_directory image_directory shapeinfo_path database channels type levels percentage
 options:
    -o    output directory (default './')
    -a    annotation directory (required)
@@ -83,6 +83,7 @@ options:
    -t    statistical model type (SM, TM, AM, IA, FM, SMLTC, SMNDPROFILE. default SMNDPROFILE )
    -l    level of parymid (default 4)
    -p    percentage of shape, texture and appearance PCA (default 0.95)
+
 Note: If you are building SMLTC or SMNDPROFILE, you must specify
  -c 1, namely, SMLTC and SMNDPROFILE can only deal with gray-level images.
  ```
@@ -91,45 +92,33 @@ Note: If you are building SMLTC or SMNDPROFILE, you must specify
 
 ```
 $ testsmfitting --help
-Usage: smfitting [options] trained_data type testing_images testing_annotations database staticORdynamic recording
+Usage: testsmfitting [options] trained_data type testing_images testing_annotations database staticORdynamic recording
 options:
-   -o   trained data DIRECTory (required)
+   -o   trained data directory (required)
    -t   fitting method to be used (ASM_PROFILEND, ASM_LTC, AAM_BASIC, AAM_CMUICIA, AAM_IAIA. default ASM_PROFILEND )
-   -i   testing image DIRECTory containing at least one image (required)
-   -a   testing annotation DIRECTory (can be ignored)
-   -d   testing database -- if annotation DIRECTory is specified, database should also be specified for further evaluation on fitting performance (can be ignored)
+   -i   testing image directory containing at least one image (required)
+   -a   testing annotation directory (can be ignored)
+   -d   testing database -- if annotation directory is specified, database should also be specified for further evaluation on fitting performance (can be ignored)
    -s   static image sequence or dynamic image sequence (default value true)
    -r   recording the fitting results or not (default value false)
 
 
-Note: current smfitting doesn't defaultly afford 1D Profile ASM.
-If you would like to try 1D Profile ASM for static images in current smfitting,
-you have to manually change the code in function VO_Fitting2DSM::VO_StartFitting
-in file VO_Fitting2DSM.cpp, say, around line 290 of file VO_Fitting2DSM.cpp
-change the 5th parameter from '2' to '1' of function
-dynamic_cast<VO_FittingASMNDProfiles*>(this)->VO_ASMNDProfileFitting
-If you would like to try 1D Profile ASM for dynamic image sequence in current smfitting,
-you have to manually change the code in function
-in file smfitting.cpp, say around line 453 of file smfitting.cpp
-change the 5th parameter from '2' to '1' of function
-dynamic_cast<VO_FittingASMNDProfiles*>(fitting2dsm)->VO_ASMNDProfileFitting
+Note: current testsmfitting adopts 2D Profile ASM by fault.
+If you would like to try 1D Profile ASM, you have to manually change the code in function VO_Fitting2DSM::VO_StartFitting in file VO_Fitting2DSM.cpp, say, around line 318 of file VO_Fitting2DSM.cpp change the 5th parameter from '2' to '1' of function
+dynamic_cast<VO_FittingASMNDProfiles*>(this)->VO_ASMNDProfileFitting.
 
 
-Face Detection: current smfitting use Adaboost technology to detect face as well as face components
-for face location initialization. Refer to CFaceDetectionAlgs in main().
-Default Adaboost detectors installed with OpenCV installation are used in current smfitting
-You may manually change the Adaboost detectors according to your own cascade file paths
+Face Detection: current testsmfitting use Adaboost technology to detect face as well as face components for face location initialization. Refer to CFaceDetectionAlgs in main().
+Default Adaboost detectors installed with OpenCV installation are adopted in current testsmfitting. You may manually change the Adaboost detectors according to your own cascade file paths
 
 
-Face Tracking: current smfitting only deal with image sequences.
-If static images are to be tested, there is no point to carry out tracking because
-for every image, Adaboost detection will be executed.
-If dynamic image sequences are to be tested, current smfitting only provides Camshift tracking strategy.
+Face Tracking: current testsmfitting only deal with image sequences.
+- For static images, it's pointless to do tracking.
+- For dynamic image sequences, Camshift tracking strategy is adopted.
 Please Refer to CTrackingAlgs() in main(), the default setting of function CTrackingAlgs() is Camshift algorithm
 
 
-Vision Open doesn't provide the video IO or webcam IO although I've done his own IO for all kinds. FFmpeg is so competent.
-Users are highly encouraged to use their own video file IO and webcam IO and use VOSM in their own real-time applications.
+Vision Open doesn't provide the video IO or webcam IO although I've done my own IO for all kinds. FFmpeg is so competent. Users are highly encouraged to use their own video file IO and webcam IO and use VOSM in their own real-time applications.
 ```
 
 
