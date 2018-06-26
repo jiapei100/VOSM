@@ -4,7 +4,7 @@
 
 Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contains variants of 2D Statistical Models, namely, variants of [ASMs](https://en.wikipedia.org/wiki/Active_shape_model) and [AAMs](https://en.wikipedia.org/wiki/Active_appearance_model). It's mainly composed of two parts:
 
-* Building: build the statistical models (both 2D and 3D are supported in [VOSM](https://github.com/jiapei100/VOSM)). For now, the following models can be built by specifying different parameters:
+* **Building**: build the statistical models (**both 2D and 3D** are supported in [VOSM](https://github.com/jiapei100/VOSM)). For now, the following models can be built by specifying different parameters:
   - Shape Model: ```-t "SM"```, fundamental shape model
   - Texture Model: ```-t "TM"```, fundamental texture model
   - [Appearance Model](http://www.imm.dtu.dk/~aam/main/node15.html): ```-t "AM"```, fundamental appearance model, originated from [Basic AAM](http://www.imm.dtu.dk/~aam/main/node16.html)
@@ -13,7 +13,7 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
   - Shape model with Local Texture Constraints: ```-t "SMLTC"```, originated from [CLM](https://personalpages.manchester.ac.uk/staff/timothy.f.cootes/Models/clm.html)
   - SMNDPROFILE. ```-t "SMNDPROFILE"```, including original [1D profile ASM](http://www.imm.dtu.dk/~aam/downloads/asmprops/node3.html) and [2D profile ASM](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf) proposed by me, please check [chapter 3 of my PhD thesis](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf).
 
-* Fitting: test the effects of fitting (**ONLY** 2D is suppprted in [VOSM](https://github.com/jiapei100/VOSM))
+* **Fitting**: test the effects of fitting (**ONLY 2D** is suppprted in [VOSM](https://github.com/jiapei100/VOSM))
 
 
 ## Current Version
