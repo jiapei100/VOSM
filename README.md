@@ -24,11 +24,11 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
 | Datasets | No. Of Annotated Points |
 |----------|-------------------------|
 | [IMM](https://www2.imm.dtu.dk/~aam/datasets/datasets.html) | <center>58</center> |
-| [AGING](http://sting.cycollege.ac.cy/~alanitis/fgnetaging/index.htm) | 68 |
-| [BIOID](https://www.bioid.com/facedb/) |68 |
-| [Talking Face](http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html) | 68 |
-| [XM2VTS](http://www.ee.surrey.ac.uk/CVSSP/xm2vtsdb/) | 68 |
-| [UMDFaces](http://www.umdfaces.io/) | 21 |
+| [AGING](http://sting.cycollege.ac.cy/~alanitis/fgnetaging/index.htm) | <center>68</center> |
+| [BIOID](https://www.bioid.com/facedb/) | <center>68</center> |
+| [Talking Face](http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html) | <center>68</center> |
+| [XM2VTS](http://www.ee.surrey.ac.uk/CVSSP/xm2vtsdb/) | <center>68</center> |
+| [UMDFaces](http://www.umdfaces.io/) | <center>21</center> |
 
 ## Prerequisites
 
