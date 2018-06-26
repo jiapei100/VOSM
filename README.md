@@ -26,7 +26,7 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
 - [BIOID](https://www.bioid.com/facedb/)
 - [Talking Face](http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html)
 - [XM2VTS](http://www.ee.surrey.ac.uk/CVSSP/xm2vtsdb/)
-- [UMDFaces]
+- [UMDFaces](http://www.umdfaces.io/)
 
 ## Prerequisites
 
