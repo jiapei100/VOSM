@@ -82,11 +82,11 @@ void usage_build()
         << "   -a    annotation directory (required) " << std::endl
         << "   -i    image directory (required) " << std::endl
         << "   -s    path of the file shapeinfo (required) " << std::endl
-        << "   -d    training database (required, IMM, AGING, BIOID, XM2VTS, FRANCK, EMOUNT, JIAPEI ) " << std::endl
+        << "   -d    training database (required, IMM, AGING, BIOID, FRANCK, XM2VTS, UMDFaces ) " << std::endl
         << "   -c    channels (1 or 3, default 3) " << std::endl
         << "   -t    statistical model type (SM, TM, AM, IA, FM, SMLTC, SMNDPROFILE. default SMNDPROFILE ) " << std::endl
         << "   -l    level of parymid (default 4) " << std::endl
-        << "   -p    percentage of shape, texture and appearance PCA (default 0.95) " << std::endl;
+        << "   -p    percentage of shape, texture and appearance PCA (default 0.95) " << std::endl << std::endl;
         
     std::cout <<"Note: If you are building SMLTC or SMNDPROFILE, you must specify " << std::endl
         << " -c 1, namely, SMLTC and SMNDPROFILE can only deal with gray-level images. " << std::endl;

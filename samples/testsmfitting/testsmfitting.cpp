@@ -89,35 +89,31 @@ void usage_build()
         << "   -r   recording the fitting results or not (default value false) " << std::endl
         << std::endl << std::endl;
 
-    std::cout << "Note: current smfitting doesn't defaultly afford 1D Profile ASM. " << std::endl
-        << "If you would like to try 1D Profile ASM for static images in current smfitting, " << std::endl
-        << "you have to manually change the code in function VO_Fitting2DSM::VO_StartFitting " << std::endl
-        << "in file VO_Fitting2DSM.cpp, say, around line 290 of file VO_Fitting2DSM.cpp " << std::endl
+    std::cout << "Note: current testsmfitting adopts 2D Profile ASM by default. " << std::endl
+        << "If you would like to try 1D Profile ASM, you have to manually change the code " << std::endl
+        << "in function VO_Fitting2DSM::VO_StartFitting in file VO_Fitting2DSM.cpp, say, " << std::endl
+        << "around line 318 of file VO_Fitting2DSM.cpp: " << std::endl
         << "change the 5th parameter from '2' to '1' of function " << std::endl
-        << "dynamic_cast<VO_FittingASMNDProfiles*>(this)->VO_ASMNDProfileFitting " << std::endl
-        << "If you would like to try 1D Profile ASM for dynamic image sequence in current smfitting, " << std::endl
-        << "you have to manually change the code in function " << std::endl
-        << "in file smfitting.cpp, say around line 453 of file smfitting.cpp " << std::endl
-        << "change the 5th parameter from '2' to '1' of function " << std::endl
-        << "dynamic_cast<VO_FittingASMNDProfiles*>(fitting2dsm)->VO_ASMNDProfileFitting " << std::endl
+        << "dynamic_cast<VO_FittingASMNDProfiles*>(this)->VO_ASMNDProfileFitting. " << std::endl
         << std::endl << std::endl;
     
-    std::cout << "Face Detection: current smfitting use Adaboost technology to detect face as well as face components " << std::endl
-        << "for face location initialization. Refer to CFaceDetectionAlgs in main(). " << std::endl
-        << "Default Adaboost detectors installed with OpenCV installation are used in current smfitting " << std::endl
-        << "You may manually change the Adaboost detectors according to your own cascade file paths " << std::endl
+    std::cout << "Face Detection: current testsmfitting use Adaboost technology to detect face " << std::endl
+        << "as well as face components for face location initialization. " << std::endl
+        << "Refer to CFaceDetectionAlgs in main(). Default Adaboost detectors " << std::endl
+        << "installed with OpenCV installation are adopted in current testsmfitting. " << std::endl
+        << "You may manually change the Adaboost detectors according to your own cascade file paths. " << std::endl
         << std::endl << std::endl;
     
-    std::cout << "Face Tracking: current smfitting only deal with image sequences. " << std::endl
-        << "If static images are to be tested, there is no point to carry out tracking because " << std::endl
-        << "for every image, Adaboost detection will be carried out." << std::endl
-        << "If dynamic image sequences are to be tested, current smfitting only affords Camshift tracking strategy. " << std::endl
-        << "Please Refer to CTrackingAlgs() in main(), the default setting of function CTrackingAlgs() is Camshift algorithm " << std::endl
+    std::cout << "Face Tracking: current testsmfitting only deal with image sequences. " << std::endl
+        << "- For static images, it's pointless to do tracking. " << std::endl
+        << "- For dynamic image sequences, Camshift tracking strategy is adopted. " << std::endl
+        << "Please Refer to CTrackingAlgs() in main(), the default setting of function " << std::endl
+        << "function CTrackingAlgs() is Camshift algorithm. " << std::endl
         << std::endl << std::endl;
         
-    std::cout<< "Vision Open doesn't afford the video IO or webcam IO although JIA Pei has done his own IO for all kinds." << std::endl
-        << "Users are highly encouraged to use their own video file IO and webcam IO and use VOSM in their own real-time applications. " << std::endl
-        << " " << std::endl
+    std::cout<< "Vision Open doesn't provide the video IO or webcam IO although I've done my own IO for all kinds." << std::endl
+        << "FFmpeg is so competent. Users are highly encouraged to use their own video file IO " << std::endl
+        << "and webcam IO and use VOSM in their own real-time applications. " << std::endl
         << std::endl << std::endl;
     
     exit(0);
