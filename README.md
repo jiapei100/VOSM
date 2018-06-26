@@ -124,16 +124,53 @@ Vision Open doesn't provide the video IO or webcam IO although I've done my own 
 
 ## Usage Examples
 
-We can **ALWAYS** run 3 similar commands to build **ALL** supported statistical models. Let's take [**IMM**](https://www2.imm.dtu.dk/~aam/datasets/datasets.html) as an example.
+**testsmbulding**
 
+As described in **help**, current [VOSM]() supports 7 types of statistical models. We try them one by one.
+Here, let's take [**IMM**](https://www2.imm.dtu.dk/~aam/datasets/datasets.html) as an example.
+
+### 1. SM
 ```
-$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "IMM" -c 1 -t "SMNDPROFILE" -l 4 -p 0.95
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "IMM" -c 1 -t "SM" -l 4 -p 0.95
+```
+generates output folders **ShapeModel** and **Point2DDistributionModel**.
 
+### 2. TM
+```
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "TM" -c 3 -t "TM" -l 4 -p 0.95
+```
+generates
+
+### 3. AM
+```
 $ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "AM" -l 4 -p 0.95
-
-$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "IA" -c 3 -t "IA" -l 4 -p 0.95
 ```
 
+### 4. IA
+```
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "IA" -l 4 -p 0.95
+```
+
+### 5. FM
+```
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "FM" -l 4 -p 0.95
+```
+
+### 6. SMLTC
+```
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "SMLTC" -l 4 -p 0.95
+```
+
+### 7. SMNDPROFILE
+```
+$ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "SMNDPROFILE" -l 4 -p 0.95
+```
+
+
+
+
+
+**testsmfitting**
 
 
 
