@@ -8,7 +8,7 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
   - Shape Model: ```-t "SM"```, fundamental shape model
   - Texture Model: ```-t "TM"```, fundamental texture model
   - [Appearance Model](http://www.imm.dtu.dk/~aam/main/node15.html): ```-t "AM"```, fundamental appearance model, originated from [Basic AAM](http://www.imm.dtu.dk/~aam/main/node16.html)
-  - Image Alignment appearance Model: ```-t IA```, inverse compositional image alignment, for [ICIA AAM](https://www.ri.cmu.edu/pub_files/pub4/matthews_iain_2004_2/matthews_iain_2004_2.pdf)
+  - Image Alignment appearance Model: ```-t "IA"```, inverse compositional image alignment, for [ICIA AAM](https://www.ri.cmu.edu/pub_files/pub4/matthews_iain_2004_2/matthews_iain_2004_2.pdf)
   - Feature Model: ```-t "FM"```, a generalized model based on **ANY** type of features adopted by the users
   - Shape model with Local Texture Constraints: ```-t "SMLTC"```, originated from [CLM](https://personalpages.manchester.ac.uk/staff/timothy.f.cootes/Models/clm.html)
   - SMNDPROFILE. ```-t "SMNDPROFILE"```, including original [1D profile ASM](http://www.imm.dtu.dk/~aam/downloads/asmprops/node3.html) and [2D profile ASM](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf) proposed by me, please check [chapter 3 of my PhD thesis](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf).
