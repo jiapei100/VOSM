@@ -168,32 +168,58 @@ $ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/trainin
 
 ##### Output
 
+Five folders: **Point2DDistributionModel**, **ShapeModel**, **TextureModel**, **AppearanceModel** and **AXM**.
 
 #### 4. IA
+
+##### Command
+
 ```
 $ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "IA" -l 4 -p 0.95
 ```
 
+##### Output
+
+
 #### 5. FM
+
+##### Command
+
 ```
 $ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "FM" -l 4 -p 0.95
 ```
 
+##### Output
+
+
+
 #### 6. SMLTC
+
+##### Command
+
 ```
 $ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 3 -t "SMLTC" -l 4 -p 0.95
 ```
 
+##### Output
+
+
 #### 7. SMNDPROFILE
+
+##### Command
+
 ```
 $ testsmbuilding -o "./output" -a "./annotations/training/" -i "./images/training/" -s "../VOSM/shapeinfo/IMM/ShapeInfo.txt" -d "AM" -c 1 -t "SMNDPROFILE" -l 4 -p 0.95
 ```
 
+##### Output
 
 
 
 
-**testsmfitting**
+
+### testsmfitting
+
 
 
 
