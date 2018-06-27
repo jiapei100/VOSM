@@ -198,8 +198,8 @@ double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier* cascade,
                                                                     //cv::CASCADE_DO_ROUGH_SEARCH
                                                                     //cv::CASCADE_SCALE_IMAGE,
                                                                     cv::CASCADE_SCALE_IMAGE,
-                                                            smallSize);
-                                                            //Size(40, 40) );
+                                                                    smallSize);
+                                                                    //Size(40, 40) );
     ///////////////////////sort///////////////////////////////////////
     if (objs.size() > 0)
     {
