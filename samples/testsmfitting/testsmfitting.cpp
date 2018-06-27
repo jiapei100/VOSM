@@ -335,14 +335,14 @@ int main(int argc, char **argv)
     }
     CAnnotationDBIO::VO_LoadShapeTrainingData( AllAnnotationFiles4Evaluation, database, oShapes);
 
-    CFaceDetectionAlgs* fd = NULL;
+    CFaceDetectionAlgs* fd = new CFaceDetectionAlgs("", VO_AdditiveStrongerClassifier::BOOSTING);
     cv::Point2f ptLeftEyeCenter, ptRightEyeCenter, ptMouthCenter;
-    fd->SetConfiguration("/usr/local/share/OpenCV/lbpcascades/lbpcascade_frontalface.xml", 
-                        "/usr/local/share/OpenCV/haarcascades/haarcascade_profileface.xml",
+    fd->SetConfiguration("  /usr/local/share/OpenCV/lbpcascades/lbpcascade_frontalface_improved.xml", 
+                            "/usr/local/share/OpenCV/lbpcascades/lbpcascade_profileface.xml",
                         "/usr/local/share/OpenCV/haarcascades/haarcascade_lefteye_2splits.xml",
                         "/usr/local/share/OpenCV/haarcascades/haarcascade_righteye_2splits.xml",
-                        "/usr/local/share/OpenCV/haarcascades/haarcascade_mcs_nose.xml",
-                        "/usr/local/share/OpenCV/haarcascades/haarcascade_mcs_mouth.xml",
+                            "/usr/local/share/OpenCV/cascades/haarcascade_mcs_nose.xml",
+                            "/usr/local/share/OpenCV/cascades/haarcascade_mcs_mouth.xml",
                         VO_AdditiveStrongerClassifier::BOOSTING,
                         CFaceDetectionAlgs::FRONTAL );
 
