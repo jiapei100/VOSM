@@ -17,7 +17,7 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
 
 
 ## Current Version
-0.3.5
+0.3.5 is our **FIRST** [release](https://github.com/jiapei100/VOSM/releases).
 
 
 ## Annotated Datasets
