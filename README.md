@@ -13,7 +13,7 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
   - Shape model with Local Texture Constraints: ```-t "SMLTC"```, originated from [CLM](https://personalpages.manchester.ac.uk/staff/timothy.f.cootes/Models/clm.html)
   - SMNDPROFILE. ```-t "SMNDPROFILE"```, including original [1D profile ASM](http://www.imm.dtu.dk/~aam/downloads/asmprops/node3.html) and [2D profile ASM](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf) proposed by me, please check [chapter 3 of my PhD thesis](http://www.visionopen.com/members/jiapei/publications/pei_thesischapter34.pdf).
 
-* **Fitting**: test the effects of fitting (**ONLY 2D** is suppprted in [VOSM](https://github.com/jiapei100/VOSM))
+* **Fitting**: test the effects of fitting (**ONLY 2D fitting** is suppprted in [VOSM](https://github.com/jiapei100/VOSM))
 
 
 ## Current Version
@@ -29,6 +29,7 @@ Vision Open Statistical Model ([VOSM](https://github.com/jiapei100/VOSM)) contai
 | [FRANCK/Talking Face](http://www-prima.inrialpes.fr/FGnet/data/01-TalkingFace/talking_face.html) | 68 |
 | [XM2VTS](http://www.ee.surrey.ac.uk/CVSSP/xm2vtsdb/) | 68 |
 | [UMDFaces](http://www.umdfaces.io/) | 21 |
+
 
 ## Prerequisites
 
@@ -67,6 +68,16 @@ By default, 8 libraries will be built under: **/usr/local/lib**:
 ## How to use VOSM?
 Please refer to our wiki [How to use VOSM?](https://github.com/jiapei100/VOSM/wiki/How-to-use-VOSM%3F).
 
+
+## Cascade Files for Face Components
+In file [testsmfitting](https://github.com/jiapei100/VOSM/blob/master/samples/testsmfitting/testsmfitting.cpp), 4 cascade files are used to detect 4 different face parts:
+
+* left eye: haarcascade_mcs_lefteye_alt.xml
+* right eye: haarcascade_mcs_righteye_alt.xml
+* nose: haarcascade_mcs_nose.xml
+* mouth: haarcascade_mcs_mouth.xml
+
+which can be found in [opencv_contrib](https://github.com/opencv/opencv_contrib/tree/master/modules/face/data/cascades).
 
 
 ## Key Relative Publications
