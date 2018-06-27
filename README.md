@@ -72,10 +72,10 @@ Please refer to our wiki [How to use VOSM?](https://github.com/jiapei100/VOSM/wi
 ## Cascade Files for Face Components
 In file [testsmfitting](https://github.com/jiapei100/VOSM/blob/master/samples/testsmfitting/testsmfitting.cpp), 4 cascade files are used to detect 4 different face parts:
 
-* left eye: haarcascade_mcs_lefteye_alt.xml
-* right eye: haarcascade_mcs_righteye_alt.xml
-* nose: haarcascade_mcs_nose.xml
-* mouth: haarcascade_mcs_mouth.xml
+* left eye: [haarcascade_mcs_lefteye_alt.xml](https://github.com/opencv/opencv_contrib/blob/master/modules/face/data/cascades/haarcascade_mcs_lefteye_alt.xml)
+* right eye: [haarcascade_mcs_righteye_alt.xml](https://github.com/opencv/opencv_contrib/blob/master/modules/face/data/cascades/haarcascade_mcs_righteye_alt.xml)
+* nose: [haarcascade_mcs_nose.xml](https://github.com/opencv/opencv_contrib/blob/master/modules/face/data/cascades/haarcascade_mcs_nose.xml)
+* mouth: [haarcascade_mcs_mouth.xml](https://github.com/opencv/opencv_contrib/blob/master/modules/face/data/cascades/haarcascade_mcs_mouth.xml)
 
 which can be found in [opencv_contrib](https://github.com/opencv/opencv_contrib/tree/master/modules/face/data/cascades).
 
