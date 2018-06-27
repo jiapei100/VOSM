@@ -396,17 +396,18 @@ int main(int argc, char **argv)
                 
                 // Explained by JIA Pei, you can save to see the detection results.
 //                iImage.copyTo(drawImage);
-//                cv::cv::Rectangle(drawImage, Point(ptLeftEyeCenter.x-1, ptLeftEyeCenter.y-1),
-//                                     Point(ptLeftEyeCenter.x+1, ptLeftEyeCenter.y+1),
+//                cv::rectangle(  drawImage, rect,colors[5], 2, 8, 0);
+//                cv::rectangle(  drawImage,  cv::Point(ptLeftEyeCenter.x-1, ptLeftEyeCenter.y-1),
+//                                            cv::Point(ptLeftEyeCenter.x+1, ptLeftEyeCenter.y+1),
 //                                colors[5], 2, 8, 0);
-//                cv::cv::Rectangle(drawImage, Point(ptRightEyeCenter.x-1, ptRightEyeCenter.y-1),
-//                                     Point(ptRightEyeCenter.x+1, ptRightEyeCenter.y+1),
+//                cv::rectangle(  drawImage,  cv::Point(ptRightEyeCenter.x-1, ptRightEyeCenter.y-1),
+//                                            cv::Point(ptRightEyeCenter.x+1, ptRightEyeCenter.y+1),
 //                                colors[6], 2, 8, 0);
-//                cv::cv::Rectangle(drawImage, Point(ptMouthCenter.x-1, ptMouthCenter.y-1),
-//                                     Point(ptMouthCenter.x+1, ptMouthCenter.y+1),
+//                cv::rectangle(  drawImage,  cv::Point(ptMouthCenter.x-1, ptMouthCenter.y-1),
+//                                            cv::Point(ptMouthCenter.x+1, ptMouthCenter.y+1),
 //                                colors[7], 2, 8, 0);
-//                imwrite("drawImage.jpg", drawImage);
-//                imwrite("resizedImage.jpg", resizedImage);
+//                cv::imwrite("drawImage.jpg", drawImage);
+//                cv::imwrite("resizedImage.jpg", resizedImage);
                 fitting2dsm->VO_StartFitting(   iImage,
                                                 oImages,
                                                 fittingmtd,
