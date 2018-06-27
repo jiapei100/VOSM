@@ -172,7 +172,7 @@ public:
                                                     cv::Size bigSize = cv::Size(FACEBIGGESTSIZE, FACEBIGGESTSIZE));
 
     /** Start Boosting Detection */
-    static double                BoostingDetection(     const cv::CascadeClassifier* cascade,
+    static double                BoostingDetection( const cv::CascadeClassifier* cascade,
                                                     const cv::Mat& img,
                                                     const cv::Rect* confinedArea,
                                                     std::vector<cv::Rect>& objs,
