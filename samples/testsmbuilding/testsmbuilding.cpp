@@ -90,7 +90,7 @@ void usage_build()
         
     std::cout <<"Note: If you are building SMLTC or SMNDPROFILE, you must specify " << std::endl
         << " -c 1, namely, SMLTC and SMNDPROFILE can only deal with gray-level images. " << std::endl;
-    
+ 
     exit(0);
 }
 
