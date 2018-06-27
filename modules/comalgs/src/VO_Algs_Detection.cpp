@@ -189,13 +189,15 @@ double CDetectionAlgs::BoostingDetection( const cv::CascadeClassifier* cascade,
 
     /////////////////detection/////////////////////////////////////////
     //t = (double)cvGetTickCount();
-    const_cast<cv::CascadeClassifier*>(cascade)->detectMultiScale( smallImg, objs,
-                                                            1.1, 2, 0
-                                                            //|CascadeClassifier::DO_CANNY_PRUNING
-                                                            //|CascadeClassifier::FIND_BIGGEST_OBJECT
-                                                            //|CascadeClassifier::DO_ROUGH_SEARCH
-                                                            //|CascadeClassifier::SCALE_IMAGE,
-                                                            |cv::CASCADE_SCALE_IMAGE,
+    const_cast<cv::CascadeClassifier*>(cascade)->detectMultiScale(  smallImg, 
+                                                                    objs,
+                                                                    1.1, 
+                                                                    2,
+                                                                    //cv::CASCADE_DO_CANNY_PRUNING
+                                                                    //cv::CV_HAAR_FIND_BIGGEST_OBJECT
+                                                                    //cv::CASCADE_DO_ROUGH_SEARCH
+                                                                    //cv::CASCADE_SCALE_IMAGE,
+                                                                    cv::CASCADE_SCALE_IMAGE,
                                                             smallSize);
                                                             //Size(40, 40) );
     ///////////////////////sort///////////////////////////////////////
