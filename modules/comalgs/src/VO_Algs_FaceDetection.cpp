@@ -898,19 +898,19 @@ cv::Rect CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(int imgWidth,
             switch(facepart)
             {
             case VO_FacePart::LEFTEYE:
-                rect    = cv::Rect ( ( int ) ( imgWidth/20.0f ), ( int ) ( imgHeight/10.0f ), ( int ) ( 9.0f*imgWidth/20.0f ), ( int ) ( 3*imgHeight/10.0f ) );
+                rect    = cv::Rect ( ( int ) ( imgWidth/20.0f ), ( int ) ( imgHeight/20.0f ), ( int ) ( 9.0f*imgWidth/20.0f ), ( int ) ( 7*imgHeight/20.0f ) );
                 break;
             case VO_FacePart::RIGHTEYE:
-                rect    = cv::Rect ( ( int ) ( 1.0f*imgWidth/2.0f ), ( int ) ( imgHeight/10.0f ), ( int ) ( 9.0f*imgWidth/20.0f ), ( int ) ( 3*imgHeight/10.0f ) );
+                rect    = cv::Rect ( ( int ) ( 1.0f*imgWidth/2.0f ), ( int ) ( imgHeight/20.0f ), ( int ) ( 9.0f*imgWidth/20.0f ), ( int ) ( 7*imgHeight/20.0f ) );
                 break;
             case VO_FacePart::NOSE:
-                rect    = cv::Rect ( ( int ) ( imgWidth/4.0f ), ( int ) ( imgHeight/5.0f ), ( int ) ( imgWidth/2.0f ), ( int ) ( 3.0*imgHeight/5.0f ) );
+                rect    = cv::Rect ( ( int ) ( imgWidth/4.0f ), ( int ) ( imgHeight/5.0f ), ( int ) ( imgWidth/2.0f ), ( int ) ( 7.0*imgHeight/10.0f ) );
                 break;
             case VO_FacePart::LIPOUTERLINE:
-                rect    = cv::Rect ( ( int ) ( imgWidth/5.0f ), ( int ) ( 1.0f*imgHeight/2.0f ), ( int ) ( 3.0f*imgWidth/5.0f ), ( int ) ( 1.0f*imgHeight/2.0f ) );
+                rect    = cv::Rect ( ( int ) ( imgWidth/1.0f ), ( int ) ( 1.0f*imgHeight/2.0f ), ( int ) ( 8.0f*imgWidth/1.0f ), ( int ) ( 1.0f*imgHeight/2.0f ) );
                 break;
             case VO_FacePart::NOSECENTRALAREA:
-                rect    = cv::Rect ( ( int ) ( 0.48*imgWidth ), ( int ) ( 0.45*imgHeight ), ( int ) ( 0.05*imgWidth ), ( int ) ( 0.05*imgHeight ) );
+                rect    = cv::Rect ( ( int ) ( 0.48*imgWidth ), ( int ) ( 0.45*imgHeight ), ( int ) ( 0.05*imgWidth ), ( int ) ( 0.10*imgHeight ) );
                 break;
             default:
                 break;
