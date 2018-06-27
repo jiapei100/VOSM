@@ -98,10 +98,9 @@ private:
     cv::Rect                    m_CVNoseCentralArea;
 
     /** Detected windows for respective face parts */
-    VO_FaceCompPos              m_VOFaceComponents0;    // not translated back to the whole image yet
     VO_FaceCompPos              m_VOFaceComponents;
-    cv::Rect                    m_CVDetectedFaceWindow2SM;
-    cv::Mat                     m_CVDetectedFaceImagePatch2SM;
+    cv::Rect                    m_CVDetectedFaceWindow4SM;
+    cv::Mat                     m_CVDetectedFaceImagePatch4SM;
 
     /** Detected Key Points */
     cv::Point2f                 m_CVDetectedCenterOfGravity;
@@ -242,14 +241,14 @@ public:
     std::vector<cv::Rect>       GetDetectedFaceRects() const {return this->m_vDetectedFaceRects; }
     VO_FaceCompPos              GetFaceComponents() const { return this->m_VOFaceComponents; }
     cv::Rect                    GetDetectedFaceWindow() const { return this->m_VOFaceComponents.m_rectObject; }
-    cv::Rect                    GetDetectedFaceWindow2SM() const { return this->m_CVDetectedFaceWindow2SM; }
+    cv::Rect                    GetDetectedFaceWindow4SM() const { return this->m_CVDetectedFaceWindow4SM; }
     cv::Rect                    GetDetectedLeftEyeWindow() const { return this->m_VOFaceComponents.m_rectLeftEye; }
     cv::Rect                    GetDetectedRightEyeWindow() const { return this->m_VOFaceComponents.m_rectRightEye; }
     cv::Rect                    GetDetectedNoseWindow() const { return this->m_VOFaceComponents.m_rectNose; }
     cv::Rect                    GetDetectedMouthWindow() const { return this->m_VOFaceComponents.m_rectMouth; }
 
     /** Reasonably adjust detected face rectangle to AAM rectangle */
-    static cv::Rect             VO_FaceRectFromDetection2SM(const cv::Size& imgSize, const cv::Rect& iFaceRect);
+    // static cv::Rect             VO_FaceRectFromDetection2SM(const cv::Size& imgSize, const cv::Rect& iFaceRect);
 
     /** Reasonably set respective window for various face parts */
     static cv::Rect             VO_SetDetectedFacePartsPossibleWindow(  int imgWidth,
