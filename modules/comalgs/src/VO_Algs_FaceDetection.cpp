@@ -245,10 +245,7 @@ double CFaceDetectionAlgs::FaceDetection(const cv::Mat& iImg,
     {
         this->m_bFaceDetected = true;
         this->m_VOFaceComponents.SetObjectRect( this->m_vDetectedFaceRects[0] );
-        this->m_VOFaceComponents0.SetObjectRect( this->m_vDetectedFaceRects[0] );
-        this->m_CVDetectedFaceWindow2SM = CFaceDetectionAlgs::VO_FaceRectFromDetection2SM( iImg.size(), this->m_VOFaceComponents0.m_rectObject );
-        this->m_VOFaceComponents0.m_rectObject = cv::Rect(0, 0, this->m_CVDetectedFaceWindow2SM.width, this->m_CVDetectedFaceWindow2SM.height);
-        this->m_CVDetectedFaceImagePatch2SM = iImg(this->m_CVDetectedFaceWindow2SM );
+        this->m_CVDetectedFaceImagePatch4SM = iImg(this->m_VOFaceComponents.m_rectObject );
     }
     else
         this->m_bFaceDetected = false;
@@ -286,16 +283,16 @@ double CFaceDetectionAlgs::FullFaceDetection (  const cv::Mat& iImg,
 {
     double res = (double)cv::getTickCount();
 
-    // this is to detect the frontal face
+    // Save image to be detected
+    // cv::imwrite("tobedetected.jpg", iImg);
+    
     this->FaceDetection(iImg, confinedArea, scale, smallSize, bigSize);
     if ( this->m_vDetectedFaceRects.size() > 0 )
     {
         this->m_bFaceDetected = true;
         this->m_VOFaceComponents.SetObjectRect( this->m_vDetectedFaceRects[0] );
-        this->m_VOFaceComponents0.SetObjectRect( this->m_vDetectedFaceRects[0] );
-        this->m_CVDetectedFaceWindow2SM = CFaceDetectionAlgs::VO_FaceRectFromDetection2SM( iImg.size(), this->m_VOFaceComponents0.m_rectObject );
-        this->m_VOFaceComponents0.m_rectObject = cv::Rect(0, 0, this->m_CVDetectedFaceWindow2SM.width, this->m_CVDetectedFaceWindow2SM.height);
-        this->m_CVDetectedFaceImagePatch2SM = iImg(this->m_CVDetectedFaceWindow2SM );
+        this->m_CVDetectedFaceWindow4SM = this->m_vDetectedFaceRects[0];
+        this->m_CVDetectedFaceImagePatch4SM = iImg(this->m_VOFaceComponents.m_rectObject );
     }
     else
     {
@@ -305,7 +302,9 @@ double CFaceDetectionAlgs::FullFaceDetection (  const cv::Mat& iImg,
     // if detected
     if(this->m_bFaceDetected)
     {
-        this->VO_FaceComponentsDetection(this->m_CVDetectedFaceImagePatch2SM,
+        // Save Detected Face Image Patch
+        // cv::imwrite("detectedface.jpg", this->m_CVDetectedFaceImagePatch4SM);
+        this->VO_FaceComponentsDetection(this->m_CVDetectedFaceImagePatch4SM,
                                         this->m_iFaceType,
                                         lefteye,
                                         righteye,
@@ -336,12 +335,12 @@ double CFaceDetectionAlgs::FullFaceDetection (  const cv::Mat& iImg,
  * @param       nose            Input - whether to detect nose
  * @param       mouth           Input - whether to detect mouth
 */
-double CFaceDetectionAlgs::VO_FaceComponentsDetection(const cv::Mat& iImg,
-                                                     int faceOrient,
-                                                     bool lefteye,
-                                                     bool righteye,
-                                                     bool nose,
-                                                     bool mouth)
+double CFaceDetectionAlgs::VO_FaceComponentsDetection(  const cv::Mat& iImg,
+                                                        int faceOrient,
+                                                        bool lefteye,
+                                                        bool righteye,
+                                                        bool nose,
+                                                        bool mouth)
 {
     double res = (double)cv::getTickCount();
 
@@ -350,27 +349,21 @@ double CFaceDetectionAlgs::VO_FaceComponentsDetection(const cv::Mat& iImg,
     if ( lefteye )
     {
         this->m_CVLeftEyePossibleWindow = CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(iImg.cols, iImg.rows, VO_FacePart::LEFTEYE, faceOrient);
-        this->m_bLeftEyeDetected = this->VO_FacePartDetection ( iImg, this->m_CVLeftEyePossibleWindow, this->m_VOFaceComponents0.m_rectLeftEye, VO_FacePart::LEFTEYE);
+        this->m_bLeftEyeDetected = this->VO_FacePartDetection ( iImg, this->m_CVLeftEyePossibleWindow, this->m_VOFaceComponents.m_rectLeftEye, VO_FacePart::LEFTEYE);
 
         if ( this->m_bLeftEyeDetected )
         {
-            this->m_VOFaceComponents.m_rectLeftEye.x = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.x + this->m_CVLeftEyePossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
-            this->m_VOFaceComponents.m_rectLeftEye.y = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.y + this->m_CVLeftEyePossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
-            this->m_VOFaceComponents.m_rectLeftEye.width = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.width );
-            this->m_VOFaceComponents.m_rectLeftEye.height = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.height );
-            this->m_VOFaceComponents0.m_rectLeftEye.x = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.x + this->m_CVLeftEyePossibleWindow.x );
-            this->m_VOFaceComponents0.m_rectLeftEye.y = ( int ) ( this->m_VOFaceComponents0.m_rectLeftEye.y + this->m_CVLeftEyePossibleWindow.y );
-
+            this->m_VOFaceComponents.m_rectLeftEye.x = ( int ) ( this->m_VOFaceComponents.m_rectLeftEye.x + this->m_CVLeftEyePossibleWindow.x + this->m_CVDetectedFaceWindow4SM.x );
+            this->m_VOFaceComponents.m_rectLeftEye.y = ( int ) ( this->m_VOFaceComponents.m_rectLeftEye.y + this->m_CVLeftEyePossibleWindow.y + this->m_CVDetectedFaceWindow4SM.y );
+            this->m_VOFaceComponents.m_rectLeftEye.width = ( int ) ( this->m_VOFaceComponents.m_rectLeftEye.width );
+            this->m_VOFaceComponents.m_rectLeftEye.height = ( int ) ( this->m_VOFaceComponents.m_rectLeftEye.height );
         }
         else
         {
-            this->m_VOFaceComponents.m_rectLeftEye.x = ( int ) ( this->m_CVLeftEyePossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
-            this->m_VOFaceComponents.m_rectLeftEye.y = ( int ) ( this->m_CVLeftEyePossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
+            this->m_VOFaceComponents.m_rectLeftEye.x = ( int ) ( this->m_CVLeftEyePossibleWindow.x + this->m_CVDetectedFaceWindow4SM.x );
+            this->m_VOFaceComponents.m_rectLeftEye.y = ( int ) ( this->m_CVLeftEyePossibleWindow.y + this->m_CVDetectedFaceWindow4SM.y );
             this->m_VOFaceComponents.m_rectLeftEye.width = ( int ) ( this->m_CVLeftEyePossibleWindow.width );
             this->m_VOFaceComponents.m_rectLeftEye.height = ( int ) ( this->m_CVLeftEyePossibleWindow.height);
-            this->m_VOFaceComponents0.m_rectLeftEye.x = ( int ) ( this->m_CVLeftEyePossibleWindow.x );
-            this->m_VOFaceComponents0.m_rectLeftEye.y = ( int ) ( this->m_CVLeftEyePossibleWindow.y );
-
         }
     }
 
@@ -378,101 +371,63 @@ double CFaceDetectionAlgs::VO_FaceComponentsDetection(const cv::Mat& iImg,
     if ( righteye )
     {
         this->m_CVRightEyePossibleWindow = CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(iImg.cols, iImg.rows, VO_FacePart::RIGHTEYE, faceOrient);
-        this->m_bRightEyeDetected = this->VO_FacePartDetection ( iImg, this->m_CVRightEyePossibleWindow, this->m_VOFaceComponents0.m_rectRightEye, VO_FacePart::RIGHTEYE );
+        this->m_bRightEyeDetected = this->VO_FacePartDetection ( iImg, this->m_CVRightEyePossibleWindow, this->m_VOFaceComponents.m_rectRightEye, VO_FacePart::RIGHTEYE );
 
         if ( this->m_bRightEyeDetected )
         {
-            this->m_VOFaceComponents.m_rectRightEye.x = ( int ) ( this->m_VOFaceComponents0.m_rectRightEye.x + this->m_CVRightEyePossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
-            this->m_VOFaceComponents.m_rectRightEye.y = ( int ) ( this->m_VOFaceComponents0.m_rectRightEye.y + this->m_CVRightEyePossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
-            this->m_VOFaceComponents.m_rectRightEye.width = ( int ) ( this->m_VOFaceComponents0.m_rectRightEye.width );
-            this->m_VOFaceComponents.m_rectRightEye.height = ( int ) ( this->m_VOFaceComponents0.m_rectRightEye.height);
-            this->m_VOFaceComponents0.m_rectRightEye.x = ( int ) ( this->m_VOFaceComponents0.m_rectRightEye.x + this->m_CVRightEyePossibleWindow.x );
-            this->m_VOFaceComponents0.m_rectRightEye.y = ( int ) ( this->m_VOFaceComponents0.m_rectRightEye.y + this->m_CVRightEyePossibleWindow.y );
-
+            this->m_VOFaceComponents.m_rectRightEye.x = ( int ) ( this->m_VOFaceComponents.m_rectRightEye.x + this->m_CVRightEyePossibleWindow.x + this->m_CVDetectedFaceWindow4SM.x );
+            this->m_VOFaceComponents.m_rectRightEye.y = ( int ) ( this->m_VOFaceComponents.m_rectRightEye.y + this->m_CVRightEyePossibleWindow.y + this->m_CVDetectedFaceWindow4SM.y );
+            this->m_VOFaceComponents.m_rectRightEye.width = ( int ) ( this->m_VOFaceComponents.m_rectRightEye.width );
+            this->m_VOFaceComponents.m_rectRightEye.height = ( int ) ( this->m_VOFaceComponents.m_rectRightEye.height);
         }
         else
         {
-            this->m_VOFaceComponents.m_rectRightEye.x = ( int ) ( this->m_CVRightEyePossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
-            this->m_VOFaceComponents.m_rectRightEye.y = ( int ) ( this->m_CVRightEyePossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
+            this->m_VOFaceComponents.m_rectRightEye.x = ( int ) ( this->m_CVRightEyePossibleWindow.x + this->m_CVDetectedFaceWindow4SM.x );
+            this->m_VOFaceComponents.m_rectRightEye.y = ( int ) ( this->m_CVRightEyePossibleWindow.y + this->m_CVDetectedFaceWindow4SM.y );
             this->m_VOFaceComponents.m_rectRightEye.width = ( int ) ( this->m_CVRightEyePossibleWindow.width );
             this->m_VOFaceComponents.m_rectRightEye.height = ( int ) ( this->m_CVRightEyePossibleWindow.height );
-            this->m_VOFaceComponents0.m_rectRightEye.x = ( int ) ( this->m_CVRightEyePossibleWindow.x );
-            this->m_VOFaceComponents0.m_rectRightEye.y = ( int ) ( this->m_CVRightEyePossibleWindow.y );
-
         }
     }
 
     if ( nose )
     {
         this->m_CVNosePossibleWindow = CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(iImg.cols, iImg.rows, VO_FacePart::NOSE, faceOrient);
-        this->m_bNoseDetected = this->VO_FacePartDetection ( iImg, this->m_CVNosePossibleWindow, this->m_VOFaceComponents0.m_rectNose, VO_FacePart::NOSE );
+        this->m_bNoseDetected = this->VO_FacePartDetection ( iImg, this->m_CVNosePossibleWindow, this->m_VOFaceComponents.m_rectNose, VO_FacePart::NOSE );
 
         if ( this->m_bNoseDetected )
         {
-            this->m_VOFaceComponents.m_rectNose.x = ( int ) ( this->m_VOFaceComponents0.m_rectNose.x + this->m_CVNosePossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
-            this->m_VOFaceComponents.m_rectNose.y = ( int ) ( this->m_VOFaceComponents0.m_rectNose.y + this->m_CVNosePossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
-            this->m_VOFaceComponents.m_rectNose.width = ( int ) ( this->m_VOFaceComponents0.m_rectNose.width );
-            this->m_VOFaceComponents.m_rectNose.height = ( int ) ( this->m_VOFaceComponents0.m_rectNose.height );
-            this->m_VOFaceComponents0.m_rectNose.x = ( int ) ( this->m_VOFaceComponents0.m_rectNose.x + this->m_CVNosePossibleWindow.x );
-            this->m_VOFaceComponents0.m_rectNose.y = ( int ) ( this->m_VOFaceComponents0.m_rectNose.y + this->m_CVNosePossibleWindow.y );
-
+            this->m_VOFaceComponents.m_rectNose.x = ( int ) ( this->m_VOFaceComponents.m_rectNose.x + this->m_CVNosePossibleWindow.x + this->m_CVDetectedFaceWindow4SM.x );
+            this->m_VOFaceComponents.m_rectNose.y = ( int ) ( this->m_VOFaceComponents.m_rectNose.y + this->m_CVNosePossibleWindow.y + this->m_CVDetectedFaceWindow4SM.y );
+            this->m_VOFaceComponents.m_rectNose.width = ( int ) ( this->m_VOFaceComponents.m_rectNose.width );
+            this->m_VOFaceComponents.m_rectNose.height = ( int ) ( this->m_VOFaceComponents.m_rectNose.height );
         }
         else
         {
-            this->m_VOFaceComponents.m_rectNose.x = ( int ) ( this->m_CVNosePossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
-            this->m_VOFaceComponents.m_rectNose.y = ( int ) ( this->m_CVNosePossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
+            this->m_VOFaceComponents.m_rectNose.x = ( int ) ( this->m_CVNosePossibleWindow.x + this->m_CVDetectedFaceWindow4SM.x );
+            this->m_VOFaceComponents.m_rectNose.y = ( int ) ( this->m_CVNosePossibleWindow.y + this->m_CVDetectedFaceWindow4SM.y );
             this->m_VOFaceComponents.m_rectNose.width = ( int ) ( this->m_CVNosePossibleWindow.width );
             this->m_VOFaceComponents.m_rectNose.height = ( int ) ( this->m_CVNosePossibleWindow.height );
-            this->m_VOFaceComponents0.m_rectNose.x = ( int ) ( this->m_CVNosePossibleWindow.x );
-            this->m_VOFaceComponents0.m_rectNose.y = ( int ) ( this->m_CVNosePossibleWindow.y );
-
         }
     }
 
     if ( mouth )
     {
         this->m_CVMouthPossibleWindow = CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(iImg.cols, iImg.rows, VO_FacePart::LIPOUTERLINE, faceOrient);
-        this->m_bMouthDetected = this->VO_FacePartDetection ( iImg, this->m_CVMouthPossibleWindow, this->m_VOFaceComponents0.m_rectMouth, VO_FacePart::LIPOUTERLINE );
+        this->m_bMouthDetected = this->VO_FacePartDetection ( iImg, this->m_CVMouthPossibleWindow, this->m_VOFaceComponents.m_rectMouth, VO_FacePart::LIPOUTERLINE );
 
         if ( this->m_bMouthDetected )
         {
-            this->m_VOFaceComponents0.m_rectMouth.x += this->m_VOFaceComponents0.m_rectMouth.width*0.1;
-            // ensure this->m_VOFaceComponents.m_rectMouth.x + this->m_VOFaceComponents.m_rectMouth.width < iImg.cols-1
-            while (this->m_VOFaceComponents0.m_rectMouth.x + this->m_VOFaceComponents0.m_rectMouth.width >= iImg.cols-1)
-            {
-                this->m_VOFaceComponents0.m_rectMouth.x--;
-            }
-
-            this->m_VOFaceComponents.m_rectMouth.x = ( int ) ( this->m_VOFaceComponents0.m_rectMouth.x + this->m_CVMouthPossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
-            this->m_VOFaceComponents.m_rectMouth.y = ( int ) ( this->m_VOFaceComponents0.m_rectMouth.y + this->m_CVMouthPossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
-            this->m_VOFaceComponents.m_rectMouth.width = ( int ) ( this->m_VOFaceComponents0.m_rectMouth.width );
-            this->m_VOFaceComponents.m_rectMouth.height = ( int ) ( this->m_VOFaceComponents0.m_rectMouth.height);
-            this->m_VOFaceComponents0.m_rectMouth.x = ( int ) ( this->m_VOFaceComponents0.m_rectMouth.x + this->m_CVMouthPossibleWindow.x );
-            this->m_VOFaceComponents0.m_rectMouth.y = ( int ) ( this->m_VOFaceComponents0.m_rectMouth.y + this->m_CVMouthPossibleWindow.y );
-
-            // For mouth, we need a modification due to the reason that the mouth is not able to be well detected.
-            // We need small adjustment.
-            this->m_VOFaceComponents0.m_rectMouth.y -= this->m_VOFaceComponents0.m_rectMouth.height*0.2;
-            this->m_VOFaceComponents.m_rectMouth.y -= this->m_VOFaceComponents.m_rectMouth.height*0.2;
-            // ensure this->m_VOFaceComponents.m_rectMouth.y > 0
-            while (this->m_VOFaceComponents0.m_rectMouth.y <= 0)
-            {
-                this->m_VOFaceComponents0.m_rectMouth.y++;
-            }
-            while (this->m_VOFaceComponents.m_rectMouth.y <= 0)
-            {
-                this->m_VOFaceComponents.m_rectMouth.y++;
-            }
+            this->m_VOFaceComponents.m_rectMouth.x = ( int ) ( this->m_VOFaceComponents.m_rectMouth.x + this->m_CVMouthPossibleWindow.x + this->m_CVDetectedFaceWindow4SM.x );
+            this->m_VOFaceComponents.m_rectMouth.y = ( int ) ( this->m_VOFaceComponents.m_rectMouth.y + this->m_CVMouthPossibleWindow.y + this->m_CVDetectedFaceWindow4SM.y );
+            this->m_VOFaceComponents.m_rectMouth.width = ( int ) ( this->m_VOFaceComponents.m_rectMouth.width );
+            this->m_VOFaceComponents.m_rectMouth.height = ( int ) ( this->m_VOFaceComponents.m_rectMouth.height );
         }
         else
         {
-            this->m_VOFaceComponents.m_rectMouth.x = ( int ) ( this->m_CVMouthPossibleWindow.x + this->m_CVDetectedFaceWindow2SM.x );
-            this->m_VOFaceComponents.m_rectMouth.y = ( int ) ( this->m_CVMouthPossibleWindow.y + this->m_CVDetectedFaceWindow2SM.y );
+            this->m_VOFaceComponents.m_rectMouth.x = ( int ) ( this->m_CVMouthPossibleWindow.x + this->m_CVDetectedFaceWindow4SM.x );
+            this->m_VOFaceComponents.m_rectMouth.y = ( int ) ( this->m_CVMouthPossibleWindow.y + this->m_CVDetectedFaceWindow4SM.y );
             this->m_VOFaceComponents.m_rectMouth.width = ( int ) ( this->m_CVMouthPossibleWindow.width );
             this->m_VOFaceComponents.m_rectMouth.height = ( int ) ( this->m_CVMouthPossibleWindow.height );
-            this->m_VOFaceComponents0.m_rectMouth.x = ( int ) ( this->m_CVMouthPossibleWindow.x );
-            this->m_VOFaceComponents0.m_rectMouth.y = ( int ) ( this->m_CVMouthPossibleWindow.y );
-
         }
     }
 
@@ -483,8 +438,8 @@ double CFaceDetectionAlgs::VO_FaceComponentsDetection(const cv::Mat& iImg,
     {
         if ( this->m_VOFaceComponents.m_rectMouth.y+1.0f*this->m_VOFaceComponents.m_rectMouth.height/2.0f <= ( this->m_VOFaceComponents.m_rectNose.y + this->m_VOFaceComponents.m_rectNose.height ) )
             this->m_VOFaceComponents.m_rectMouth.y += this->m_VOFaceComponents.m_rectMouth.height;
-        if ( this->m_VOFaceComponents0.m_rectMouth.y+1.0f*this->m_VOFaceComponents0.m_rectMouth.height/2.0f <= ( this->m_VOFaceComponents0.m_rectNose.y + this->m_VOFaceComponents0.m_rectNose.height ) )
-            this->m_VOFaceComponents0.m_rectMouth.y += this->m_VOFaceComponents0.m_rectMouth.height;
+        if ( this->m_VOFaceComponents.m_rectMouth.y+1.0f*this->m_VOFaceComponents.m_rectMouth.height/2.0f <= ( this->m_VOFaceComponents.m_rectNose.y + this->m_VOFaceComponents.m_rectNose.height ) )
+            this->m_VOFaceComponents.m_rectMouth.y += this->m_VOFaceComponents.m_rectMouth.height;
     }
 
     res = ((double)cv::getTickCount() - res) / ((double)cv::getTickFrequency()*1000.);
@@ -516,6 +471,7 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
     {
         case VO_FacePart::LEFTEYE:
         {
+            // cv::imwrite("lefteye.jpg", smallImgROI);
             switch(this->m_iDetectionMethod)
             {
                 case VO_AdditiveStrongerClassifier::BAGGING:
@@ -524,10 +480,8 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
                                                     0,
                                                     detectedfp,
                                                     1.0,
-                                                    cv::Size(iImg.cols/4, iImg.cols/8),
-                                                    cv::Size(iImg.cols, iImg.cols*2/3) );
-//                                                        cv::Size(18, 12),
-//                                                        cv::Size(54, 36) );
+                                                    cv::Size(smallImgROI.cols/4, smallImgROI.rows/8),
+                                                    cv::Size(smallImgROI.cols, smallImgROI.rows*2/3) );
                 break;
                 case VO_AdditiveStrongerClassifier::BOOSTING:
                     CDetectionAlgs::BoostingDetection(  &this->m_cascadeClassifierLeftEye,
@@ -535,16 +489,15 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
                                                         0,
                                                         detectedfp,
                                                         1.0,
-                                                        cv::Size(iImg.cols/4, iImg.cols/8),
-                                                        cv::Size(iImg.cols, iImg.cols*2/3) );
-//                                                        cv::Size(18, 12),
-//                                                        cv::Size(54, 36) );
+                                                        cv::Size(smallImgROI.cols/4, smallImgROI.rows/8),
+                                                        cv::Size(smallImgROI.cols, smallImgROI.rows*2/3) );
                 break;
             }
         }
         break;
         case VO_FacePart::RIGHTEYE:
         {
+            // cv::imwrite("righteye.jpg", smallImgROI);
             switch(this->m_iDetectionMethod)
             {
                 case VO_AdditiveStrongerClassifier::BAGGING:
@@ -553,10 +506,8 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
                                                         0,
                                                         detectedfp,
                                                         1.0,
-                                                        cv::Size(iImg.cols/4, iImg.cols/8),
-                                                        cv::Size(iImg.cols, iImg.cols*2/3) );
-//                                                        cv::Size(18, 12),
-//                                                        cv::Size(54, 36) );
+                                                        cv::Size(smallImgROI.cols/4, smallImgROI.rows/8),
+                                                        cv::Size(smallImgROI.cols, smallImgROI.rows*2/3) );
                 break;
                 case VO_AdditiveStrongerClassifier::BOOSTING:
                     CDetectionAlgs::BoostingDetection(  &this->m_cascadeClassifierRightEye,
@@ -564,16 +515,15 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
                                                         0,
                                                         detectedfp,
                                                         1.0,
-                                                        cv::Size(iImg.cols/4, iImg.cols/8),
-                                                        cv::Size(iImg.cols, iImg.cols*2/3) );
-//                                                        cv::Size(18, 12),
-//                                                        cv::Size(54, 36) );
+                                                        cv::Size(smallImgROI.cols/4, smallImgROI.rows/8),
+                                                        cv::Size(smallImgROI.cols, smallImgROI.rows*2/3) );
                 break;
             }
         }
         break;
         case VO_FacePart::NOSE:
         {
+            // cv::imwrite("nose.jpg", smallImgROI);
             switch(this->m_iDetectionMethod)
             {
                 case VO_AdditiveStrongerClassifier::BAGGING:
@@ -582,10 +532,8 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
                                                         0,
                                                         detectedfp,
                                                         1.0,
-                                                        cv::Size(iImg.cols/6, iImg.rows/6),
-                                                        cv::Size(iImg.cols, iImg.rows) );
-//                                                        cv::Size(18, 15),
-//                                                        cv::Size(54, 45) );
+                                                        cv::Size(smallImgROI.cols/6, smallImgROI.rows/6),
+                                                        cv::Size(smallImgROI.cols, smallImgROI.rows) );
                 break;
                 case VO_AdditiveStrongerClassifier::BOOSTING:
                     CDetectionAlgs::BoostingDetection( &this->m_cascadeClassifierNose,
@@ -593,16 +541,15 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
                                                         0,
                                                         detectedfp,
                                                         1.0,
-                                                        cv::Size(iImg.cols/6, iImg.rows/6),
-                                                        cv::Size(iImg.cols, iImg.rows) );
-//                                                        cv::Size(18, 15),
-//                                                        cv::Size(54, 45) );
+                                                        cv::Size(smallImgROI.cols/6, smallImgROI.rows/6),
+                                                        cv::Size(smallImgROI.cols, smallImgROI.rows) );
                 break;
             }
         }
         break;
         case VO_FacePart::LIPOUTERLINE:
         {
+            // cv::imwrite("lipouterline.jpg", smallImgROI);
             switch(this->m_iDetectionMethod)
             {
                 case VO_AdditiveStrongerClassifier::BAGGING:
@@ -611,10 +558,8 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
                                                         0,
                                                         detectedfp,
                                                         1.0,
-                                                        cv::Size(iImg.cols/6, iImg.rows/6),
-                                                        cv::Size(iImg.cols, iImg.rows) );
-//                                                        cv::Size(25, 15),
-//                                                        cv::Size(75, 45) );
+                                                        cv::Size(smallImgROI.cols/6, smallImgROI.rows/6),
+                                                        cv::Size(smallImgROI.cols, smallImgROI.rows) );
                 break;
                 case VO_AdditiveStrongerClassifier::BOOSTING:
                     CDetectionAlgs::BoostingDetection( &this->m_cascadeClassifierMouth,
@@ -622,10 +567,8 @@ bool CFaceDetectionAlgs::VO_FacePartDetection (const cv::Mat& iImg,
                                                         0,
                                                         detectedfp,
                                                         1.0,
-                                                        cv::Size(iImg.cols/6, iImg.rows/6),
-                                                        cv::Size(iImg.cols, iImg.rows) );
-//                                                        cv::Size(25, 15),
-//                                                        cv::Size(75, 45) );
+                                                        cv::Size(smallImgROI.cols/6, smallImgROI.rows/6),
+                                                        cv::Size(smallImgROI.cols, smallImgROI.rows) );
                 break;
             }
         }
@@ -658,17 +601,19 @@ int CFaceDetectionAlgs::VO_DetectFaceDirection(int faceOrient)
     if(this->m_bFaceDetected && this->m_bLeftEyeDetected && this->m_bRightEyeDetected && this->m_bNoseDetected)
     {
         this->m_CVNoseCentralArea = CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(
-                                    this->m_CVDetectedFaceImagePatch2SM.cols,
-                                    this->m_CVDetectedFaceImagePatch2SM.rows,
+                                    this->m_CVDetectedFaceImagePatch4SM.cols,
+                                    this->m_CVDetectedFaceImagePatch4SM.rows,
                                     VO_FacePart::NOSECENTRALAREA,
                                     faceOrient);
-        return CFaceDetectionAlgs::VO_DetectFaceDirection(this->m_VOFaceComponents0,
+        return CFaceDetectionAlgs::VO_DetectFaceDirection(  this->m_VOFaceComponents,
                                                             this->m_CVNosePossibleWindow,
                                                             this->m_CVNoseCentralArea);
     }
     else
         return CFaceDetectionAlgs::UNDETECTED;
 }
+
+
 /**
  * @brief   Detect Face Directions
  * @param   facecomponents    -- input, face components positions
@@ -701,15 +646,15 @@ int CFaceDetectionAlgs::VO_DetectFaceDirection( const VO_FaceCompPos& facecompon
     if(centers[3].y > nosecentralarea.y+nosecentralarea.height && centers[3].y > possiblenoseCenter.y)
         updown = 1;     // down
 
-    if( leftright == 0 && updown == 1)                dir = DIR_DOWNFRONTAL;
-    if( leftright == 1 && updown == 1)                dir = DIR_DOWNLEFT;
-    if( leftright == -1 && updown == 1)                dir = DIR_DOWNRIGHT;
-    if( leftright == 0 && updown == -1)                dir = DIR_UPFRONTAL;
-    if( leftright == 1 && updown == -1)                dir = DIR_UPLEFT;
-    if( leftright == -1 && updown == -1)            dir = DIR_UPRIGHT;
-    if( leftright == 1 && updown == 0)                dir = DIR_LEFT;
-    if( leftright == -1 && updown == 0)                dir = DIR_RIGHT;
-    if( leftright == 0 && updown == 0)                dir = DIR_FRONTAL;
+    if( leftright == 0 && updown == 1)          dir = DIR_DOWNFRONTAL;
+    if( leftright == 1 && updown == 1)          dir = DIR_DOWNLEFT;
+    if( leftright == -1 && updown == 1)         dir = DIR_DOWNRIGHT;
+    if( leftright == 0 && updown == -1)         dir = DIR_UPFRONTAL;
+    if( leftright == 1 && updown == -1)         dir = DIR_UPLEFT;
+    if( leftright == -1 && updown == -1)        dir = DIR_UPRIGHT;
+    if( leftright == 1 && updown == 0)          dir = DIR_LEFT;
+    if( leftright == -1 && updown == 0)         dir = DIR_RIGHT;
+    if( leftright == 0 && updown == 0)          dir = DIR_FRONTAL;
 
     return dir;
 }
@@ -746,10 +691,10 @@ void CFaceDetectionAlgs::VO_DrawDetection ( cv::Mat& ioImg,
 //        pt2.y = this->m_VOFaceComponents.m_rectObject.y + this->m_VOFaceComponents.m_rectObject.height;
 //        cv::rectangle( ioImg, pt1, pt2, color, 2, 8, 0 );
 
-        pt1.x = this->m_CVDetectedFaceWindow2SM.x;
-        pt1.y = this->m_CVDetectedFaceWindow2SM.y;
-        pt2.x = this->m_CVDetectedFaceWindow2SM.x + this->m_CVDetectedFaceWindow2SM.width;
-        pt2.y = this->m_CVDetectedFaceWindow2SM.y + this->m_CVDetectedFaceWindow2SM.height;
+        pt1.x = this->m_CVDetectedFaceWindow4SM.x;
+        pt1.y = this->m_CVDetectedFaceWindow4SM.y;
+        pt2.x = this->m_CVDetectedFaceWindow4SM.x + this->m_CVDetectedFaceWindow4SM.width;
+        pt2.y = this->m_CVDetectedFaceWindow4SM.y + this->m_CVDetectedFaceWindow4SM.height;
         cv::rectangle( ioImg, pt1, pt2, color, 2, 8, 0 );
     }
 
@@ -781,12 +726,6 @@ void CFaceDetectionAlgs::VO_DrawDetection ( cv::Mat& ioImg,
         pt2.x = this->m_VOFaceComponents.m_rectNose.x + this->m_VOFaceComponents.m_rectNose.width;
         pt2.y = this->m_VOFaceComponents.m_rectNose.y + this->m_VOFaceComponents.m_rectNose.height;
         cv::rectangle ( ioImg, pt1, pt2, colors[3], 1, 8, 0 );
-
-//        pt1.x = this->m_CVDetectedFaceWindow2SM.x + this->m_CVNosePossibleWindow.x;
-//        pt1.y = this->m_CVDetectedFaceWindow2SM.y + this->m_CVNosePossibleWindow.y;
-//        pt2.x = this->m_CVDetectedFaceWindow2SM.x + this->m_CVNosePossibleWindow.x + this->m_CVNosePossibleWindow.width;
-//        pt2.y = this->m_CVDetectedFaceWindow2SM.y + this->m_CVNosePossibleWindow.y + this->m_CVNosePossibleWindow.height;
-//        cv::rectangle ( ioImg, pt1, pt2, colors[5], 1, 8, 0 );
     }
 
     // Mouth
@@ -826,8 +765,8 @@ void CFaceDetectionAlgs::CalcFaceKeyPoints()
             this->m_CVDetectedRightEyeCenter.x = this->m_VOFaceComponents.m_rectRightEye.x + (double)this->m_VOFaceComponents.m_rectRightEye.width/2.0;
             this->m_CVDetectedRightEyeCenter.y = this->m_VOFaceComponents.m_rectRightEye.y + (double)this->m_VOFaceComponents.m_rectRightEye.height/2.0;
             
-            //this->m_CVDetectedLeftEyeLeftCorner
-            //this->m_CVDetectedLeftEyeRightCorner
+            //this->m_CVDetectedRightEyeLeftCorner
+            //this->m_CVDetectedRightEyeRightCorner
         }
         
 //        if(this->m_bNoseDetected)
@@ -835,8 +774,9 @@ void CFaceDetectionAlgs::CalcFaceKeyPoints()
             this->m_CVDetectedNoseCenter.x = this->m_VOFaceComponents.m_rectNose.x + (double)this->m_VOFaceComponents.m_rectNose.width/2.0;
             this->m_CVDetectedNoseCenter.y = this->m_VOFaceComponents.m_rectNose.y + (double)this->m_VOFaceComponents.m_rectNose.height/2.0;
             
-            //this->m_CVDetectedLeftEyeLeftCorner
-            //this->m_CVDetectedLeftEyeRightCorner
+            //this->m_CVDetectedNoseTip
+            //this->m_CVDetectedNostrilLeft
+            //this->m_CVDetectedNostrilRight
         }
         
 //        if(this->m_bMouthDetected)
@@ -844,8 +784,8 @@ void CFaceDetectionAlgs::CalcFaceKeyPoints()
             this->m_CVDetectedMouthCenter.x = this->m_VOFaceComponents.m_rectMouth.x + (double)this->m_VOFaceComponents.m_rectMouth.width/2.0;
             this->m_CVDetectedMouthCenter.y = this->m_VOFaceComponents.m_rectMouth.y + (double)this->m_VOFaceComponents.m_rectMouth.height/2.0;
             
-            //this->m_CVDetectedLeftEyeLeftCorner
-            //this->m_CVDetectedLeftEyeRightCorner
+            //this->m_CVDetectedMouthLeftCorner
+            //this->m_CVDetectedMouthRightCorner
         }
     }
 }
@@ -898,42 +838,42 @@ cv::Point2f    CFaceDetectionAlgs::GetDetectedFaceKeyPoint(unsigned int ptType) 
  * @param         iFaceRect     the detected face rectangle
  * @return        Rect          the adjusted face rectangle
  */
-cv::Rect CFaceDetectionAlgs::VO_FaceRectFromDetection2SM (const cv::Size& imgSize,
-                                                          const cv::Rect& iFaceRect )
-{
-    cv::Rect res;
-
-    // Note: copied from aamlibrary and asmlibrary
-    static const float CONF_VjHeightShift = 0.15f;      // shift height down by 15%
-    static const float CONF_VjShrink      = 0.80f;       // shrink size of VJ box by 20%
-
-    float xMin        = iFaceRect.x;
-    float yMin        = iFaceRect.y;
-    float xMax        = iFaceRect.x + iFaceRect.width;
-    float yMax        = iFaceRect.y + iFaceRect.height;
-
-    float NewWidth     = CONF_VjShrink * iFaceRect.width;
-    float NewHeight = CONF_VjShrink * iFaceRect.height;
-
-    float yMean     = ( yMin + yMax ) / 2;
-    yMean             += CONF_VjHeightShift * NewHeight;    // move face down
-    float xMean     = ( xMin + xMax ) / 2;
-
-    res.x             = xMean - 0.5f * NewWidth > 0 ? (int)(xMean - 0.5f * NewWidth) : 0;
-    res.y             = yMean - 0.5f * NewHeight > 0 ? (int)(yMean - 0.5f * NewHeight) : 0;
-    if(NewWidth + res.x < imgSize.width)
-        res.width     = NewWidth;
-    else
-        res.width     = imgSize.width - res.x;
-    if(NewHeight*1.1f + res.y < imgSize.height)
-        res.height     = NewHeight*1.1f;
-    else
-        res.height    = imgSize.height - res.y;
-    //res.width = NewWidth < imgSize.width ? (int)NewWidth : imgSize.width;
-    //res.height = (NewHeight*1.1f) < imgSize.height ? (int)(NewHeight*1.1f) : imgSize.height;
-
-    return res;
-}
+//cv::Rect CFaceDetectionAlgs::VO_FaceRectFromDetection2SM (const cv::Size& imgSize,
+//                                                          const cv::Rect& iFaceRect )
+//{
+//    cv::Rect res;
+//
+//    // Note: copied from aamlibrary and asmlibrary
+//    static const float CONF_VjHeightShift = 0.15f;      // shift height down by 15%
+//    static const float CONF_VjShrink      = 0.80f;       // shrink size of VJ box by 20%
+//
+//    float xMin      = iFaceRect.x;
+//    float yMin      = iFaceRect.y;
+//    float xMax      = iFaceRect.x + iFaceRect.width;
+//    float yMax      = iFaceRect.y + iFaceRect.height;
+//
+//    float NewWidth  = CONF_VjShrink * iFaceRect.width;
+//    float NewHeight = CONF_VjShrink * iFaceRect.height;
+//
+//    float yMean     = ( yMin + yMax ) / 2;
+//    yMean           += CONF_VjHeightShift * NewHeight;    // move face down
+//    float xMean     = ( xMin + xMax ) / 2;
+//
+//    res.x           = xMean - 0.5f * NewWidth > 0 ? (int)(xMean - 0.5f * NewWidth) : 0;
+//    res.y           = yMean - 0.5f * NewHeight > 0 ? (int)(yMean - 0.5f * NewHeight) : 0;
+//    if(NewWidth + res.x < imgSize.width)
+//        res.width   = NewWidth;
+//    else
+//        res.width   = imgSize.width - res.x;
+//    if(NewHeight*1.1f + res.y < imgSize.height)
+//        res.height  = NewHeight*1.1f;
+//    else
+//        res.height  = imgSize.height - res.y;
+//    //res.width = NewWidth < imgSize.width ? (int)NewWidth : imgSize.width;
+//    //res.height = (NewHeight*1.1f) < imgSize.height ? (int)(NewHeight*1.1f) : imgSize.height;
+//
+//    return res;
+//}
 
 
 /**
