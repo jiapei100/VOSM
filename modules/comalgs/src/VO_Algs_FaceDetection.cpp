@@ -907,7 +907,7 @@ cv::Rect CFaceDetectionAlgs::VO_SetDetectedFacePartsPossibleWindow(int imgWidth,
                 rect    = cv::Rect ( ( int ) ( imgWidth/4.0f ), ( int ) ( imgHeight/5.0f ), ( int ) ( imgWidth/2.0f ), ( int ) ( 7.0*imgHeight/10.0f ) );
                 break;
             case VO_FacePart::LIPOUTERLINE:
-                rect    = cv::Rect ( ( int ) ( imgWidth/1.0f ), ( int ) ( 1.0f*imgHeight/2.0f ), ( int ) ( 0.8f*imgWidth/1.0f ), ( int ) ( 1.0f*imgHeight/2.0f ) );
+                rect    = cv::Rect ( ( int ) ( 0.1*imgWidth/1.0f ), ( int ) ( 1.0f*imgHeight/2.0f ), ( int ) ( 0.8f*imgWidth/1.0f ), ( int ) ( 1.0f*imgHeight/2.0f ) );
                 break;
             case VO_FacePart::NOSECENTRALAREA:
                 rect    = cv::Rect ( ( int ) ( 0.48*imgWidth ), ( int ) ( 0.45*imgHeight ), ( int ) ( 0.05*imgWidth ), ( int ) ( 0.10*imgHeight ) );
