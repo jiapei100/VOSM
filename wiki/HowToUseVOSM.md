@@ -219,7 +219,7 @@ Let's just take **ASM_PROFILEND** as an example.
 $ testsmfitting -o "./output/" -t "ASM_PROFILEND" -i "./images/testing/" -a "./annotations/testing/" -d "IMM" -s true -r true
 ```
 
-will generate all fitted images, some are well fitted:
+All fitted images are generated under current folder, some are well fitted:
 
 | 11-1m.jpg | 33-4m.jpg | 40-6m.jpg |
 |:----------:|:----------:|:----------:|
@@ -247,3 +247,6 @@ The fitting process can also be recorded for each image if the parameter "-r" is
 | ![12.jpg](https://raw.githubusercontent.com/LongerVision/Resource/master/vosm/IMM/FittingResults/40-6m/12.jpg) | ![13.jpg](https://raw.githubusercontent.com/LongerVision/Resource/master/vosm/IMM/FittingResults/40-6m/13.jpg) | ![14.jpg](https://raw.githubusercontent.com/LongerVision/Resource/master/vosm/IMM/FittingResults/40-6m/14.jpg) |
 | 15.jpg | 16.jpg |  |
 | ![15.jpg](https://raw.githubusercontent.com/LongerVision/Resource/master/vosm/IMM/FittingResults/40-6m/15.jpg) | ![16.jpg](https://raw.githubusercontent.com/LongerVision/Resource/master/vosm/IMM/FittingResults/40-6m/16.jpg) |  |
+
+
+Clearly, the [technology of pyramids](https://en.wikipedia.org/wiki/Pyramid_(image_processing)) is adopted during the fitting process.
