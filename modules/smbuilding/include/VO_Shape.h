@@ -8,7 +8,7 @@
 *                                   License Agreement                                               *
 *                           For Vision Open Statistical Models                                      *
 *                                                                                                   *
-* Copyright (C):    2006~2014 by JIA Pei, all rights reserved.                                      *
+* Copyright (C):    2006~2021 by JIA Pei, all rights reserved.                                      *
 *                                                                                                   *
 *                   VOSM is free software under the terms of the GNU Lesser General Public License  *
 *                   (GNU LGPL) as published by the Free Software Foundation; either version 3.0 of  *
@@ -51,14 +51,14 @@
 *                   http://www2.imm.dtu.dk/~aam/main/, 2000.                                        *
 *                                                                                                   *
 *                                                                                                   *
-* Version:          0.3.4                                                                           *
+* Version:          0.4.0                                                                           *
 * Author:           JIA Pei                                                                         *
-* Contact:          jp4work@gmail.com                                                               *
-* URL:              http://www.visionopen.com                                                       *
+* Contact:          jiapei@longervision.com                                                         *
+* URL:              http://www.longervision.com                                                     *
 * Create Date:      2010-11-04                                                                      *
 * Modify Date:      2014-04-17                                                                      *
+* Modify Date:      2021-05-04                                                                      *
 ****************************************************************************************************/
-
 
 #ifndef __VO_SHAPE_H__
 #define __VO_SHAPE_H__
@@ -114,8 +114,8 @@ protected:
     }
 
 public:
-    enum { LEFTMOST    = -1, RIGHTMOST    = -2, TOPMOST = -3, BOTTOMMOST = -4,
-            CENTER = -5, OUTERMOST = -6, INNERMOST = -7};
+    enum { LEFTMOST    = 1, RIGHTMOST    = 2, TOPMOST = 3, BOTTOMMOST = 4,
+            CENTER = 5, OUTERMOST = 6, INNERMOST = 7};
 
     /** Default constructor */
     VO_Shape(unsigned int dim = 0, unsigned int pts = 0) {this->m_MatShape.zeros(dim, pts);}

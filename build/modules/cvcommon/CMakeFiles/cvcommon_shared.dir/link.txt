@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O3 -DNDEBUG  -shared -Wl,-soname,libvosm_cvcommon.so -o libvosm_cvcommon.so CMakeFiles/cvcommon_shared.dir/src/VO_AnnotationDBIO.cpp.o CMakeFiles/cvcommon_shared.dir/src/VO_FaceCompPos.cpp.o CMakeFiles/cvcommon_shared.dir/src/VO_DetectionDBIO.cpp.o CMakeFiles/cvcommon_shared.dir/src/VO_FaceKeyPoint.cpp.o   -L/usr/local/lib  -L/usr/local/cuda/lib64 

@@ -50,11 +50,11 @@ $ sudo make install
 
 Two commands and eight libraries will be built:
 
-By default, 2 commands will be built under: **/usr/local/bin**:
+By default, 2 commands will be installed under: **/usr/local/bin**:
 - testsmbuilding
 - testsmfitting
 
-By default, 8 libraries will be built under: **/usr/local/lib**:
+By default, 8 libraries will be installed under: **/usr/local/lib**:
 - libvosm_comalgs.so
 - libvosm_common.so
 - libvosm_cvcommon.so
