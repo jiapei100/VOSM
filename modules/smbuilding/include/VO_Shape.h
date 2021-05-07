@@ -114,8 +114,8 @@ protected:
     }
 
 public:
-    enum { LEFTMOST    = 1, RIGHTMOST    = 2, TOPMOST = 3, BOTTOMMOST = 4,
-            CENTER = 5, OUTERMOST = 6, INNERMOST = 7};
+    enum { LEFTMOST    = -1, RIGHTMOST    = -2, TOPMOST = -3, BOTTOMMOST = -4,
+            CENTER = -5, OUTERMOST = -6, INNERMOST = -7};
 
     /** Default constructor */
     VO_Shape(unsigned int dim = 0, unsigned int pts = 0) {this->m_MatShape.zeros(dim, pts);}
@@ -341,10 +341,10 @@ public:
     cv::Mat_<float>                 GetACol(unsigned int idx) const {return this->m_MatShape.col(idx);}
     
     /** Get a 2D point */
-    cv::Point2f                     GetA2DPoint(unsigned int idx) const;
+    cv::Point2f                     GetA2DPoint(int idx) const;
     
     /** Get a 3D point */
-    cv::Point3f                     GetA3DPoint(unsigned int idx) const;
+    cv::Point3f                     GetA3DPoint(int idx) const;
     
     /** Seeable point list */
     std::vector<bool>               GetSeeable() const { return this->m_MatSeeable; }

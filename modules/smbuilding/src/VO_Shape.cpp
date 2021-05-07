@@ -1510,7 +1510,7 @@ VO_Shape VO_Shape::Combine2Shapes(const VO_Shape& shape1, const VO_Shape& shape2
  * @param       idx -- indexes of point list
  * @return      the point
 */
-cv::Point2f VO_Shape::GetA2DPoint(unsigned int idx) const
+cv::Point2f VO_Shape::GetA2DPoint(int idx) const
 {
     cv::Point2f res;
     unsigned int count = 0;
@@ -1596,7 +1596,7 @@ cv::Point2f VO_Shape::GetA2DPoint(unsigned int idx) const
  * @param       idx -- indexes of point list
  * @return      cv::Point3f        the point
 */
-cv::Point3f VO_Shape::GetA3DPoint(unsigned int idx) const
+cv::Point3f VO_Shape::GetA3DPoint(int idx) const
 {
     cv::Point3f res;
     unsigned int count = 0;
